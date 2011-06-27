@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts Prototype
+Bundle-SymbolicName: org.opendarts.prototype; singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: org.opendarts.prototype.ProtoPlugin
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
