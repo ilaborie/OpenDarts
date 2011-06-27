@@ -1,0 +1,9 @@
+# Ignoring default dotFiles
+.DS_Store
+.settings/
+.project
+.classpath
+
+
+# Ignore Java Files
+.class
