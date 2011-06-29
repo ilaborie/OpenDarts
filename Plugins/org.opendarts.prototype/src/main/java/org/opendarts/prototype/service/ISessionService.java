@@ -12,7 +12,7 @@ public interface ISessionService {
 	 *
 	 * @param session the session
 	 */
-	void closeSession(ISession session);
+	void closeSession();
 
 	/**
 	 * Gets the session.
