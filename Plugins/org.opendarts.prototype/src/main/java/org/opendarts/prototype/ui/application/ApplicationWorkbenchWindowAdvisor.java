@@ -1,4 +1,4 @@
-package org.opendarts.prototype.application;
+package org.opendarts.prototype.ui.application;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -37,8 +37,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
 		configurer.setInitialSize(new Point(400, 300));
-		configurer.setShowCoolBar(false);
-		configurer.setShowStatusLine(false);
+		configurer.setShowCoolBar(true);
+		configurer.setShowStatusLine(true);
 		configurer.setTitle("OpenDarts");
 	}
 }

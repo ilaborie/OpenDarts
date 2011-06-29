@@ -1,4 +1,4 @@
-package org.opendarts.prototype.application;
+package org.opendarts.prototype.ui.application;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="OpenDarts" sequenceNumber="1">
+<target name="OpenDarts" sequenceNumber="2">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="3.7.0.I20110613-1736"/>
@@ -14,6 +14,11 @@
 <unit id="org.slf4j.log4j" version="1.6.1.v20100831-0715"/>
 <unit id="org.slf4j.log4j.source" version="1.6.1.v20100831-0715"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.sdk" version="3.7.0.I20110613-1736"/>
+<unit id="org.eclipse.sdk.ide" version="3.7.0.I20110613-1736"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
 </location>
 </locations>
 </target>

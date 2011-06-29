@@ -1,4 +1,4 @@
-package org.opendarts.prototype.application;
+package org.opendarts.prototype.ui.application;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;

@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="org.opendarts.prototype.application.Application">
+               class="org.opendarts.prototype.ui.application.Application">
          </run>
       </application>
    </extension>
@@ -15,7 +15,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="OpenDarts"
-            class="org.opendarts.prototype.perspective.MainPerspective"
+            class="org.opendarts.prototype.ui.perspective.MainPerspective"
             id="opendarts.perspective.main">
       </perspective>
    </extension>

@@ -1,4 +1,4 @@
-package org.opendarts.prototype.perspective;
+package org.opendarts.prototype.ui.perspective;
 
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;

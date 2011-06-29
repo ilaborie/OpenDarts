@@ -1,9 +1,9 @@
-package org.opendarts.prototype.application;
+package org.opendarts.prototype.ui.application;
 
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
-import org.opendarts.prototype.perspective.MainPerspective;
+import org.opendarts.prototype.ui.perspective.MainPerspective;
 
 /**
  * The Class ApplicationWorkbenchAdvisor.
