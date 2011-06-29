@@ -22,7 +22,7 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		LOG.info("New Game...");
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
