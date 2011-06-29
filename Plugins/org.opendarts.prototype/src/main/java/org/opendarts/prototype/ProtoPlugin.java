@@ -2,7 +2,6 @@ package org.opendarts.prototype;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.opendarts.prototype.service.ISessionService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -39,8 +38,6 @@ public class ProtoPlugin extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		ISessionService sessionService = getService(ISessionService.class);
-		sessionService.closeSession();
 		plugin = null;
 		super.stop(context);
 	}
@@ -76,7 +73,9 @@ public class ProtoPlugin extends AbstractUIPlugin {
 		if (plugin != null) {
 			BundleContext context = plugin.getBundle().getBundleContext();
 			ServiceReference<T> serviceRef = context.getServiceReference(clazz);
-			result = context.getService(serviceRef);
+			if (serviceRef != null) {
+				result = context.getService(serviceRef);
+			}
 		}
 		return result;
 	}
