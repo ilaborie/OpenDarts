@@ -6,16 +6,16 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 /**
- * The Class ApplicationActionBarAdvisor.
+ * The Class OpenDartsActionBarAdvisor.
  */
-public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
+public class OpenDartsActionBarAdvisor extends ActionBarAdvisor {
 
 	/**
 	 * Instantiates a new application action bar advisor.
 	 *
 	 * @param configurer the configurer
 	 */
-	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+	public OpenDartsActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
 	}
 

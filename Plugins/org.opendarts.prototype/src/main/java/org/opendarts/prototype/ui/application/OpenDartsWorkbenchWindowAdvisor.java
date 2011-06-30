@@ -7,16 +7,16 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 /**
- * The Class ApplicationWorkbenchWindowAdvisor.
+ * The Class OpenDartsWorkbenchWindowAdvisor.
  */
-public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
+public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	/**
 	 * Instantiates a new application workbench window advisor.
 	 *
 	 * @param configurer the configurer
 	 */
-	public ApplicationWorkbenchWindowAdvisor(
+	public OpenDartsWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
 	}
@@ -27,7 +27,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public ActionBarAdvisor createActionBarAdvisor(
 			IActionBarConfigurer configurer) {
-		return new ApplicationActionBarAdvisor(configurer);
+		return new OpenDartsActionBarAdvisor(configurer);
 	}
 
 	/* (non-Javadoc)
@@ -36,9 +36,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
-		configurer.setInitialSize(new Point(400, 300));
-		configurer.setShowCoolBar(true);
-		configurer.setShowStatusLine(true);
+		configurer.setInitialSize(new Point(1024, 786));
 		configurer.setTitle("OpenDarts");
+		configurer.setShowFastViewBars(true);
+		configurer.setShowProgressIndicator(true);
 	}
 }

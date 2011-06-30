@@ -6,9 +6,9 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.opendarts.prototype.ui.perspective.MainPerspective;
 
 /**
- * The Class ApplicationWorkbenchAdvisor.
+ * The Class OpenDartsWorkbenchAdvisor.
  */
-public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
+public class OpenDartsWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.application.WorkbenchAdvisor#createWorkbenchWindowAdvisor(org.eclipse.ui.application.IWorkbenchWindowConfigurer)
@@ -16,7 +16,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
-		return new ApplicationWorkbenchWindowAdvisor(configurer);
+		return new OpenDartsWorkbenchWindowAdvisor(configurer);
 	}
 
 	/* (non-Javadoc)

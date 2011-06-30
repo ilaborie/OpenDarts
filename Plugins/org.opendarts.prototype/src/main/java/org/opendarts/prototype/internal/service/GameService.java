@@ -2,7 +2,7 @@ package org.opendarts.prototype.internal.service;
 
 import java.util.List;
 
-import org.opendarts.prototype.internal.model.Game;
+import org.opendarts.prototype.internal.model.Game501;
 import org.opendarts.prototype.internal.model.GameDefinition;
 import org.opendarts.prototype.internal.model.GameSet;
 import org.opendarts.prototype.model.IGame;
@@ -37,7 +37,7 @@ public class GameService implements IGameService{
 	public IGame createGame(ISet set, IGameDefinition gameDef,
 			List<IPlayer> players) {
 		IPlayer[] pl = players.toArray(new IPlayer[players.size()]);
-		Game result = new Game((GameSet) set, (GameDefinition) gameDef, pl);
+		Game501 result = new Game501((GameSet) set, (GameDefinition) gameDef, pl);
 		return result;
 	}
 

@@ -6,7 +6,8 @@ Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: org.opendarts.prototype.ProtoPlugin
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -18,6 +17,7 @@ import org.opendarts.prototype.model.IGameDefinition;
 import org.opendarts.prototype.model.IPlayer;
 import org.opendarts.prototype.service.IGameDefinitionService;
 import org.opendarts.prototype.service.IPlayerService;
+import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +39,9 @@ public class NewGameDialog extends TitleAreaDialog {
 	/** The game definition. */
 	private IGameDefinition gameDefinition;
 
+	/** The toolkit. */
+	private OpenDartsFormsToolkit toolkit = OpenDartsFormsToolkit.getToolkit();
+
 	/**
 	 * Instantiates a new new game dialog.
 	 *
@@ -55,7 +58,7 @@ public class NewGameDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Game ...");
+		newShell.setText("New Game501 ...");
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +81,7 @@ public class NewGameDialog extends TitleAreaDialog {
 		GridLayoutFactory.fillDefaults().applyTo(main);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(main);
 
-		// Game Description
+		// Game501 Description
 		Group grpGameDesc = this.createGameDescriptionArea(main);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(grpGameDesc);
 
@@ -102,16 +105,12 @@ public class NewGameDialog extends TitleAreaDialog {
 	protected Group createGameDescriptionArea(Composite main) {
 		Group group = new Group(main, SWT.NONE);
 		GridLayoutFactory.fillDefaults().applyTo(group);
-		group.setText("Game Description");
+		group.setText("Game501 Description");
 
 		// XXX prototype 
-		Label label = new Label(group, SWT.NONE);
+		Label label = toolkit.createDummyLabel(group,
+				"Prototype is only for 501");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		label.setText("Prototype is only for 501");
-		label.setFont(JFaceResources.getFontRegistry().getItalic(
-				JFaceResources.DIALOG_FONT));
-		label.setForeground(this.getShell().getDisplay()
-				.getSystemColor(SWT.COLOR_DARK_CYAN));
 
 		return group;
 	}
@@ -128,13 +127,9 @@ public class NewGameDialog extends TitleAreaDialog {
 		group.setText("Legs");
 
 		// XXX prototype 
-		Label label = new Label(group, SWT.NONE);
+		Label label = toolkit.createDummyLabel(group,
+				"Prototype is only for 'Best Of 5'");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		label.setText("Prototype is only for 'Best Of 5'");
-		label.setFont(JFaceResources.getFontRegistry().getItalic(
-				JFaceResources.DIALOG_FONT));
-		label.setForeground(this.getShell().getDisplay()
-				.getSystemColor(SWT.COLOR_DARK_CYAN));
 
 		return group;
 	}
@@ -151,13 +146,9 @@ public class NewGameDialog extends TitleAreaDialog {
 		group.setText("Players");
 
 		// XXX prototype 
-		Label label = new Label(group, SWT.NONE);
+		Label label = toolkit.createDummyLabel(group,
+				"Prototype is only for 'User vs Computer'");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		label.setText("Prototype is only for 'User vs Computer'");
-		label.setFont(JFaceResources.getFontRegistry().getItalic(
-				JFaceResources.DIALOG_FONT));
-		label.setForeground(this.getShell().getDisplay()
-				.getSystemColor(SWT.COLOR_DARK_CYAN));
 
 		return group;
 	}

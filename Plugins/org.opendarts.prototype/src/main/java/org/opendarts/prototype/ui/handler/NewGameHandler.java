@@ -7,6 +7,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.model.IGame;
@@ -18,6 +21,8 @@ import org.opendarts.prototype.service.IGameService;
 import org.opendarts.prototype.service.ISessionService;
 import org.opendarts.prototype.service.ISetService;
 import org.opendarts.prototype.ui.dialog.NewGameDialog;
+import org.opendarts.prototype.ui.editor.Game501Editor;
+import org.opendarts.prototype.ui.editor.GameEditorInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +40,8 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		LOG.info("New Game...");
-		LOG.info("New Game...");
+		LOG.info("New Game501...");
+		LOG.info("New Game501...");
 
 		// The session
 		ISessionService sessionService = ProtoPlugin
@@ -52,7 +57,7 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 			int nbGame = dialog.getNumberSetGames();
 			ISet set = setService.createNewSet(session, nbGame);
 
-			// Game
+			// Game501
 			IGameService gameService = ProtoPlugin
 					.getService(IGameService.class);
 			IGameDefinition gameDef = dialog.getGameDefinition();
@@ -60,8 +65,19 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 			IGame game = gameService.createGame(set, gameDef, players);
 
 			LOG.info("New game created: {}", game);
+
+			// Open Editor
+			GameEditorInput input = new GameEditorInput(game);
+			IWorkbenchWindow window = HandlerUtil
+					.getActiveWorkbenchWindow(event);
+			IWorkbenchPage page = window.getActivePage();
+			try {
+				page.openEditor(input, Game501Editor.ID);
+			} catch (PartInitException e) {
+				LOG.error("Could not open editor", e);
+			}
 		} else {
-			LOG.info("Canncel NewGame creation");
+			LOG.info("Cancel NewGame creation");
 		}
 
 		return null;

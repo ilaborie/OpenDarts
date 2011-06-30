@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="org.opendarts.prototype.ui.application.Application">
+               class="org.opendarts.prototype.ui.application.OpenDartsApplication">
          </run>
       </application>
    </extension>
@@ -53,6 +53,22 @@
             </command>
          </menu>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="opendarts.file.toolbar"
+               label="File">
+            <command
+                  commandId="opendarts.cmd.newGame"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.file.exit"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -60,6 +76,34 @@
             class="org.opendarts.prototype.ui.handler.NewGameHandler"
             commandId="opendarts.cmd.newGame">
       </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.opendarts.prototype.ui.editor.Game501Editor"
+            default="false"
+            id="opendarts.editor.501"
+            name="501 Game">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="opendarts.cmd.newGame"
+            icon="icons/actions/add.png">
+      </image>
+      <image
+            commandId="org.eclipse.ui.file.exit"
+            icon="icons/actions/quit.png">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="opendarts.cmd.newGame"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+G">
+      </key>
    </extension>
 
 </plugin>

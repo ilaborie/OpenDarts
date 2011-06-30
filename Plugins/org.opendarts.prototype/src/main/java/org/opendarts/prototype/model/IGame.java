@@ -21,4 +21,8 @@ public interface IGame extends IAbstractGame {
 	 */
 	IGameDefinition getGameDefinition();
 
+	String getName();
+
+	String getDescription();
+
 }

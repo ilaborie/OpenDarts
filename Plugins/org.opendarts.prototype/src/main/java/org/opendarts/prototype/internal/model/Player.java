@@ -26,4 +26,12 @@ public class Player implements IPlayer {
 		return this.name;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 }
