@@ -1,13 +1,16 @@
 /*
  * 
  */
-package org.opendarts.prototype.ui.editor.x01;
+package org.opendarts.prototype.ui.x01.label;
+
+import java.text.MessageFormat;
 
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.forms.IFormColors;
+import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 
@@ -32,7 +35,8 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	public String getText(Object element) {
 		if (element instanceof GameX01Entry) {
 			GameX01Entry gameEntry = (GameX01Entry) element;
-			return String.valueOf(gameEntry.getRound() * 3);
+			int round = gameEntry.getRound();
+			return MessageFormat.format("#{1} ({0})", (round * 3), round);
 		} else if (element instanceof DummyX01Entry) {
 			return "";
 		}

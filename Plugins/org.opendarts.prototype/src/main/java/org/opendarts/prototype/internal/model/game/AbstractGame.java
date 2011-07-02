@@ -13,6 +13,7 @@ import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.game.GameEvent;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameDefinition;
+import org.opendarts.prototype.model.game.IGameEntry;
 import org.opendarts.prototype.model.game.IGameListener;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.slf4j.Logger;
@@ -29,6 +30,12 @@ public abstract class AbstractGame implements IGame {
 
 	/** The winner. */
 	private IPlayer winner;
+
+	/** The current player. */
+	private IPlayer currentPlayer;
+
+	/** The current entry. */
+	private IGameEntry currentEntry;
 
 	/** The game definition. */
 	private final IGameDefinition gameDef;
@@ -98,12 +105,13 @@ public abstract class AbstractGame implements IGame {
 	}
 
 	/**
-	 * Sets the end.
+	 * End.
 	 *
-	 * @param end the new end
+	 * @param player the player
 	 */
-	protected void setEnd(Calendar end) {
-		this.end = end;
+	protected void end(IPlayer player) {
+		this.winner = player;
+		this.end = Calendar.getInstance();
 	}
 
 	/* (non-Javadoc)
@@ -147,14 +155,45 @@ public abstract class AbstractGame implements IGame {
 	public GameSet getSet() {
 		return this.set;
 	}
+	
+	/**
+	 * Gets the current player.
+	 *
+	 * @return the current player
+	 */
+	public IPlayer getCurrentPlayer() {
+		return this.currentPlayer;
+	}
 
 	/**
-	 * Sets the winner.
+	 * Sets the current player.
 	 *
-	 * @param winner the new winner
+	 * @param player the new current player
 	 */
-	protected void setWinner(IPlayer winner) {
-		this.winner = winner;
+	protected void setCurrentPlayer(IPlayer player) {
+		this.currentPlayer = player;
+		this.fireGameEvent(GameEvent.Factory.newCurrentPlayerEvent(this,
+				this.currentPlayer, this.currentEntry));
+	}
+
+	/**
+	 * Gets the current entry.
+	 *
+	 * @return the current entry
+	 */
+	public IGameEntry getCurrentEntry() {
+		return this.currentEntry;
+	}
+
+	/**
+	 * Sets the current entry.
+	 *
+	 * @param entry the new current entry
+	 */
+	protected void setCurrentEntry(IGameEntry entry) {
+		this.currentEntry = entry;
+		this.fireGameEvent(GameEvent.Factory.newGameEntryCreatedEvent(this,
+				entry));
 	}
 
 	/**

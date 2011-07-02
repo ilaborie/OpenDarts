@@ -40,5 +40,7 @@ public class StartGameHandler extends AbstractHandler implements IHandler {
 		}
 		return null;
 	}
+	
+	
 
 }

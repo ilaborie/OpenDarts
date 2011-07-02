@@ -112,7 +112,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.opendarts.prototype.ui.editor.x01.GameX01Editor"
+            class="org.opendarts.prototype.ui.x01.editor.GameX01Editor"
             default="false"
             id="opendarts.editor.x01"
             name="x01 Game">

@@ -166,7 +166,7 @@ public class GameEvent {
 		 */
 		public static GameEvent newGameFinishedEvent(IGame game,
 				IPlayer winner, IGameEntry entry, IDartsThrow dartsThrow) {
-			GameEvent result = new GameEvent(GameEventType.GAME_INITIALIZED,
+			GameEvent result = new GameEvent(GameEventType.GAME_FINISHED,
 					game);
 			result.player = winner;
 			result.entry = entry;

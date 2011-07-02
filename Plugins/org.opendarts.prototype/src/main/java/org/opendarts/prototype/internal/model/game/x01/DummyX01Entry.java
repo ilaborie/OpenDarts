@@ -1,6 +1,5 @@
-package org.opendarts.prototype.ui.editor.x01;
+package org.opendarts.prototype.internal.model.game.x01;
 
-import org.opendarts.prototype.internal.model.game.x01.GameX01;
 
 /**
  * The Class DummyX01Entry.

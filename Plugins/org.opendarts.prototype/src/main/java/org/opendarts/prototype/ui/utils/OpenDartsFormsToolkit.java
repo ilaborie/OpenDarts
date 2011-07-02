@@ -16,7 +16,28 @@ import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+/**
+ * The Class OpenDartsFormsToolkit.
+ */
 public class OpenDartsFormsToolkit extends FormToolkit {
+
+	/** The Constant COLOR_BROKEN. */
+	public static final String COLOR_BROKEN = "BrokenBackgroundColor";
+
+	/** The Constant COLOR_WINNING. */
+	public static final String COLOR_WINNING = "WinningBackgroundColor";
+
+	/** The Constant COLOR_ACTIVE. */
+	public static final String COLOR_ACTIVE = "ActiveBackgroundColor";
+
+	/** The Constant COLOR_ACTIVE. */
+	public static final String COLOR_INACTIVE = "InactiveBackgroundColor";
+
+	/** The Constant FONT_SCORE_LEFT. */
+	public static final String FONT_SCORE_LEFT = "ScoreLeftFont";
+
+	/** The Constant FONT_SCORE_INPUT. */
+	public static final String FONT_SCORE_INPUT = "ScoreInputFont";
 
 	/** The form colors. */
 	private static FormColors formColors;
@@ -26,6 +47,10 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 
 	/** The font registry. */
 	private static FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+
+	/** The display. */
+	private static Display display;
+
 	/**
 	 * Instantiates a new open darts forms toolkit.
 	 *
@@ -33,6 +58,13 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	private OpenDartsFormsToolkit(FormColors colors) {
 		super(colors);
+
+		Font initialFont;
+		// Fonts
+		initialFont = fontRegistry.defaultFont();
+		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
+		registerFont(initialFont, FONT_SCORE_INPUT, 64);
+		registerFont(initialFont, FONT_SCORE_LEFT, 160);
 	}
 
 	/**
@@ -44,9 +76,40 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	public static FormColors getFormColors(Display display) {
 		if (formColors == null) {
 			formColors = new FormColors(display);
+			formColors.createColor(COLOR_ACTIVE, 0xF2, 0xDA, 0x2E);
+			formColors.createColor(COLOR_BROKEN, 0xD0, 0x6D, 0x58);
+			formColors.createColor(COLOR_INACTIVE, 0xC1, 0xC1, 0xC1);
+			formColors.createColor(COLOR_WINNING,
+					formColors.getColor(IFormColors.H_GRADIENT_START).getRGB());
 			formColors.markShared();
 		}
 		return formColors;
+	}
+
+	/**
+	 * Gets the font.
+	 *
+	 * @param initialFont the initial font
+	 * @param key the key
+	 * @param height the height
+	 * @return the font
+	 */
+	private static void registerFont(Font initialFont, String key, int height) {
+		FontData[] fontData = initialFont.getFontData();
+		for (int i = 0; i < fontData.length; i++) {
+			fontData[i].setHeight(height);
+		}
+		fontRegistry.put(key, fontData);
+	}
+
+	/**
+	 * Gets the font.
+	 *
+	 * @param key the key
+	 * @return the font
+	 */
+	public Font getFont(String key) {
+		return fontRegistry.get(key);
 	}
 
 	/**
@@ -56,8 +119,8 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	public static OpenDartsFormsToolkit getToolkit() {
 		if (toolkit == null) {
-			toolkit = new OpenDartsFormsToolkit(
-					getFormColors(Display.getDefault()));
+			display = Display.getDefault();
+			toolkit = new OpenDartsFormsToolkit(getFormColors(display));
 		}
 		return toolkit;
 	}
@@ -82,8 +145,7 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	public Label createDummyLabel(Composite parent, String text) {
 		Label label = new Label(parent, SWT.WRAP);
 		label.setText(text);
-		label.setFont(JFaceResources.getFontRegistry().getItalic(
-				JFaceResources.DIALOG_FONT));
+		label.setFont(fontRegistry.getItalic(JFaceResources.DIALOG_FONT));
 		label.setForeground(Display.getDefault().getSystemColor(
 				SWT.COLOR_DARK_CYAN));
 		return label;
@@ -129,24 +191,5 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		column.setEditingSupport(editingSupport);
 		return column;
 	}
-
-	/**
-	 * Gets the score font.
-	 *
-	 * @return the score font
-	 */
-	public Font getScoreFont() {
-		Font font = fontRegistry.get("scoreFont");
-		if (font == null) {
-			FontData[] fd = JFaceResources.getDefaultFont().getFontData();
-			for (FontData fdd : fd) {
-				fdd.setHeight(48);
-			}
-			font = new Font(Display.getDefault(), fd);
-			fontRegistry.put("scoreFont", font.getFontData());
-		}
-		return font;
-	}
-
 
 }

@@ -19,6 +19,6 @@ public interface IDartsThrow {
 	 *
 	 * @return the list
 	 */
-	List<IDart> getList();
+	List<IDart> getDarts();
 
 }

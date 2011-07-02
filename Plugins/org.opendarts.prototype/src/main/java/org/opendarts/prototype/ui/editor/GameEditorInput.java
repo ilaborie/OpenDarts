@@ -69,7 +69,6 @@ public class GameEditorInput implements IEditorInput {
 	 */
 	@Override
 	public IPersistableElement getPersistable() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

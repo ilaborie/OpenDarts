@@ -56,7 +56,7 @@ public class GameX01Entry implements IGameEntry {
 	 * @param newThrow the new throw
 	 * @return true, if the game could be finished
 	 */
-	public boolean addPlayerThrow(IPlayer player, ThreeDartThrow newThrow) {
+	protected boolean addPlayerThrow(IPlayer player, ThreeDartThrow newThrow) {
 		this.playerThrow.put(player, newThrow);
 		// check if could be win
 		Integer startingScore = this.gameX01.getScore(player);

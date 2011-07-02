@@ -22,7 +22,7 @@ import org.opendarts.prototype.service.session.ISessionService;
 import org.opendarts.prototype.service.session.ISetService;
 import org.opendarts.prototype.ui.dialog.NewGameDialog;
 import org.opendarts.prototype.ui.editor.GameEditorInput;
-import org.opendarts.prototype.ui.editor.x01.GameX01Editor;
+import org.opendarts.prototype.ui.x01.editor.GameX01Editor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

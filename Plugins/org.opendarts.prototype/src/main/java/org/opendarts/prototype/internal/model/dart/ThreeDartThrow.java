@@ -1,5 +1,6 @@
 package org.opendarts.prototype.internal.model.dart;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,7 +31,19 @@ public class ThreeDartThrow implements IDartsThrow {
 		super();
 		this.score = score;
 		this.darts = new ArrayList<IDart>();
-		this.checkScore();
+		this.check();
+	}
+
+	/**
+	 * Instantiates a new three dart throw.
+	 *
+	 * @param value the value
+	 * @throws InvalidDartThrowException 
+	 * @throws NumberFormatException 
+	 */
+	public ThreeDartThrow(String value) throws NumberFormatException,
+			InvalidDartThrowException {
+		this(Integer.parseInt((String) value));
 	}
 
 	/**
@@ -38,7 +51,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	 *
 	 * @throws InvalidDartThrowException the invalid dart throw exception
 	 */
-	private void checkScore() throws InvalidDartThrowException {
+	protected void check() throws InvalidDartThrowException {
 		List<Integer> invalid = Arrays.asList(172, 173, 175, 176, 178, 179);
 		if (this.score < 0) {
 			throw new InvalidDartThrowException("Score should be > 0");
@@ -47,6 +60,20 @@ public class ThreeDartThrow implements IDartsThrow {
 		} else if (invalid.contains(this.score)) {
 			throw new InvalidDartThrowException("Score should be " + score);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String result;
+		if (this.darts.isEmpty()) {
+			result = String.valueOf(this.score);
+		} else {
+			result = MessageFormat.format("{0} - {1}", this.score, this.darts);
+		}
+		return result;
 	}
 
 	/**
@@ -78,8 +105,17 @@ public class ThreeDartThrow implements IDartsThrow {
 	 * @see org.opendarts.prototype.model.dart.IDartsThrow#getList()
 	 */
 	@Override
-	public List<IDart> getList() {
+	public List<IDart> getDarts() {
 		return Collections.unmodifiableList(this.darts);
+	}
+	
+	/**
+	 * Gets the internal darts.
+	 *
+	 * @return the internal darts
+	 */
+	protected List<IDart> getInternalDarts() {
+		return this.darts;
 	}
 
 }

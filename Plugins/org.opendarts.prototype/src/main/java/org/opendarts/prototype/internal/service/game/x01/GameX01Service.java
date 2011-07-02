@@ -2,9 +2,12 @@ package org.opendarts.prototype.internal.service.game.x01;
 
 import java.util.List;
 
+import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
 import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.internal.model.game.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.session.GameSet;
+import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -16,13 +19,12 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class GameX01Service.
  */
-public class GameX01Service implements IGameService{
-	
+public class GameX01Service implements IGameService {
+
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(GameX01Service.class);
-	
-	
+
 	/**
 	 * Instantiates a new game service.
 	 */
@@ -37,7 +39,8 @@ public class GameX01Service implements IGameService{
 	public IGame createGame(ISet set, IGameDefinition gameDef,
 			List<IPlayer> players) {
 		IPlayer[] pl = players.toArray(new IPlayer[players.size()]);
-		GameX01 result = new GameX01((GameSet) set, (GameDefinition) gameDef, pl);
+		GameX01 result = new GameX01((GameSet) set, (GameDefinition) gameDef,
+				pl);
 		return result;
 	}
 
@@ -51,4 +54,25 @@ public class GameX01Service implements IGameService{
 		LOG.info("Game {} started", igame);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.game.IGameService#addPlayerThrow(org.opendarts.prototype.internal.model.game.x01.GameX01, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	public void addPlayerThrow(GameX01 igame, IPlayer player,
+			IDartsThrow idartThrow) {
+		GameX01 game = (GameX01) igame;
+		ThreeDartThrow dartThrow = (ThreeDartThrow) idartThrow;
+		game.addPlayerThrow(player, dartThrow);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.game.IGameService#addWinningPlayerThrow(org.opendarts.prototype.internal.model.game.x01.GameX01, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	public void addWinningPlayerThrow(GameX01 igame, IPlayer player,
+			IDartsThrow idartThrow) {
+		GameX01 game = (GameX01) igame;
+		WinningX01DartsThrow dartThrow = (WinningX01DartsThrow) idartThrow;
+		game.addWinningPlayerThrow(player, dartThrow);
+	}
 }

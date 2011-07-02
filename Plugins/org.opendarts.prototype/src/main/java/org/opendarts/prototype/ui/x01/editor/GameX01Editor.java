@@ -1,4 +1,4 @@
-package org.opendarts.prototype.ui.editor.x01;
+package org.opendarts.prototype.ui.x01.editor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
