@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.opendarts.prototype.GameService">
-   <implementation class="org.opendarts.prototype.internal.service.GameService"/>
+   <implementation class="org.opendarts.prototype.internal.service.game.x01.GameX01Service"/>
    <service>
-      <provide interface="org.opendarts.prototype.service.IGameService"/>
+      <provide interface="org.opendarts.prototype.service.game.IGameService"/>
    </service>
 </scr:component>

@@ -12,17 +12,17 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.opendarts.prototype.ProtoPlugin;
-import org.opendarts.prototype.model.IGame;
-import org.opendarts.prototype.model.IGameDefinition;
-import org.opendarts.prototype.model.IPlayer;
-import org.opendarts.prototype.model.ISession;
-import org.opendarts.prototype.model.ISet;
-import org.opendarts.prototype.service.IGameService;
-import org.opendarts.prototype.service.ISessionService;
-import org.opendarts.prototype.service.ISetService;
+import org.opendarts.prototype.model.game.IGame;
+import org.opendarts.prototype.model.game.IGameDefinition;
+import org.opendarts.prototype.model.player.IPlayer;
+import org.opendarts.prototype.model.session.ISession;
+import org.opendarts.prototype.model.session.ISet;
+import org.opendarts.prototype.service.game.IGameService;
+import org.opendarts.prototype.service.session.ISessionService;
+import org.opendarts.prototype.service.session.ISetService;
 import org.opendarts.prototype.ui.dialog.NewGameDialog;
-import org.opendarts.prototype.ui.editor.Game501Editor;
 import org.opendarts.prototype.ui.editor.GameEditorInput;
+import org.opendarts.prototype.ui.editor.x01.GameX01Editor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,8 +40,9 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		LOG.info("New Game501...");
-		LOG.info("New Game501...");
+		LOG.info("New Game...");
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+		IWorkbenchPage page = window.getActivePage();
 
 		// The session
 		ISessionService sessionService = ProtoPlugin
@@ -57,7 +58,7 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 			int nbGame = dialog.getNumberSetGames();
 			ISet set = setService.createNewSet(session, nbGame);
 
-			// Game501
+			// GameX01
 			IGameService gameService = ProtoPlugin
 					.getService(IGameService.class);
 			IGameDefinition gameDef = dialog.getGameDefinition();
@@ -67,20 +68,27 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 			LOG.info("New game created: {}", game);
 
 			// Open Editor
-			GameEditorInput input = new GameEditorInput(game);
-			IWorkbenchWindow window = HandlerUtil
-					.getActiveWorkbenchWindow(event);
-			IWorkbenchPage page = window.getActivePage();
-			try {
-				page.openEditor(input, Game501Editor.ID);
-			} catch (PartInitException e) {
-				LOG.error("Could not open editor", e);
-			}
+			this.openEditor(page, game);
 		} else {
 			LOG.info("Cancel NewGame creation");
 		}
 
 		return null;
+	}
+
+	/**
+	 * Open Game editor.
+	 *
+	 * @param page the page
+	 * @param game the game
+	 */
+	private void openEditor(IWorkbenchPage page, IGame game) {
+		GameEditorInput input = new GameEditorInput(game);
+		try {
+			page.openEditor(input, GameX01Editor.ID);
+		} catch (PartInitException e) {
+			LOG.error("Could not open editor", e);
+		}
 	}
 
 }

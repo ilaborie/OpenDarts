@@ -3,7 +3,7 @@ package org.opendarts.prototype.ui.editor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.opendarts.prototype.model.IGame;
+import org.opendarts.prototype.model.game.IGame;
 
 /**
  * The Class GameEditorInput.

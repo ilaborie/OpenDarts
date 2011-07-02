@@ -25,6 +25,10 @@
             id="opendarts.cmd.newGame"
             name="New Game">
       </command>
+      <command
+            id="opendarts.cmd.StartGame"
+            name="Start Game">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -57,7 +61,7 @@
             allPopups="false"
             locationURI="toolbar:org.eclipse.ui.main.toolbar">
          <toolbar
-               id="opendarts.file.toolbar"
+               id="opendarts.toolbar.file"
                label="File">
             <command
                   commandId="opendarts.cmd.newGame"
@@ -68,6 +72,22 @@
                   style="push">
             </command>
          </toolbar>
+         <toolbar
+               id="opendarts.toolbar.game"
+               label="Game">
+            <command
+                  commandId="opendarts.cmd.StartGame"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:openwis.editor.game.toolbar">
+         <command
+               commandId="opendarts.cmd.StartGame"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -76,14 +96,26 @@
             class="org.opendarts.prototype.ui.handler.NewGameHandler"
             commandId="opendarts.cmd.newGame">
       </handler>
+      <handler
+            class="org.opendarts.prototype.ui.handler.StartGameHandler"
+            commandId="opendarts.cmd.StartGame">
+         <enabledWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="opendarts.editor.x01">
+               </equals>
+            </with>
+         </enabledWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.opendarts.prototype.ui.editor.Game501Editor"
+            class="org.opendarts.prototype.ui.editor.x01.GameX01Editor"
             default="false"
-            id="opendarts.editor.501"
-            name="501 Game">
+            id="opendarts.editor.x01"
+            name="x01 Game">
       </editor>
    </extension>
    <extension
@@ -96,6 +128,10 @@
             commandId="org.eclipse.ui.file.exit"
             icon="icons/actions/quit.png">
       </image>
+      <image
+            commandId="opendarts.cmd.StartGame"
+            icon="icons/actions/start.png">
+      </image>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -103,6 +139,12 @@
             commandId="opendarts.cmd.newGame"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+G">
+      </key>
+      <key
+            commandId="opendarts.cmd.StartGame"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+R">
       </key>
    </extension>
 

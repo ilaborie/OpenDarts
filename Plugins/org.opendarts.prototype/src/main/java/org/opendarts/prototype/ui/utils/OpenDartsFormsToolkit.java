@@ -2,6 +2,10 @@ package org.opendarts.prototype.ui.utils;
 
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -83,6 +87,47 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		label.setForeground(Display.getDefault().getSystemColor(
 				SWT.COLOR_DARK_CYAN));
 		return label;
+	}
+
+	/**
+	 * Builds the column.
+	 *
+	 * @param title the title
+	 * @param viewer the viewer
+	 * @param width the width
+	 * @param style the style
+	 * @param labelProvider the label provider
+	 * @return the table viewer column
+	 */
+	public TableViewerColumn createTableColumn(String title,
+			TableViewer viewer, int width, int style,
+			ColumnLabelProvider labelProvider) {
+		TableViewerColumn column = new TableViewerColumn(viewer, style);
+		column.getColumn().setText(title);
+		column.getColumn().setWidth(width);
+		column.getColumn().setResizable(false);
+		column.setLabelProvider(labelProvider);
+		return column;
+	}
+
+	/**
+	 * Creates the table column.
+	 *
+	 * @param title the title
+	 * @param viewer the viewer
+	 * @param width the width
+	 * @param style the style
+	 * @param labelProvider the label provider
+	 * @param editingSupport the editing support
+	 * @return the table viewer column
+	 */
+	public TableViewerColumn createTableColumn(String title,
+			TableViewer viewer, int width, int style,
+			ColumnLabelProvider labelProvider, EditingSupport editingSupport) {
+		TableViewerColumn column = this.createTableColumn(title, viewer, width,
+				style, labelProvider);
+		column.setEditingSupport(editingSupport);
+		return column;
 	}
 
 	/**

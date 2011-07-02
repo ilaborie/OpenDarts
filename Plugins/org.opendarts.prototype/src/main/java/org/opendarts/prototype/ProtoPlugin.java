@@ -1,6 +1,7 @@
 package org.opendarts.prototype;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -59,7 +60,30 @@ public class ProtoPlugin extends AbstractUIPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+		ImageDescriptor imageDescriptor = plugin.getImageRegistry()
+				.getDescriptor(path);
+		if (imageDescriptor == null) {
+			imageDescriptor = imageDescriptorFromPlugin(PLUGIN_ID, path);
+			plugin.getImageRegistry().put(path, imageDescriptor);
+		}
+		return imageDescriptor;
+	}
+
+	/**
+	 * Gets the image.
+	 *
+	 * @param path the path
+	 * @return the image
+	 */
+	public static Image getImage(String path) {
+		Image image = plugin.getImageRegistry().get(path);
+		if (image == null) {
+		ImageDescriptor imageDescriptor = imageDescriptorFromPlugin(PLUGIN_ID,
+				path);
+			plugin.getImageRegistry().put(path, imageDescriptor);
+			image = imageDescriptor.createImage();
+		}
+		return image;
 	}
 
 	/**

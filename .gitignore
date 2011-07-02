@@ -1,6 +1,8 @@
 # Ignoring default dotFiles
 .DS_Store
 
-
 # Ignore Java Files
 .class
+
+# Other working folder
+vrac/

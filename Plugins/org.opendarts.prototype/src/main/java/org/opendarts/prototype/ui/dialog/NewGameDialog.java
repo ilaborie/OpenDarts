@@ -13,10 +13,10 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.opendarts.prototype.ProtoPlugin;
-import org.opendarts.prototype.model.IGameDefinition;
-import org.opendarts.prototype.model.IPlayer;
-import org.opendarts.prototype.service.IGameDefinitionService;
-import org.opendarts.prototype.service.IPlayerService;
+import org.opendarts.prototype.model.game.IGameDefinition;
+import org.opendarts.prototype.model.player.IPlayer;
+import org.opendarts.prototype.service.game.IGameDefinitionService;
+import org.opendarts.prototype.service.player.IPlayerService;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +58,7 @@ public class NewGameDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Game501 ...");
+		newShell.setText("New GameX01 ...");
 	}
 
 	/* (non-Javadoc)
@@ -81,7 +81,7 @@ public class NewGameDialog extends TitleAreaDialog {
 		GridLayoutFactory.fillDefaults().applyTo(main);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(main);
 
-		// Game501 Description
+		// GameX01 Description
 		Group grpGameDesc = this.createGameDescriptionArea(main);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(grpGameDesc);
 
@@ -105,7 +105,7 @@ public class NewGameDialog extends TitleAreaDialog {
 	protected Group createGameDescriptionArea(Composite main) {
 		Group group = new Group(main, SWT.NONE);
 		GridLayoutFactory.fillDefaults().applyTo(group);
-		group.setText("Game501 Description");
+		group.setText("GameX01 Description");
 
 		// XXX prototype 
 		Label label = toolkit.createDummyLabel(group,

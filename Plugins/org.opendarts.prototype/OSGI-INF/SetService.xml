@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.opendarts.prototype.SetService">
-   <implementation class="org.opendarts.prototype.internal.service.SetService"/>
+   <implementation class="org.opendarts.prototype.internal.service.session.SetService"/>
    <service>
-      <provide interface="org.opendarts.prototype.service.ISetService"/>
+      <provide interface="org.opendarts.prototype.service.session.ISetService"/>
    </service>
 </scr:component>
