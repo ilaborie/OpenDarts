@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
 import org.opendarts.prototype.internal.model.game.AbstractGame;
-import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 import org.opendarts.prototype.model.game.GameEvent;
@@ -44,8 +43,8 @@ public class GameX01 extends AbstractGame implements IGame {
 	 * @param gameDef the game definition
 	 * @param players the players
 	 */
-	public GameX01(GameSet set, GameDefinition gameDef, IPlayer... players) {
-		super(set, gameDef, players);
+	public GameX01(GameSet set, List<IPlayer> players) {
+		super(set, players);
 		this.score = new HashMap<IPlayer, Integer>();
 		this.entries = new ArrayList<GameX01Entry>();
 		this.scoreToDo = 170;

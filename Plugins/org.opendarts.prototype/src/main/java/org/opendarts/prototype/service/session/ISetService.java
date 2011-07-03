@@ -1,5 +1,6 @@
 package org.opendarts.prototype.service.session;
 
+import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
 
@@ -11,9 +12,10 @@ public interface ISetService {
 	/**
 	 * Creates the new set.
 	 *
-	 * @param selection the selection
+	 * @param session the session
+	 * @param gameDefinition the game definition
 	 * @return the i set
 	 */
-	ISet createNewSet(ISession session, int nbGame);
+	ISet createNewSet(ISession session, IGameDefinition gameDefinition);
 
 }

@@ -53,17 +53,17 @@ public class NewGameHandler extends AbstractHandler implements IHandler {
 		NewGameDialog dialog = new NewGameDialog(
 				HandlerUtil.getActiveShell(event));
 		if (dialog.open() == Window.OK) {
+			IGameDefinition gameDef = dialog.getGameDefinition();
+
 			// Set
 			ISetService setService = ProtoPlugin.getService(ISetService.class);
-			int nbGame = dialog.getNumberSetGames();
-			ISet set = setService.createNewSet(session, nbGame);
+			ISet set = setService.createNewSet(session, gameDef);
 
 			// GameX01
 			IGameService gameService = ProtoPlugin
 					.getService(IGameService.class);
-			IGameDefinition gameDef = dialog.getGameDefinition();
 			List<IPlayer> players = dialog.getPlayers();
-			IGame game = gameService.createGame(set, gameDef, players);
+			IGame game = gameService.createGame(set, players);
 
 			LOG.info("New game created: {}", game);
 

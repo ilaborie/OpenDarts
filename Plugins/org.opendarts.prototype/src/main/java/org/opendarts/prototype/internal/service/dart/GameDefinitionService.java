@@ -1,7 +1,10 @@
 package org.opendarts.prototype.internal.service.dart;
 
+import java.util.List;
+
 import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.model.game.IGameDefinition;
+import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameDefinitionService;
 
 /**
@@ -20,8 +23,8 @@ public class GameDefinitionService implements IGameDefinitionService {
 	 * @see org.opendarts.prototype.service.IGameDefinitionService#createGameDefinition()
 	 */
 	@Override
-	public IGameDefinition createGameDefinition() {
-		return new GameDefinition();
+	public IGameDefinition createGameDefinition(List<IPlayer> players) {
+		return new GameDefinition(players);
 	}
 
 }

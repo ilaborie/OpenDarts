@@ -1,6 +1,8 @@
 package org.opendarts.prototype.internal.service.session;
 
+import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.internal.model.session.GameSet;
+import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.service.session.ISetService;
@@ -21,8 +23,8 @@ public class SetService implements ISetService {
 	 * @see org.opendarts.prototype.service.ISetService#createNewSet(org.opendarts.prototype.model.ISession, int)
 	 */
 	@Override
-	public ISet createNewSet(ISession session, int nbGame) {
-		ISet result = new GameSet(session, nbGame);
+	public ISet createNewSet(ISession session, IGameDefinition gameDefinition) {
+		ISet result = new GameSet(session, (GameDefinition) gameDefinition);
 		return result;
 	}
 

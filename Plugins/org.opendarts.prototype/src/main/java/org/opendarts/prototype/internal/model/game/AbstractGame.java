@@ -1,7 +1,6 @@
 package org.opendarts.prototype.internal.model.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +11,6 @@ import org.eclipse.core.runtime.SafeRunner;
 import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.game.GameEvent;
 import org.opendarts.prototype.model.game.IGame;
-import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.game.IGameEntry;
 import org.opendarts.prototype.model.game.IGameListener;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -37,9 +35,6 @@ public abstract class AbstractGame implements IGame {
 	/** The current entry. */
 	private IGameEntry currentEntry;
 
-	/** The game definition. */
-	private final IGameDefinition gameDef;
-
 	/** The players. */
 	private final List<IPlayer> players;
 
@@ -55,11 +50,10 @@ public abstract class AbstractGame implements IGame {
 	/**
 	 * Instantiates a new abstract game.
 	 */
-	public AbstractGame(GameSet set, GameDefinition gameDef, IPlayer... players) {
+	public AbstractGame(GameSet set, List<IPlayer> players) {
 		super();
 		this.set = set;
-		this.gameDef = gameDef;
-		this.players = new ArrayList<IPlayer>(Arrays.asList(players));
+		this.players = new ArrayList<IPlayer>(players);
 		this.listeners = new CopyOnWriteArraySet<IGameListener>();
 	}
 
@@ -128,23 +122,6 @@ public abstract class AbstractGame implements IGame {
 	@Override
 	public List<IPlayer> getPlayers() {
 		return Collections.unmodifiableList(this.players);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.model.IGame#getGameDefinition()
-	 */
-	@Override
-	public IGameDefinition getGameDefinition() {
-		return this.gameDef;
-	}
-
-	/**
-	 * Gets the game definition.
-	 *
-	 * @return the game definition
-	 */
-	public IGameDefinition getGameDef() {
-		return this.gameDef;
 	}
 
 	/**

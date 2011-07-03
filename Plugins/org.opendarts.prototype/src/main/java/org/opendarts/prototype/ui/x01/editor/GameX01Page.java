@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -184,17 +186,27 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 * @param player the player
 	 */
 	private void createInputScoreText(Composite main, IPlayer player) {
-		// TODO decoration
 		Text inputScoreText = this.toolkit.createText(main, "", SWT.CENTER);
-		TextInputListener listener = new TextInputListener(this.getSite()
-				.getShell(), inputScoreText, this.game, player);
-		GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 80)
-				.applyTo(inputScoreText);
-		inputScoreText.addKeyListener(listener);
 		inputScoreText.setFont(toolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
 		inputScoreText.setEnabled(false);
 		this.playerScoreInput.put(player, inputScoreText);
+
+		// layout
+		int indent = FieldDecorationRegistry.getDefault()
+				.getMaximumDecorationWidth() + 2;
+		GridDataFactory.fillDefaults().grab(true, false)
+				.indent(indent, SWT.DEFAULT).hint(SWT.DEFAULT, 80)
+				.applyTo(inputScoreText);
+
+		// decoration
+		ControlDecoration dec = new ControlDecoration(inputScoreText, SWT.TOP
+				| SWT.LEFT);
+
+		// listener
+		TextInputListener listener = new TextInputListener(this.getSite()
+				.getShell(), inputScoreText, this.game, player, dec);
+		inputScoreText.addKeyListener(listener);
 	}
 
 	/**

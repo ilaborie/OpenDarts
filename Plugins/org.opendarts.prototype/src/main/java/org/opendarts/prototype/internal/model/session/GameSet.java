@@ -1,6 +1,8 @@
 package org.opendarts.prototype.internal.model.session;
 
+import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.model.game.IGame;
+import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
 
@@ -12,8 +14,9 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	/** The session. */
 	private final ISession session;
 
-	/** The nb game. */
-	private final int nbGame;
+	/** The game definition. */
+	private final GameDefinition gameDefinition;
+
 
 	/**
 	 * Instantiates a new game set.
@@ -21,10 +24,10 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	 * @param session the session
 	 * @param nbGame the nb game
 	 */
-	public GameSet(ISession session, int nbGame) {
+	public GameSet(ISession session, GameDefinition gameDefinition) {
 		super();
 		this.session = session;
-		this.nbGame = nbGame;
+		this.gameDefinition = gameDefinition;
 	}
 
 	/**
@@ -36,13 +39,12 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		return this.session;
 	}
 
-	/**
-	 * Gets the nb game.
-	 *
-	 * @return the nb game
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.session.ISet#getGameDefinition()
 	 */
-	public int getNbGame() {
-		return this.nbGame;
+	@Override
+	public IGameDefinition getGameDefinition() {
+		return this.gameDefinition;
 	}
 
 }

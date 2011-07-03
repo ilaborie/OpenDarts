@@ -18,13 +18,6 @@ public interface IGame extends IAbstractGame {
 	List<IPlayer> getPlayers();
 
 	/**
-	 * Gets the game definition.
-	 *
-	 * @return the game definition
-	 */
-	IGameDefinition getGameDefinition();
-
-	/**
 	 * Gets the name.
 	 *
 	 * @return the name

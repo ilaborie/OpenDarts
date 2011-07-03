@@ -33,9 +33,6 @@ public class NewGameDialog extends TitleAreaDialog {
 	/** The players. */
 	private List<IPlayer> players;
 
-	/** The nb set games. */
-	private int nbSetGames;
-
 	/** The game definition. */
 	private IGameDefinition gameDefinition;
 
@@ -163,13 +160,13 @@ public class NewGameDialog extends TitleAreaDialog {
 				.getService(IPlayerService.class);
 
 		// XXX prototype
-		IGameDefinitionService gameDefService = ProtoPlugin
-				.getService(IGameDefinitionService.class);
-		this.gameDefinition = gameDefService.createGameDefinition();
-		this.nbSetGames = 5;
 		this.players = Arrays.asList(
 				playerService.getPlayer(System.getenv("USER")),
 				playerService.getComputerPlayer());
+
+		IGameDefinitionService gameDefService = ProtoPlugin
+				.getService(IGameDefinitionService.class);
+		this.gameDefinition = gameDefService.createGameDefinition(players);
 
 		super.okPressed();
 	}
@@ -182,15 +179,6 @@ public class NewGameDialog extends TitleAreaDialog {
 	 */
 	public List<IPlayer> getPlayers() {
 		return this.players;
-	}
-	
-	/**
-	 * Gets the number set games.
-	 *
-	 * @return the number set games
-	 */
-	public int getNumberSetGames() {
-		return this.nbSetGames;
 	}
 
 	/**

@@ -7,7 +7,7 @@ import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.player.IPlayer;
 
 /**
- * The Class GameEvent.
+ * The Class SetEvent.
  */
 public class GameEvent {
 
@@ -72,7 +72,7 @@ public class GameEvent {
 	@Override
 	public String toString() {
 		return MessageFormat.format(
-				"[GameEvent] {0} - {1} with '{'{2}, {3}, {4} '}' at {5}",
+				"[SetEvent] {0} - {1} with '{'{2}, {3}, {4} '}' at {5}",
 				this.game, this.type, this.entry, this.player, this.dartsThrow,
 				this.time.getTime());
 	}
