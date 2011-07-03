@@ -42,7 +42,7 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	private final IPlayer player;
 
 	/** The game service. */
-	private IGameService gameService;
+	private final IGameService gameService;
 
 	/** The dart throw util. */
 	private final DartThrowUtil dartThrowUtil;
@@ -166,9 +166,9 @@ public class TextInputListener implements FocusListener, SelectionListener,
 			case SWT.F7:
 			case SWT.F8:
 				if (e.stateMask == SWT.SHIFT) {
-					this.handleNewValue(shiftShortcutValue.get(e.keyCode));
+					this.handleNewValue(this.shiftShortcutValue.get(e.keyCode));
 				} else {
-					this.handleNewValue(shortcutValue.get(e.keyCode));
+					this.handleNewValue(this.shortcutValue.get(e.keyCode));
 				}
 				break;
 			case SWT.F9:
@@ -197,7 +197,7 @@ public class TextInputListener implements FocusListener, SelectionListener,
 		this.decoration.hide();
 		try {
 			Integer score = Integer.parseInt(leftValue);
-			Integer leftScore = this.game.getScore(player);
+			Integer leftScore = this.game.getScore(this.player);
 			String value = String.valueOf(leftScore - score);
 			this.handleNewValue(value);
 		} catch (NumberFormatException e) {
@@ -215,7 +215,7 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	private void handleWinning(int nbDart) {
 		this.decoration.hide();
 		try {
-			Integer leftScore = this.game.getScore(player);
+			Integer leftScore = this.game.getScore(this.player);
 			WinningX01DartsThrow dartThrow = new WinningX01DartsThrow(
 					leftScore, nbDart);
 			this.gameService.addWinningPlayerThrow(this.game, this.player,
@@ -234,11 +234,10 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	private void handleNewValue(String value) {
 		this.decoration.hide();
 		if (!"".equals(value)) {
-			Integer leftScore = this.game.getScore(player);
+			Integer leftScore = this.game.getScore(this.player);
 			ThreeDartThrow dartThrow;
 			try {
-				dartThrow = this.dartThrowUtil.getDartThrow((String) value,
-						leftScore);
+				dartThrow = this.dartThrowUtil.getDartThrow(value, leftScore);
 				if (dartThrow instanceof WinningX01DartsThrow) {
 					this.gameService.addWinningPlayerThrow(this.game,
 							this.player, dartThrow);

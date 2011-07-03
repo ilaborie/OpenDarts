@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.model.session.IAbstractGame;
+import org.opendarts.prototype.model.session.ISet;
 
 /**
  * The Interface IGame.
  */
 public interface IGame extends IAbstractGame {
-	
+
 	/**
 	 * Gets the players.
 	 *
@@ -30,6 +31,13 @@ public interface IGame extends IAbstractGame {
 	 * @return the description
 	 */
 	String getDescription();
+
+	/**
+	 * Gets the sets the.
+	 *
+	 * @return the sets the
+	 */
+	ISet getParentSet();
 
 	/**
 	 * Gets the game entries.
@@ -58,5 +66,12 @@ public interface IGame extends IAbstractGame {
 	 * @param listener the listener
 	 */
 	void removeListener(IGameListener listener);
+
+	/**
+	 * Gets the first player.
+	 *
+	 * @return the first player
+	 */
+	IPlayer getFirstPlayer();
 
 }

@@ -60,7 +60,8 @@ public class GameX01Entry implements IGameEntry {
 		this.playerThrow.put(player, newThrow);
 		// check if could be win
 		Integer startingScore = this.gameX01.getScore(player);
-		return (startingScore != null && (startingScore == newThrow.getScore()));
+		return ((startingScore != null) && (startingScore == newThrow
+				.getScore()));
 	}
 
 	/**

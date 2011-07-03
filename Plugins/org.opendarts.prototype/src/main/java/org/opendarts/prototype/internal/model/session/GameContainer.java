@@ -16,7 +16,7 @@ import org.opendarts.prototype.model.session.IGameContainer;
 public class GameContainer<T> implements IGameContainer<T> {
 
 	/** The start. */
-	private final Calendar start;
+	private Calendar start;
 
 	/** The end. */
 	private Calendar end;
@@ -35,7 +35,6 @@ public class GameContainer<T> implements IGameContainer<T> {
 	 */
 	public GameContainer() {
 		super();
-		this.start = Calendar.getInstance();
 		this.games = new ArrayList<T>();
 	}
 
@@ -45,6 +44,15 @@ public class GameContainer<T> implements IGameContainer<T> {
 	@Override
 	public Calendar getStart() {
 		return this.start;
+	}
+
+	/**
+	 * Sets the start.
+	 *
+	 * @param start the new start
+	 */
+	protected void setStart(Calendar start) {
+		this.start = start;
 	}
 
 	/* (non-Javadoc)
@@ -87,6 +95,15 @@ public class GameContainer<T> implements IGameContainer<T> {
 		return Collections.unmodifiableList(this.games);
 	}
 
+	/**
+	 * Gets the internals game.
+	 *
+	 * @return the internals game
+	 */
+	protected List<T> getInternalsGame() {
+		return this.games;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.model.IGameContainer#addGame(java.lang.Object)
 	 */
@@ -109,7 +126,7 @@ public class GameContainer<T> implements IGameContainer<T> {
 	 *
 	 * @param winner the new winner
 	 */
-	public void setWinner(IPlayer winner) {
+	protected void setWinner(IPlayer winner) {
 		this.winner = winner;
 	}
 
@@ -118,7 +135,7 @@ public class GameContainer<T> implements IGameContainer<T> {
 	 *
 	 * @param currentGame the new current game
 	 */
-	public void setCurrentGame(T currentGame) {
+	protected void setCurrentGame(T currentGame) {
 		this.currentGame = currentGame;
 	}
 

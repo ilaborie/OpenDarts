@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.eclipse.core.runtime.ISafeRunnable;
-import org.eclipse.core.runtime.SafeRunner;
 import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.game.GameEvent;
 import org.opendarts.prototype.model.game.IGame;
@@ -124,15 +122,22 @@ public abstract class AbstractGame implements IGame {
 		return Collections.unmodifiableList(this.players);
 	}
 
-	/**
-	 * Gets the sets the.
-	 *
-	 * @return the sets the
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.game.IGame#getFirstPlayer()
 	 */
-	public GameSet getSet() {
+	@Override
+	public IPlayer getFirstPlayer() {
+		return this.getPlayers().get(0);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.game.IGame#getParentSet()
+	 */
+	@Override
+	public GameSet getParentSet() {
 		return this.set;
 	}
-	
+
 	/**
 	 * Gets the current player.
 	 *
@@ -179,25 +184,12 @@ public abstract class AbstractGame implements IGame {
 	 * @param event the event
 	 */
 	protected void fireGameEvent(final GameEvent event) {
-		for (final IGameListener listener : listeners) {
-			SafeRunner.run(new ISafeRunnable() {
-
-				/* (non-Javadoc)
-				 * @see org.eclipse.core.runtime.ISafeRunnable#run()
-				 */
-				@Override
-				public void run() throws Exception {
-					listener.notifyGameEvent(event);
-				}
-
-				/* (non-Javadoc)
-				 * @see org.eclipse.core.runtime.ISafeRunnable#handleException(java.lang.Throwable)
-				 */
-				@Override
-				public void handleException(Throwable e) {
-					LOG.error("Error when sending game event: " + event, e);
-				}
-			});
+		for (final IGameListener listener : this.listeners) {
+			try {
+				listener.notifyGameEvent(event);
+			} catch (Throwable t) {
+				LOG.error("Error when sending game event: " + event, t);
+			}
 		}
 	}
 

@@ -16,8 +16,7 @@ public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	 *
 	 * @param configurer the configurer
 	 */
-	public OpenDartsWorkbenchWindowAdvisor(
-			IWorkbenchWindowConfigurer configurer) {
+	public OpenDartsWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
 	}
 

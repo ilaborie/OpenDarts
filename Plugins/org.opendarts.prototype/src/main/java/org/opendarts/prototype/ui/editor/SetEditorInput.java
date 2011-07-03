@@ -1,26 +1,32 @@
+/*
+ * 
+ */
 package org.opendarts.prototype.ui.editor;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.model.game.IGame;
+import org.opendarts.prototype.model.session.ISet;
+import org.opendarts.prototype.ui.ISharedImages;
 
 /**
  * The Class GameEditorInput.
  */
-public class GameEditorInput implements IEditorInput {
+public class SetEditorInput implements IEditorInput {
 
-	/** The game. */
-	private final IGame game;
+	/** The set. */
+	private final ISet set;
 
 	/**
 	 * Instantiates a new game editor input.
 	 *
 	 * @param game the game
 	 */
-	public GameEditorInput(IGame game) {
+	public SetEditorInput(ISet set) {
 		super();
-		this.game = game;
+		this.set = set;
 	}
 
 	/**
@@ -34,7 +40,9 @@ public class GameEditorInput implements IEditorInput {
 	public Object getAdapter(Class adapter) {
 		Object result = null;
 		if (IGame.class.isAssignableFrom(adapter)) {
-			result = this.game;
+			result = this.set.getCurrentGame();
+		} else if (ISet.class.isAssignableFrom(adapter)) {
+			result = this.set;
 		}
 		return result;
 	}
@@ -44,7 +52,7 @@ public class GameEditorInput implements IEditorInput {
 	 */
 	@Override
 	public boolean exists() {
-		return !this.game.isFinished();
+		return !this.set.isFinished();
 	}
 
 	/* (non-Javadoc)
@@ -52,8 +60,7 @@ public class GameEditorInput implements IEditorInput {
 	 */
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		// TODO Auto-generated method stub
-		return null;
+		return ProtoPlugin.getImageDescriptor(ISharedImages.IMG_EDITOR);
 	}
 
 	/* (non-Javadoc)
@@ -61,7 +68,7 @@ public class GameEditorInput implements IEditorInput {
 	 */
 	@Override
 	public String getName() {
-		return this.game.getName();
+		return this.set.getName();
 	}
 
 	/* (non-Javadoc)
@@ -77,17 +84,16 @@ public class GameEditorInput implements IEditorInput {
 	 */
 	@Override
 	public String getToolTipText() {
-		return this.game.getDescription();
+		return this.set.getDescription();
 	}
 
 	/**
-	 * Gets the game.
+	 * Gets the sets the.
 	 *
-	 * @return the game
+	 * @return the sets the
 	 */
-	public IGame getGame() {
-		return this.game;
+	public ISet getSet() {
+		return this.set;
 	}
 
 }
-

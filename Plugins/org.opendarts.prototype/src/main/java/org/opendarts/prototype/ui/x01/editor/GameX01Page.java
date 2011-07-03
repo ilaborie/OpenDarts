@@ -1,17 +1,18 @@
 package org.opendarts.prototype.ui.x01.editor;
 
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -24,11 +25,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.menus.IMenuService;
 import org.opendarts.prototype.ProtoPlugin;
-import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.model.game.GameEvent;
 import org.opendarts.prototype.model.game.IGameEntry;
@@ -61,7 +62,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	private OpenDartsFormsToolkit toolkit;
 
 	/** The game. */
-	private GameX01 game;
+	private final GameX01 game;
 
 	/** The player score. */
 	private final Map<IPlayer, Text> playerScoreLeft;
@@ -75,14 +76,20 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	/** The score viewer. */
 	private TableViewer scoreViewer;
 
+	/** The index. */
+	private final int index;
+
 	/**
 	 * Instantiates a new game page.
 	 *
 	 * @param gameEditor the game editor
+	 * @param game the game
+	 * @param index the index
 	 */
-	public GameX01Page(GameX01Editor gameEditor) {
-		super(gameEditor, "main", "main");
-		this.game = (GameX01) gameEditor.getGame();
+	public GameX01Page(SetX01Editor gameEditor, GameX01 game, int index) {
+		super(gameEditor, String.valueOf(index), "Game #" + index);
+		this.game = game;
+		this.index = index;
 		this.playerScoreLeft = new HashMap<IPlayer, Text>();
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
@@ -137,7 +144,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 		// Toolbar
 		ToolBarManager manager = (ToolBarManager) form.getToolBarManager();
-		IMenuService menuService = (IMenuService) getSite().getService(
+		IMenuService menuService = (IMenuService) this.getSite().getService(
 				IMenuService.class);
 		menuService.populateContributionManager(manager,
 				"toolbar:openwis.editor.game.toolbar");
@@ -145,6 +152,23 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 		// Register listener
 		this.game.addListener(this);
+
+		// initialize game
+		this.scoreViewer.setInput(this.game);
+		this.handlePlayer(this.game.getCurrentPlayer());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.editor.FormPage#setFocus()
+	 */
+	@Override
+	public void setFocus() {
+		Text text = this.playerScoreInput.get(this.game.getCurrentPlayer());
+		if (text != null) {
+			text.setFocus();
+		} else {
+			super.setFocus();
+		}
 	}
 
 	/**
@@ -166,6 +190,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 		// resize the row height using a MeasureItem listener
 		table.addListener(SWT.MeasureItem, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				// height cannot be per row so simply set
 				event.height = 24;
@@ -173,7 +198,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		});
 
 		this.scoreViewer = new TableViewer(table);
-		this.scoreViewer.setContentProvider(new ArrayContentProvider());
+		this.scoreViewer.setContentProvider(new GameX01ContentProvider());
 
 		this.addColumns();
 		this.toolkit.paintBordersFor(main);
@@ -271,8 +296,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		Composite main = this.toolkit.createComposite(parent);
 		GridLayoutFactory.fillDefaults().applyTo(main);
 
-		Section secPlayer = this.toolkit.createSection(main, Section.TITLE_BAR
-				| Section.CLIENT_INDENT);
+		Section secPlayer = this.toolkit.createSection(main,
+				ExpandableComposite.TITLE_BAR
+						| ExpandableComposite.CLIENT_INDENT);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
 		secPlayer.setText(player.getName());
 
@@ -337,85 +363,130 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	public void notifyGameEvent(GameEvent event) {
 		if (event.getGame().equals(this.game)) {
 			LOG.trace("New Game Event: {}", event);
-			Text txt;
-			IPlayer player;
-			TableViewerColumn column;
-			IGameEntry entry = event.getEntry();
 			switch (event.getType()) {
 				case GAME_INITIALIZED:
-					for (IPlayer p : this.game.getPlayers()) {
-						txt = this.playerScoreLeft.get(p);
-						txt.setText(this.getPlayerCurrentScore(p));
-					}
-					this.scoreViewer.setInput(this.game.getGameEntries());
-					// add dummy entry
-					this.scoreViewer.add(new DummyX01Entry(this.game));
+					this.handleGameInitialized();
 					break;
 				case GAME_ENTRY_CREATED:
-					this.scoreViewer.add(entry);
-					this.scoreViewer.reveal(entry);
+					this.handleNewEntry(event.getEntry());
 					break;
 				case GAME_ENTRY_UPDATED:
-					this.scoreViewer.update(entry, null);
-					player = event.getPlayer();
-					if (player != null) {
-						txt = this.playerScoreLeft.get(player);
-						txt.setText(this.getPlayerCurrentScore(player));
-					}
+					this.handleEntryUpdated(event, event.getEntry());
 					break;
 				case NEW_CURRENT_PLAYER:
-					player = event.getPlayer();
-					// mark column
-					column = this.playerColumn.get(player);
-					TableViewerColumn c;
-					for (IPlayer p : this.game.getPlayers()) {
-						c = this.playerColumn.get(p);
-						if (c.equals(column)) {
-							c.getColumn()
-									.setImage(
-											ProtoPlugin
-													.getImage(ISharedImages.IMG_ARROW_DECO));
-						} else {
-							c.getColumn().setImage(null);
-						}
-					}
-					// enable/disable inputs & focus
-					Text playerInputTxt = this.playerScoreInput.get(player);
-					for (Text inputTxt : this.playerScoreInput.values()) {
-						if (playerInputTxt.equals(inputTxt)) {
-							inputTxt.setEnabled(true);
-							inputTxt.setBackground(OpenDartsFormsToolkit
-									.getToolkit()
-									.getColors()
-									.getColor(
-											OpenDartsFormsToolkit.COLOR_ACTIVE));
-							inputTxt.setFocus();
-						} else {
-							inputTxt.setEnabled(false);
-							inputTxt.setText("");
-							inputTxt.setBackground(OpenDartsFormsToolkit
-									.getToolkit()
-									.getColors()
-									.getColor(
-											OpenDartsFormsToolkit.COLOR_INACTIVE));
-						}
-					}
+					this.handlePlayer(event.getPlayer());
 					break;
 				case GAME_FINISHED:
-					player = event.getPlayer();
-					column = this.playerColumn.get(player);
-					column.getColumn().setImage(
-							ProtoPlugin.getImage(ISharedImages.IMG_TICK_DECO));
-					// remove edition
-					for (Text inputTxt : this.playerScoreInput.values()) {
-						inputTxt.setEnabled(false);
-					}
-					for (TableViewerColumn col : this.playerColumn.values()) {
-						col.setEditingSupport(null);
-					}
-
+					this.handleGameFinished(event.getPlayer());
+					break;
 				case GAME_CANCELED:
 					// TODO cleanup
+			}
+		}
+	}
+
+	/**
+	 * Handle game initialized.
+	 */
+	private void handleGameInitialized() {
+		Text txt;
+		for (IPlayer p : this.game.getPlayers()) {
+			txt = this.playerScoreLeft.get(p);
+			txt.setText(this.getPlayerCurrentScore(p));
+		}
+		this.scoreViewer.setInput(this.game.getGameEntries());
+	}
+
+	/**
+	 * Handle new entry.
+	 *
+	 * @param entry the entry
+	 */
+	private void handleNewEntry(IGameEntry entry) {
+		this.scoreViewer.add(entry);
+		this.scoreViewer.reveal(entry);
+	}
+
+	/**
+	 * Handle entry updated.
+	 *
+	 * @param event the event
+	 * @param entry the entry
+	 */
+	private void handleEntryUpdated(GameEvent event, IGameEntry entry) {
+		Text txt;
+		IPlayer player;
+		this.scoreViewer.update(entry, null);
+		player = event.getPlayer();
+		if (player != null) {
+			txt = this.playerScoreLeft.get(player);
+			txt.setText(this.getPlayerCurrentScore(player));
+		}
+	}
+
+	/**
+	 * Handle game finished.
+	 *
+	 * @param player the player
+	 */
+	private void handleGameFinished(IPlayer player) {
+		TableViewerColumn column;
+		column = this.playerColumn.get(player);
+		column.getColumn().setImage(
+				ProtoPlugin.getImage(ISharedImages.IMG_TICK_DECO));
+		// remove edition
+		for (Text inputTxt : this.playerScoreInput.values()) {
+			inputTxt.setEnabled(false);
+		}
+		for (TableViewerColumn col : this.playerColumn.values()) {
+			col.setEditingSupport(null);
+		}
+
+		// End Game dialog
+		if (!this.game.getParentSet().isFinished()) {
+			String title = MessageFormat.format("{0} finished", this.game);
+			String message = game.getWinningMessage();
+			MessageDialog.openInformation(this.getSite().getShell(), title,
+					message);
+		}
+	}
+
+	/**
+	 * Handle player.
+	 *
+	 * @param player the player
+	 */
+	private void handlePlayer(IPlayer player) {
+		if (player != null) {
+			TableViewerColumn column;
+			// mark column
+			column = this.playerColumn.get(player);
+			TableViewerColumn c;
+			for (IPlayer p : this.game.getPlayers()) {
+				c = this.playerColumn.get(p);
+				if (c.equals(column)) {
+					c.getColumn().setImage(
+							ProtoPlugin.getImage(ISharedImages.IMG_ARROW_DECO));
+				} else {
+					c.getColumn().setImage(null);
+				}
+			}
+			// enable/disable inputs & focus
+			Text playerInputTxt = this.playerScoreInput.get(player);
+			for (Text inputTxt : this.playerScoreInput.values()) {
+				if (playerInputTxt.equals(inputTxt)) {
+					inputTxt.setEnabled(true);
+					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+							.getColors()
+							.getColor(OpenDartsFormsToolkit.COLOR_ACTIVE));
+					inputTxt.setFocus();
+				} else {
+					inputTxt.setEnabled(false);
+					inputTxt.setText("");
+					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+							.getColors()
+							.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
+				}
 			}
 		}
 	}

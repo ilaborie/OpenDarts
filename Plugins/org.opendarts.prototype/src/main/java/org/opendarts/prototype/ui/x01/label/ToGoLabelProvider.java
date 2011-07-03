@@ -25,7 +25,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 		IStyledLabelProvider {
 
 	/** The player. */
-	private IPlayer player;
+	private final IPlayer player;
 
 	/**
 	 * Instantiates a new score label provider.
@@ -70,7 +70,6 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD);
 	}
 
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider#getStyledText(java.lang.Object)
 	 */
@@ -96,10 +95,13 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 		Styler styler = new Styler() {
 			@Override
 			public void applyStyles(TextStyle textStyle) {
-				textStyle.background = getBackground(element);
-				textStyle.font = getFont(element);
-				textStyle.foreground = getForeground(element);
-				textStyle.underline = ((score / 111) > 0) && (score % 111 == 0);
+				textStyle.background = ToGoLabelProvider.this
+						.getBackground(element);
+				textStyle.font = ToGoLabelProvider.this.getFont(element);
+				textStyle.foreground = ToGoLabelProvider.this
+						.getForeground(element);
+				textStyle.underline = ((score / 111) > 0)
+						&& ((score % 111) == 0);
 			}
 		};
 

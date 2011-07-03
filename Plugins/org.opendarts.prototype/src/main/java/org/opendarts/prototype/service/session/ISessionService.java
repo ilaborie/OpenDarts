@@ -21,5 +21,4 @@ public interface ISessionService {
 	 */
 	ISession getSession();
 
-
 }

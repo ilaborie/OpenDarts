@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -88,8 +89,16 @@ public class GameX01 extends AbstractGame implements IGame {
 	 */
 	@Override
 	public String getName() {
-		return MessageFormat.format("501 - {0} vs {1}", this.getFirstPlayer(),
-				this.getSecondPlayer());
+		String result;
+		if (this.getPlayers().size() == 2) {
+			result = MessageFormat.format("{2} - {0} vs {1}",
+					this.getFirstPlayer(), this.getSecondPlayer(),
+					this.scoreToDo);
+		} else {
+			result = MessageFormat.format("{1} - {0} ", this.getPlayers(),
+					this.scoreToDo);
+		}
+		return result;
 	}
 
 	/* (non-Javadoc)
@@ -106,15 +115,6 @@ public class GameX01 extends AbstractGame implements IGame {
 	@Override
 	public String getDescription() {
 		return this.getName();
-	}
-
-	/**
-	 * Gets the first player.
-	 *
-	 * @return the first player
-	 */
-	public IPlayer getFirstPlayer() {
-		return this.getPlayers().get(0);
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class GameX01 extends AbstractGame implements IGame {
 		// Add darts
 		GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
 		entry.addPlayerThrow(player, dartThrow);
-		entry.setNbPlayedDart((entry.getRound() - 1) * 3
+		entry.setNbPlayedDart(((entry.getRound() - 1) * 3)
 				+ dartThrow.getNbDartToFinish());
 
 		// Notify
@@ -220,5 +220,53 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.end(player);
 		this.fireGameEvent(GameEvent.Factory.newGameFinishedEvent(this,
 				this.getWinner(), entry, dartThrow));
+		((GameSet) this.getParentSet()).handleFinishedGame(this);
+	}
+
+	/**
+	 * Gets the winning message.
+	 *
+	 * @return the winning message
+	 */
+	public String getWinningMessage() {
+		String result = "";
+		if (this.getWinner() != null) {
+			GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
+			result = MessageFormat.format("{0} win with {1} darts",
+					this.getWinner(), entry.getNbPlayedDart());
+		} else {
+			result = "Draw game";
+		}
+		return result;
+	}
+
+	/**
+	 * Update player throw.
+	 *
+	 * @param entry the entry
+	 * @param player the player
+	 * @param dartThrow the dart throw
+	 */
+	public void updatePlayerThrow(GameX01Entry entry, IPlayer player,
+			ThreeDartThrow dartThrow) {
+		int score = this.scoreToDo;
+		ThreeDartThrow dThrow;
+		GameX01Entry e;
+		for (Iterator<GameX01Entry> itEntries = this.entries.iterator(); itEntries
+				.hasNext();) {
+			e = itEntries.next();
+			dThrow = e.getPlayerThrow().get(player);
+			if (e.equals(entry)) {
+				e.addPlayerThrow(player, dartThrow);
+				dThrow = dartThrow;
+			}
+			// break 
+			if (dThrow != null) {
+				score -= dThrow.getScore();
+			}
+		}
+		this.score.put(player, score);
+		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
+				player, entry, dartThrow));
 	}
 }

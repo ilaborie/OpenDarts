@@ -1,23 +1,23 @@
 package org.opendarts.prototype.model.session;
 
 /**
- * The listener interface for receiving Set events.
- * The class that is interested in processing a Set
+ * The listener interface for receiving Session events.
+ * The class that is interested in processing a Session
  * event implements this interface, and the object created
  * with that class is registered with a component using the
  * component's <code>addListener<code> method. When
- * the Set event occurs, that object's appropriate
+ * the Session event occurs, that object's appropriate
  * method is invoked.
  *
- * @see SetEvent
+ * @see SessionEvent
  */
-public interface ISetListener {
+public interface ISessionListener {
 
 	/**
 	 * Notify game event.
 	 *
 	 * @param event the event
 	 */
-	void notifySetEvent(SetEvent event);
+	void notifySessionEvent(SessionEvent event);
 
 }

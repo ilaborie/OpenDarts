@@ -9,13 +9,11 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Shell;
-import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 import org.opendarts.prototype.model.player.IPlayer;
-import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.x01.utils.DartThrowUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +36,6 @@ public class ScoreX01EditingSupport extends EditingSupport {
 	/** The cell editor. */
 	private final TextCellEditor cellEditor;
 
-	/** The game service. */
-	private final IGameService gameService;
-
 	/** The dart throw util. */
 	private final DartThrowUtil dartThrowUtil;
 
@@ -56,11 +51,10 @@ public class ScoreX01EditingSupport extends EditingSupport {
 		super(viewer);
 		this.game = game;
 		this.player = player;
-		this.gameService = ProtoPlugin.getService(IGameService.class);
 
 		this.dartThrowUtil = new DartThrowUtil(parentShell, game, player);
 		this.cellEditor = new TextCellEditor(viewer.getTable());
-		cellEditor.setValidator(new ICellEditorValidator() {
+		this.cellEditor.setValidator(new ICellEditorValidator() {
 			@Override
 			public String isValid(Object value) {
 				String result = null;
@@ -117,12 +111,14 @@ public class ScoreX01EditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		if (!"".equals(value)) {
-			Integer leftScore = this.game.getScore(player);
+			if (element instanceof GameX01Entry) {
+				GameX01Entry entry = (GameX01Entry) element;
+			Integer leftScore = this.game.getScore(this.player);
 			ThreeDartThrow dartThrow;
 			try {
 				dartThrow = this.dartThrowUtil.getDartThrow((String) value,
 						leftScore);
-				this.gameService.addPlayerThrow(this.game, this.player,
+					this.game.updatePlayerThrow(entry, this.player,
 						dartThrow);
 			} catch (NumberFormatException e) {
 				// Should not arrived
@@ -130,8 +126,7 @@ public class ScoreX01EditingSupport extends EditingSupport {
 			} catch (InvalidDartThrowException e) {
 				// Should not arrived
 				LOG.error("WTF !", e);
-			}
+			}	}
 		}
 	}
-
 }

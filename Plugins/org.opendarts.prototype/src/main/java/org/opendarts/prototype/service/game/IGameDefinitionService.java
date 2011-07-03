@@ -1,6 +1,7 @@
 package org.opendarts.prototype.service.game;
 
 import java.util.List;
+import java.util.Map;
 
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -16,5 +17,6 @@ public interface IGameDefinitionService {
 	 * @param players the players
 	 * @return the game definition
 	 */
-	IGameDefinition createGameDefinition(List<IPlayer> players);
+	IGameDefinition createGameDefinition(List<IPlayer> players,
+			Map<String, Object> params);
 }

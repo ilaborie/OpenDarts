@@ -78,8 +78,8 @@ public class ProtoPlugin extends AbstractUIPlugin {
 	public static Image getImage(String path) {
 		Image image = plugin.getImageRegistry().get(path);
 		if (image == null) {
-		ImageDescriptor imageDescriptor = imageDescriptorFromPlugin(PLUGIN_ID,
-				path);
+			ImageDescriptor imageDescriptor = imageDescriptorFromPlugin(
+					PLUGIN_ID, path);
 			plugin.getImageRegistry().put(path, imageDescriptor);
 			image = imageDescriptor.createImage();
 		}

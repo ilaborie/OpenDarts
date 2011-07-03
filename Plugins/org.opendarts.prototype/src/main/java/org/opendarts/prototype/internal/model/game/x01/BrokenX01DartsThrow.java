@@ -15,8 +15,7 @@ public class BrokenX01DartsThrow extends ThreeDartThrow {
 	 * @param score the score
 	 * @throws InvalidDartThrowException the invalid dart throw exception
 	 */
-	public BrokenX01DartsThrow(int score)
-			throws InvalidDartThrowException {
+	public BrokenX01DartsThrow(int score) throws InvalidDartThrowException {
 		super(score);
 	}
 

@@ -105,8 +105,8 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	private static void registerFont(Font initialFont, String key, int height) {
 		FontData[] fontData = initialFont.getFontData();
-		for (int i = 0; i < fontData.length; i++) {
-			fontData[i].setHeight(height);
+		for (FontData element : fontData) {
+			element.setHeight(height);
 		}
 		fontRegistry.put(key, fontData);
 	}

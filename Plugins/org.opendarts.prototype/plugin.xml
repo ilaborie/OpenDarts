@@ -22,8 +22,8 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            id="opendarts.cmd.newGame"
-            name="New Game">
+            id="opendarts.cmd.newSet"
+            name="New Set">
       </command>
       <command
             id="opendarts.cmd.StartGame"
@@ -38,7 +38,7 @@
          <menu
                label="File">
             <command
-                  commandId="opendarts.cmd.newGame"
+                  commandId="opendarts.cmd.newSet"
                   label="New Game..."
                   style="push">
             </command>
@@ -64,7 +64,7 @@
                id="opendarts.toolbar.file"
                label="File">
             <command
-                  commandId="opendarts.cmd.newGame"
+                  commandId="opendarts.cmd.newSet"
                   style="push">
             </command>
             <command
@@ -75,26 +75,18 @@
          <toolbar
                id="opendarts.toolbar.game"
                label="Game">
-            <command
-                  commandId="opendarts.cmd.StartGame"
-                  style="push">
-            </command>
          </toolbar>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="toolbar:openwis.editor.game.toolbar">
-         <command
-               commandId="opendarts.cmd.StartGame"
-               style="push">
-         </command>
       </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.opendarts.prototype.ui.handler.NewGameHandler"
-            commandId="opendarts.cmd.newGame">
+            class="org.opendarts.prototype.ui.handler.NewSetHandler"
+            commandId="opendarts.cmd.newSet">
       </handler>
       <handler
             class="org.opendarts.prototype.ui.handler.StartGameHandler"
@@ -112,7 +104,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.opendarts.prototype.ui.x01.editor.GameX01Editor"
+            class="org.opendarts.prototype.ui.x01.editor.SetX01Editor"
             default="false"
             id="opendarts.editor.x01"
             name="x01 Game">
@@ -121,7 +113,7 @@
    <extension
          point="org.eclipse.ui.commandImages">
       <image
-            commandId="opendarts.cmd.newGame"
+            commandId="opendarts.cmd.newSet"
             icon="icons/actions/add.png">
       </image>
       <image
@@ -136,7 +128,7 @@
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="opendarts.cmd.newGame"
+            commandId="opendarts.cmd.newSet"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+G">
       </key>

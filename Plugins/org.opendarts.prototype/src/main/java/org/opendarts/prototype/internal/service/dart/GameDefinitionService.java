@@ -1,6 +1,7 @@
 package org.opendarts.prototype.internal.service.dart;
 
 import java.util.List;
+import java.util.Map;
 
 import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.model.game.IGameDefinition;
@@ -23,8 +24,12 @@ public class GameDefinitionService implements IGameDefinitionService {
 	 * @see org.opendarts.prototype.service.IGameDefinitionService#createGameDefinition()
 	 */
 	@Override
-	public IGameDefinition createGameDefinition(List<IPlayer> players) {
-		return new GameDefinition(players);
+	public IGameDefinition createGameDefinition(List<IPlayer> players,
+			Map<String, Object> params) {
+		int nbGameWin = (Integer) params.get(IGameDefinition.NB_GAME_TO_WIN);
+		boolean playAll = Boolean.TRUE.equals(params
+				.get(IGameDefinition.PLAY_ALL_GAME));
+		return new GameDefinition(players, nbGameWin, playAll);
 	}
 
 }

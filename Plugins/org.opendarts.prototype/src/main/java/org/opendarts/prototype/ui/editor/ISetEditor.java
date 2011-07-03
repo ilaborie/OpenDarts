@@ -1,25 +1,24 @@
 package org.opendarts.prototype.ui.editor;
 
 import org.eclipse.ui.IEditorPart;
-import org.opendarts.prototype.model.game.IGame;
+import org.opendarts.prototype.model.session.ISet;
 
 /**
- * The Interface IGameEditor.
  */
-public interface IGameEditor extends IEditorPart {
+public interface ISetEditor extends IEditorPart {
 
 	/**
 	 * Gets the game input.
 	 *
 	 * @return the game input
 	 */
-	GameEditorInput getGameInput();
+	SetEditorInput getSetInput();
 
 	/**
 	 * Gets the game.
 	 *
 	 * @return the game
 	 */
-	IGame getGame();
+	ISet getSet();
 
 }

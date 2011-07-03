@@ -6,14 +6,14 @@ import java.util.List;
  * The Interface IDartsThrow.
  */
 public interface IDartsThrow {
-	
+
 	/**
 	 * Gets the score.
 	 *
 	 * @return the score
 	 */
 	int getScore();
-	
+
 	/**
 	 * Gets the list.
 	 *

@@ -26,7 +26,7 @@ public class SessionService implements ISessionService {
 	 */
 	@Override
 	public ISession getSession() {
-		ISession result = currentSession;
+		ISession result = this.currentSession;
 		if (result == null) {
 			this.currentSession = this.createSession();
 			result = this.currentSession;

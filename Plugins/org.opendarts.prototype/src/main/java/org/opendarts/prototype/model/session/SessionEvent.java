@@ -3,54 +3,42 @@ package org.opendarts.prototype.model.session;
 import java.text.MessageFormat;
 import java.util.Calendar;
 
-import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.player.IPlayer;
 
 /**
- * The Class SetEvent.
  */
-public class SetEvent {
+public class SessionEvent {
 
 	/**
-	 * The Enum GameEventType.
 	 */
-	public static enum SetEventType {
-		/** The SE t_ initialized. */
-		SET_INITIALIZED,
-		/** The SE t_ canceled. */
-		SET_CANCELED,
-		/** The SE t_ finished. */
-		SET_FINISHED,
-		/** The NE w_ curren t_ game. */
-		NEW_CURRENT_GAME;
+	public static enum SessionEventType {
+
+		SESSION_INITIALIZED, SESSION_CANCELED, SESSION_FINISHED, NEW_CURRENT_SET;
+
 	}
 
-	/** The game. */
-	private IGame game;
+	private final ISession session;
 
 	/** The player. */
 	private IPlayer player;
 
 	/** The Set. */
-	private final ISet set;
+	private ISet set;
 
 	/** The type. */
-	private final SetEventType type;
+	private final SessionEventType type;
 
 	/** The time. */
 	private final Calendar time;
 
 	/**
-	 * Instantiates a new sets the event.
 	 *
-	 * @param type the type
-	 * @param set the set
 	 */
-	private SetEvent(SetEventType type, ISet set) {
+	private SessionEvent(SessionEventType type, ISession session) {
 		super();
 		this.time = Calendar.getInstance();
 		this.type = type;
-		this.set = set;
+		this.session = session;
 	}
 
 	/* (non-Javadoc)
@@ -59,18 +47,9 @@ public class SetEvent {
 	@Override
 	public String toString() {
 		return MessageFormat.format(
-				"[SetEvent] {0} - {1} with '{'{2}, {3}, {4} '}' at {5}",
-				this.set, this.type, this.game, this.player,
+				"[SessionEvent] {0} - {1} with '{'{2}, {3}'}' at {4}",
+				this.session, this.type, this.set, this.player,
 				this.time.getTime());
-	}
-
-	/**
-	 * Gets the game.
-	 *
-	 * @return the game
-	 */
-	public IGame getGame() {
-		return this.game;
 	}
 
 	/**
@@ -80,6 +59,10 @@ public class SetEvent {
 	 */
 	public IPlayer getPlayer() {
 		return this.player;
+	}
+
+	public ISession getSession() {
+		return this.session;
 	}
 
 	/**
@@ -96,7 +79,7 @@ public class SetEvent {
 	 *
 	 * @return the type
 	 */
-	public SetEventType getType() {
+	public SessionEventType getType() {
 		return this.type;
 	}
 
@@ -121,40 +104,40 @@ public class SetEvent {
 		}
 
 		/**
-		 * New set initialized event.
 		 *
 		 * @param set the set
 		 * @return the sets the event
 		 */
-		public static SetEvent newSetInitializedEvent(ISet set) {
-			SetEvent result = new SetEvent(SetEventType.SET_INITIALIZED, set);
+		public static SessionEvent newSessionInitializedEvent(ISession session) {
+			SessionEvent result = new SessionEvent(
+					SessionEventType.SESSION_INITIALIZED, session);
 			return result;
 		}
 
 		/**
-		 * New set finished event.
 		 *
 		 * @param set the set
 		 * @param winner the winner
 		 * @param game the game
 		 * @return the sets the event
 		 */
-		public static SetEvent newSetFinishedEvent(ISet set, IPlayer winner,
-				IGame game) {
-			SetEvent result = new SetEvent(SetEventType.SET_FINISHED, set);
+		public static SessionEvent newSessionEvent(ISession session,
+				IPlayer winner, ISet set) {
+			SessionEvent result = new SessionEvent(
+					SessionEventType.SESSION_FINISHED, session);
 			result.player = winner;
-			result.game = game;
+			result.set = set;
 			return result;
 		}
 
 		/**
-		 * New set canceled event.
 		 *
 		 * @param set the set
 		 * @return the sets the event
 		 */
-		public static SetEvent newSetCanceledEvent(ISet set) {
-			SetEvent result = new SetEvent(SetEventType.SET_CANCELED, set);
+		public static SessionEvent newSessionCanceledEvent(ISession session) {
+			SessionEvent result = new SessionEvent(
+					SessionEventType.SESSION_CANCELED, session);
 			return result;
 		}
 
@@ -165,9 +148,10 @@ public class SetEvent {
 		 * @param game the game
 		 * @return the sets the event
 		 */
-		public static SetEvent newSetGameEvent(ISet set, IGame game) {
-			SetEvent result = new SetEvent(SetEventType.NEW_CURRENT_GAME, set);
-			result.game = game;
+		public static SessionEvent newSessionSetEvent(ISession session, ISet set) {
+			SessionEvent result = new SessionEvent(
+					SessionEventType.NEW_CURRENT_SET, session);
+			result.set = set;
 			return result;
 		}
 	}

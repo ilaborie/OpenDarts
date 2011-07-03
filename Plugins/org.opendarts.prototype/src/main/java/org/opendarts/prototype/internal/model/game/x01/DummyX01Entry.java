@@ -1,10 +1,11 @@
 package org.opendarts.prototype.internal.model.game.x01;
 
+import org.opendarts.prototype.model.game.IGameEntry;
 
 /**
  * The Class DummyX01Entry.
  */
-public class DummyX01Entry {
+public class DummyX01Entry implements IGameEntry {
 
 	/** The game. */
 	private final GameX01 game;
@@ -27,6 +28,5 @@ public class DummyX01Entry {
 	public GameX01 getGame() {
 		return this.game;
 	}
-
 
 }

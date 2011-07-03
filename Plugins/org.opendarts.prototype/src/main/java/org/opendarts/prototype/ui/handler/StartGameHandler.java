@@ -9,7 +9,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.service.game.IGameService;
-import org.opendarts.prototype.ui.editor.IGameEditor;
+import org.opendarts.prototype.ui.editor.ISetEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +30,9 @@ public class StartGameHandler extends AbstractHandler implements IHandler {
 		LOG.info("Start Game");
 
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (editor instanceof IGameEditor) {
-			IGameEditor gameEditor = (IGameEditor) editor;
-			IGame game = gameEditor.getGame();
+		if (editor instanceof ISetEditor) {
+			ISetEditor gameEditor = (ISetEditor) editor;
+			IGame game = gameEditor.getSet().getCurrentGame();
 
 			IGameService gameService = ProtoPlugin
 					.getService(IGameService.class);
@@ -40,7 +40,5 @@ public class StartGameHandler extends AbstractHandler implements IHandler {
 		}
 		return null;
 	}
-	
-	
 
 }

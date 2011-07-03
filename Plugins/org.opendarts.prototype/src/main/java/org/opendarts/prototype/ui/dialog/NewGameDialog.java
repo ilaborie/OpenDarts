@@ -1,7 +1,9 @@
 package org.opendarts.prototype.ui.dialog;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -37,7 +39,8 @@ public class NewGameDialog extends TitleAreaDialog {
 	private IGameDefinition gameDefinition;
 
 	/** The toolkit. */
-	private OpenDartsFormsToolkit toolkit = OpenDartsFormsToolkit.getToolkit();
+	private final OpenDartsFormsToolkit toolkit = OpenDartsFormsToolkit
+			.getToolkit();
 
 	/**
 	 * Instantiates a new new game dialog.
@@ -105,7 +108,7 @@ public class NewGameDialog extends TitleAreaDialog {
 		group.setText("GameX01 Description");
 
 		// XXX prototype 
-		Label label = toolkit.createDummyLabel(group,
+		Label label = this.toolkit.createDummyLabel(group,
 				"Prototype is only for 501");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 
@@ -124,7 +127,7 @@ public class NewGameDialog extends TitleAreaDialog {
 		group.setText("Legs");
 
 		// XXX prototype 
-		Label label = toolkit.createDummyLabel(group,
+		Label label = this.toolkit.createDummyLabel(group,
 				"Prototype is only for 'Best Of 5'");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 
@@ -143,7 +146,7 @@ public class NewGameDialog extends TitleAreaDialog {
 		group.setText("Players");
 
 		// XXX prototype 
-		Label label = toolkit.createDummyLabel(group,
+		Label label = this.toolkit.createDummyLabel(group,
 				"Prototype is only for 'User vs Computer'");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 
@@ -164,14 +167,18 @@ public class NewGameDialog extends TitleAreaDialog {
 				playerService.getPlayer(System.getenv("USER")),
 				playerService.getComputerPlayer());
 
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(IGameDefinition.NB_GAME_TO_WIN, 3);
+		params.put(IGameDefinition.PLAY_ALL_GAME, false);
+
 		IGameDefinitionService gameDefService = ProtoPlugin
 				.getService(IGameDefinitionService.class);
-		this.gameDefinition = gameDefService.createGameDefinition(players);
+		this.gameDefinition = gameDefService.createGameDefinition(this.players,
+				params);
 
 		super.okPressed();
 	}
-	
-	
+
 	/**
 	 * Gets the players.
 	 *

@@ -34,7 +34,7 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 	 */
 	protected void checkDartToFinish() throws InvalidDartThrowException {
 		super.check();
-		if (this.nbDartToFinish < 1 || this.nbDartToFinish > 3) {
+		if ((this.nbDartToFinish < 1) || (this.nbDartToFinish > 3)) {
 			throw new InvalidDartThrowException("Should finish with 1-3 darts");
 		}
 	}

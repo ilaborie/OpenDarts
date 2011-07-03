@@ -49,7 +49,7 @@ public class GameEvent {
 
 	/** The type. */
 	private final GameEventType type;
-	
+
 	/** The time. */
 	private final Calendar time;
 
@@ -131,7 +131,6 @@ public class GameEvent {
 		return this.time;
 	}
 
-
 	/**
 	 * The Class Factory.
 	 */
@@ -142,7 +141,7 @@ public class GameEvent {
 		private Factory() {
 			super();
 		}
-		
+
 		/**
 		 * New game initialized event.
 		 *
@@ -166,8 +165,7 @@ public class GameEvent {
 		 */
 		public static GameEvent newGameFinishedEvent(IGame game,
 				IPlayer winner, IGameEntry entry, IDartsThrow dartsThrow) {
-			GameEvent result = new GameEvent(GameEventType.GAME_FINISHED,
-					game);
+			GameEvent result = new GameEvent(GameEventType.GAME_FINISHED, game);
 			result.player = winner;
 			result.entry = entry;
 			result.dartsThrow = dartsThrow;

@@ -1,5 +1,7 @@
 package org.opendarts.prototype.model.game;
 
+import org.opendarts.prototype.model.session.SetEvent;
+
 /**
  * The listener interface for receiving Game events.
  * The class that is interested in processing a Game

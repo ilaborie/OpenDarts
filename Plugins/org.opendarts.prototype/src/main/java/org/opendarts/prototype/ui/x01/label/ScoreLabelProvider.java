@@ -26,7 +26,7 @@ import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 public class ScoreLabelProvider extends ColumnLabelProvider {
 
 	/** The player. */
-	private IPlayer player;
+	private final IPlayer player;
 
 	/**
 	 * Instantiates a new score label provider.

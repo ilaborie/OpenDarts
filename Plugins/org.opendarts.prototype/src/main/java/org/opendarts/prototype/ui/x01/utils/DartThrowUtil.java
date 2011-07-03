@@ -53,7 +53,7 @@ public class DartThrowUtil {
 		if (leftScore == result.getScore()) {
 			// Dialog for Broken, 1, 2, 3 darts finish
 			GameX01FinishDialog dialog = new GameX01FinishDialog(
-					this.parentShell, game, player);
+					this.parentShell, this.game, this.player);
 			dialog.open();
 			int nbDarts = dialog.getNbDarts();
 			if (nbDarts > 0) {

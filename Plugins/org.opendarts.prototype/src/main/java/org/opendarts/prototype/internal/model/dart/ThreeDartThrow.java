@@ -43,7 +43,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	 */
 	public ThreeDartThrow(String value) throws NumberFormatException,
 			InvalidDartThrowException {
-		this(Integer.parseInt((String) value));
+		this(Integer.parseInt(value));
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class ThreeDartThrow implements IDartsThrow {
 		} else if (this.score > 180) {
 			throw new InvalidDartThrowException("Score should be ² 180");
 		} else if (invalid.contains(this.score)) {
-			throw new InvalidDartThrowException("Score should be " + score);
+			throw new InvalidDartThrowException("Score should be " + this.score);
 		}
 	}
 
@@ -92,7 +92,6 @@ public class ThreeDartThrow implements IDartsThrow {
 		this.darts.add(dart3);
 	}
 
-
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.model.dart.IDartsThrow#getScore()
 	 */
@@ -108,7 +107,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	public List<IDart> getDarts() {
 		return Collections.unmodifiableList(this.darts);
 	}
-	
+
 	/**
 	 * Gets the internal darts.
 	 *

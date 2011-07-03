@@ -36,6 +36,7 @@ public class GameX01Service implements IGameService {
 	@Override
 	public IGame createGame(ISet set, List<IPlayer> players) {
 		GameX01 result = new GameX01((GameSet) set, players);
+		set.addGame(result);
 		return result;
 	}
 
@@ -55,7 +56,7 @@ public class GameX01Service implements IGameService {
 	@Override
 	public void addPlayerThrow(GameX01 igame, IPlayer player,
 			IDartsThrow idartThrow) {
-		GameX01 game = (GameX01) igame;
+		GameX01 game = igame;
 		ThreeDartThrow dartThrow = (ThreeDartThrow) idartThrow;
 		game.addPlayerThrow(player, dartThrow);
 	}
@@ -66,7 +67,7 @@ public class GameX01Service implements IGameService {
 	@Override
 	public void addWinningPlayerThrow(GameX01 igame, IPlayer player,
 			IDartsThrow idartThrow) {
-		GameX01 game = (GameX01) igame;
+		GameX01 game = igame;
 		WinningX01DartsThrow dartThrow = (WinningX01DartsThrow) idartThrow;
 		game.addWinningPlayerThrow(player, dartThrow);
 	}
