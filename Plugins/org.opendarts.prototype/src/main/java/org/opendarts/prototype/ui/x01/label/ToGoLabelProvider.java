@@ -3,8 +3,6 @@
  */
 package org.opendarts.prototype.ui.x01.label;
 
-import org.eclipse.jface.resource.FontRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
@@ -68,10 +66,8 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 	 */
 	@Override
 	public Font getFont(Object element) {
-		FontRegistry fontRegistry = JFaceResources.getFontRegistry();
-		Font result = fontRegistry.getBold(JFaceResources.BANNER_FONT);
-
-		return result;
+		return OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD);
 	}
 
 

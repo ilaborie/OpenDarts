@@ -16,6 +16,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -162,6 +164,14 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
+		// resize the row height using a MeasureItem listener
+		table.addListener(SWT.MeasureItem, new Listener() {
+			public void handleEvent(Event event) {
+				// height cannot be per row so simply set
+				event.height = 24;
+			}
+		});
+
 		this.scoreViewer = new TableViewer(table);
 		this.scoreViewer.setContentProvider(new ArrayContentProvider());
 
@@ -187,7 +197,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 */
 	private void createInputScoreText(Composite main, IPlayer player) {
 		Text inputScoreText = this.toolkit.createText(main, "", SWT.CENTER);
-		inputScoreText.setFont(toolkit
+		inputScoreText.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
 		inputScoreText.setEnabled(false);
 		this.playerScoreInput.put(player, inputScoreText);
@@ -213,7 +223,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 * Adds the columns.
 	 */
 	private void addColumns() {
-		int turnWidth = 70;
+		int turnWidth = 100;
 
 		List<IPlayer> players = this.game.getPlayers();
 		if (players.size() == 2) {
@@ -237,7 +247,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 */
 	private void createPlayerColumns(IPlayer player) {
 		Shell shell = this.getSite().getShell();
-		int width = 100;
+		int width = 94;
 		int style = SWT.CENTER;
 		TableViewerColumn column;
 		column = this.toolkit.createTableColumn("Scored", this.scoreViewer,
@@ -294,7 +304,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 		Text txtScore = this.toolkit.createText(main,
 				this.getPlayerCurrentScore(player), SWT.READ_ONLY | SWT.CENTER);
-		txtScore.setFont(toolkit.getFont(OpenDartsFormsToolkit.FONT_SCORE_LEFT));
+		txtScore.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_LEFT));
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(txtScore);
 
 		this.playerScoreLeft.put(player, txtScore);

@@ -5,7 +5,6 @@ package org.opendarts.prototype.ui.x01.label;
 
 import java.text.MessageFormat;
 
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -66,8 +65,8 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Font getFont(Object element) {
-		return JFaceResources.getFontRegistry().getBold(
-				JFaceResources.BANNER_FONT);
+		return OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD);
 	}
 
 }

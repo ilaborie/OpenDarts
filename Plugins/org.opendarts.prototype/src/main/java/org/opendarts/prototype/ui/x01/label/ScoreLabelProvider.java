@@ -7,6 +7,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.forms.IFormColors;
 import org.opendarts.prototype.ProtoPlugin;
@@ -69,11 +70,10 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof GameX01Entry) {
-			GameX01Entry gameEntry = (GameX01Entry) element;
-			Integer score = gameEntry.getGame().getScore(this.player);
-			if (score != null && score == 0) {
-				return ProtoPlugin.getImage(ISharedImages.IMG_TICK_DECO);
+		if (element instanceof DummyX01Entry) {
+			DummyX01Entry entry = (DummyX01Entry) element;
+			if (this.player.equals(entry.getGame().getFirstPlayer())) {
+				return ProtoPlugin.getImage(ISharedImages.IMG_START_DECO);
 			}
 		}
 		return super.getImage(element);
@@ -99,6 +99,15 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 			}
 		}
 		return super.getBackground(element);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getFont(java.lang.Object)
+	 */
+	@Override
+	public Font getFont(Object element) {
+		return OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET);
 	}
 
 }

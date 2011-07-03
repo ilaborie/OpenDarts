@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -35,6 +36,12 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 
 	/** The Constant FONT_SCORE_LEFT. */
 	public static final String FONT_SCORE_LEFT = "ScoreLeftFont";
+
+	/** The Constant FONT_SCORE_SHEET. */
+	public static final String FONT_SCORE_SHEET = "ScoreSheetFont";
+
+	/** The Constant FONT_SCORE_SHEET_BOLD. */
+	public static final String FONT_SCORE_SHEET_BOLD = "ScoreSheetFontBold";
 
 	/** The Constant FONT_SCORE_INPUT. */
 	public static final String FONT_SCORE_INPUT = "ScoreInputFont";
@@ -62,7 +69,9 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		Font initialFont;
 		// Fonts
 		initialFont = fontRegistry.defaultFont();
+		registerFont(initialFont, FONT_SCORE_SHEET, 18);
 		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
+		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 18);
 		registerFont(initialFont, FONT_SCORE_INPUT, 64);
 		registerFont(initialFont, FONT_SCORE_LEFT, 160);
 	}
@@ -108,7 +117,7 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 * @param key the key
 	 * @return the font
 	 */
-	public Font getFont(String key) {
+	public static Font getFont(String key) {
 		return fontRegistry.get(key);
 	}
 
@@ -165,9 +174,11 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 			TableViewer viewer, int width, int style,
 			ColumnLabelProvider labelProvider) {
 		TableViewerColumn column = new TableViewerColumn(viewer, style);
-		column.getColumn().setText(title);
-		column.getColumn().setWidth(width);
-		column.getColumn().setResizable(false);
+		TableColumn tableColumn = column.getColumn();
+		tableColumn.setText(title);
+		tableColumn.setWidth(width);
+		tableColumn.setResizable(false);
+
 		column.setLabelProvider(labelProvider);
 		return column;
 	}
