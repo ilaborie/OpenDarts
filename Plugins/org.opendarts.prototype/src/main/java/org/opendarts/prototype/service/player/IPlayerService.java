@@ -1,5 +1,7 @@
 package org.opendarts.prototype.service.player;
 
+import java.util.List;
+
 import org.opendarts.prototype.model.player.IPlayer;
 
 /**
@@ -21,5 +23,12 @@ public interface IPlayerService {
 	 * @return the computer player
 	 */
 	IPlayer getComputerPlayer();
+
+	/**
+	 * Gets the all players.
+	 *
+	 * @return the all players
+	 */
+	List<IPlayer> getAllPlayers();
 
 }

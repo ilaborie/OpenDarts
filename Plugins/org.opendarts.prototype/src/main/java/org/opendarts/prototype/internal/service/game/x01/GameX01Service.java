@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.internal.model.game.x01.GameX01Definition;
 import org.opendarts.prototype.internal.model.game.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.dart.IDartsThrow;
@@ -35,7 +36,9 @@ public class GameX01Service implements IGameService {
 	 */
 	@Override
 	public IGame createGame(ISet set, List<IPlayer> players) {
-		GameX01 result = new GameX01((GameSet) set, players);
+		GameX01Definition gameDef = (GameX01Definition) set.getGameDefinition();
+		GameX01 result = new GameX01((GameSet) set, players,
+				gameDef.getStartScore());
 		set.addGame(result);
 		return result;
 	}

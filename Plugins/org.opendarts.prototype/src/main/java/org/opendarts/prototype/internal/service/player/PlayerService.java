@@ -1,8 +1,11 @@
 package org.opendarts.prototype.internal.service.player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.opendarts.prototype.internal.model.player.ComputerPlayer;
 import org.opendarts.prototype.internal.model.player.Player;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.player.IPlayerService;
@@ -41,7 +44,19 @@ public class PlayerService implements IPlayerService {
 	 */
 	@Override
 	public IPlayer getComputerPlayer() {
-		return new Player("<Computer>");
+		return new ComputerPlayer();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.player.IPlayerService#getAllPlayers()
+	 */
+	@Override
+	public List<IPlayer> getAllPlayers() {
+		ArrayList<IPlayer> list = new ArrayList<IPlayer>(this.players.values());
+		if (list.isEmpty()) {
+			list.add(this.getComputerPlayer());
+		}
+		return list;
 	}
 
 }

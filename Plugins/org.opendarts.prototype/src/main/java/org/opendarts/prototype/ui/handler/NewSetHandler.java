@@ -15,7 +15,7 @@ import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.service.session.ISessionService;
 import org.opendarts.prototype.service.session.ISetService;
-import org.opendarts.prototype.ui.dialog.NewGameDialog;
+import org.opendarts.prototype.ui.dialog.NewSetDialog;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
 import org.opendarts.prototype.ui.x01.editor.SetX01Editor;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class NewSetHandler extends AbstractHandler implements IHandler {
 		ISession session = sessionService.getSession();
 
 		// Dialog
-		NewGameDialog dialog = new NewGameDialog(
+		NewSetDialog dialog = new NewSetDialog(
 				HandlerUtil.getActiveShell(event));
 		if (dialog.open() == Window.OK) {
 			IGameDefinition gameDef = dialog.getGameDefinition();

@@ -42,12 +42,13 @@ public class GameX01 extends AbstractGame implements IGame {
 	 * @param set the set
 	 * @param gameDef the game definition
 	 * @param players the players
+	 * @param startScore 
 	 */
-	public GameX01(GameSet set, List<IPlayer> players) {
+	public GameX01(GameSet set, List<IPlayer> players, int startScore) {
 		super(set, players);
 		this.score = new HashMap<IPlayer, Integer>();
 		this.entries = new ArrayList<GameX01Entry>();
-		this.scoreToDo = 170;
+		this.scoreToDo = startScore;
 	}
 
 	/**

@@ -106,4 +106,22 @@ public class GameDefinition implements IGameDefinition {
 		}
 		return result;
 	}
+
+	/**
+	 * Gets the nb game to win.
+	 *
+	 * @return the nb game to win
+	 */
+	public int getNbGameToWin() {
+		return this.nbGameToWin;
+	}
+
+	/**
+	 * Checks if is play all games.
+	 *
+	 * @return true, if is play all games
+	 */
+	public boolean isPlayAllGames() {
+		return this.playAllGames;
+	}
 }
