@@ -16,6 +16,8 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -238,6 +240,12 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		TextInputListener listener = new TextInputListener(this.getSite()
 				.getShell(), inputScoreText, this.game, player, dec);
 		inputScoreText.addKeyListener(listener);
+
+		inputScoreText.addTraverseListener(new TraverseListener() {
+			public void keyTraversed(TraverseEvent e) {
+				e.doit = false;
+			}
+		});
 	}
 
 	/**
@@ -329,7 +337,6 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		txtScore.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_LEFT));
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(txtScore);
-
 		this.playerScoreLeft.put(player, txtScore);
 
 		return main;
