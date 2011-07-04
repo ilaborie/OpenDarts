@@ -76,9 +76,6 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	/** The score viewer. */
 	private TableViewer scoreViewer;
 
-	/** The index. */
-	private final int index;
-
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -89,7 +86,6 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	public GameX01Page(SetX01Editor gameEditor, GameX01 game, int index) {
 		super(gameEditor, String.valueOf(index), "Game #" + index);
 		this.game = game;
-		this.index = index;
 		this.playerScoreLeft = new HashMap<IPlayer, Text>();
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();

@@ -85,7 +85,7 @@ public class ScoreX01EditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 		boolean result = (element instanceof GameX01Entry)
-				&& (this.player.equals(this.game.getCurrentPlayer()));
+				&& (!this.game.isFinished());
 		return result;
 	}
 
@@ -113,20 +113,20 @@ public class ScoreX01EditingSupport extends EditingSupport {
 		if (!"".equals(value)) {
 			if (element instanceof GameX01Entry) {
 				GameX01Entry entry = (GameX01Entry) element;
-			Integer leftScore = this.game.getScore(this.player);
-			ThreeDartThrow dartThrow;
-			try {
-				dartThrow = this.dartThrowUtil.getDartThrow((String) value,
-						leftScore);
-					this.game.updatePlayerThrow(entry, this.player,
-						dartThrow);
-			} catch (NumberFormatException e) {
-				// Should not arrived
-				LOG.error("WTF !", e);
-			} catch (InvalidDartThrowException e) {
-				// Should not arrived
-				LOG.error("WTF !", e);
-			}	}
+				Integer leftScore = this.game.getScore(this.player);
+				ThreeDartThrow dartThrow;
+				try {
+					dartThrow = this.dartThrowUtil.getDartThrow((String) value,
+							leftScore);
+					this.game.updatePlayerThrow(entry, this.player, dartThrow);
+				} catch (NumberFormatException e) {
+					// Should not arrived
+					LOG.error("WTF !", e);
+				} catch (InvalidDartThrowException e) {
+					// Should not arrived
+					LOG.error("WTF !", e);
+				}
+			}
 		}
 	}
 }

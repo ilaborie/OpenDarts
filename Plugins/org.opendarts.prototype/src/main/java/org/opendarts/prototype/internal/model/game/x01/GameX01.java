@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -195,6 +194,30 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.setCurrentPlayer(players.get(idx));
 	}
 
+
+		/**
+	 * Update player throw.
+	 *
+	 * @param entry the entry
+	 * @param player the player
+	 * @param newThrow the new dart throw
+	 */
+	public void updatePlayerThrow(GameX01Entry entry, IPlayer player,
+			ThreeDartThrow newThrow) {
+		ThreeDartThrow oldThrow = entry.getPlayerThrow().get(player);
+		if (oldThrow != null) {
+			int score = this.getScore(player);
+			score += oldThrow.getScore();
+			score -= newThrow.getScore();
+			entry.getPlayerThrow().put(player, newThrow);
+			this.score.put(player, score);
+			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
+					player, entry, newThrow));
+		} else {
+			this.addPlayerThrow(player, newThrow);
+		}
+	}
+
 	/**
 	 * Adds the winning player throw.
 	 *
@@ -238,35 +261,5 @@ public class GameX01 extends AbstractGame implements IGame {
 			result = "Draw game";
 		}
 		return result;
-	}
-
-	/**
-	 * Update player throw.
-	 *
-	 * @param entry the entry
-	 * @param player the player
-	 * @param dartThrow the dart throw
-	 */
-	public void updatePlayerThrow(GameX01Entry entry, IPlayer player,
-			ThreeDartThrow dartThrow) {
-		int score = this.scoreToDo;
-		ThreeDartThrow dThrow;
-		GameX01Entry e;
-		for (Iterator<GameX01Entry> itEntries = this.entries.iterator(); itEntries
-				.hasNext();) {
-			e = itEntries.next();
-			dThrow = e.getPlayerThrow().get(player);
-			if (e.equals(entry)) {
-				e.addPlayerThrow(player, dartThrow);
-				dThrow = dartThrow;
-			}
-			// break 
-			if (dThrow != null) {
-				score -= dThrow.getScore();
-			}
-		}
-		this.score.put(player, score);
-		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
-				player, entry, dartThrow));
 	}
 }
