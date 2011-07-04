@@ -106,6 +106,7 @@
       <editor
             class="org.opendarts.prototype.ui.x01.editor.SetX01Editor"
             default="false"
+            icon="icons/view/editor.png"
             id="opendarts.editor.x01"
             name="x01 Game">
       </editor>

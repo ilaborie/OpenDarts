@@ -6,10 +6,8 @@ package org.opendarts.prototype.ui.editor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.session.ISet;
-import org.opendarts.prototype.ui.ISharedImages;
 
 /**
  * The Class GameEditorInput.
@@ -60,7 +58,7 @@ public class SetEditorInput implements IEditorInput {
 	 */
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return ProtoPlugin.getImageDescriptor(ISharedImages.IMG_EDITOR);
+		return null;
 	}
 
 	/* (non-Javadoc)
