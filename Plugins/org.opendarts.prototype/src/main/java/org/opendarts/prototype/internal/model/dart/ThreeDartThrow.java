@@ -37,6 +37,49 @@ public class ThreeDartThrow implements IDartsThrow {
 	/**
 	 * Instantiates a new three dart throw.
 	 *
+	 * @param dart1 the dart1
+	 * @param dart2 the dart2
+	 * @param dart3 the dart3
+	 * @throws InvalidDartThrowException 
+	 */
+	public ThreeDartThrow(IDart dart1, IDart dart2, IDart dart3)
+			throws InvalidDartThrowException {
+		this(dart1.getScore() + dart2.getScore() + dart3.getScore());
+		this.darts.add(dart1);
+		this.darts.add(dart2);
+		this.darts.add(dart3);
+	}
+
+	/**
+	 * Instantiates a new three dart throw.
+	 *
+	 * @param darts the darts
+	 * @throws InvalidDartThrowException the invalid dart throw exception
+	 */
+	public ThreeDartThrow(IDart[] darts) throws InvalidDartThrowException {
+		this(getScore(darts));
+		this.darts.addAll(Arrays.asList(darts));
+	}
+
+	/**
+	 * Gets the score.
+	 *
+	 * @param darts the darts
+	 * @return the score
+	 */
+	protected static int getScore(IDart[] darts) {
+		int score = 0;
+		for (IDart dart : darts) {
+			if (dart != null) {
+				score += dart.getScore();
+			}
+		}
+		return score;
+	}
+
+	/**
+	 * Instantiates a new three dart throw.
+	 *
 	 * @param value the value
 	 * @throws InvalidDartThrowException 
 	 * @throws NumberFormatException 
@@ -74,22 +117,6 @@ public class ThreeDartThrow implements IDartsThrow {
 			result = MessageFormat.format("{0} - {1}", this.score, this.darts);
 		}
 		return result;
-	}
-
-	/**
-	 * Instantiates a new three dart throw.
-	 *
-	 * @param dart1 the dart1
-	 * @param dart2 the dart2
-	 * @param dart3 the dart3
-	 * @throws InvalidDartThrowException 
-	 */
-	public ThreeDartThrow(IDart dart1, IDart dart2, IDart dart3)
-			throws InvalidDartThrowException {
-		this(dart1.getScore() + dart2.getScore() + dart3.getScore());
-		this.darts.add(dart1);
-		this.darts.add(dart2);
-		this.darts.add(dart3);
 	}
 
 	/* (non-Javadoc)

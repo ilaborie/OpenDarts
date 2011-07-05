@@ -72,7 +72,9 @@ public enum DartSector {
 	OUT_OF_TARGET,
 
 	/** The UNLUCK y_ dart. */
-	UNLUCKY_DART;
+	UNLUCKY_DART,
+	/** The NONE. */
+	NONE;
 
 	/**
 	 * Gets the base score.
@@ -147,6 +149,7 @@ public enum DartSector {
 				break;
 			case OUT_OF_TARGET:
 			case UNLUCKY_DART:
+			case NONE:
 			default:
 				baseScore = 0;
 		}
@@ -166,8 +169,162 @@ public enum DartSector {
 			case UNLUCKY_DART:
 				result = "UnluckyDart";
 				break;
+			case NONE:
+				result = "";
+				break;
 			default:
 				result = String.valueOf(this.getBaseScore());
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the left.
+	 *
+	 * @return the left
+	 */
+	public DartSector getNext() {
+		DartSector result;
+		switch (this) {
+			case EIGHT:
+				result = ELEVEN;
+				break;
+			case EIGHTEEN:
+				result = FOUR;
+				break;
+			case ELEVEN:
+				result = FOURTEEN;
+				break;
+			case FIVE:
+				result = TWENTY;
+				break;
+			case FIVETEEN:
+				result = TWO;
+				break;
+			case FOUR:
+				result = THIRTEEN;
+				break;
+			case FOURTEEN:
+				result = NINE;
+				break;
+			case NINE:
+				result = TWELVE;
+				break;
+			case NINETEEN:
+				result = SEVEN;
+				break;
+			case ONE:
+				result = EIGHTEEN;
+				break;
+			case SEVEN:
+				result = SIXTEEN;
+				break;
+			case SEVENTEEN:
+				result = THREE;
+				break;
+			case SIX:
+				result = TEN;
+				break;
+			case SIXTEEN:
+				result = EIGHT;
+				break;
+			case TEN:
+				result = FIVETEEN;
+				break;
+			case THIRTEEN:
+				result = SIX;
+				break;
+			case THREE:
+				result = NINETEEN;
+				break;
+			case TWELVE:
+				result = FIVE;
+				break;
+			case TWENTY:
+				result = ONE;
+				break;
+			case TWO:
+				result = SEVENTEEN;
+				break;
+			case BULL:
+			case OUT_OF_TARGET:
+			case UNLUCKY_DART:
+			case NONE:
+			default:
+				result = DartSector.NONE;
+		}
+		return result;
+	}
+
+	public DartSector getPrevious() {
+		DartSector result;
+		switch (this) {
+			case EIGHT:
+				result = SIXTEEN;
+				break;
+			case EIGHTEEN:
+				result = ONE;
+				break;
+			case ELEVEN:
+				result = EIGHT;
+				break;
+			case FIVE:
+				result = TWELVE;
+				break;
+			case FIVETEEN:
+				result = TEN;
+				break;
+			case FOUR:
+				result = EIGHTEEN;
+				break;
+			case FOURTEEN:
+				result = ELEVEN;
+				break;
+			case NINE:
+				result = FOURTEEN;
+				break;
+			case NINETEEN:
+				result = THREE;
+				break;
+			case ONE:
+				result = TWENTY;
+				break;
+			case SEVEN:
+				result = NINETEEN;
+				break;
+			case SEVENTEEN:
+				result = TWO;
+				break;
+			case SIX:
+				result = THIRTEEN;
+				break;
+			case SIXTEEN:
+				result = SEVEN;
+				break;
+			case TEN:
+				result = SIX;
+				break;
+			case THIRTEEN:
+				result = FOUR;
+				break;
+			case THREE:
+				result = SEVENTEEN;
+				break;
+			case TWELVE:
+				result = NINE;
+				break;
+			case TWENTY:
+				result = FIVE;
+				break;
+			case TWO:
+				result = FIVETEEN;
+				break;
+			case BULL:
+			case OUT_OF_TARGET:
+			case UNLUCKY_DART:
+			case NONE:
+			default:
+				result = DartSector.NONE;
 		}
 		return result;
 	}

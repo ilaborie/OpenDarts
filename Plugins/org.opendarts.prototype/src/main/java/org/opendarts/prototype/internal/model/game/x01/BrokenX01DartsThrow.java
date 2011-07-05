@@ -44,6 +44,16 @@ public class BrokenX01DartsThrow extends ThreeDartThrow {
 		this.getInternalDarts().addAll(dThrow.getDarts());
 	}
 
+	/**
+	 * Instantiates a new broken x01 darts throw.
+	 *
+	 * @param darts the darts
+	 * @throws InvalidDartThrowException the invalid dart throw exception
+	 */
+	public BrokenX01DartsThrow(IDart[] darts) throws InvalidDartThrowException {
+		super(darts);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartThrow#toString()
 	 */

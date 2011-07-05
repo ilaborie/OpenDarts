@@ -85,8 +85,8 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.players.clear();
 
 		// Get last configuration
-		if (lastGameDefinition != null
-				&& lastGameDefinition instanceof GameX01Definition) {
+		if ((lastGameDefinition != null)
+				&& (lastGameDefinition instanceof GameX01Definition)) {
 			GameX01Definition gameDef = (GameX01Definition) lastGameDefinition;
 			this.startScore = gameDef.getStartScore();
 			this.playAllGames = gameDef.isPlayAllGames();
@@ -134,12 +134,12 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 		this.spiStartingScore = new Spinner(group, SWT.NONE);
 		fieldData.copy().applyTo(this.spiStartingScore);
-		spiStartingScore.setMinimum(2);
-		spiStartingScore.setIncrement(1);
-		spiStartingScore.setMaximum(1000001);
-		spiStartingScore.setPageIncrement(100);
-		spiStartingScore.addSelectionListener(this);
-		spiStartingScore.setSelection(this.startScore);
+		this.spiStartingScore.setMinimum(2);
+		this.spiStartingScore.setIncrement(1);
+		this.spiStartingScore.setMaximum(1000001);
+		this.spiStartingScore.setPageIncrement(100);
+		this.spiStartingScore.addSelectionListener(this);
+		this.spiStartingScore.setSelection(this.startScore);
 
 		// Nb games to win
 		lbl = new Label(group, SWT.WRAP);
@@ -187,6 +187,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.lstPlayerCombo.clear();
 		ComboViewer cbViewer;
 		CCombo combo;
+		IPlayer player;
 		for (int i = 0; i < nbPlayer; i++) {
 			// label
 			lbl = new Label(group, SWT.WRAP);
@@ -201,9 +202,14 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			cbViewer.setLabelProvider(new PlayerLabelProvider());
 			cbViewer.setContentProvider(new ArrayContentProvider());
 			cbViewer.setInput(this.playerService.getAllPlayers());
+
 			if (this.players.size() > i) {
-				cbViewer.setSelection(new StructuredSelection(this.players
-						.get(i)));
+				player = this.players.get(i);
+				cbViewer.setSelection(new StructuredSelection(player));
+				//			} else if (i == 0) {
+				//				player = playerService.getPlayer(System.getenv("HOME"));
+				//			} else {
+				//				player = playerService.getComputerPlayer();
 			}
 			this.lstPlayerCombo.add(cbViewer);
 		}

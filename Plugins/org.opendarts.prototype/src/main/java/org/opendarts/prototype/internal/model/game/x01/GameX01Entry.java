@@ -96,6 +96,7 @@ public class GameX01Entry implements IGameEntry {
 	 *
 	 * @return the round
 	 */
+	@Override
 	public int getRound() {
 		return this.round;
 	}

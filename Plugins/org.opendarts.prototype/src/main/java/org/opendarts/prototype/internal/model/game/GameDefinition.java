@@ -79,8 +79,8 @@ public class GameDefinition implements IGameDefinition {
 	@Override
 	public List<IPlayer> getNextPlayers(ISet set) {
 		this.lastPlayers = new ArrayList<IPlayer>(this.lastPlayers);
-		Collections.rotate(players, 1);
-		return players;
+		Collections.rotate(this.players, 1);
+		return this.players;
 	}
 
 	/* (non-Javadoc)

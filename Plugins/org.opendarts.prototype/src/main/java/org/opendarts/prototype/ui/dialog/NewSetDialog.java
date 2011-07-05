@@ -15,7 +15,6 @@ import org.opendarts.prototype.ui.x01.dialog.SetX01ConfigurationDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class NewSetDialog.
  */

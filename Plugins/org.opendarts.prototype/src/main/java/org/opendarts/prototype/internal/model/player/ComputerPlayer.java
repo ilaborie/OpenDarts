@@ -12,4 +12,12 @@ public class ComputerPlayer extends Player {
 		super("<COM>");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.player.Player#isComputer()
+	 */
+	@Override
+	public boolean isComputer() {
+		return true;
+	}
+
 }

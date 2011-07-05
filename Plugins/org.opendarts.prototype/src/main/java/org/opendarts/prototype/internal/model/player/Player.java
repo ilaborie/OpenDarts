@@ -34,4 +34,12 @@ public class Player implements IPlayer {
 		return this.getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.player.IPlayer#isComputer()
+	 */
+	@Override
+	public boolean isComputer() {
+		return false;
+	}
+
 }

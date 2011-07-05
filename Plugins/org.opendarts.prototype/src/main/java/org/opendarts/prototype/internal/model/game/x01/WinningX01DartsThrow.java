@@ -1,9 +1,7 @@
 package org.opendarts.prototype.internal.model.game.x01;
 
-import org.opendarts.prototype.internal.model.dart.Dart;
+import org.opendarts.prototype.internal.model.dart.NoDart;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
-import org.opendarts.prototype.model.dart.DartSector;
-import org.opendarts.prototype.model.dart.DartZone;
 import org.opendarts.prototype.model.dart.IDart;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 
@@ -62,7 +60,7 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 	 */
 	public WinningX01DartsThrow(IDart dart1, IDart dart2)
 			throws InvalidDartThrowException {
-		super(dart1, dart2, new Dart(DartSector.OUT_OF_TARGET, DartZone.NONE));
+		super(dart1, dart2, NoDart.NO_DART);
 		this.nbDartToFinish = 2;
 	}
 
@@ -73,8 +71,7 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 	 * @throws InvalidDartThrowException the invalid dart throw exception
 	 */
 	public WinningX01DartsThrow(IDart dart1) throws InvalidDartThrowException {
-		super(dart1, new Dart(DartSector.OUT_OF_TARGET, DartZone.NONE),
-				new Dart(DartSector.OUT_OF_TARGET, DartZone.NONE));
+		super(dart1, NoDart.NO_DART, NoDart.NO_DART);
 		this.nbDartToFinish = 1;
 	}
 
@@ -90,6 +87,23 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 		this(dThrow.getScore(), nbDarts);
 		this.getInternalDarts().addAll(dThrow.getDarts());
 		this.checkDartToFinish();
+	}
+
+	/**
+	 * Instantiates a new winning x01 darts throw.
+	 *
+	 * @param darts the darts
+	 * @throws InvalidDartThrowException the invalid dart throw exception
+	 */
+	public WinningX01DartsThrow(IDart[] darts) throws InvalidDartThrowException {
+		super(darts);
+		int nbDarts = 0;
+		for (IDart dart : darts) {
+			if ((dart != null) && !(dart instanceof NoDart)) {
+				nbDarts++;
+			}
+		}
+		this.nbDartToFinish = nbDarts;
 	}
 
 	/* (non-Javadoc)

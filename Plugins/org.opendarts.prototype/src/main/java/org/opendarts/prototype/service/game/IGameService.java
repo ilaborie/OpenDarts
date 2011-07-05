@@ -3,6 +3,7 @@ package org.opendarts.prototype.service.game;
 import java.util.List;
 
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.model.dart.IDart;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -48,4 +49,12 @@ public interface IGameService {
 	void addWinningPlayerThrow(GameX01 game, IPlayer player,
 			IDartsThrow dartThrow);
 
+	/**
+	 * Choose best dart.
+	 *
+	 * @param score the score
+	 * @param nbDartLeft the number of dart left
+	 * @return the i dart
+	 */
+	IDart chooseBestDart(int score, int nbDartLeft);
 }

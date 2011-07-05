@@ -195,14 +195,13 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.setCurrentPlayer(players.get(idx));
 	}
 
-
-		/**
-	 * Update player throw.
-	 *
-	 * @param entry the entry
-	 * @param player the player
-	 * @param newThrow the new dart throw
-	 */
+	/**
+	* Update player throw.
+	*
+	* @param entry the entry
+	* @param player the player
+	* @param newThrow the new dart throw
+	*/
 	public void updatePlayerThrow(GameX01Entry entry, IPlayer player,
 			ThreeDartThrow newThrow) {
 		ThreeDartThrow oldThrow = entry.getPlayerThrow().get(player);
@@ -244,7 +243,7 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.end(player);
 		this.fireGameEvent(GameEvent.Factory.newGameFinishedEvent(this,
 				this.getWinner(), entry, dartThrow));
-		((GameSet) this.getParentSet()).handleFinishedGame(this);
+		this.getParentSet().handleFinishedGame(this);
 	}
 
 	/**

@@ -105,8 +105,8 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 			}
 		}
 		return MessageFormat.format(
-				"{0} win the set with {1} games against  {2}",
-				player, this.getWinningGames(player), sb);
+				"{0} win the set with {1} games against  {2}", player,
+				this.getWinningGames(player), sb);
 	}
 
 	/* (non-Javadoc)
@@ -228,12 +228,11 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 
 		// check end
 		if (this.getGameDefinition().isSetFinished(this)) {
-			this.fireSetEvent(SetEvent.Factory.newSetFinishedEvent(
-					this, this.getWinner(), game));
+			this.fireSetEvent(SetEvent.Factory.newSetFinishedEvent(this,
+					this.getWinner(), game));
 		} else {
 			// create a new game
-			IGame newGame = this.createNewGame(game
-					.getFirstPlayer());
+			IGame newGame = this.createNewGame(game.getFirstPlayer());
 			this.setCurrentGame(newGame);
 			this.gameService.startGame(newGame);
 		}

@@ -19,6 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -33,12 +34,18 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.menus.IMenuService;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
+import org.opendarts.prototype.internal.model.game.x01.WinningX01DartsThrow;
+import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.GameEvent;
 import org.opendarts.prototype.model.game.IGameEntry;
 import org.opendarts.prototype.model.game.IGameListener;
 import org.opendarts.prototype.model.player.IPlayer;
+import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.ISharedImages;
+import org.opendarts.prototype.ui.dialog.ThreeDartsComputerDialog;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
+import org.opendarts.prototype.ui.x01.dialog.DartsComputerX01Dialog;
 import org.opendarts.prototype.ui.x01.label.ScoreLabelProvider;
 import org.opendarts.prototype.ui.x01.label.ToGoLabelProvider;
 import org.opendarts.prototype.ui.x01.label.TurnLabelProvider;
@@ -78,6 +85,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	/** The score viewer. */
 	private TableViewer scoreViewer;
 
+	/** The game service. */
+	private final IGameService gameService;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -91,6 +101,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		this.playerScoreLeft = new HashMap<IPlayer, Text>();
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
+		this.gameService = ProtoPlugin.getService(IGameService.class);
 	}
 
 	/* (non-Javadoc)
@@ -153,7 +164,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 		// initialize game
 		this.scoreViewer.setInput(this.game);
-		this.handlePlayer(this.game.getCurrentPlayer());
+		this.handlePlayer(this.game.getCurrentPlayer(),
+				this.game.getCurrentEntry());
 	}
 
 	/* (non-Javadoc)
@@ -242,6 +254,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		inputScoreText.addKeyListener(listener);
 
 		inputScoreText.addTraverseListener(new TraverseListener() {
+			@Override
 			public void keyTraversed(TraverseEvent e) {
 				e.doit = false;
 			}
@@ -363,28 +376,34 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 * @see org.opendarts.prototype.model.game.IGameListener#notifyGameEvent(org.opendarts.prototype.model.game.GameEvent)
 	 */
 	@Override
-	public void notifyGameEvent(GameEvent event) {
+	public void notifyGameEvent(final GameEvent event) {
 		if (event.getGame().equals(this.game)) {
 			LOG.trace("New Game Event: {}", event);
-			switch (event.getType()) {
-				case GAME_INITIALIZED:
-					this.handleGameInitialized();
-					break;
-				case GAME_ENTRY_CREATED:
-					this.handleNewEntry(event.getEntry());
-					break;
-				case GAME_ENTRY_UPDATED:
-					this.handleEntryUpdated(event, event.getEntry());
-					break;
-				case NEW_CURRENT_PLAYER:
-					this.handlePlayer(event.getPlayer());
-					break;
-				case GAME_FINISHED:
-					this.handleGameFinished(event.getPlayer());
-					break;
-				case GAME_CANCELED:
-					// TODO cleanup
-			}
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					switch (event.getType()) {
+						case GAME_INITIALIZED:
+							handleGameInitialized();
+							break;
+						case GAME_ENTRY_CREATED:
+							handleNewEntry(event.getEntry());
+							break;
+						case GAME_ENTRY_UPDATED:
+							handleEntryUpdated(event.getPlayer(),
+									event.getEntry());
+							break;
+						case NEW_CURRENT_PLAYER:
+							handlePlayer(event.getPlayer(), event.getEntry());
+							break;
+						case GAME_FINISHED:
+							handleGameFinished(event.getPlayer());
+							break;
+						case GAME_CANCELED:
+							// TODO cleanup
+					}
+				}
+			});
 		}
 	}
 
@@ -413,14 +432,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	/**
 	 * Handle entry updated.
 	 *
-	 * @param event the event
 	 * @param entry the entry
 	 */
-	private void handleEntryUpdated(GameEvent event, IGameEntry entry) {
+	private void handleEntryUpdated(IPlayer player, IGameEntry entry) {
 		Text txt;
-		IPlayer player;
 		this.scoreViewer.update(entry, null);
-		player = event.getPlayer();
 		if (player != null) {
 			txt = this.playerScoreLeft.get(player);
 			txt.setText(this.getPlayerCurrentScore(player));
@@ -448,7 +464,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		// End Game dialog
 		if (!this.game.getParentSet().isFinished()) {
 			String title = MessageFormat.format("{0} finished", this.game);
-			String message = game.getWinningMessage();
+			String message = this.game.getWinningMessage();
 			MessageDialog.openInformation(this.getSite().getShell(), title,
 					message);
 		}
@@ -459,7 +475,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 *
 	 * @param player the player
 	 */
-	private void handlePlayer(IPlayer player) {
+	private void handlePlayer(IPlayer player, IGameEntry entry) {
 		if (player != null) {
 			TableViewerColumn column;
 			// mark column
@@ -489,6 +505,23 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
 							.getColors()
 							.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
+				}
+			}
+
+			// IA playing
+			if (player.isComputer()) {
+				ThreeDartsComputerDialog computerThrow = new DartsComputerX01Dialog(
+						this.getSite().getShell(), player, this.game,
+						(GameX01Entry) entry);
+				computerThrow.open();
+
+				IDartsThrow dartThrow = computerThrow.getComputerThrow();
+				if (dartThrow instanceof WinningX01DartsThrow) {
+					this.gameService.addWinningPlayerThrow(this.game, player,
+							dartThrow);
+				} else {
+					this.gameService.addPlayerThrow(this.game, player,
+							dartThrow);
 				}
 			}
 		}

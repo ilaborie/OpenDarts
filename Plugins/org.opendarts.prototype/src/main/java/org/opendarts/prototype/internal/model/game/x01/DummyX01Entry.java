@@ -29,4 +29,12 @@ public class DummyX01Entry implements IGameEntry {
 		return this.game;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.game.IGameEntry#getRound()
+	 */
+	@Override
+	public int getRound() {
+		return -1;
+	}
+
 }

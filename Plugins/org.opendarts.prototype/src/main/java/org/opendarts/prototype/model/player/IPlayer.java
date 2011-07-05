@@ -12,4 +12,11 @@ public interface IPlayer {
 	 */
 	String getName();
 
+	/**
+	 * Checks if is computer.
+	 *
+	 * @return true, if is computer
+	 */
+	boolean isComputer();
+
 }
