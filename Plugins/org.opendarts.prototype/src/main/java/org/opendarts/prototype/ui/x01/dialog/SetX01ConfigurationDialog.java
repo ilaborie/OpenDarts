@@ -1,18 +1,21 @@
 package org.opendarts.prototype.ui.x01.dialog;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
@@ -20,20 +23,23 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Definition;
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.player.IPlayerService;
+import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.dialog.IGameDefinitionComposite;
 import org.opendarts.prototype.ui.dialog.NewSetDialog;
 import org.opendarts.prototype.ui.player.label.PlayerLabelProvider;
 
 /**
  * The Class SetX01ConfigurationDialog.
+ * FIXME validation
  */
 public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
-		SelectionListener {
+		SelectionListener, ISelectionChangedListener {
 
 	/** The player service. */
 	private final IPlayerService playerService;
@@ -59,8 +65,23 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	/** The btn play all. */
 	private Button btnPlayAll;
 
-	/** The lst player combo. */
-	private final List<ComboViewer> lstPlayerCombo;
+	/** The current player. */
+	private IPlayer currentPlayer;
+
+	/** The btn user add. */
+	private Button btnUserAdd;
+
+	/** The btn user del. */
+	private Button btnUserDel;
+
+	/** The btn user new. */
+	private Button btnUserNew;
+
+	/** The table players. */
+	private TableViewer tablePlayers;
+
+	/** The parent dialog. */
+	private NewSetDialog parentDialog;
 
 	/**
 	 * Instantiates a new sets the x01 configuration dialog.
@@ -69,7 +90,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		super();
 		this.playerService = ProtoPlugin.getService(IPlayerService.class);
 		this.players = new ArrayList<IPlayer>();
-		this.lstPlayerCombo = new ArrayList<ComboViewer>();
 	}
 
 	/* (non-Javadoc)
@@ -79,6 +99,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	public Composite createSetConfiguration(NewSetDialog dialog,
 			Composite parent, IGameDefinition lastGameDefinition) {
 		// init
+		this.parentDialog = dialog;
 		this.startScore = 501;
 		this.nbGameToWin = 3;
 		this.playAllGames = false;
@@ -97,7 +118,8 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 		// Main component
 		Composite main = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(main);
+		GridLayoutFactory.fillDefaults().numColumns(2).margins(5, 5)
+				.applyTo(main);
 
 		// X01 Description
 		Group grpGameDesc = this.createGameDescriptionArea(main);
@@ -170,49 +192,51 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 * @return the group
 	 */
 	protected Group createPlayersArea(Composite main) {
-		// TODO multi players
-		int nbPlayer = 2;
-
 		Group group = new Group(main, SWT.NONE);
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(2)
 				.applyTo(group);
 		group.setText("Players");
 
-		Label lbl;
-		GridDataFactory lblData = GridDataFactory.fillDefaults().align(SWT.END,
-				SWT.CENTER);
-		GridDataFactory fieldData = GridDataFactory.fillDefaults()
-				.align(SWT.BEGINNING, SWT.CENTER).grab(true, false);
+		this.tablePlayers = new TableViewer(group, SWT.V_SCROLL);
+		GridDataFactory.fillDefaults().hint(100, 60).grab(true, true)
+				.applyTo(this.tablePlayers.getTable());
+		this.tablePlayers.setLabelProvider(new PlayerLabelProvider());
+		this.tablePlayers.setContentProvider(new ArrayContentProvider());
+		this.tablePlayers.setInput(this.players);
+		this.tablePlayers.addSelectionChangedListener(this);
 
-		this.lstPlayerCombo.clear();
-		ComboViewer cbViewer;
-		CCombo combo;
-		IPlayer player;
-		for (int i = 0; i < nbPlayer; i++) {
-			// label
-			lbl = new Label(group, SWT.WRAP);
-			lbl.setText(MessageFormat.format("Player #{0}:", i));
-			lblData.copy().applyTo(lbl);
+		// buttons
+		Composite cmpBtn = new Composite(group, SWT.NONE);
+		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BEGINNING)
+				.applyTo(cmpBtn);
+		GridLayoutFactory.fillDefaults().applyTo(cmpBtn);
 
-			// Player combo
-			combo = new CCombo(group, SWT.BORDER);
-			fieldData.copy().minSize(200, SWT.DEFAULT).grab(true, true)
-					.applyTo(combo);
-			cbViewer = new ComboViewer(combo);
-			cbViewer.setLabelProvider(new PlayerLabelProvider());
-			cbViewer.setContentProvider(new ArrayContentProvider());
-			cbViewer.setInput(this.playerService.getAllPlayers());
+		// Add
+		this.btnUserAdd = new Button(cmpBtn, SWT.PUSH);
+		this.btnUserAdd.setImage(ProtoPlugin
+				.getImage(ISharedImages.IMG_USER_ADD));
+		GridDataFactory.fillDefaults().applyTo(this.btnUserAdd);
+		this.btnUserAdd.addSelectionListener(this);
 
-			if (this.players.size() > i) {
-				player = this.players.get(i);
-				cbViewer.setSelection(new StructuredSelection(player));
-				//			} else if (i == 0) {
-				//				player = playerService.getPlayer(System.getenv("HOME"));
-				//			} else {
-				//				player = playerService.getComputerPlayer();
-			}
-			this.lstPlayerCombo.add(cbViewer);
-		}
+		// Remove
+		this.btnUserDel = new Button(cmpBtn, SWT.PUSH);
+		this.btnUserDel.setImage(ProtoPlugin
+				.getImage(ISharedImages.IMG_USER_DELETE));
+		GridDataFactory.fillDefaults().applyTo(this.btnUserDel);
+		this.btnUserDel.setEnabled(false);
+		this.btnUserDel.addSelectionListener(this);
+
+		new Label(cmpBtn, SWT.HORIZONTAL);
+
+		// New
+		this.btnUserNew = new Button(cmpBtn, SWT.PUSH);
+		this.btnUserNew.setImage(ProtoPlugin
+				.getImage(ISharedImages.IMG_USER_NEW));
+		GridDataFactory.fillDefaults().applyTo(this.btnUserNew);
+		this.btnUserNew.addSelectionListener(this);
+
+		// TODO up & down
+
 		return group;
 	}
 
@@ -221,18 +245,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 */
 	@Override
 	public IGameDefinition getGameDefinition() {
-		this.players.clear();
-		IStructuredSelection sel;
-		for (ComboViewer cb : this.lstPlayerCombo) {
-			sel = (IStructuredSelection) cb.getSelection();
-			if (!sel.isEmpty()) {
-				this.players.add((IPlayer) sel.getFirstElement());
-			} else {
-				this.players.add(this.playerService.getPlayer(cb.getCCombo()
-						.getText()));
-			}
-		}
-
 		if (this.players.isEmpty()) {
 			throw new IllegalArgumentException("Not enought players");
 		}
@@ -260,6 +272,84 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			this.nbGameToWin = this.spiNbGame.getSelection();
 		} else if (obj.equals(this.btnPlayAll)) {
 			this.playAllGames = this.btnPlayAll.getSelection();
+		} else if (obj.equals(this.btnUserAdd)) {
+			this.addPlayer();
+		} else if (obj.equals(this.btnUserDel)) {
+			boolean remove = this.players.remove(this.currentPlayer);
+			if (remove) {
+				this.tablePlayers.remove(this.currentPlayer);
+				this.tablePlayers.setSelection(StructuredSelection.EMPTY);
+			}
+		} else if (obj.equals(this.btnUserNew)) {
+			this.newPlayer();
+		}
+	}
+
+	/**
+	 * New player.
+	 */
+	private void newPlayer() {
+		InputDialog dialog = new InputDialog(this.parentDialog.getShell(),
+				"New user", "Enter the user name:", "<name>",
+				new IInputValidator() {
+
+					/* (non-Javadoc)
+					 * @see org.eclipse.jface.dialogs.IInputValidator#isValid(java.lang.String)
+					 */
+					@Override
+					public String isValid(String newText) {
+						return "".equals(newText) ? "Name should not being empty"
+								: null;
+					}
+				});
+		if (dialog.open() == Window.OK) {
+			IPlayer player = this.playerService.getPlayer(dialog.getValue());
+			if (player != null) {
+				this.players.add(player);
+				this.tablePlayers.add(player);
+				this.tablePlayers.setSelection(new StructuredSelection(player));
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+	 */
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		IStructuredSelection sel = (IStructuredSelection) this.tablePlayers
+				.getSelection();
+		if (!sel.isEmpty()) {
+			this.currentPlayer = (IPlayer) sel.getFirstElement();
+		} else {
+			this.currentPlayer = null;
+		}
+		this.btnUserDel.setEnabled(this.currentPlayer != null);
+	}
+
+	/**
+	 * Adds the player.
+	 */
+	private void addPlayer() {
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(
+				this.parentDialog.getShell(), new PlayerLabelProvider());
+		dialog.setImage(ProtoPlugin.getImage(ISharedImages.IMG_OBJ_USER));
+		dialog.setTitle("");
+		dialog.setElements(this.playerService.getAllPlayers().toArray());
+		dialog.setEmptyListMessage("Please select at least one player");
+		dialog.setHelpAvailable(false);
+		dialog.setMessage("Choose player(s)");
+		dialog.setMultipleSelection(true);
+
+		if (dialog.open() == Window.OK) {
+			IPlayer player;
+			for (Object obj : dialog.getResult()) {
+				player = (IPlayer) obj;
+				if (!this.players.contains(player) && this.players.add(player)) {
+					this.tablePlayers.add(player);
+				}
+			}
+
 		}
 	}
 

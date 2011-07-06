@@ -29,6 +29,12 @@ public class PlayerService implements IPlayerService {
 	public PlayerService() {
 		super();
 		this.players = new HashMap<String, IPlayer>();
+		// XXX init
+		IPlayer player;
+		player = new Player(System.getenv("USER"));
+		this.players.put(player.getName(), player);
+		player = this.getComputerPlayer();
+		this.players.put(player.getName(), player);
 	}
 
 	/* (non-Javadoc)
@@ -58,7 +64,6 @@ public class PlayerService implements IPlayerService {
 	@Override
 	public List<IPlayer> getAllPlayers() {
 		ArrayList<IPlayer> list = new ArrayList<IPlayer>(this.players.values());
-		list.add(this.getComputerPlayer());
 		return list;
 	}
 

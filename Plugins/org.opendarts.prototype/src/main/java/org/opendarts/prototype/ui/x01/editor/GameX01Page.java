@@ -82,7 +82,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	private final Map<IPlayer, TableViewerColumn> playerColumn;
 
 	/** The score viewer. */
-	private TableViewer scoreViewer;
+	private final Map<IPlayer, TableViewer> scoreViewers;
 
 	/** The game service. */
 	private final IGameService gameService;
@@ -101,6 +101,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
 		this.gameService = ProtoPlugin.getService(IGameService.class);
+		this.scoreViewers = new HashMap<IPlayer, TableViewer>();
 	}
 
 	/* (non-Javadoc)
@@ -114,41 +115,64 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		form.setText(this.game.getName());
 		this.toolkit.decorateFormHeading(form.getForm());
 
+		GridDataFactory playerData;
+		GridDataFactory scoreData;
+		scoreData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1)
+				.hint(SWT.DEFAULT, 200);
+
+		List<IPlayer> players = this.game.getPlayers();
+		boolean twoPlayer = (players.size() == 2);
 		// body
+		int nbCol;
+		int tableSpan;
+		if (twoPlayer) {
+			nbCol = 4;
+			tableSpan = 2;
+			playerData = GridDataFactory.fillDefaults().grab(false, true)
+					.hint(150, SWT.DEFAULT);
+			scoreData = GridDataFactory.fillDefaults().grab(true, false)
+					.span(2, 1).hint(SWT.DEFAULT, 200);
+		} else {
+			nbCol = players.size();
+			tableSpan = nbCol;
+			playerData = GridDataFactory.fillDefaults().grab(false, true)
+					.hint(150, SWT.DEFAULT);
+
+			scoreData = GridDataFactory.fillDefaults().grab(true, false)
+					.hint(SWT.DEFAULT, 200);
+		}
 		Composite body = form.getBody();
-		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(4)
+		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
 				.equalWidth(true).applyTo(body);
 
-		// First Player Status
-		GridDataFactory playerData = GridDataFactory.fillDefaults()
-				.grab(false, true).hint(150, SWT.DEFAULT);
-		Composite cmpPlayerOne = this.createPlayerComposite(body,
-				this.game.getFirstPlayer());
-		;
-		playerData.copy().applyTo(cmpPlayerOne);
+		if (twoPlayer) {
+			// First Player Status
+			Composite cmpPlayerOne = this.createPlayerComposite(body,
+					this.game.getFirstPlayer());
+			playerData.copy().applyTo(cmpPlayerOne);
+		} else {
+			// create multi player stats
+		}
 
 		// Score
 		Composite cmpScore = this.createScoreTableComposite(body);
-		GridDataFactory.fillDefaults().grab(true, true).span(2, 1)
+		GridDataFactory.fillDefaults().grab(true, true).span(tableSpan, 1)
 				.applyTo(cmpScore);
 
-		// Second Player Status
-		Composite cmpPlayerTwo = this.createPlayerComposite(body,
-				this.game.getSecondPlayer());
-		playerData.copy().applyTo(cmpPlayerTwo);
+		if (twoPlayer) {
+			// Second Player Status
+			Composite cmpPlayerTwo = this.createPlayerComposite(body,
+					this.game.getSecondPlayer());
+			playerData.copy().applyTo(cmpPlayerTwo);
+		}
 
-		// PlayerOne Left Score
-		GridDataFactory scoreData = GridDataFactory.fillDefaults()
-				.grab(true, false).span(2, 1).hint(SWT.DEFAULT, 200);
-		Composite cmpPlayerOneLeftScore = this.createPlayerScoreLeftComposite(
-				body, this.game.getFirstPlayer());
-		scoreData.copy().applyTo(cmpPlayerOneLeftScore);
-
-		// PlayerTwo Left Score
-		Composite cmpPlayerTwoLeftScore = this.createPlayerScoreLeftComposite(
-				body, this.game.getSecondPlayer());
-
-		scoreData.copy().applyTo(cmpPlayerTwoLeftScore);
+		// Left score
+		Composite cmpPlayerLeftScore;
+		for (IPlayer player : players) {
+			cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(body,
+					player);
+			scoreData.copy().applyTo(cmpPlayerLeftScore);
+		}
 
 		// Toolbar
 		ToolBarManager manager = (ToolBarManager) form.getToolBarManager();
@@ -162,7 +186,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		this.game.addListener(this);
 
 		// initialize game
-		this.scoreViewer.setInput(this.game);
+		for (TableViewer viewer : this.scoreViewers.values()) {
+			viewer.setInput(this.game);
+		}
 		this.handlePlayer(this.game.getCurrentPlayer(),
 				this.game.getCurrentEntry());
 	}
@@ -188,39 +214,116 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 */
 	private Composite createScoreTableComposite(Composite parent) {
 		Composite main = this.toolkit.createComposite(parent);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(main);
 
-		// Table
-		Table table = this.toolkit.createTable(main, SWT.V_SCROLL);
-		GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
-				.applyTo(table);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		List<IPlayer> players = this.game.getPlayers();
+		int nbPlayers = players.size();
+		boolean twoPlayer = (nbPlayers == 2);
 
-		// resize the row height using a MeasureItem listener
-		table.addListener(SWT.MeasureItem, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				// height cannot be per row so simply set
-				event.height = 24;
+		if (twoPlayer) {
+			GridLayoutFactory.fillDefaults().numColumns(2).applyTo(main);
+		} else {
+			GridLayoutFactory.fillDefaults().numColumns(nbPlayers)
+					.applyTo(main);
+		}
+
+		TableViewer viewer;
+		Table table;
+		if (twoPlayer) {
+			// Table
+			table = this.toolkit.createTable(main, SWT.V_SCROLL);
+			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
+					.applyTo(table);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
+
+			// resize the row height using a MeasureItem listener
+			table.addListener(SWT.MeasureItem, new Listener() {
+				@Override
+				public void handleEvent(Event event) {
+					// height cannot be per row so simply set
+					event.height = 24;
+				}
+			});
+			viewer = new TableViewer(table);
+			viewer.setContentProvider(new GameX01ContentProvider());
+			this.addColumns(null, viewer);
+			this.scoreViewers.put(this.game.getFirstPlayer(), viewer);
+			this.scoreViewers.put(this.game.getSecondPlayer(), viewer);
+
+		} else {
+			Section section;
+			Composite client;
+			for (IPlayer player : players) {
+				// Section
+				section = this.toolkit.createSection(main, Section.TITLE_BAR);
+				GridDataFactory.fillDefaults().grab(true, true)
+						.applyTo(section);
+				section.setText(MessageFormat.format("{0} - {1}", player,
+						this.game.getParentSet().getWinningGames(player)));
+
+				// Section body
+				client = this.toolkit.createComposite(section, SWT.WRAP);
+				GridLayoutFactory.fillDefaults().applyTo(client);
+
+				this.addPlayerStatSection(client, player);
+
+				// Table
+				table = this.toolkit.createTable(client, SWT.V_SCROLL);
+				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
+				table.setHeaderVisible(true);
+				table.setLinesVisible(true);
+
+				// resize the row height using a MeasureItem listener
+				table.addListener(SWT.MeasureItem, new Listener() {
+					@Override
+					public void handleEvent(Event event) {
+						// height cannot be per row so simply set
+						event.height = 24;
+					}
+				});
+				viewer = new TableViewer(table);
+				viewer.setContentProvider(new GameX01ContentProvider());
+				this.addColumns(player, viewer);
+				this.scoreViewers.put(player, viewer);
+
+				// End section definition
+				this.toolkit.paintBordersFor(client);
+				section.setClient(client);
 			}
-		});
-
-		this.scoreViewer = new TableViewer(table);
-		this.scoreViewer.setContentProvider(new GameX01ContentProvider());
-
-		this.addColumns();
+		}
 		this.toolkit.paintBordersFor(main);
 
-		IPlayer player;
 		// Score input
-		player = this.game.getFirstPlayer();
-		this.createInputScoreText(main, player);
-
-		player = this.game.getSecondPlayer();
-		this.createInputScoreText(main, player);
-
+		for (IPlayer player : players) {
+			this.createInputScoreText(main, player);
+		}
 		return main;
+	}
+
+	/**
+	 * Adds the player stat section.
+	 *
+	 * @param parent the parent
+	 * @param player the player
+	 */
+	private void addPlayerStatSection(Composite parent, IPlayer player) {
+		// Section
+		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR
+				| Section.TWISTIE);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
+		section.setText("Statistics");
+
+		// Section body
+		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
+		GridLayoutFactory.fillDefaults().applyTo(client);
+
+		// Player Status
+		Composite cmpPlayerTwo = this.createPlayerComposite(client, player);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpPlayerTwo);
+
+		// End section definition
+		this.toolkit.paintBordersFor(client);
+		section.setClient(client);
 	}
 
 	/**
@@ -262,42 +365,41 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 	/**
 	 * Adds the columns.
+	 * @param viewer 
+	 * @param player2 
 	 */
-	private void addColumns() {
+	private void addColumns(IPlayer player, TableViewer viewer) {
 		int turnWidth = 100;
-
-		List<IPlayer> players = this.game.getPlayers();
-		if (players.size() == 2) {
-			this.createPlayerColumns(this.game.getFirstPlayer());
-			this.toolkit.createTableColumn("", this.scoreViewer, turnWidth,
-					SWT.CENTER, new TurnLabelProvider());
-			this.createPlayerColumns(this.game.getSecondPlayer());
+		if (player == null) {
+			// Two player
+			this.createPlayerColumns(viewer, this.game.getFirstPlayer());
+			this.toolkit.createTableColumn("", viewer, turnWidth, SWT.CENTER,
+					new TurnLabelProvider());
+			this.createPlayerColumns(viewer, this.game.getSecondPlayer());
 		} else {
-			this.toolkit.createTableColumn("", this.scoreViewer, turnWidth,
-					SWT.CENTER, new TurnLabelProvider());
-			for (IPlayer player : players) {
-				this.createPlayerColumns(player);
-			}
+			this.toolkit.createTableColumn("", viewer, turnWidth, SWT.CENTER,
+					new TurnLabelProvider());
+			this.createPlayerColumns(viewer, player);
 		}
 	}
 
 	/**
 	 * Creates the player columns.
+	 * @param viewer 
 	 *
 	 * @param player the player
 	 */
-	private void createPlayerColumns(IPlayer player) {
+	private void createPlayerColumns(TableViewer viewer, IPlayer player) {
 		Shell shell = this.getSite().getShell();
 		int width = 94;
 		int style = SWT.CENTER;
 		TableViewerColumn column;
-		column = this.toolkit.createTableColumn("Scored", this.scoreViewer,
-				width, style, new ScoreLabelProvider(player),
-				new ScoreX01EditingSupport(shell, this.game, player,
-						this.scoreViewer));
+		column = this.toolkit.createTableColumn("Scored", viewer, width, style,
+				new ScoreLabelProvider(player), new ScoreX01EditingSupport(
+						shell, this.game, player, viewer));
 		this.playerColumn.put(player, column);
 
-		this.toolkit.createTableColumn("To Go", this.scoreViewer, width, style,
+		this.toolkit.createTableColumn("To Go", viewer, width, style,
 				new ToGoLabelProvider(player));
 	}
 
@@ -378,32 +480,26 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	public void notifyGameEvent(final GameEvent event) {
 		if (event.getGame().equals(this.game)) {
 			LOG.trace("New Game Event: {}", event);
-			//			Display.getDefault().asyncExec(new Runnable() {
-			//				@Override
-			//				public void run() {
-					switch (event.getType()) {
-						case GAME_INITIALIZED:
-							handleGameInitialized();
-							break;
-						case GAME_ENTRY_CREATED:
-							handleNewEntry(event.getEntry());
-							break;
-						case GAME_ENTRY_UPDATED:
-							handleEntryUpdated(event.getPlayer(),
-									event.getEntry());
-							break;
-						case NEW_CURRENT_PLAYER:
-							handlePlayer(event.getPlayer(), event.getEntry());
-							break;
-						case GAME_FINISHED:
-							handleGameFinished(event.getPlayer());
-							break;
-						case GAME_CANCELED:
-							// TODO cleanup
-					}
-				}
-		//			});
-		//		}
+			switch (event.getType()) {
+				case GAME_INITIALIZED:
+					handleGameInitialized();
+					break;
+				case GAME_ENTRY_CREATED:
+					handleNewEntry(event.getEntry());
+					break;
+				case GAME_ENTRY_UPDATED:
+					handleEntryUpdated(event.getPlayer(), event.getEntry());
+					break;
+				case NEW_CURRENT_PLAYER:
+					handlePlayer(event.getPlayer(), event.getEntry());
+					break;
+				case GAME_FINISHED:
+					handleGameFinished(event.getPlayer());
+					break;
+				case GAME_CANCELED:
+					// TODO cleanup
+			}
+		}
 	}
 
 	/**
@@ -415,7 +511,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 			txt = this.playerScoreLeft.get(p);
 			txt.setText(this.getPlayerCurrentScore(p));
 		}
-		this.scoreViewer.setInput(this.game.getGameEntries());
+
+		for (TableViewer tw : this.scoreViewers.values()) {
+			tw.setInput(this.game.getGameEntries());
+		}
 	}
 
 	/**
@@ -424,8 +523,18 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 * @param entry the entry
 	 */
 	private void handleNewEntry(IGameEntry entry) {
-		this.scoreViewer.add(entry);
-		this.scoreViewer.reveal(entry);
+		boolean twoPlayer = (this.game.getPlayers().size() == 2);
+		if (twoPlayer) {
+			// only one table
+			TableViewer tw = this.scoreViewers.get(game.getFirstPlayer());
+			tw.add(entry);
+			tw.reveal(entry);
+		} else {
+			for (TableViewer tw : this.scoreViewers.values()) {
+				tw.add(entry);
+				tw.reveal(entry);
+			}
+		}
 	}
 
 	/**
@@ -435,7 +544,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 */
 	private void handleEntryUpdated(IPlayer player, IGameEntry entry) {
 		Text txt;
-		this.scoreViewer.update(entry, null);
+		TableViewer scoreViewer = this.scoreViewers.get(player);
+		scoreViewer.update(entry, null);
 		if (player != null) {
 			txt = this.playerScoreLeft.get(player);
 			txt.setText(this.getPlayerCurrentScore(player));
@@ -525,5 +635,4 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 			}
 		}
 	}
-
 }

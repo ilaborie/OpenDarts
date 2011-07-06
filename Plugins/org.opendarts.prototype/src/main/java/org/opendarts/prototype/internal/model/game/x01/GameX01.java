@@ -163,38 +163,39 @@ public class GameX01 extends AbstractGame implements IGame {
 	 */
 	public void addPlayerThrow(IPlayer player, ThreeDartThrow dartThrow) {
 		ThreeDartThrow dThrow = dartThrow;
-
-		// update player score
-		int score = this.getScore(player);
-		score -= dartThrow.getScore();
-		if (score < 2) {
-			// broken
-			try {
-				dThrow = new BrokenX01DartsThrow(dartThrow);
-			} catch (InvalidDartThrowException e) {
-				LOG.error("WTF should not happen", e);
+		if (dartThrow != null) {
+			// update player score
+			int score = this.getScore(player);
+			score -= dartThrow.getScore();
+			if (score < 2) {
+				// broken
+				try {
+					dThrow = new BrokenX01DartsThrow(dartThrow);
+				} catch (InvalidDartThrowException e) {
+					LOG.error("WTF should not happen", e);
+				}
+			} else {
+				this.score.put(player, score);
 			}
-		} else {
-			this.score.put(player, score);
+
+			// Add darts
+			GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
+			entry.addPlayerThrow(player, dThrow);
+
+			// Notify update
+			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
+					player, entry, dartThrow));
+
+			// Choose next player
+			List<IPlayer> players = this.getPlayers();
+			int idx = players.indexOf(player);
+			idx++;
+			if (idx >= players.size()) {
+				idx = 0;
+				this.newGameEntry();
+			}
+			this.setCurrentPlayer(players.get(idx));
 		}
-
-		// Add darts
-		GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
-		entry.addPlayerThrow(player, dThrow);
-
-		// Notify update
-		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
-				player, entry, dartThrow));
-
-		// Choose next player
-		List<IPlayer> players = this.getPlayers();
-		int idx = players.indexOf(player);
-		idx++;
-		if (idx >= players.size()) {
-			idx = 0;
-			this.newGameEntry();
-		}
-		this.setCurrentPlayer(players.get(idx));
 	}
 
 	/**

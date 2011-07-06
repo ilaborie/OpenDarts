@@ -221,7 +221,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 				// broken
 				this.setDartThrow(new BrokenX01DartsThrow(this.getDarts()));
 			}
-		} else if ((score - dart.getScore()) == 1) {
+		} else if ((score - dart.getScore()) < 2) {
 			// broken
 			this.setDartThrow(new BrokenX01DartsThrow(this.getDarts()));
 		}

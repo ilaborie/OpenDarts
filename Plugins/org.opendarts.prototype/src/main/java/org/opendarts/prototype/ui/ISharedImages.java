@@ -10,4 +10,8 @@ public interface ISharedImages {
 
 	String IMG_OBJ_USER = "icons/obj/user.png";
 	String IMG_OBJ_COMPUTER = "icons/obj/computer.png";
+
+	String IMG_USER_ADD = "icons/actions/user_add.png";
+	String IMG_USER_DELETE = "icons/actions/user_delete.png";
+	String IMG_USER_NEW = "icons/actions/user_new.png";
 }
