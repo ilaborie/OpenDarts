@@ -119,14 +119,8 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.FormDialog#createFormContent(org.eclipse.ui.forms.IManagedForm)
 	 */
-	/**
-	 * Creates the form content.
-	 *
-	 * @param mform the mform
-	 */
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-
 		String title = this.getFormTitle();
 		ScrolledForm form = mform.getForm();
 		form.setText(title);

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.opendarts.prototype.internal.model.dart.Dart;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Definition;
-import org.opendarts.prototype.internal.model.game.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.dart.DartSector;
 import org.opendarts.prototype.model.dart.DartZone;

@@ -42,6 +42,7 @@ public class ScoreX01EditingSupport extends EditingSupport {
 	/**
 	 * Instantiates a new score x01 editing support.
 	 *
+	 * @param parentShell the parent shell
 	 * @param game the game
 	 * @param player the player
 	 * @param viewer the viewer

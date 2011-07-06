@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
+import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.AbstractGame;
 import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
@@ -206,11 +208,13 @@ public class GameX01 extends AbstractGame implements IGame {
 			ThreeDartThrow newThrow) {
 		ThreeDartThrow oldThrow = entry.getPlayerThrow().get(player);
 		if (oldThrow != null) {
-			int score = this.getScore(player);
-			score += oldThrow.getScore();
-			score -= newThrow.getScore();
-			entry.getPlayerThrow().put(player, newThrow);
-			this.score.put(player, score);
+			if (newThrow != null) {
+				int score = this.getScore(player);
+				score += oldThrow.getScore();
+				score -= newThrow.getScore();
+				entry.getPlayerThrow().put(player, newThrow);
+				this.score.put(player, score);
+			}
 			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
 					player, entry, newThrow));
 		} else {

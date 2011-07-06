@@ -1,4 +1,4 @@
-package org.opendarts.prototype.internal.model.game.x01;
+package org.opendarts.prototype.internal.model.dart.x01;
 
 import org.opendarts.prototype.internal.model.dart.NoDart;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;

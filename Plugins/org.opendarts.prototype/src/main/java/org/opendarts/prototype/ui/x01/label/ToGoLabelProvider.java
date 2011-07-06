@@ -11,10 +11,10 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
-import org.opendarts.prototype.internal.model.game.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 

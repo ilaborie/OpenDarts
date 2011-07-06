@@ -1,5 +1,6 @@
 package org.opendarts.prototype.ui.x01.utils;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.x01.DartX01Util;
+import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
-import org.opendarts.prototype.internal.model.game.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameService;
@@ -216,10 +218,16 @@ public class TextInputListener implements FocusListener, SelectionListener,
 		this.decoration.hide();
 		try {
 			Integer leftScore = this.game.getScore(this.player);
-			WinningX01DartsThrow dartThrow = new WinningX01DartsThrow(
-					leftScore, nbDart);
-			this.gameService.addWinningPlayerThrow(this.game, this.player,
-					dartThrow);
+			if (DartX01Util.couldFinish(leftScore, nbDart)) {
+				WinningX01DartsThrow dartThrow = new WinningX01DartsThrow(
+						leftScore, nbDart);
+				this.gameService.addWinningPlayerThrow(this.game, this.player,
+						dartThrow);
+			} else {
+				this.applyError(MessageFormat.format(
+						"Could not finish {0} with {1} dart(s)", leftScore,
+						nbDart));
+			}
 		} catch (InvalidDartThrowException e) {
 			String msg = e.getMessage();
 			this.applyError(msg);
@@ -238,7 +246,10 @@ public class TextInputListener implements FocusListener, SelectionListener,
 			ThreeDartThrow dartThrow;
 			try {
 				dartThrow = this.dartThrowUtil.getDartThrow(value, leftScore);
-				if (dartThrow instanceof WinningX01DartsThrow) {
+				if (dartThrow == null) {
+					this.inputText.setFocus();
+					this.inputText.selectAll();
+				} else if (dartThrow instanceof WinningX01DartsThrow) {
 					this.gameService.addWinningPlayerThrow(this.game,
 							this.player, dartThrow);
 				} else {
