@@ -61,6 +61,10 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		for (IPlayer player : gameDefinition.getPlayers()) {
 			this.playerGames.put(player, 0);
 		}
+		// create the first game
+		IGame game = this.gameService.createGame(this,
+				this.gameDefinition.getPlayers());
+		this.getInternalsGame().add(game);
 	}
 
 	/* (non-Javadoc)
@@ -70,17 +74,8 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	public void initSet() {
 		this.setStart(Calendar.getInstance());
 
-		// Clear games
-		this.getInternalsGame().clear();
 		this.fireSetEvent(SetEvent.Factory.newSetInitializedEvent(this));
-
-		// Create Game
-		IGame game = this.gameService.createGame(this,
-				this.gameDefinition.getPlayers());
-		this.setCurrentGame(game);
-
-		// Start the game
-		this.gameService.startGame(game);
+		this.setCurrentGame(this.getInternalsGame().get(0));
 	}
 
 	/* (non-Javadoc)
@@ -143,15 +138,6 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	@Override
 	public String getDescription() {
 		return this.getName();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.internal.model.session.GameContainer#addGame(java.lang.Object)
-	 */
-	@Override
-	public void addGame(IGame game) {
-		super.addGame(game);
-		this.fireSetEvent(SetEvent.Factory.newSetGameEvent(this, game));
 	}
 
 	/* (non-Javadoc)
@@ -234,8 +220,13 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 			// create a new game
 			IGame newGame = this.createNewGame(game.getFirstPlayer());
 			this.setCurrentGame(newGame);
-			this.gameService.startGame(newGame);
 		}
+	}
+
+	@Override
+	protected void setCurrentGame(IGame game) {
+		super.setCurrentGame(game);
+		this.fireSetEvent(SetEvent.Factory.newSetGameEvent(this, game));
 	}
 
 	/**

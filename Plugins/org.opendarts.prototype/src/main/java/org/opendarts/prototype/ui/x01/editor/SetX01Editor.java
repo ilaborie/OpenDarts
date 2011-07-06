@@ -10,11 +10,13 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.model.session.ISetListener;
 import org.opendarts.prototype.model.session.SetEvent;
+import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.editor.ISetEditor;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
 import org.slf4j.Logger;
@@ -39,12 +41,16 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	/** all game pages. */
 	private final Map<GameX01, GameX01Page> pages;
 
+	/** The game service. */
+	private final IGameService gameService;
+
 	/**
 	 * Instantiates a new game editor.
 	 */
 	public SetX01Editor() {
 		super();
 		this.pages = new HashMap<GameX01, GameX01Page>();
+		this.gameService = ProtoPlugin.getService(IGameService.class);
 	}
 
 	/* (non-Javadoc)
@@ -61,20 +67,11 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	@Override
 	protected void setInput(IEditorInput input) {
 		super.setInput(input);
-		if (this.setInput != null) {
-			this.getSet().removeListener(this);
-		}
 		this.setInput = (SetEditorInput) input;
-		this.getSet().addListener(this);
-	}
+		ISet set = this.getSet();
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.MultiPageEditorPart#setFocus()
-	 */
-	@Override
-	public void setFocus() {
-		GameX01Page page = this.pages.get(this.getSet().getCurrentGame());
-		page.setFocus();
+		// Register listener
+		set.addListener(this);
 	}
 
 	/* (non-Javadoc)
@@ -95,8 +92,11 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		if (event.getSet().equals(this.getSet())) {
 			LOG.trace("New Set Event: {}", event);
 			switch (event.getType()) {
+				case SET_INITIALIZED:
+					this.handleSetInitialize();
+					break;
 				case NEW_CURRENT_GAME:
-					this.handleNewGame((GameX01) event.getGame());
+					this.handleGameActive((GameX01) event.getGame());
 					break;
 				case SET_FINISHED:
 					this.handleSetFinished();
@@ -108,21 +108,37 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	}
 
 	/**
+	* Start.
+	*/
+	private void handleSetInitialize() {
+		IGame game = this.getSet().getCurrentGame();
+		if (game != null && !game.isFinished()) {
+			this.handleGameActive((GameX01) game);
+		}
+	}
+
+	/**
 	 * Handle new game.
 	 *
 	 * @param game the game
 	 */
-	private void handleNewGame(GameX01 game) {
-		// Create new page
-		int nb = this.pages.size() + 1;
-		GameX01Page page = new GameX01Page(this, game, nb);
-		this.pages.put(game, page);
-		try {
-			this.addPage(page);
-			this.setActivePage(String.valueOf(nb));
-		} catch (PartInitException e) {
-			LOG.error("Could not add page", e);
+	private void handleGameActive(GameX01 game) {
+		// get new page
+		GameX01Page page;
+		page = this.pages.get(game);
+		if (page == null) {
+			int nb = this.pages.size() + 1;
+			page = new GameX01Page(this, game, nb);
+			this.pages.put(game, page);
+			try {
+				this.addPage(page);
+				this.setActivePage(String.valueOf(nb));
+			} catch (PartInitException e) {
+				LOG.error("Could not add page", e);
+			}
 		}
+		// auto start Game
+		this.gameService.startGame(game);
 	}
 
 	/**

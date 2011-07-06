@@ -43,7 +43,6 @@ public class GameX01Service implements IGameService {
 		GameX01Definition gameDef = (GameX01Definition) set.getGameDefinition();
 		GameX01 result = new GameX01((GameSet) set, players,
 				gameDef.getStartScore());
-		set.addGame(result);
 		return result;
 	}
 

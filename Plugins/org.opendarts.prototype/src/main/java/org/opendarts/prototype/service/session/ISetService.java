@@ -18,4 +18,11 @@ public interface ISetService {
 	 */
 	ISet createNewSet(ISession session, IGameDefinition gameDefinition);
 
+	/**
+	 * Start set.
+	 *
+	 * @param set the set
+	 */
+	void startSet(ISet set);
+
 }

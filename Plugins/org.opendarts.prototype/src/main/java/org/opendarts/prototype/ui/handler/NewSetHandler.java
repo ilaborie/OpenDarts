@@ -5,6 +5,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -54,11 +55,9 @@ public class NewSetHandler extends AbstractHandler implements IHandler {
 			ISetService setService = ProtoPlugin.getService(ISetService.class);
 			ISet set = setService.createNewSet(session, gameDef);
 
-			// start the set
-			set.initSet();
-
 			// Open Editor
 			this.openEditor(page, set);
+			setService.startSet(set);
 		} else {
 			LOG.info("Cancel NewGame creation");
 		}
@@ -70,14 +69,17 @@ public class NewSetHandler extends AbstractHandler implements IHandler {
 	 *
 	 * @param page the page
 	 * @param game the game
+	 * @return 
 	 */
-	private void openEditor(IWorkbenchPage page, ISet set) {
+	private IEditorPart openEditor(IWorkbenchPage page, ISet set) {
+		IEditorPart openEditor = null;
 		SetEditorInput input = new SetEditorInput(set);
 		try {
-			page.openEditor(input, SetX01Editor.ID);
+			openEditor = page.openEditor(input, SetX01Editor.ID);
 		} catch (PartInitException e) {
 			LOG.error("Could not open editor", e);
 		}
+		return openEditor;
 	}
 
 }

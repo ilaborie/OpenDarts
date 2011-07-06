@@ -19,7 +19,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -379,9 +378,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	public void notifyGameEvent(final GameEvent event) {
 		if (event.getGame().equals(this.game)) {
 			LOG.trace("New Game Event: {}", event);
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
+			//			Display.getDefault().asyncExec(new Runnable() {
+			//				@Override
+			//				public void run() {
 					switch (event.getType()) {
 						case GAME_INITIALIZED:
 							handleGameInitialized();
@@ -403,8 +402,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 							// TODO cleanup
 					}
 				}
-			});
-		}
+		//			});
+		//		}
 	}
 
 	/**

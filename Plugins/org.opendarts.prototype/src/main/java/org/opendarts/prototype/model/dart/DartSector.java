@@ -167,7 +167,7 @@ public enum DartSector {
 				result = "Out";
 				break;
 			case UNLUCKY_DART:
-				result = "UnluckyDart";
+				result = ":'(";
 				break;
 			case NONE:
 				result = "";

@@ -25,10 +25,6 @@
             id="opendarts.cmd.newSet"
             name="New Set">
       </command>
-      <command
-            id="opendarts.cmd.StartGame"
-            name="Start Game">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -88,18 +84,6 @@
             class="org.opendarts.prototype.ui.handler.NewSetHandler"
             commandId="opendarts.cmd.newSet">
       </handler>
-      <handler
-            class="org.opendarts.prototype.ui.handler.StartGameHandler"
-            commandId="opendarts.cmd.StartGame">
-         <enabledWhen>
-            <with
-                  variable="activeEditorId">
-               <equals
-                     value="opendarts.editor.x01">
-               </equals>
-            </with>
-         </enabledWhen>
-      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -121,10 +105,6 @@
             commandId="org.eclipse.ui.file.exit"
             icon="icons/actions/quit.png">
       </image>
-      <image
-            commandId="opendarts.cmd.StartGame"
-            icon="icons/actions/start.png">
-      </image>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -133,12 +113,5 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+G">
       </key>
-      <key
-            commandId="opendarts.cmd.StartGame"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+R">
-      </key>
    </extension>
-
 </plugin>
