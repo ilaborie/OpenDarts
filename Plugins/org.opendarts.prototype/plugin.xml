@@ -114,4 +114,16 @@
             sequence="M1+G">
       </key>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.opendarts.prototype.application"
+            name="proto">
+         <property
+               name="appName"
+               value="proto">
+         </property>
+      </product>
+   </extension>
 </plugin>
