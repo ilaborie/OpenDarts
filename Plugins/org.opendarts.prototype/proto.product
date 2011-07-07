@@ -3,7 +3,6 @@
 
 <product name="proto" id="org.opendarts.prototype.product" application="org.opendarts.prototype.application" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -14,7 +13,6 @@
 
    <windowImages/>
 
-
    <launcher name="OpenDarts">
       <solaris/>
       <win useIco="false">
@@ -22,10 +20,8 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="ch.qos.logback.classic"/>
@@ -54,6 +50,7 @@
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.swt"/>
       <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.cocoa" fragment="true"/>
       <plugin id="org.eclipse.ui.forms"/>
