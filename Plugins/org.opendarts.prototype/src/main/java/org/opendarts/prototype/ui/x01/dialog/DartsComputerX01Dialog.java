@@ -9,7 +9,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.events.ShellListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -98,13 +97,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	 */
 	@Override
 	protected Control createButtonBar(Composite parent) {
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		//Composite sep = new Composite(parent, SWT.NULL);
-		//sep.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
-		//gd.heightHint = 1;
-		Label sep = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
-		sep.setLayoutData(gd);
-		return sep;
+		return new Label(parent, SWT.NONE);
 	}
 
 	/* (non-Javadoc)
