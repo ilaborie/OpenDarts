@@ -333,7 +333,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 	 * @param player the player
 	 */
 	private void createInputScoreText(Composite main, IPlayer player) {
-		Text inputScoreText = this.toolkit.createText(main, "", SWT.CENTER);
+		Text inputScoreText = this.toolkit.createText(main, "", SWT.CENTER
+				| SWT.BORDER);
 		inputScoreText.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
 		inputScoreText.setEnabled(false);
@@ -447,7 +448,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		GridLayoutFactory.fillDefaults().applyTo(main);
 
 		Text txtScore = this.toolkit.createText(main,
-				this.getPlayerCurrentScore(player), SWT.READ_ONLY | SWT.CENTER);
+				this.getPlayerCurrentScore(player), SWT.READ_ONLY | SWT.CENTER
+						| SWT.BORDER);
 		txtScore.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_LEFT));
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(txtScore);
