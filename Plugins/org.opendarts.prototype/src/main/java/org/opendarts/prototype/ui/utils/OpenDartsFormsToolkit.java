@@ -73,7 +73,7 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
 		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 18);
 		registerFont(initialFont, FONT_SCORE_INPUT, 64);
-		registerFont(initialFont, FONT_SCORE_LEFT, 160);
+		registerFont(initialFont, FONT_SCORE_LEFT, 126);
 	}
 
 	/**

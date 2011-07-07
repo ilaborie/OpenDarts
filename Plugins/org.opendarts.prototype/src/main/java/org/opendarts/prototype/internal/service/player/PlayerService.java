@@ -31,7 +31,11 @@ public class PlayerService implements IPlayerService {
 		this.players = new HashMap<String, IPlayer>();
 		// XXX init
 		IPlayer player;
-		player = new Player(System.getenv("USER"));
+		String name = System.getenv("USER");
+		if (name == null || "".equals(name)) {
+			name = System.getenv("USERNAME");
+		}
+		player = new Player(name);
 		this.players.put(player.getName(), player);
 		player = this.getComputerPlayer();
 		this.players.put(player.getName(), player);
