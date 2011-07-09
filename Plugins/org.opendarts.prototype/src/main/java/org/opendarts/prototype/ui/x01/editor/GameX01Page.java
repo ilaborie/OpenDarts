@@ -576,8 +576,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		if (!this.game.getParentSet().isFinished()) {
 			String title = MessageFormat.format("{0} finished", this.game);
 			String message = this.game.getWinningMessage();
-			MessageDialog.openInformation(this.getSite().getShell(), title,
-					message);
+			Shell shell = this.getSite().getShell();
+			MessageDialog.open(MessageDialog.INFORMATION, shell, title,
+					message, SWT.SHEET);
 		}
 	}
 

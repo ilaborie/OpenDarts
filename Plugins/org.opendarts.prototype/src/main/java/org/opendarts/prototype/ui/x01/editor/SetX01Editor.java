@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -148,8 +150,9 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		// End Game dialog
 		String title = MessageFormat.format("{0} finished", this.getSet());
 		String message = this.getSet().getWinningMessage();
-		MessageDialog
-				.openInformation(this.getSite().getShell(), title, message);
+		Shell shell = this.getSite().getShell();
+		MessageDialog.open(MessageDialog.INFORMATION, shell, title, message,
+				SWT.SHEET);
 	}
 
 	/* (non-Javadoc)
