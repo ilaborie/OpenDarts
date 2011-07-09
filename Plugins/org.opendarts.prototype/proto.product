@@ -13,6 +13,9 @@
 
    <windowImages/>
 
+   <splash
+      location="org.opendarts.prototype"
+      startupProgressRect="5,275,445,15" />
    <launcher name="OpenDarts">
       <solaris/>
       <win useIco="false">
