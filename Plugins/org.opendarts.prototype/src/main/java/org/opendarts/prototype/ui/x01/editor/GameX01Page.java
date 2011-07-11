@@ -117,8 +117,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 		GridDataFactory playerData;
 		GridDataFactory scoreData;
-		scoreData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1)
-				.hint(SWT.DEFAULT, 200);
+		scoreData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1);
 
 		List<IPlayer> players = this.game.getPlayers();
 		boolean twoPlayer = (players.size() == 2);
@@ -128,18 +127,14 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		if (twoPlayer) {
 			nbCol = 4;
 			tableSpan = 2;
-			playerData = GridDataFactory.fillDefaults().grab(false, true)
-					.hint(150, SWT.DEFAULT);
+			playerData = GridDataFactory.fillDefaults().grab(false, true);
 			scoreData = GridDataFactory.fillDefaults().grab(true, false)
-					.span(2, 1).hint(SWT.DEFAULT, 200);
+					.span(2, 1);
 		} else {
 			nbCol = players.size();
 			tableSpan = nbCol;
-			playerData = GridDataFactory.fillDefaults().grab(false, true)
-					.hint(150, SWT.DEFAULT);
-
-			scoreData = GridDataFactory.fillDefaults().grab(true, false)
-					.hint(SWT.DEFAULT, 200);
+			playerData = GridDataFactory.fillDefaults().grab(false, true);
+			scoreData = GridDataFactory.fillDefaults().grab(true, false);
 		}
 		Composite body = form.getBody();
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
