@@ -140,6 +140,7 @@ public class PlayerService implements IPlayerService {
 				case BULL:
 					if (rand < 20) {
 						sector = DartSector.UNLUCKY_DART;
+						zone = DartZone.SINGLE;
 					} else if (rand < 120) {
 						sector = DartSector.BULL;
 						zone = DartZone.DOUBLE;
@@ -150,6 +151,7 @@ public class PlayerService implements IPlayerService {
 						// random single
 						int i = random.nextInt(DartSector.values().length);
 						sector = DartSector.values()[i];
+						zone = DartZone.SINGLE;
 					}
 					break;
 				case NONE:
