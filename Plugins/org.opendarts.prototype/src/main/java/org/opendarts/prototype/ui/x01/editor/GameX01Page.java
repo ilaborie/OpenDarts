@@ -90,7 +90,14 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	/** The game service. */
 	private final IGameService gameService;
 
+	/** The body. */
 	private Composite body;
+
+	/** The managed form. */
+	private IManagedForm mForm;
+
+	/** The dirty. */
+	private boolean dirty;
 
 	/**
 	 * Instantiates a new game page.
@@ -105,7 +112,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.playerScoreLeft = new HashMap<IPlayer, Text>();
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
-		this.gameService = ProtoPlugin.getService(IGameService.class);
+		this.gameService = gameEditor.getSet().getGameService();
 		this.scoreViewers = new HashMap<IPlayer, TableViewer>();
 	}
 
@@ -114,6 +121,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 */
 	@Override
 	protected void createFormContent(IManagedForm managedForm) {
+		this.mForm = managedForm;
 		// form
 		ScrolledForm form = managedForm.getForm();
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
@@ -531,6 +539,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					break;
 				case GAME_CANCELED:
 					// TODO cleanup
+					this.dirty = false;
+					this.mForm.dirtyStateChanged();
 			}
 		}
 	}
@@ -548,6 +558,16 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		for (TableViewer tw : this.scoreViewers.values()) {
 			tw.setInput(this.game.getGameEntries());
 		}
+		this.isDirty();
+		this.mForm.dirtyStateChanged();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.editor.FormPage#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	/**
@@ -611,6 +631,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			MessageDialog.open(MessageDialog.INFORMATION, shell, title,
 					message, SWT.SHEET);
 		}
+		this.dirty = false;
+		this.mForm.dirtyStateChanged();
 	}
 
 	/**

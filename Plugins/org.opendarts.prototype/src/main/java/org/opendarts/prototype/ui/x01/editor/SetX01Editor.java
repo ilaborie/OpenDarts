@@ -10,6 +10,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.opendarts.prototype.ProtoPlugin;
@@ -19,6 +21,7 @@ import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.model.session.ISetListener;
 import org.opendarts.prototype.model.session.SetEvent;
 import org.opendarts.prototype.service.game.IGameService;
+import org.opendarts.prototype.service.session.ISetService;
 import org.opendarts.prototype.ui.editor.ISetEditor;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
 import org.slf4j.Logger;
@@ -28,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * The Class SetX01Editor.
  */
 public class SetX01Editor extends FormEditor implements ISetEditor,
-		ISetListener {
+		ISetListener, ISaveablePart2 {
 
 	/** The ID. */
 	public static String ID = "opendarts.editor.x01";
@@ -44,7 +47,13 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private final Map<GameX01, GameX01Page> pages;
 
 	/** The game service. */
-	private final IGameService gameService;
+	private IGameService gameService;
+
+	/** The dirty. */
+	private boolean dirty;
+
+	/** The set service. */
+	private ISetService setService;
 
 	/**
 	 * Instantiates a new game editor.
@@ -52,7 +61,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	public SetX01Editor() {
 		super();
 		this.pages = new HashMap<GameX01, GameX01Page>();
-		this.gameService = ProtoPlugin.getService(IGameService.class);
+		this.setService = ProtoPlugin.getService(ISetService.class);
 	}
 
 	/* (non-Javadoc)
@@ -113,10 +122,12 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	* Start.
 	*/
 	private void handleSetInitialize() {
+		this.gameService = this.getSet().getGameService();
 		IGame game = this.getSet().getCurrentGame();
 		if (game != null && !game.isFinished()) {
 			this.handleGameActive((GameX01) game);
 		}
+		this.dirty = true;
 	}
 
 	/**
@@ -147,12 +158,14 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	 * Handle set finished.
 	 */
 	private void handleSetFinished() {
+		this.dirty = false;
 		// End Game dialog
 		String title = MessageFormat.format("{0} finished", this.getSet());
 		String message = this.getSet().getWinningMessage();
 		Shell shell = this.getSite().getShell();
 		MessageDialog.open(MessageDialog.INFORMATION, shell, title, message,
 				SWT.SHEET);
+		this.firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	/* (non-Javadoc)
@@ -181,6 +194,10 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		// Save is disable
+		ISet set = this.getSet();
+		if (set != null && !set.isFinished()) {
+			this.setService.cancelSet(set);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -197,6 +214,22 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.editor.FormEditor#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+		return this.dirty;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.ISaveablePart2#promptToSaveOnClose()
+	 */
+	@Override
+	public int promptToSaveOnClose() {
+		return ISaveablePart2.YES;
 	}
 
 }

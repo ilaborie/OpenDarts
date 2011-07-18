@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.game.GameDefinition;
+import org.opendarts.prototype.internal.service.game.x01.GameX01Service;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -22,6 +22,7 @@ import org.opendarts.prototype.service.game.IGameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class GameSet.
  */
@@ -57,7 +58,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		this.gameDefinition = gameDefinition;
 		this.listeners = new CopyOnWriteArraySet<ISetListener>();
 		this.playerGames = new HashMap<IPlayer, Integer>();
-		this.gameService = ProtoPlugin.getService(IGameService.class);
+		this.gameService = new GameX01Service();
 		for (IPlayer player : gameDefinition.getPlayers()) {
 			this.playerGames.put(player, 0);
 		}
@@ -223,6 +224,9 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.session.GameContainer#setCurrentGame(java.lang.Object)
+	 */
 	@Override
 	protected void setCurrentGame(IGame game) {
 		super.setCurrentGame(game);
@@ -238,5 +242,21 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	private IGame createNewGame(IPlayer player) {
 		return this.gameService.createGame(this,
 				this.gameDefinition.getNextPlayers(this));
+	}
+
+	/**
+	 * Cancel.
+	 */
+	public void cancelSet() {
+		// TODO may do something for stats
+		this.fireSetEvent(SetEvent.Factory.newSetCanceledEvent(this));
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.session.ISet#getGameService()
+	 */
+	@Override
+	public IGameService getGameService() {
+		return this.gameService;
 	}
 }

@@ -57,4 +57,11 @@ public interface IGameService {
 	 * @return the i dart
 	 */
 	IDart chooseBestDart(int score, int nbDartLeft);
+
+	/**
+	 * Cancel game.
+	 *
+	 * @param game the game
+	 */
+	void cancelGame(IGame game);
 }

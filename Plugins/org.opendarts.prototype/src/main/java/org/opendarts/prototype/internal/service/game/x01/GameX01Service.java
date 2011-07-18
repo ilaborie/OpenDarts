@@ -56,6 +56,13 @@ public class GameX01Service implements IGameService {
 		LOG.info("Game {} started", igame);
 	}
 
+	@Override
+	public void cancelGame(IGame igame) {
+		GameX01 game = (GameX01) igame;
+		game.cancelGame();
+		LOG.info("Game {} canceled", igame);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.service.game.IGameService#addPlayerThrow(org.opendarts.prototype.internal.model.game.x01.GameX01, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */

@@ -5,9 +5,11 @@ package org.opendarts.prototype.internal.service.session;
 
 import org.opendarts.prototype.internal.model.game.GameDefinition;
 import org.opendarts.prototype.internal.model.session.GameSet;
+import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
+import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.service.session.ISetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +45,21 @@ public class SetService implements ISetService {
 	@Override
 	public void startSet(ISet set) {
 		set.initSet();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.session.ISetService#cancelSet(org.opendarts.prototype.model.session.ISet)
+	 */
+	@Override
+	public void cancelSet(ISet set) {
+		IGame game = set.getCurrentGame();
+		if (game!=null) {
+			IGameService gameService = set.getGameService();
+			gameService.cancelGame(game);
+		}
+		GameSet gSet = (GameSet) set;
+		gSet.cancelSet();
+		LOG.info("Set canceled: {}", set);
 	}
 
 }

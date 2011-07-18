@@ -65,13 +65,14 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	 * @param player the player
 	 * @param game the game
 	 * @param entry the entry
+	 * @param gameService 
 	 */
 	public DartsComputerX01Dialog(Shell parentShell, IPlayer player,
 			GameX01 game, GameX01Entry entry) {
 		super(parentShell, player, game, entry);
 		this.player = player;
 		this.entry = entry;
-		this.gameService = ProtoPlugin.getService(IGameService.class);
+		this.gameService = game.getParentSet().getGameService();
 		this.playerService = ProtoPlugin.getService(IPlayerService.class);
 		this.score = ((GameX01) game).getScore(player);
 	}

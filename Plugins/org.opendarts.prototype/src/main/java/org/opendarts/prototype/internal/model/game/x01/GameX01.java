@@ -267,4 +267,12 @@ public class GameX01 extends AbstractGame implements IGame {
 		}
 		return result;
 	}
+
+	/**
+	 * Cancel game.
+	 */
+	public void cancelGame() {
+		// TODO update stats
+		this.fireGameEvent(GameEvent.Factory.newGameCanceledEvent(this));
+	}
 }

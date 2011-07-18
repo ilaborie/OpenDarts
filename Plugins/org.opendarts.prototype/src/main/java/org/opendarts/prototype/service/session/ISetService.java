@@ -25,4 +25,11 @@ public interface ISetService {
 	 */
 	void startSet(ISet set);
 
+	/**
+	 * Cancel set.
+	 *
+	 * @param set the set
+	 */
+	void cancelSet(ISet set);
+
 }

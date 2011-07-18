@@ -3,6 +3,7 @@ package org.opendarts.prototype.model.session;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.player.IPlayer;
+import org.opendarts.prototype.service.game.IGameService;
 
 /**
  * The Interface ISet.
@@ -70,5 +71,12 @@ public interface ISet extends IGameContainer<IGame> {
 	 * @return the winning message
 	 */
 	String getWinningMessage();
+
+	/**
+	 * Gets the game service.
+	 *
+	 * @return the game service
+	 */
+	IGameService getGameService();
 
 }

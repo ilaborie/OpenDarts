@@ -16,7 +16,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
 import org.opendarts.prototype.internal.model.dart.x01.DartX01Util;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
@@ -77,7 +76,7 @@ public class TextInputListener implements FocusListener, SelectionListener,
 		this.inputText = inputText;
 		this.decoration = dec;
 		this.dartThrowUtil = new DartThrowUtil(parentShell, game, player);
-		this.gameService = ProtoPlugin.getService(IGameService.class);
+		this.gameService = game.getParentSet().getGameService();
 		this.shortcutValue = new HashMap<Integer, String>();
 		this.shiftShortcutValue = new HashMap<Integer, String>();
 		this.initShortCut();
