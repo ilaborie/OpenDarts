@@ -6,10 +6,15 @@ package org.opendarts.prototype.internal.model.player;
 public class ComputerPlayer extends Player {
 
 	/**
+	 * A counter
+	 */
+	private static int count = 1;
+
+	/**
 	 * Instantiates a new computer player.
 	 */
 	public ComputerPlayer() {
-		super("<COM>");
+		super("<COM> " + count++);
 	}
 
 	/* (non-Javadoc)

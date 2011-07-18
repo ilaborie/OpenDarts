@@ -37,6 +37,12 @@ public class PlayerService implements IPlayerService {
 		}
 		player = new Player(name);
 		this.players.put(player.getName(), player);
+
+		// A computer
+		player = this.getComputerPlayer();
+		this.players.put(player.getName(), player);
+
+		// Another computer
 		player = this.getComputerPlayer();
 		this.players.put(player.getName(), player);
 	}

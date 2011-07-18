@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -56,7 +58,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class GameX01Page.
  */
-public class GameX01Page extends FormPage implements IFormPage, IGameListener {
+public class GameX01Page extends FormPage implements IFormPage, IGameListener,
+		IExpansionListener {
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
@@ -86,6 +89,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 
 	/** The game service. */
 	private final IGameService gameService;
+
+	private Composite body;
 
 	/**
 	 * Instantiates a new game page.
@@ -136,7 +141,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 			playerData = GridDataFactory.fillDefaults().grab(false, true);
 			scoreData = GridDataFactory.fillDefaults().grab(true, false);
 		}
-		Composite body = form.getBody();
+		this.body = form.getBody();
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
 				.equalWidth(true).applyTo(body);
 
@@ -162,12 +167,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		}
 
 		// Left score
-		Composite cmpPlayerLeftScore;
-		for (IPlayer player : players) {
-			cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(body,
-					player);
-			scoreData.copy().applyTo(cmpPlayerLeftScore);
-		}
+		Composite leftScoreMain = this.createLeftScoreComposite(nbCol,
+				scoreData);
+		GridDataFactory.fillDefaults().grab(true, false).span(nbCol, 1)
+				.applyTo(leftScoreMain);
 
 		// Toolbar
 		ToolBarManager manager = (ToolBarManager) form.getToolBarManager();
@@ -186,6 +189,39 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 		}
 		this.handlePlayer(this.game.getCurrentPlayer(),
 				this.game.getCurrentEntry());
+	}
+
+	/**
+	 * Creates the left score composite.
+	 *
+	 * @param nbCol the nb col
+	 * @param scoreData the score data
+	 * @return the composite
+	 */
+	private Composite createLeftScoreComposite(int nbCol,
+			GridDataFactory scoreData) {
+		ExpandableComposite leftScoreMain = this.toolkit
+				.createExpandableComposite(body, ExpandableComposite.TWISTIE
+						| ExpandableComposite.EXPANDED
+						| ExpandableComposite.NO_TITLE);
+		GridLayoutFactory.fillDefaults().applyTo(leftScoreMain);
+
+		Composite leftScoreBody = this.toolkit.createComposite(leftScoreMain);
+		GridLayoutFactory.fillDefaults().extendedMargins(0, 0, 6, 0)
+				.numColumns(nbCol).equalWidth(true).applyTo(leftScoreBody);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(leftScoreBody);
+
+		Composite cmpPlayerLeftScore;
+		for (IPlayer player : this.game.getPlayers()) {
+			cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
+					leftScoreBody, player);
+			scoreData.copy().applyTo(cmpPlayerLeftScore);
+		}
+
+		this.toolkit.paintBordersFor(leftScoreBody);
+		leftScoreMain.setClient(leftScoreBody);
+		leftScoreMain.addExpansionListener(this);
+		return leftScoreMain;
 	}
 
 	/* (non-Javadoc)
@@ -632,5 +668,21 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener {
 				}
 			}
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.events.IExpansionListener#expansionStateChanged(org.eclipse.ui.forms.events.ExpansionEvent)
+	 */
+	@Override
+	public void expansionStateChanged(ExpansionEvent e) {
+		this.body.layout(true);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.events.IExpansionListener#expansionStateChanging(org.eclipse.ui.forms.events.ExpansionEvent)
+	 */
+	@Override
+	public void expansionStateChanging(ExpansionEvent e) {
+		// Nothing to do
 	}
 }

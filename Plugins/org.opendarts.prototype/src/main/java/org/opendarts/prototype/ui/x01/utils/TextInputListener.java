@@ -151,12 +151,12 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Handle shortcuts (F1 ....)
 		switch (e.keyCode) {
 			case '\t':
 			case '\r':
 			case '\n':
 			case ' ':
+			case SWT.KEYPAD_CR:
 				this.handleNewValue(this.inputText.getText());
 				break;
 			case SWT.F1:
