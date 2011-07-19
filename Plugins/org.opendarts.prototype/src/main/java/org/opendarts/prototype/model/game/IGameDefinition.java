@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.model.session.ISet;
+import org.opendarts.prototype.service.game.IGameService;
+import org.opendarts.prototype.service.stats.IStatsService;
 
 /**
  * The Interface IGameDefinition.
@@ -48,4 +50,18 @@ public interface IGameDefinition {
 	 * @return true, if is sets the finished
 	 */
 	boolean isSetFinished(ISet set);
+
+	/**
+	 * Gets the game service.
+	 *
+	 * @return the game service
+	 */
+	IGameService getGameService();
+
+	/**
+	 * Gets the i stats service.
+	 *
+	 * @return the i stats service
+	 */
+	IStatsService getIStatsService();
 }

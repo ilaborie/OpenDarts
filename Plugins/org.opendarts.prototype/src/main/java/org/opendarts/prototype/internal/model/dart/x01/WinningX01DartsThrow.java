@@ -1,14 +1,14 @@
 package org.opendarts.prototype.internal.model.dart.x01;
 
 import org.opendarts.prototype.internal.model.dart.NoDart;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.model.dart.IDart;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 
 /**
  * The Class WinningX01DartsThrow.
  */
-public class WinningX01DartsThrow extends ThreeDartThrow {
+public class WinningX01DartsThrow extends ThreeDartsThrow {
 
 	/** The nb dart to finish. */
 	private final int nbDartToFinish;
@@ -28,7 +28,7 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartThrow#check()
+	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartsThrow#check()
 	 */
 	protected void checkDartToFinish() throws InvalidDartThrowException {
 		super.check();
@@ -82,7 +82,7 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 	 * @param nbDarts the nb darts
 	 * @throws InvalidDartThrowException the invalid dart throw exception
 	 */
-	public WinningX01DartsThrow(ThreeDartThrow dThrow, int nbDarts)
+	public WinningX01DartsThrow(ThreeDartsThrow dThrow, int nbDarts)
 			throws InvalidDartThrowException {
 		this(dThrow.getScore(), nbDarts);
 		this.getInternalDarts().addAll(dThrow.getDarts());
@@ -107,7 +107,7 @@ public class WinningX01DartsThrow extends ThreeDartThrow {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartThrow#toString()
+	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartsThrow#toString()
 	 */
 	@Override
 	public String toString() {

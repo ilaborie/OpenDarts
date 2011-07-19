@@ -3,12 +3,25 @@ package org.opendarts.prototype.internal.model.game.x01;
 import java.util.List;
 
 import org.opendarts.prototype.internal.model.game.GameDefinition;
+import org.opendarts.prototype.internal.service.game.x01.GameX01Service;
+import org.opendarts.prototype.internal.service.stats.x01.StatsX01Service;
 import org.opendarts.prototype.model.player.IPlayer;
+import org.opendarts.prototype.service.game.IGameService;
+import org.opendarts.prototype.service.stats.IStatsService;
 
+/**
+ * The Class GameX01Definition.
+ */
 public class GameX01Definition extends GameDefinition {
 
 	/** The start score. */
 	private final int startScore;
+
+	/** The game service. */
+	private final IGameService gameService;
+
+	/** The stats service. */
+	private final IStatsService statsService;
 
 	/**
 	 * Instantiates a new game x01 definition.
@@ -22,6 +35,8 @@ public class GameX01Definition extends GameDefinition {
 			int nbGameToWin, boolean playAllGames) {
 		super(players, nbGameToWin, playAllGames);
 		this.startScore = startScore;
+		this.gameService = new GameX01Service();
+		this.statsService = new StatsX01Service();
 	}
 
 	/**
@@ -31,6 +46,22 @@ public class GameX01Definition extends GameDefinition {
 	 */
 	public int getStartScore() {
 		return this.startScore;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.game.IGameDefinition#getGameService()
+	 */
+	@Override
+	public IGameService getGameService() {
+		return this.gameService;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.game.IGameDefinition#getIStatsService()
+	 */
+	@Override
+	public IStatsService getIStatsService() {
+		return this.statsService;
 	}
 
 }

@@ -16,7 +16,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.DartX01Util;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
@@ -242,7 +242,7 @@ public class TextInputListener implements FocusListener, SelectionListener,
 		this.decoration.hide();
 		if (!"".equals(value)) {
 			Integer leftScore = this.game.getScore(this.player);
-			ThreeDartThrow dartThrow;
+			ThreeDartsThrow dartThrow;
 			try {
 				dartThrow = this.dartThrowUtil.getDartThrow(value, leftScore);
 				if (dartThrow == null) {

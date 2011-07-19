@@ -1,20 +1,33 @@
 package org.opendarts.prototype.internal.service.stats;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.opendarts.prototype.model.game.IGame;
+import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
-import org.opendarts.prototype.model.stats.IStatEntry;
-import org.opendarts.prototype.model.stats.IStatValue;
 import org.opendarts.prototype.model.stats.IStats;
-import org.opendarts.prototype.service.stats.IStatService;
+import org.opendarts.prototype.model.stats.IStatsEntry;
+import org.opendarts.prototype.service.stats.IStatsService;
 import org.opendarts.prototype.service.stats.IStatsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The Class AbstractStatsService.
+ */
 @SuppressWarnings("rawtypes")
-public abstract class AbstractStatsService implements IStatService {
+public abstract class AbstractStatsService implements IStatsService {
+
+	public static final String SESSION_SET_WIN = "Session.Set.Win";
+	public static final String SESSION_NB_SET = "Session.nb.Set";
+	public static final String SESSION_NB_GAME = "Session.nb.Game";
+
+	public static final String SET_GAME_WIN = "Set.Game.Win";
+	public static final String SET_NB_GAME = "Set.nb.Game";
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
@@ -23,34 +36,129 @@ public abstract class AbstractStatsService implements IStatService {
 	/** The listeners. */
 	private final CopyOnWriteArraySet<IStatsListener> listeners;
 
+	/** The session stats. */
+	private final Map<ISession, Map<IPlayer, IStats<ISession>>> sessionStats;
+
+	/** The set stats. */
+	private final Map<ISet, Map<IPlayer, IStats<ISet>>> setStats;
+
+	/** The game stats. */
+	private final Map<IGame, Map<IPlayer, IStats<IGame>>> gameStats;
+
 	/**
 	 * Instantiates a new abstract stats service.
 	 */
 	public AbstractStatsService() {
 		super();
 		this.listeners = new CopyOnWriteArraySet<IStatsListener>();
-	}
-
-	@Override
-	public IStats<ISession> getSessionStats(ISession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IStats<ISet> getSetStats(ISet set) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IStats<IGame> getGameStats(IGame game) {
-		// TODO Auto-generated method stub
-		return null;
+		this.sessionStats = new HashMap<ISession, Map<IPlayer, IStats<ISession>>>();
+		this.setStats = new HashMap<ISet, Map<IPlayer, IStats<ISet>>>();
+		this.gameStats = new HashMap<IGame, Map<IPlayer, IStats<IGame>>>();
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatService#addStatsListener(org.opendarts.prototype.service.stats.IStatsListener)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#getSessionStats(org.opendarts.prototype.model.session.ISession)
+	 */
+	@Override
+	public Map<IPlayer, IStats<ISession>> getSessionStats(ISession session) {
+		Map<IPlayer, IStats<ISession>> map = this.sessionStats.get(session);
+		if (map == null) {
+			map = new HashMap<IPlayer, IStats<ISession>>();
+			this.sessionStats.put(session, map);
+		}
+		return Collections.unmodifiableMap(map);
+	}
+
+	/**
+	 * Adds the session stats.
+	 *
+	 * @param session the session
+	 * @param player the player
+	 * @param sessionStats the session stats
+	 */
+	protected void addSessionStats(ISession session, IPlayer player,
+			IStats<ISession> sessionStats) {
+		Map<IPlayer, IStats<ISession>> map = this.sessionStats.get(session);
+		if (map == null) {
+			map = new HashMap<IPlayer, IStats<ISession>>();
+			this.sessionStats.put(session, map);
+		}
+
+		IStats<ISession> stats = map.get(player);
+		if (stats == null) {
+			map.put(player, sessionStats);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#getSetStats(org.opendarts.prototype.model.session.ISet)
+	 */
+	@Override
+	public Map<IPlayer, IStats<ISet>> getSetStats(ISet set) {
+		Map<IPlayer, IStats<ISet>> map = this.setStats.get(set);
+		if (map == null) {
+			map = new HashMap<IPlayer, IStats<ISet>>();
+			this.setStats.put(set, map);
+		}
+		return Collections.unmodifiableMap(map);
+	}
+
+	/**
+	 * Adds the set stats.
+	 *
+	 * @param set the set
+	 * @param player the player
+	 * @param setStats the set stats
+	 */
+	protected void addSetStats(ISet set, IPlayer player, IStats<ISet> setStats) {
+		Map<IPlayer, IStats<ISet>> map = this.setStats.get(set);
+		if (map == null) {
+			map = new HashMap<IPlayer, IStats<ISet>>();
+			this.setStats.put(set, map);
+		}
+
+		IStats<ISet> stats = map.get(player);
+		if (stats == null) {
+			map.put(player, setStats);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#getGameStats(org.opendarts.prototype.model.game.IGame)
+	 */
+	@Override
+	public Map<IPlayer, IStats<IGame>> getGameStats(IGame game) {
+		Map<IPlayer, IStats<IGame>> map = this.gameStats.get(game);
+		if (map == null) {
+			map = new HashMap<IPlayer, IStats<IGame>>();
+			this.gameStats.put(game, map);
+		}
+		return Collections.unmodifiableMap(map);
+	}
+
+	/**
+	 * Adds the game stats.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @param gameStats the game stats
+	 */
+	protected void addGameStats(IGame game, IPlayer player,
+			IStats<IGame> gameStats) {
+		Map<IPlayer, IStats<IGame>> map = this.gameStats.get(game);
+		if (map == null) {
+			map = new HashMap<IPlayer, IStats<IGame>>();
+			this.gameStats.put(game, map);
+		}
+
+		IStats<IGame> stats = map.get(player);
+		if (stats == null) {
+			map.put(player, gameStats);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#addStatsListener(org.opendarts.prototype.service.stats.IStatsListener)
 	 */
 	@Override
 	public <T> void addStatsListener(IStatsListener<T> listener) {
@@ -58,28 +166,11 @@ public abstract class AbstractStatsService implements IStatService {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatService#removeStatsListener(org.opendarts.prototype.service.stats.IStatsListener)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#removeStatsListener(org.opendarts.prototype.service.stats.IStatsListener)
 	 */
 	@Override
 	public <T> void removeStatsListener(IStatsListener<T> listener) {
 		this.listeners.remove(listener);
-	}
-
-	/**
-	 * Fire entry created.
-	 *
-	 * @param stats the stats
-	 * @param entry the entry
-	 */
-	@SuppressWarnings({ "unchecked" })
-	protected void fireEntryCreated(IStats stats, IStatEntry entry) {
-		for (IStatsListener listener : this.listeners) {
-			try {
-				listener.createdEntry(stats, entry);
-			} catch (Throwable t) {
-				LOG.error("Error in listener", t);
-			}
-		}
 	}
 
 	/**
@@ -90,11 +181,10 @@ public abstract class AbstractStatsService implements IStatService {
 	 * @param entry the entry
 	 */
 	@SuppressWarnings({ "unchecked" })
-	protected void fireEntryUpdated(IStats stats, IStatValue oldValue,
-			IStatEntry entry) {
+	protected void fireEntryUpdated(IStats stats, IStatsEntry entry) {
 		for (IStatsListener listener : this.listeners) {
 			try {
-				listener.updatedEntry(stats, oldValue, entry);
+				listener.updatedEntry(stats, entry);
 			} catch (Throwable t) {
 				LOG.error("Error in listener", t);
 			}

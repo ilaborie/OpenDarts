@@ -1,13 +1,13 @@
 package org.opendarts.prototype.internal.model.dart.x01;
 
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.model.dart.IDart;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 
 /**
  * The Class WinningX01DartsThrow.
  */
-public class BrokenX01DartsThrow extends ThreeDartThrow {
+public class BrokenX01DartsThrow extends ThreeDartsThrow {
 
 	/**
 	 * Instantiates a new winning x01 darts throw.
@@ -38,7 +38,7 @@ public class BrokenX01DartsThrow extends ThreeDartThrow {
 	 * @param dThrow the d throw
 	 * @throws InvalidDartThrowException 
 	 */
-	public BrokenX01DartsThrow(ThreeDartThrow dThrow)
+	public BrokenX01DartsThrow(ThreeDartsThrow dThrow)
 			throws InvalidDartThrowException {
 		this(dThrow.getScore());
 		this.getInternalDarts().addAll(dThrow.getDarts());
@@ -55,7 +55,7 @@ public class BrokenX01DartsThrow extends ThreeDartThrow {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartThrow#toString()
+	 * @see org.opendarts.prototype.internal.model.dart.ThreeDartsThrow#toString()
 	 */
 	@Override
 	public String toString() {

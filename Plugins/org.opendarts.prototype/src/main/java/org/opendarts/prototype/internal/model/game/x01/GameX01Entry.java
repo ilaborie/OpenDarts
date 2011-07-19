@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.model.game.IGameEntry;
 import org.opendarts.prototype.model.player.IPlayer;
 
@@ -20,7 +20,7 @@ public class GameX01Entry implements IGameEntry {
 	private final GameX01 gameX01;
 
 	/** The player throw. */
-	private final Map<IPlayer, ThreeDartThrow> playerThrow;
+	private final Map<IPlayer, ThreeDartsThrow> playerThrow;
 
 	/** The round. */
 	private final int round;
@@ -38,7 +38,7 @@ public class GameX01Entry implements IGameEntry {
 		super();
 		this.gameX01 = game;
 		this.round = round;
-		this.playerThrow = new HashMap<IPlayer, ThreeDartThrow>();
+		this.playerThrow = new HashMap<IPlayer, ThreeDartsThrow>();
 	}
 
 	/* (non-Javadoc)
@@ -56,7 +56,7 @@ public class GameX01Entry implements IGameEntry {
 	 * @param newThrow the new throw
 	 * @return true, if the game could be finished
 	 */
-	protected boolean addPlayerThrow(IPlayer player, ThreeDartThrow newThrow) {
+	protected boolean addPlayerThrow(IPlayer player, ThreeDartsThrow newThrow) {
 		this.playerThrow.put(player, newThrow);
 		// check if could be win
 		Integer startingScore = this.gameX01.getScore(player);
@@ -87,7 +87,7 @@ public class GameX01Entry implements IGameEntry {
 	 *
 	 * @return the player throw
 	 */
-	public Map<IPlayer, ThreeDartThrow> getPlayerThrow() {
+	public Map<IPlayer, ThreeDartsThrow> getPlayerThrow() {
 		return this.playerThrow;
 	}
 

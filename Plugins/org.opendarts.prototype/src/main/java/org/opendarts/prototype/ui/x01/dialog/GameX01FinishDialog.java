@@ -61,17 +61,18 @@ public class GameX01FinishDialog extends FormDialog {
 	 */
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		String title = MessageFormat.format("{0} Finished ?", game, player);
+		String title = MessageFormat.format("{0} Finished ?", this.game,
+				this.player);
 		ScrolledForm form = mform.getForm();
 		form.setText(title);
-		toolkit.decorateFormHeading(form.getForm());
+		this.toolkit.decorateFormHeading(form.getForm());
 
 		Composite body = form.getBody();
 		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(body);
 
 		// Message
 		String msg = MessageFormat.format("{0} has finished with {1} ?",
-				player, score);
+				this.player, this.score);
 		Label lbl = this.toolkit.createLabel(body, msg);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(lbl);
 

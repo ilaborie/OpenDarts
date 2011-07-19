@@ -11,7 +11,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.forms.IFormColors;
 import org.opendarts.prototype.ProtoPlugin;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
@@ -46,7 +46,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 		if (element instanceof GameX01Entry) {
 			String result;
 			GameX01Entry gameEntry = (GameX01Entry) element;
-			ThreeDartThrow dartThrow = gameEntry.getPlayerThrow().get(
+			ThreeDartsThrow dartThrow = gameEntry.getPlayerThrow().get(
 					this.player);
 			if (dartThrow == null) {
 				result = "";
@@ -89,7 +89,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 					.getColor(IFormColors.H_GRADIENT_START);
 		} else if (element instanceof GameX01Entry) {
 			GameX01Entry entry = (GameX01Entry) element;
-			ThreeDartThrow dartThrow = entry.getPlayerThrow().get(this.player);
+			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow instanceof BrokenX01DartsThrow) {
 				return OpenDartsFormsToolkit.getToolkit().getColors()
 						.getColor(OpenDartsFormsToolkit.COLOR_BROKEN);

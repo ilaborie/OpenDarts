@@ -16,7 +16,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.model.dart.IDart;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.IGame;
@@ -38,7 +38,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 	private final Text[] txtWished;
 
 	/** The dart throw. */
-	private ThreeDartThrow dartThrow;
+	private ThreeDartsThrow dartThrow;
 
 	/** The toolkit. */
 	private final OpenDartsFormsToolkit toolkit;
@@ -67,7 +67,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 	 *
 	 * @return the dart throw
 	 */
-	protected ThreeDartThrow getDartThrow() {
+	protected ThreeDartsThrow getDartThrow() {
 		return this.dartThrow;
 	}
 
@@ -76,7 +76,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 	 *
 	 * @param dartThrow the new dart throw
 	 */
-	protected void setDartThrow(ThreeDartThrow dartThrow) {
+	protected void setDartThrow(ThreeDartsThrow dartThrow) {
 		this.dartThrow = dartThrow;
 	}
 
@@ -124,7 +124,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 		String title = this.getFormTitle();
 		ScrolledForm form = mform.getForm();
 		form.setText(title);
-		toolkit.decorateFormHeading(form.getForm());
+		this.toolkit.decorateFormHeading(form.getForm());
 
 		Composite body = form.getBody();
 		GridLayoutFactory.fillDefaults().margins(5, 5)

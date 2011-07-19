@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.progress.UIJob;
 import org.opendarts.prototype.ProtoPlugin;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
@@ -74,7 +74,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 		this.entry = entry;
 		this.gameService = game.getParentSet().getGameService();
 		this.playerService = ProtoPlugin.getService(IPlayerService.class);
-		this.score = ((GameX01) game).getScore(player);
+		this.score = game.getScore(player);
 	}
 
 	/**
@@ -82,6 +82,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	 *
 	 * @return the form title
 	 */
+	@Override
 	public String getFormTitle() {
 		return MessageFormat.format("#{1} round for {0} - Starting at {2}",
 				this.player, this.entry.getRound(), this.score);
@@ -116,20 +117,22 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 			/* (non-Javadoc)
 			 * @see org.eclipse.swt.events.ShellAdapter#shellClosed(org.eclipse.swt.events.ShellEvent)
 			 */
+			@Override
 			public void shellClosed(ShellEvent event) {
 				event.doit = false; // don't close now
-				if (canHandleShellCloseEvent()) {
-					handleShellCloseEvent();
+				if (DartsComputerX01Dialog.this.canHandleShellCloseEvent()) {
+					DartsComputerX01Dialog.this.handleShellCloseEvent();
 				}
 			}
 
 			/* (non-Javadoc)
 			 * @see org.eclipse.swt.events.ShellAdapter#shellActivated(org.eclipse.swt.events.ShellEvent)
 			 */
+			@Override
 			public void shellActivated(ShellEvent event) {
 				// Throw darts
 				ThrowDartsJob job;
-				for (int i = 0; i < getDarts().length; i++) {
+				for (int i = 0; i < DartsComputerX01Dialog.this.getDarts().length; i++) {
 					job = new ThrowDartsJob(i);
 					job.schedule(DELAY * (i + 1));
 				}
@@ -139,14 +142,18 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 					@Override
 					public IStatus runInUIThread(IProgressMonitor monitor) {
 						try {
-							if (getDartThrow() == null) {
-								setDartThrow(new ThreeDartThrow(getDarts()));
+							if (DartsComputerX01Dialog.this.getDartThrow() == null) {
+								DartsComputerX01Dialog.this
+										.setDartThrow(new ThreeDartsThrow(
+												DartsComputerX01Dialog.this
+														.getDarts()));
 							}
-							LOG.info("Throw: {}", getDartThrow());
+							LOG.info("Throw: {}",
+									DartsComputerX01Dialog.this.getDartThrow());
 						} catch (InvalidDartThrowException e) {
 							LOG.error("WTF, computer is dumb?", e);
 						}
-						close();
+						DartsComputerX01Dialog.this.close();
 						return Status.OK_STATUS;
 					}
 				};
@@ -180,13 +187,15 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			try {
-				if (getDartThrow() != null) {
+				if (DartsComputerX01Dialog.this.getDartThrow() != null) {
 					return Status.CANCEL_STATUS;
 				}
-				IDart dart = throwDart(score, this.index);
-				score -= dart.getScore();
-				getDarts()[this.index] = dart;
-				displayDart(dart, score, this.index);
+				IDart dart = DartsComputerX01Dialog.this.throwDart(
+						DartsComputerX01Dialog.this.score, this.index);
+				DartsComputerX01Dialog.this.score -= dart.getScore();
+				DartsComputerX01Dialog.this.getDarts()[this.index] = dart;
+				DartsComputerX01Dialog.this.displayDart(dart,
+						DartsComputerX01Dialog.this.score, this.index);
 			} catch (InvalidDartThrowException e) {
 				LOG.error("WTF, the computer is not allowed to cheat!", e);
 			}

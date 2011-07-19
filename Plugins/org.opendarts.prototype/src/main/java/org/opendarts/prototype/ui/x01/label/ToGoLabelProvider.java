@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
@@ -45,7 +45,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 		if (element instanceof GameX01Entry) {
 			String result;
 			GameX01Entry gameEntry = (GameX01Entry) element;
-			ThreeDartThrow dartThrow = gameEntry.getPlayerThrow().get(
+			ThreeDartsThrow dartThrow = gameEntry.getPlayerThrow().get(
 					this.player);
 			if (dartThrow == null) {
 				result = "";
@@ -81,7 +81,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 		final int score;
 		if (element instanceof GameX01Entry) {
 			GameX01Entry gameEntry = (GameX01Entry) element;
-			ThreeDartThrow dartThrow = gameEntry.getPlayerThrow().get(
+			ThreeDartsThrow dartThrow = gameEntry.getPlayerThrow().get(
 					this.player);
 			if (dartThrow != null) {
 				score = dartThrow.getScore();
@@ -117,7 +117,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider implements
 	public Color getBackground(Object element) {
 		if (element instanceof GameX01Entry) {
 			GameX01Entry entry = (GameX01Entry) element;
-			ThreeDartThrow dartThrow = entry.getPlayerThrow().get(this.player);
+			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow instanceof WinningX01DartsThrow) {
 				return OpenDartsFormsToolkit.getToolkit().getColors()
 						.getColor(OpenDartsFormsToolkit.COLOR_WINNING);

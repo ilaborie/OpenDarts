@@ -19,10 +19,4 @@ public interface IStatValue<T> {
 	 */
 	String getValueAsString();
 
-	/**
-	 * Gets the value as number.
-	 *
-	 * @return the value as number
-	 */
-	Number getValueAsNumber();
 }

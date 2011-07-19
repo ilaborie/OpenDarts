@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.AbstractGame;
@@ -161,8 +161,8 @@ public class GameX01 extends AbstractGame implements IGame {
 	 * @param player the player
 	 * @param dartThrow the dart throw
 	 */
-	public void addPlayerThrow(IPlayer player, ThreeDartThrow dartThrow) {
-		ThreeDartThrow dThrow = dartThrow;
+	public void addPlayerThrow(IPlayer player, ThreeDartsThrow dartThrow) {
+		ThreeDartsThrow dThrow = dartThrow;
 		if (dartThrow != null) {
 			// update player score
 			int score = this.getScore(player);
@@ -206,8 +206,8 @@ public class GameX01 extends AbstractGame implements IGame {
 	* @param newThrow the new dart throw
 	*/
 	public void updatePlayerThrow(GameX01Entry entry, IPlayer player,
-			ThreeDartThrow newThrow) {
-		ThreeDartThrow oldThrow = entry.getPlayerThrow().get(player);
+			ThreeDartsThrow newThrow) {
+		ThreeDartsThrow oldThrow = entry.getPlayerThrow().get(player);
 		if (oldThrow != null) {
 			if (newThrow != null) {
 				int score = this.getScore(player);

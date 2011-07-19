@@ -32,7 +32,7 @@ public class PlayerService implements IPlayerService {
 		// XXX init
 		IPlayer player;
 		String name = System.getenv("USER");
-		if (name == null || "".equals(name)) {
+		if ((name == null) || "".equals(name)) {
 			name = System.getenv("USERNAME");
 		}
 		player = new Player(name);

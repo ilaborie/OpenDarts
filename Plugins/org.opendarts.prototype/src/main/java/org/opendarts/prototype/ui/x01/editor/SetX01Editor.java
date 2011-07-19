@@ -53,7 +53,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private boolean dirty;
 
 	/** The set service. */
-	private ISetService setService;
+	private final ISetService setService;
 
 	/**
 	 * Instantiates a new game editor.
@@ -124,7 +124,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private void handleSetInitialize() {
 		this.gameService = this.getSet().getGameService();
 		IGame game = this.getSet().getCurrentGame();
-		if (game != null && !game.isFinished()) {
+		if ((game != null) && !game.isFinished()) {
 			this.handleGameActive((GameX01) game);
 		}
 		this.dirty = true;
@@ -195,7 +195,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	public void doSave(IProgressMonitor monitor) {
 		// Save is disable
 		ISet set = this.getSet();
-		if (set != null && !set.isFinished()) {
+		if ((set != null) && !set.isFinished()) {
 			this.setService.cancelSet(set);
 		}
 	}

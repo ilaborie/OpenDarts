@@ -19,10 +19,10 @@ public class DartX01Util {
 
 		switch (nbDart) {
 			case 1:
-				result = (score % 2 == 0) && ((score == 50) || (score <= 40));
+				result = ((score % 2) == 0) && ((score == 50) || (score <= 40));
 				break;
 			default:
-				int base = (nbDart - 1) * 60 + 39;
+				int base = ((nbDart - 1) * 60) + 39;
 				result = (score < base)
 						|| (Arrays.asList(base + 1, base + 2, base + 5,
 								base + 8, base + 11).contains(score));

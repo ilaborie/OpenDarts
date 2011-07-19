@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.opendarts.prototype.internal.model.game.GameDefinition;
-import org.opendarts.prototype.internal.service.game.x01.GameX01Service;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameDefinition;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -45,6 +44,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 
 	/** The game service. */
 	private final IGameService gameService;
+	
 
 	/**
 	 * Instantiates a new game set.
@@ -58,7 +58,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		this.gameDefinition = gameDefinition;
 		this.listeners = new CopyOnWriteArraySet<ISetListener>();
 		this.playerGames = new HashMap<IPlayer, Integer>();
-		this.gameService = new GameX01Service();
+		this.gameService = gameDefinition.getGameService();
 		for (IPlayer player : gameDefinition.getPlayers()) {
 			this.playerGames.put(player, 0);
 		}

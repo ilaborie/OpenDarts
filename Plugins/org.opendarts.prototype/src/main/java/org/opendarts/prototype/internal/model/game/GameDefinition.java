@@ -11,7 +11,7 @@ import org.opendarts.prototype.model.session.ISet;
 /**
  * The Class GameDefinition.
  */
-public class GameDefinition implements IGameDefinition {
+public abstract class GameDefinition implements IGameDefinition {
 
 	/** The players. */
 	private final List<IPlayer> players;

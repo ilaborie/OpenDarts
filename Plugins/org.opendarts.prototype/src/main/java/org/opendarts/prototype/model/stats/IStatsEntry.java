@@ -1,9 +1,9 @@
 package org.opendarts.prototype.model.stats;
 
 /**
- * The Interface IStatEntry.
+ * The Interface IStatsEntry.
  */
-public interface IStatEntry<T> {
+public interface IStatsEntry<T> {
 
 	/**
 	 * Gets the key.

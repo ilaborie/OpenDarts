@@ -151,11 +151,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		}
 		this.body = form.getBody();
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
-				.equalWidth(true).applyTo(body);
+				.equalWidth(true).applyTo(this.body);
 
 		if (twoPlayer) {
 			// First Player Status
-			Composite cmpPlayerOne = this.createPlayerComposite(body,
+			Composite cmpPlayerOne = this.createPlayerComposite(this.body,
 					this.game.getFirstPlayer());
 			playerData.copy().applyTo(cmpPlayerOne);
 		} else {
@@ -163,13 +163,13 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		}
 
 		// Score
-		Composite cmpScore = this.createScoreTableComposite(body);
+		Composite cmpScore = this.createScoreTableComposite(this.body);
 		GridDataFactory.fillDefaults().grab(true, true).span(tableSpan, 1)
 				.applyTo(cmpScore);
 
 		if (twoPlayer) {
 			// Second Player Status
-			Composite cmpPlayerTwo = this.createPlayerComposite(body,
+			Composite cmpPlayerTwo = this.createPlayerComposite(this.body,
 					this.game.getSecondPlayer());
 			playerData.copy().applyTo(cmpPlayerTwo);
 		}
@@ -209,9 +209,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	private Composite createLeftScoreComposite(int nbCol,
 			GridDataFactory scoreData) {
 		ExpandableComposite leftScoreMain = this.toolkit
-				.createExpandableComposite(body, ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED
-						| ExpandableComposite.NO_TITLE);
+				.createExpandableComposite(this.body,
+						ExpandableComposite.TWISTIE
+								| ExpandableComposite.EXPANDED
+								| ExpandableComposite.NO_TITLE);
 		GridLayoutFactory.fillDefaults().applyTo(leftScoreMain);
 
 		Composite leftScoreBody = this.toolkit.createComposite(leftScoreMain);
@@ -294,7 +295,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			Composite client;
 			for (IPlayer player : players) {
 				// Section
-				section = this.toolkit.createSection(main, Section.TITLE_BAR);
+				section = this.toolkit.createSection(main,
+						ExpandableComposite.TITLE_BAR);
 				GridDataFactory.fillDefaults().grab(true, true)
 						.applyTo(section);
 				section.setText(MessageFormat.format("{0} - {1}", player,
@@ -347,8 +349,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 */
 	private void addPlayerStatSection(Composite parent, IPlayer player) {
 		// Section
-		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR
-				| Section.TWISTIE);
+		Section section = this.toolkit.createSection(parent,
+				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Statistics");
 
@@ -523,19 +525,19 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			LOG.trace("New Game Event: {}", event);
 			switch (event.getType()) {
 				case GAME_INITIALIZED:
-					handleGameInitialized();
+					this.handleGameInitialized();
 					break;
 				case GAME_ENTRY_CREATED:
-					handleNewEntry(event.getEntry());
+					this.handleNewEntry(event.getEntry());
 					break;
 				case GAME_ENTRY_UPDATED:
-					handleEntryUpdated(event.getPlayer(), event.getEntry());
+					this.handleEntryUpdated(event.getPlayer(), event.getEntry());
 					break;
 				case NEW_CURRENT_PLAYER:
-					handlePlayer(event.getPlayer(), event.getEntry());
+					this.handlePlayer(event.getPlayer(), event.getEntry());
 					break;
 				case GAME_FINISHED:
-					handleGameFinished(event.getPlayer());
+					this.handleGameFinished(event.getPlayer());
 					break;
 				case GAME_CANCELED:
 					// TODO cleanup
@@ -567,7 +569,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 */
 	@Override
 	public boolean isDirty() {
-		return dirty;
+		return this.dirty;
 	}
 
 	/**
@@ -579,7 +581,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		boolean twoPlayer = (this.game.getPlayers().size() == 2);
 		if (twoPlayer) {
 			// only one table
-			TableViewer tw = this.scoreViewers.get(game.getFirstPlayer());
+			TableViewer tw = this.scoreViewers.get(this.game.getFirstPlayer());
 			tw.add(entry);
 			tw.reveal(entry);
 		} else {

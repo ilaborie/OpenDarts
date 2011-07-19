@@ -10,7 +10,7 @@ import org.opendarts.prototype.model.player.IPlayer;
  * @param <T> the generic type
  */
 public interface IStats<T> {
-	
+
 	/**
 	 * Gets the element.
 	 *
@@ -30,13 +30,23 @@ public interface IStats<T> {
 	 *
 	 * @return the all entries
 	 */
-	Map<String, IStatEntry<?>> getAllEntries();
+	@SuppressWarnings("rawtypes")
+	Map<String, IStatsEntry> getAllEntries();
 
 	/**
 	 * Gets the entry.
 	 *
+	 * @param <U> the generic type
 	 * @param key the key
 	 * @return the entry
 	 */
-	<U> IStatEntry<U> getEntry(String key);
+	<U> IStatsEntry<U> getEntry(String key);
+
+	/**
+	 * Adds the entry.
+	 *
+	 * @param <U> the generic type
+	 * @param entry the entry
+	 */
+	<U> void addEntry(IStatsEntry<U> entry);
 }

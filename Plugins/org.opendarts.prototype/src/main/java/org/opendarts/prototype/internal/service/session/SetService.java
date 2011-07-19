@@ -53,7 +53,7 @@ public class SetService implements ISetService {
 	@Override
 	public void cancelSet(ISet set) {
 		IGame game = set.getCurrentGame();
-		if (game!=null) {
+		if (game != null) {
 			IGameService gameService = set.getGameService();
 			gameService.cancelGame(game);
 		}

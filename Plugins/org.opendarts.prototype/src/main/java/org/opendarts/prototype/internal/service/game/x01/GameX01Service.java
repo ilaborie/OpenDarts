@@ -3,7 +3,7 @@ package org.opendarts.prototype.internal.service.game.x01;
 import java.util.List;
 
 import org.opendarts.prototype.internal.model.dart.Dart;
-import org.opendarts.prototype.internal.model.dart.ThreeDartThrow;
+import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Definition;
@@ -70,7 +70,7 @@ public class GameX01Service implements IGameService {
 	public void addPlayerThrow(GameX01 igame, IPlayer player,
 			IDartsThrow idartThrow) {
 		GameX01 game = igame;
-		ThreeDartThrow dartThrow = (ThreeDartThrow) idartThrow;
+		ThreeDartsThrow dartThrow = (ThreeDartsThrow) idartThrow;
 		game.addPlayerThrow(player, dartThrow);
 	}
 

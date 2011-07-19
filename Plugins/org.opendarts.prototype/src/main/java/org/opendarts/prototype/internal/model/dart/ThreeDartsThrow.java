@@ -11,9 +11,9 @@ import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 
 /**
- * The Class ThreeDartThrow.
+ * The Class ThreeDartsThrow.
  */
-public class ThreeDartThrow implements IDartsThrow {
+public class ThreeDartsThrow implements IDartsThrow {
 
 	/** The score. */
 	private final int score;
@@ -27,7 +27,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	 * @param score the score
 	 * @throws InvalidDartThrowException 
 	 */
-	public ThreeDartThrow(int score) throws InvalidDartThrowException {
+	public ThreeDartsThrow(int score) throws InvalidDartThrowException {
 		super();
 		this.score = score;
 		this.darts = new ArrayList<IDart>();
@@ -42,7 +42,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	 * @param dart3 the dart3
 	 * @throws InvalidDartThrowException 
 	 */
-	public ThreeDartThrow(IDart dart1, IDart dart2, IDart dart3)
+	public ThreeDartsThrow(IDart dart1, IDart dart2, IDart dart3)
 			throws InvalidDartThrowException {
 		this(dart1.getScore() + dart2.getScore() + dart3.getScore());
 		this.darts.add(dart1);
@@ -56,7 +56,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	 * @param darts the darts
 	 * @throws InvalidDartThrowException the invalid dart throw exception
 	 */
-	public ThreeDartThrow(IDart[] darts) throws InvalidDartThrowException {
+	public ThreeDartsThrow(IDart[] darts) throws InvalidDartThrowException {
 		this(getScore(darts));
 		this.darts.addAll(Arrays.asList(darts));
 	}
@@ -84,7 +84,7 @@ public class ThreeDartThrow implements IDartsThrow {
 	 * @throws InvalidDartThrowException 
 	 * @throws NumberFormatException 
 	 */
-	public ThreeDartThrow(String value) throws NumberFormatException,
+	public ThreeDartsThrow(String value) throws NumberFormatException,
 			InvalidDartThrowException {
 		this(Integer.parseInt(value));
 	}
