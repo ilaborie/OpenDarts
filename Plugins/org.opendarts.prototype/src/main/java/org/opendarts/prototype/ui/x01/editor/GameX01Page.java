@@ -590,7 +590,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		scoreViewer.update(entry, null);
 		if (player != null) {
 			txt = this.playerScoreLeft.get(player);
-			txt.setText(this.getPlayerCurrentScore(player));
+			if (!txt.isDisposed()) {
+				txt.setText(this.getPlayerCurrentScore(player));
+				scoreViewer.reveal(entry);
+			}
 		}
 	}
 

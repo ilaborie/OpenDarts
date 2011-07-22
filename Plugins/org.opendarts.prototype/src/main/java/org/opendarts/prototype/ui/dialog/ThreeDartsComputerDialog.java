@@ -223,10 +223,11 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 	 */
 	private Text buildText(Composite parent) {
 		Text txt = this.toolkit.createText(parent, "", SWT.READ_ONLY
+				| SWT.BORDER
 				| SWT.CENTER);
 		txt.setEnabled(false);
 		GridDataFactory.fillDefaults().grab(true, true)
-				.align(SWT.CENTER, SWT.CENTER).hint(150, SWT.DEFAULT)
+				.align(SWT.CENTER, SWT.CENTER).hint(220, SWT.DEFAULT)
 				.applyTo(txt);
 		txt.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
