@@ -15,8 +15,8 @@ import org.opendarts.prototype.internal.service.stats.x01.entry.Average3DartsSta
 import org.opendarts.prototype.internal.service.stats.x01.entry.AverageDartStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.BestLegStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.BestOutStatsEntry;
-import org.opendarts.prototype.internal.service.stats.x01.entry.BestOutsStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.CountDartsStatsEntry;
+import org.opendarts.prototype.internal.service.stats.x01.entry.OutsOver100StatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.TotalDartStatsEntry;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameEntry;
@@ -38,6 +38,7 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SESSION_60_PLUS = "Session.60+";
 	public static final String SESSION_TONS_PLUS = "Session.100+";
 	public static final String SESSION_BEST_LEG = "Session.best.leg";
+	public static final String SESSION_AVG_LEG = "Session.avg.leg";
 	public static final String SESSION_BEST_OUT = "Session.best.out";
 	public static final String SESSION_COUNT_DARTS = "Session.darts.count";
 	public static final String SESSION_TOTAL_SCORE = "Session.darts.count";
@@ -50,6 +51,7 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SET_60_PLUS = "Set.60+";
 	public static final String SET_TONS_PLUS = "Set.100+";
 	public static final String SET_BEST_LEG = "Set.best.leg";
+	public static final String SET_AVG_LEG = "Set.avg.leg";
 	public static final String SET_BEST_OUT = "Set.best.out";
 	public static final String SET_COUNT_DARTS = "Set.darts.count";
 	public static final String SET_TOTAL_SCORE = "Set.total.score";
@@ -70,11 +72,11 @@ public class StatsX01Service extends AbstractStatsService {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatsService#updateStats(org.opendarts.prototype.model.stats.IStats, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.dart.IDartsThrow)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#updateStats( org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public <T> void updateStats(IStats<T> stats, IPlayer player, IGame igame,
+	public <T> void updateStats(IPlayer player, IGame igame,
 			IGameEntry ientry) {
 		GameX01 game = (GameX01) igame;
 		GameSet set = game.getParentSet();
@@ -190,9 +192,10 @@ public class StatsX01Service extends AbstractStatsService {
 		stats.addEntry(new TotalDartStatsEntry(SET_TOTAL_SCORE));
 
 		// Set best outs
-		stats.addEntry(new BestOutsStatsEntry(SET_BEST_OUT));
+		stats.addEntry(new OutsOver100StatsEntry(SET_BEST_OUT));
 
 		// TODO
+		//		public static final String SET_AVG_LEG = "Set.avg.leg";
 		//		public static final String SET_GAME_WIN = "Set.Game.Win";
 		//		public static final String SET_NB_GAME = "Set.nb.Game";
 
@@ -237,9 +240,10 @@ public class StatsX01Service extends AbstractStatsService {
 		stats.addEntry(new TotalDartStatsEntry(SESSION_TOTAL_SCORE));
 
 		// Session best outs
-		stats.addEntry(new BestOutsStatsEntry(SESSION_BEST_OUT));
+		stats.addEntry(new OutsOver100StatsEntry(SESSION_OUT_OVER_100));
 
 		// TODO
+		//		public static final String SESSION_AVG_LEG = "Session.avg.leg";
 		//		public static final String SESSION_SET_WIN = "Session.Set.Win";
 		//		public static final String SESSION_NB_SET = "Session.nb.Set";
 		//		public static final String SESSION_NB_GAME = "Session.nb.Game";

@@ -35,7 +35,7 @@ public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
-		configurer.setInitialSize(new Point(1024, 786));
+		configurer.setInitialSize(new Point(1024, 810));
 		configurer.setTitle("OpenDarts");
 		configurer.setShowFastViewBars(true);
 		configurer.setShowProgressIndicator(true);

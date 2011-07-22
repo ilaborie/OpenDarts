@@ -1,5 +1,7 @@
 package org.opendarts.prototype.internal.model.stats;
 
+import java.text.MessageFormat;
+
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameEntry;
@@ -28,6 +30,14 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 	public AbstractStatsEntry(String key) {
 		super();
 		this.key = key;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return MessageFormat.format("{0} : {1}", key, value);
 	}
 
 	/* (non-Javadoc)

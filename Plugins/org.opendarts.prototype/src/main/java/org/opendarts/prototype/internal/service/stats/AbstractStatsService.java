@@ -11,8 +11,8 @@ import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.model.stats.IStats;
 import org.opendarts.prototype.model.stats.IStatsEntry;
-import org.opendarts.prototype.service.stats.IStatsService;
 import org.opendarts.prototype.service.stats.IStatsListener;
+import org.opendarts.prototype.service.stats.IStatsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +45,9 @@ public abstract class AbstractStatsService implements IStatsService {
 	/** The game stats. */
 	private final Map<IGame, Map<IPlayer, IStats<IGame>>> gameStats;
 
+	/** The entries. */
+	private final Map<IPlayer, Map<String, IStatsEntry>> entries;
+
 	/**
 	 * Instantiates a new abstract stats service.
 	 */
@@ -54,6 +57,7 @@ public abstract class AbstractStatsService implements IStatsService {
 		this.sessionStats = new HashMap<ISession, Map<IPlayer, IStats<ISession>>>();
 		this.setStats = new HashMap<ISet, Map<IPlayer, IStats<ISet>>>();
 		this.gameStats = new HashMap<IGame, Map<IPlayer, IStats<IGame>>>();
+		this.entries = new HashMap<IPlayer, Map<String, IStatsEntry>>();
 	}
 
 	/* (non-Javadoc)
@@ -88,6 +92,14 @@ public abstract class AbstractStatsService implements IStatsService {
 		if (stats == null) {
 			map.put(player, sessionStats);
 		}
+
+		// Entries
+		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
+		if (playerEntries == null) {
+			playerEntries = new HashMap<String, IStatsEntry>();
+			this.entries.put(player, playerEntries);
+		}
+		playerEntries.putAll(sessionStats.getAllEntries());
 	}
 
 	/* (non-Javadoc)
@@ -121,6 +133,14 @@ public abstract class AbstractStatsService implements IStatsService {
 		if (stats == null) {
 			map.put(player, setStats);
 		}
+
+		// Entries
+		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
+		if (playerEntries == null) {
+			playerEntries = new HashMap<String, IStatsEntry>();
+			this.entries.put(player, playerEntries);
+		}
+		playerEntries.putAll(setStats.getAllEntries());
 	}
 
 	/* (non-Javadoc)
@@ -155,6 +175,13 @@ public abstract class AbstractStatsService implements IStatsService {
 		if (stats == null) {
 			map.put(player, gameStats);
 		}
+		// Entries
+		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
+		if (playerEntries == null) {
+			playerEntries = new HashMap<String, IStatsEntry>();
+			this.entries.put(player, playerEntries);
+		}
+		playerEntries.putAll(gameStats.getAllEntries());
 	}
 
 	/* (non-Javadoc)
@@ -191,4 +218,16 @@ public abstract class AbstractStatsService implements IStatsService {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#getSetStatEntry(org.opendarts.prototype.model.player.IPlayer, java.lang.String)
+	 */
+	@Override
+	public IStatsEntry getSetStatEntry(IPlayer player, String statsKey) {
+		IStatsEntry result = null;
+		Map<String, IStatsEntry> map = this.entries.get(player);
+		if (map != null) {
+			result = map.get(statsKey);
+		}
+		return result;
+	}
 }

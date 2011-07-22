@@ -8,6 +8,7 @@ import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.model.stats.IStats;
+import org.opendarts.prototype.model.stats.IStatsEntry;
 
 /**
  * The Interface IStatsService.
@@ -41,11 +42,10 @@ public interface IStatsService {
 	/**
 	 * Update stats.
 	 *
-	 * @param stats the stats
 	 * @param key the key
 	 * @param value the value
 	 */
-	<T> void updateStats(IStats<T> stats, IPlayer player, IGame game,
+	<T> void updateStats(IPlayer player, IGame game,
 			IGameEntry entry);
 
 	/**
@@ -63,5 +63,15 @@ public interface IStatsService {
 	 * @param listener the listener
 	 */
 	<T> void removeStatsListener(IStatsListener<T> listener);
+
+	/**
+	 * Gets the sets the stat entry.
+	 *
+	 * @param player the player
+	 * @param statsKey the stats key
+	 * @return the sets the stat entry
+	 */
+	@SuppressWarnings("rawtypes")
+	IStatsEntry getSetStatEntry(IPlayer player, String statsKey);
 
 }

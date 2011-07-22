@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.opendarts.prototype.internal.service.stats.x01.StatsX01Service">
+   <implementation class="org.opendarts.prototype.internal.service.stats.x01.StatsX01Service"/>
+   <service>
+      <provide interface="org.opendarts.prototype.service.stats.IStatsService"/>
+   </service>
+</scr:component>

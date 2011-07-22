@@ -1,5 +1,8 @@
 package org.opendarts.prototype.internal.model.stats;
 
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+
 import org.opendarts.prototype.model.stats.IStatValue;
 
 /**
@@ -9,6 +12,10 @@ import org.opendarts.prototype.model.stats.IStatValue;
  */
 public class StatsValue<T> implements IStatValue<T> {
 
+	/** The Constant DOUBLE_FORMATTER. */
+	private static final DecimalFormat DOUBLE_FORMATTER = new DecimalFormat(
+			"0.00");
+
 	/** The value. */
 	private T value;
 
@@ -17,6 +24,14 @@ public class StatsValue<T> implements IStatValue<T> {
 	 */
 	public StatsValue() {
 		super();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return MessageFormat.format("{0}", value);
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +56,15 @@ public class StatsValue<T> implements IStatValue<T> {
 	 */
 	@Override
 	public String getValueAsString() {
-		return String.valueOf(this.value);
+		String result;
+		if (this.value == null) {
+			result = "-";
+		} else if (this.value instanceof Double) {
+			result = DOUBLE_FORMATTER.format((Double) this.value);
+		} else {
+			result = String.valueOf(this.value);
+		}
+		return result;
 	}
 
 }

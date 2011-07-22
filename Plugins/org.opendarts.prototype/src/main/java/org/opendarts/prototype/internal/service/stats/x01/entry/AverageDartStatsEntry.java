@@ -1,5 +1,6 @@
 package org.opendarts.prototype.internal.service.stats.x01.entry;
 
+import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.stats.AverageStatsEntry;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.IGame;
@@ -26,6 +27,12 @@ public class AverageDartStatsEntry extends AverageStatsEntry {
 	@Override
 	protected Number getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		return dartsThrow.getScore() / 3D;
+		int score = dartsThrow.getScore();
+		int nbDarts = 3;
+		if (dartsThrow instanceof WinningX01DartsThrow) {
+			WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
+			nbDarts = winThrow.getNbDartToFinish();
+		}
+		return ((double) score) / ((double) nbDarts);
 	}
 }

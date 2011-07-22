@@ -19,8 +19,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -45,6 +43,7 @@ import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.dialog.ThreeDartsComputerDialog;
+import org.opendarts.prototype.ui.utils.FixHeightListener;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.prototype.ui.x01.dialog.DartsComputerX01Dialog;
 import org.opendarts.prototype.ui.x01.label.ScoreLabelProvider;
@@ -277,13 +276,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			table.setLinesVisible(true);
 
 			// resize the row height using a MeasureItem listener
-			table.addListener(SWT.MeasureItem, new Listener() {
-				@Override
-				public void handleEvent(Event event) {
-					// height cannot be per row so simply set
-					event.height = 24;
-				}
-			});
+			table.addListener(SWT.MeasureItem, new FixHeightListener(24));
 			viewer = new TableViewer(table);
 			viewer.setContentProvider(new GameX01ContentProvider());
 			this.addColumns(null, viewer);
@@ -315,13 +308,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				table.setLinesVisible(true);
 
 				// resize the row height using a MeasureItem listener
-				table.addListener(SWT.MeasureItem, new Listener() {
-					@Override
-					public void handleEvent(Event event) {
-						// height cannot be per row so simply set
-						event.height = 24;
-					}
-				});
+				table.addListener(SWT.MeasureItem, new FixHeightListener(24));
 				viewer = new TableViewer(table);
 				viewer.setContentProvider(new GameX01ContentProvider());
 				this.addColumns(player, viewer);

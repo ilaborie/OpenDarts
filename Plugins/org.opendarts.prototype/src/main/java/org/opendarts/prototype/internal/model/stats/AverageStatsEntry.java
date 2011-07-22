@@ -37,7 +37,7 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<Number> {
 				value = new StatsValue<Number>();
 				value.setValue(input);
 				this.setValue(value);
-
+				this.counter++;
 				this.sum = input.doubleValue();
 			} else {
 				this.counter++;

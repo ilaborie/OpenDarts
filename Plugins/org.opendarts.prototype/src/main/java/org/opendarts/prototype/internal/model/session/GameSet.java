@@ -44,7 +44,6 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 
 	/** The game service. */
 	private final IGameService gameService;
-	
 
 	/**
 	 * Instantiates a new game set.
@@ -62,6 +61,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		for (IPlayer player : gameDefinition.getPlayers()) {
 			this.playerGames.put(player, 0);
 		}
+
 		// create the first game
 		IGame game = this.gameService.createGame(this,
 				this.gameDefinition.getPlayers());

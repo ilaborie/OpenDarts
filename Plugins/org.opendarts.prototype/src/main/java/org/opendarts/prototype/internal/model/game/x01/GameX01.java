@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
@@ -18,6 +19,7 @@ import org.opendarts.prototype.model.game.GameEvent;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameEntry;
 import org.opendarts.prototype.model.player.IPlayer;
+import org.opendarts.prototype.service.stats.IStatsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +40,9 @@ public class GameX01 extends AbstractGame implements IGame {
 	/** The score to do. */
 	private final int scoreToDo;
 
+	/** The stats service. */
+	private final IStatsService statsService;
+
 	/**
 	 * Instantiates a new game container.
 	 *
@@ -51,6 +56,8 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.score = new HashMap<IPlayer, Integer>();
 		this.entries = new ArrayList<GameX01Entry>();
 		this.scoreToDo = startScore;
+		// stats
+		this.statsService = ProtoPlugin.getService(IStatsService.class);
 	}
 
 	/**
@@ -186,6 +193,11 @@ public class GameX01 extends AbstractGame implements IGame {
 			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
 					player, entry, dartThrow));
 
+			// Update stats
+			if (this.statsService != null) {
+				this.statsService.updateStats(player, this, entry);
+			}
+
 			// Choose next player
 			List<IPlayer> players = this.getPlayers();
 			int idx = players.indexOf(player);
@@ -218,6 +230,11 @@ public class GameX01 extends AbstractGame implements IGame {
 			}
 			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
 					player, entry, newThrow));
+
+			// Update stats
+			if (this.statsService != null) {
+				this.statsService.updateStats(player, this, entry);
+			}
 		} else {
 			this.addPlayerThrow(player, newThrow);
 		}
@@ -244,10 +261,16 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
 				player, entry, dartThrow));
 
+		// Update stats
+		if (this.statsService != null) {
+			this.statsService.updateStats(player, this, entry);
+		}
+
 		// Handle winning
 		this.end(player);
 		this.fireGameEvent(GameEvent.Factory.newGameFinishedEvent(this,
 				this.getWinner(), entry, dartThrow));
+
 		this.getParentSet().handleFinishedGame(this);
 	}
 
@@ -272,7 +295,6 @@ public class GameX01 extends AbstractGame implements IGame {
 	 * Cancel game.
 	 */
 	public void cancelGame() {
-		// TODO update stats
 		this.fireGameEvent(GameEvent.Factory.newGameCanceledEvent(this));
 	}
 }

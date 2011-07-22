@@ -8,9 +8,9 @@ import org.opendarts.prototype.model.game.IGameEntry;
 import org.opendarts.prototype.model.player.IPlayer;
 
 /**
- * The Class BestOutsStatsEntry.
+ * The Class OutsOver100StatsEntry.
  */
-public class BestOutsStatsEntry extends
+public class OutsOver100StatsEntry extends
 			AbstractStatsEntry<String> {
 
 	/**
@@ -18,7 +18,7 @@ public class BestOutsStatsEntry extends
 	 *
 	 * @param key the key
 	 */
-		public BestOutsStatsEntry(String key) {
+		public OutsOver100StatsEntry(String key) {
 			super(key);
 		}
 
