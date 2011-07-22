@@ -372,7 +372,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		int indent = FieldDecorationRegistry.getDefault()
 				.getMaximumDecorationWidth() + 2;
 		GridDataFactory.fillDefaults().grab(true, false)
-				.indent(indent, SWT.DEFAULT).hint(SWT.DEFAULT, 80)
+				.indent(indent, SWT.DEFAULT).hint(SWT.DEFAULT, 100)
 				.applyTo(inputScoreText);
 
 		// decoration
