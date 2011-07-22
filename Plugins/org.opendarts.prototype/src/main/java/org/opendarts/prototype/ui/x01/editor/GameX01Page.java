@@ -269,7 +269,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		Table table;
 		if (twoPlayer) {
 			// Table
-			table = this.toolkit.createTable(main, SWT.V_SCROLL);
+			table = this.toolkit.createTable(main, SWT.V_SCROLL | SWT.BORDER);
 			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
 					.applyTo(table);
 			table.setHeaderVisible(true);
