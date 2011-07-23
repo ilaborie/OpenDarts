@@ -2,8 +2,6 @@ package org.opendarts.prototype.ui.utils;
 
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -163,43 +161,23 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	/**
 	 * Builds the column.
 	 *
-	 * @param title the title
 	 * @param viewer the viewer
-	 * @param width the width
-	 * @param style the style
-	 * @param labelProvider the label provider
+	 * @param descr the column descriptor
 	 * @return the table viewer column
 	 */
-	public TableViewerColumn createTableColumn(String title,
-			TableViewer viewer, int width, int style,
-			ColumnLabelProvider labelProvider) {
-		TableViewerColumn column = new TableViewerColumn(viewer, style);
+	public TableViewerColumn createTableColumn(TableViewer viewer,
+			ColumnDescriptor descr) {
+		TableViewerColumn column = new TableViewerColumn(viewer,
+				descr.getStyle());
 		TableColumn tableColumn = column.getColumn();
-		tableColumn.setText(title);
-		tableColumn.setWidth(width);
-		tableColumn.setResizable(false);
+		tableColumn.setText(descr.getLabel());
+		tableColumn.setWidth(descr.getDefaultWidth());
+		tableColumn.setResizable(descr.isResizable());
 
-		column.setLabelProvider(labelProvider);
-		return column;
-	}
+		column.setEditingSupport(descr.getEditingSupport());
+		column.setLabelProvider(descr.getLabelProvider());
 
-	/**
-	 * Creates the table column.
-	 *
-	 * @param title the title
-	 * @param viewer the viewer
-	 * @param width the width
-	 * @param style the style
-	 * @param labelProvider the label provider
-	 * @param editingSupport the editing support
-	 * @return the table viewer column
-	 */
-	public TableViewerColumn createTableColumn(String title,
-			TableViewer viewer, int width, int style,
-			ColumnLabelProvider labelProvider, EditingSupport editingSupport) {
-		TableViewerColumn column = this.createTableColumn(title, viewer, width,
-				style, labelProvider);
-		column.setEditingSupport(editingSupport);
+		descr.setColumn(column);
 		return column;
 	}
 

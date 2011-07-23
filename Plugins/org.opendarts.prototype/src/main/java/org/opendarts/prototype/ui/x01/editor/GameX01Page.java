@@ -3,6 +3,7 @@ package org.opendarts.prototype.ui.x01.editor;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,9 @@ import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.dialog.ThreeDartsComputerDialog;
+import org.opendarts.prototype.ui.utils.ColumnDescriptor;
 import org.opendarts.prototype.ui.utils.FixHeightListener;
+import org.opendarts.prototype.ui.utils.GrabColumnsListener;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.prototype.ui.x01.dialog.DartsComputerX01Dialog;
 import org.opendarts.prototype.ui.x01.label.ScoreLabelProvider;
@@ -268,10 +271,14 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		TableViewer viewer;
 		Table table;
 		if (twoPlayer) {
-			// Table
-			table = this.toolkit.createTable(main, SWT.V_SCROLL | SWT.BORDER);
+			Composite comp = this.toolkit.createComposite(main);
+			GridLayoutFactory.fillDefaults().applyTo(comp);
 			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
-					.applyTo(table);
+					.applyTo(comp);
+
+			// Table
+			table = this.toolkit.createTable(comp, SWT.V_SCROLL | SWT.BORDER);
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
 
@@ -279,7 +286,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			table.addListener(SWT.MeasureItem, new FixHeightListener(24));
 			viewer = new TableViewer(table);
 			viewer.setContentProvider(new GameX01ContentProvider());
-			this.addColumns(null, viewer);
+			List<ColumnDescriptor> columns = this.addColumns(null, viewer);
+
+			viewer.getControl().addControlListener(
+					new GrabColumnsListener(viewer, columns));
+
 			this.scoreViewers.put(this.game.getFirstPlayer(), viewer);
 			this.scoreViewers.put(this.game.getSecondPlayer(), viewer);
 
@@ -301,8 +312,12 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 				this.addPlayerStatSection(client, player);
 
+				Composite comp = this.toolkit.createComposite(client);
+				GridLayoutFactory.fillDefaults().applyTo(comp);
+				GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
+
 				// Table
-				table = this.toolkit.createTable(client, SWT.V_SCROLL);
+				table = this.toolkit.createTable(comp, SWT.V_SCROLL);
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
@@ -311,7 +326,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				table.addListener(SWT.MeasureItem, new FixHeightListener(24));
 				viewer = new TableViewer(table);
 				viewer.setContentProvider(new GameX01ContentProvider());
-				this.addColumns(player, viewer);
+				List<ColumnDescriptor> columns = this
+						.addColumns(player, viewer);
+
+				viewer.getControl().addControlListener(
+						new GrabColumnsListener(viewer, columns));
 				this.scoreViewers.put(player, viewer);
 
 				// End section definition
@@ -396,20 +415,30 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 * Adds the columns.
 	 * @param viewer 
 	 * @param player2 
+	 * @return 
 	 */
-	private void addColumns(IPlayer player, TableViewer viewer) {
-		int turnWidth = 100;
+	private List<ColumnDescriptor> addColumns(IPlayer player, TableViewer viewer) {
+		List<ColumnDescriptor> result = new ArrayList<ColumnDescriptor>();
+
+		ColumnDescriptor colDescr = new ColumnDescriptor("");
+		colDescr.width(100);
+		colDescr.labelProvider(new TurnLabelProvider());
+
 		if (player == null) {
 			// Two player
-			this.createPlayerColumns(viewer, this.game.getFirstPlayer());
-			this.toolkit.createTableColumn("", viewer, turnWidth, SWT.CENTER,
-					new TurnLabelProvider());
-			this.createPlayerColumns(viewer, this.game.getSecondPlayer());
+			result.addAll(this.createPlayerColumns(viewer,
+					this.game.getFirstPlayer()));
+
+			this.toolkit.createTableColumn(viewer, colDescr);
+			result.add(colDescr);
+			result.addAll(this.createPlayerColumns(viewer,
+					this.game.getSecondPlayer()));
 		} else {
-			this.toolkit.createTableColumn("", viewer, turnWidth, SWT.CENTER,
-					new TurnLabelProvider());
-			this.createPlayerColumns(viewer, player);
+			this.toolkit.createTableColumn(viewer, colDescr);
+			result.add(colDescr);
+			result.addAll(this.createPlayerColumns(viewer, player));
 		}
+		return result;
 	}
 
 	/**
@@ -418,18 +447,33 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 *
 	 * @param player the player
 	 */
-	private void createPlayerColumns(TableViewer viewer, IPlayer player) {
+	private List<ColumnDescriptor> createPlayerColumns(TableViewer viewer,
+			IPlayer player) {
+		List<ColumnDescriptor> result = new ArrayList<ColumnDescriptor>();
 		Shell shell = this.getSite().getShell();
-		int width = 94;
-		int style = SWT.CENTER;
+
 		TableViewerColumn column;
-		column = this.toolkit.createTableColumn("Scored", viewer, width, style,
-				new ScoreLabelProvider(player), new ScoreX01EditingSupport(
-						shell, this.game, player, viewer));
+		ColumnDescriptor colDescr;
+		int width = 94;
+
+		// Scored
+		colDescr = new ColumnDescriptor("Scored");
+		colDescr.width(width);
+		colDescr.labelProvider(new ScoreLabelProvider(player));
+		colDescr.editingSupport(new ScoreX01EditingSupport(shell, this.game,
+				player, viewer));
+		column = this.toolkit.createTableColumn(viewer, colDescr);
+		result.add(colDescr);
 		this.playerColumn.put(player, column);
 
-		this.toolkit.createTableColumn("To Go", viewer, width, style,
-				new ToGoLabelProvider(player));
+		// Scored
+		colDescr = new ColumnDescriptor("To Go");
+		colDescr.width(width);
+		colDescr.labelProvider(new ToGoLabelProvider(player));
+		this.toolkit.createTableColumn(viewer, colDescr);
+		result.add(colDescr);
+
+		return result;
 	}
 
 	/**

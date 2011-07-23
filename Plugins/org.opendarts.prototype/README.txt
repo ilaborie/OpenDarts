@@ -1,3 +1,6 @@
+Requirement
+Java 1.6+ (see http://java.com/download)
+
 USES
 ====
 
