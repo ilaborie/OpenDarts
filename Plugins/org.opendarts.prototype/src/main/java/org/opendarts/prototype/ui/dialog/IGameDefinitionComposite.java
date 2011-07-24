@@ -1,5 +1,7 @@
 package org.opendarts.prototype.ui.dialog;
 
+import java.util.List;
+
 import org.eclipse.swt.widgets.Composite;
 import org.opendarts.prototype.model.game.IGameDefinition;
 
@@ -25,4 +27,6 @@ public interface IGameDefinitionComposite {
 	 * @return the game definition
 	 */
 	IGameDefinition getGameDefinition();
+
+	List<ValidationEntry> validate();
 }

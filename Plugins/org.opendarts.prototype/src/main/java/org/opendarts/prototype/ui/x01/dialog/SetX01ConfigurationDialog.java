@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -32,6 +33,7 @@ import org.opendarts.prototype.service.player.IPlayerService;
 import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.dialog.IGameDefinitionComposite;
 import org.opendarts.prototype.ui.dialog.NewSetDialog;
+import org.opendarts.prototype.ui.dialog.ValidationEntry;
 import org.opendarts.prototype.ui.player.label.PlayerLabelProvider;
 
 /**
@@ -85,6 +87,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 	/**
 	 * Instantiates a new sets the x01 configuration dialog.
+	 * @param newSetDialog 
 	 */
 	public SetX01ConfigurationDialog() {
 		super();
@@ -283,6 +286,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		} else if (obj.equals(this.btnUserNew)) {
 			this.newPlayer();
 		}
+		this.parentDialog.notifyUpdate();
 	}
 
 	/**
@@ -351,6 +355,22 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			}
 
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.ui.dialog.IGameDefinitionComposite#validate()
+	 */
+	@Override
+	public List<ValidationEntry> validate() {
+		List<ValidationEntry> result = new ArrayList<ValidationEntry>();
+		if (players.isEmpty()) {
+			result.add(new ValidationEntry(IMessageProvider.ERROR,
+					"Need at least two players"));
+		} else if (players.size() == 1) {
+			result.add(new ValidationEntry(IMessageProvider.WARNING,
+					"Playing alone is boring !"));
+		}
+		return result;
 	}
 
 }

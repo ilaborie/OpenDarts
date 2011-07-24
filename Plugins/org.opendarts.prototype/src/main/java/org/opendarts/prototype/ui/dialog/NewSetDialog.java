@@ -2,10 +2,12 @@ package org.opendarts.prototype.ui.dialog;
 
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -102,12 +104,49 @@ public class NewSetDialog extends TitleAreaDialog {
 	protected void okPressed() {
 		LOG.debug("NewSet#ok");
 		try {
-			this.gameDefinition = this.compGameDef.getGameDefinition();
-			lastGameDefinition = this.gameDefinition;
-			super.okPressed();
+			int type = this.notifyUpdate();
+			switch (type) {
+				case IMessageProvider.NONE:
+				case IMessageProvider.WARNING:
+				case IMessageProvider.INFORMATION:
+					this.gameDefinition = this.compGameDef.getGameDefinition();
+					lastGameDefinition = this.gameDefinition;
+					super.okPressed();
+				default:
+					break;
+			}
 		} catch (Exception e) {
 			this.setErrorMessage(e.getMessage());
 		}
+	}
+
+	/**
+	 * Notify update.
+	 * @return 
+	 */
+	public int notifyUpdate() {
+		List<ValidationEntry> list = this.compGameDef.validate();
+		int type = IMessageProvider.NONE;
+		ValidationEntry worstEntry = null;
+		if (list != null) {
+			for (ValidationEntry e : list) {
+				if (type < e.getMessageType()) {
+					worstEntry = e;
+					type = e.getMessageType();
+				}
+			}
+		}
+
+		this.setMessage(null, IMessageProvider.NONE);
+		if (worstEntry != null) {
+			this.setMessage(worstEntry.getMessage(),
+					worstEntry.getMessageType());
+		}
+
+		Button btn = this.getButton(OK);
+		btn.setEnabled(type != IMessageProvider.ERROR);
+
+		return type;
 	}
 
 	/**
