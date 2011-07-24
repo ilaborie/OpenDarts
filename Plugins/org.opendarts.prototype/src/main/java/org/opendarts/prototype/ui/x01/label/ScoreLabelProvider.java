@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -56,9 +55,6 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	private void initColors() {
 		Display display = Display.getDefault();
-		for (int i = 0; i < 60; i++) {
-			colors.put(i, display.getSystemColor(SWT.COLOR_BLACK));
-		}
 		this.initColorRange(60, 100, rgb60, rgb100);
 		this.initColorRange(100, 180, rgb100, rgb180);
 		colors.put(180, new Color(display, rgb180));
@@ -187,15 +183,19 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Color getForeground(Object element) {
+		Color result = null;
 		if (element instanceof GameX01Entry) {
 			GameX01Entry entry = (GameX01Entry) element;
 			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow != null) {
 				int score = dartThrow.getScore();
-				return this.colors.get(score);
+				result = this.colors.get(score);
 			}
 		}
-		return super.getBackground(element);
+		if (result == null) {
+			result = super.getBackground(element);
+		}
+		return result;
 	}
 
 	/* (non-Javadoc)
