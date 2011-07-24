@@ -1,4 +1,4 @@
-package org.opendarts.prototype.ui.utils;
+package org.opendarts.prototype.ui.utils.listener;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
+import org.opendarts.prototype.ui.utils.ColumnDescriptor;
 
 /**
  * Fill table with columns

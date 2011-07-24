@@ -94,6 +94,17 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	}
 
 	/**
+	 * Close.
+	 *
+	 * @param save the save
+	 */
+	@Override
+	public void close(boolean save) {
+		this.getSet().removeListener(this);
+		super.close(save);
+	}
+
+	/**
 	 * Notify set event.
 	 *
 	 * @param event the event

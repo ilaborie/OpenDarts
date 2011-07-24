@@ -1,13 +1,8 @@
 package org.opendarts.prototype.ui.x01.utils;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
@@ -17,12 +12,12 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
-import org.opendarts.prototype.internal.model.dart.x01.DartX01Util;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameService;
+import org.opendarts.prototype.ui.x01.utils.shortcut.X01Shortcuts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,11 +49,11 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	/** The decoration. */
 	private final ControlDecoration decoration;
 
-	/** The shortcut value. */
-	private final Map<Integer, String> shortcutValue;
+	/** The shortcuts. */
+	private final X01Shortcuts shortcuts;
 
-	/** The shortcut value. */
-	private final Map<Integer, String> shiftShortcutValue;
+	/** The shell. */
+	private final Shell shell;
 
 	/**
 	 * Instantiates a new text input listener.
@@ -71,38 +66,15 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	public TextInputListener(Shell parentShell, Text inputText, GameX01 game,
 			IPlayer player, ControlDecoration dec) {
 		super();
+		this.shell = parentShell;
 		this.game = game;
 		this.player = player;
 		this.inputText = inputText;
 		this.decoration = dec;
 		this.dartThrowUtil = new DartThrowUtil(parentShell, game, player);
 		this.gameService = game.getParentSet().getGameService();
-		this.shortcutValue = new HashMap<Integer, String>();
-		this.shiftShortcutValue = new HashMap<Integer, String>();
-		this.initShortCut();
-	}
 
-	/**
-	 * Inits the short cut.
-	 */
-	private void initShortCut() {
-		this.shortcutValue.put(SWT.F1, "0");
-		this.shortcutValue.put(SWT.F2, "26");
-		this.shortcutValue.put(SWT.F3, "41");
-		this.shortcutValue.put(SWT.F4, "45");
-		this.shortcutValue.put(SWT.F5, "60");
-		this.shortcutValue.put(SWT.F6, "81");
-		this.shortcutValue.put(SWT.F7, "85");
-		this.shortcutValue.put(SWT.F8, "100");
-
-		this.shiftShortcutValue.put(SWT.F1, "43");
-		this.shiftShortcutValue.put(SWT.F2, "55");
-		this.shiftShortcutValue.put(SWT.F3, "83");
-		this.shiftShortcutValue.put(SWT.F4, "95");
-		this.shiftShortcutValue.put(SWT.F5, "121");
-		this.shiftShortcutValue.put(SWT.F6, "125");
-		this.shiftShortcutValue.put(SWT.F7, "140");
-		this.shiftShortcutValue.put(SWT.F8, "180");
+		this.shortcuts = X01Shortcuts.getX01Shortcuts();
 	}
 
 	/* (non-Javadoc)
@@ -150,87 +122,8 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		switch (e.keyCode) {
-			case '\t':
-			case '\r':
-			case '\n':
-			case ' ':
-			case SWT.KEYPAD_CR:
-				this.handleNewValue(this.inputText.getText());
-				break;
-			case SWT.F1:
-			case SWT.F2:
-			case SWT.F3:
-			case SWT.F4:
-			case SWT.F5:
-			case SWT.F6:
-			case SWT.F7:
-			case SWT.F8:
-				if (e.stateMask == SWT.SHIFT) {
-					this.handleNewValue(this.shiftShortcutValue.get(e.keyCode));
-				} else {
-					this.handleNewValue(this.shortcutValue.get(e.keyCode));
-				}
-				break;
-			case SWT.F9:
-				this.handleLeftValue(this.inputText.getText());
-				break;
-			case SWT.F10:
-				this.handleWinning(1);
-				break;
-			case SWT.F11:
-				this.handleWinning(2);
-				break;
-			case SWT.F12:
-				this.handleWinning(3);
-				break;
-			default:
-				break;
-		}
-	}
-
-	/**
-	 * Handle left value.
-	 *
-	 * @param leftValue the left value
-	 */
-	private void handleLeftValue(String leftValue) {
-		this.decoration.hide();
-		try {
-			Integer score = Integer.parseInt(leftValue);
-			Integer leftScore = this.game.getScore(this.player);
-			String value = String.valueOf(leftScore - score);
-			this.handleNewValue(value);
-		} catch (NumberFormatException e) {
-			LOG.warn("Invalid format: " + e);
-			String msg = "Not a number!";
-			this.applyError(msg);
-		}
-	}
-
-	/**
-	 * Handle winning.
-	 *
-	 * @param nbDart the nb dart
-	 */
-	private void handleWinning(int nbDart) {
-		this.decoration.hide();
-		try {
-			Integer leftScore = this.game.getScore(this.player);
-			if (DartX01Util.couldFinish(leftScore, nbDart)) {
-				WinningX01DartsThrow dartThrow = new WinningX01DartsThrow(
-						leftScore, nbDart);
-				this.gameService.addWinningPlayerThrow(this.game, this.player,
-						dartThrow);
-			} else {
-				this.applyError(MessageFormat.format(
-						"Could not finish {0} with {1} dart(s)", leftScore,
-						nbDart));
-			}
-		} catch (InvalidDartThrowException e) {
-			String msg = e.getMessage();
-			this.applyError(msg);
-		}
+		this.shortcuts.handleKeyEvent(e, this.shell, inputText, game, player,
+				decoration);
 	}
 
 	/**

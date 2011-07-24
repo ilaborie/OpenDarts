@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -16,8 +17,11 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -42,12 +46,13 @@ import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.dialog.ThreeDartsComputerDialog;
-import org.opendarts.prototype.ui.utils.CancelTraverseListener;
 import org.opendarts.prototype.ui.utils.ColumnDescriptor;
-import org.opendarts.prototype.ui.utils.FixHeightListener;
-import org.opendarts.prototype.ui.utils.GrabColumnsListener;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
+import org.opendarts.prototype.ui.utils.listener.CancelTraverseListener;
+import org.opendarts.prototype.ui.utils.listener.FixHeightListener;
+import org.opendarts.prototype.ui.utils.listener.GrabColumnsListener;
 import org.opendarts.prototype.ui.x01.dialog.DartsComputerX01Dialog;
+import org.opendarts.prototype.ui.x01.dialog.ShortcutsTooltip;
 import org.opendarts.prototype.ui.x01.label.ScoreLabelProvider;
 import org.opendarts.prototype.ui.x01.label.ToGoLabelProvider;
 import org.opendarts.prototype.ui.x01.label.TurnLabelProvider;
@@ -187,6 +192,17 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				IMenuService.class);
 		menuService.populateContributionManager(manager,
 				"toolbar:openwis.editor.game.toolbar");
+		manager.add(new ControlContribution("openwis.editor.game.toolbar.help") {
+			@Override
+			protected Control createControl(Composite parent) {
+				Label helpLabel = new Label(parent, SWT.NONE);
+				helpLabel.setImage(ProtoPlugin
+						.getImage("/icons/actions/help.png"));
+				ToolTip toolTip = new ShortcutsTooltip(helpLabel);
+				toolTip.setPopupDelay(0);
+				return helpLabel;
+			}
+		});
 		manager.update(true);
 
 		// Register listener
@@ -387,6 +403,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
 		inputScoreText.setEnabled(false);
 		this.playerScoreInput.put(player, inputScoreText);
+
+		// Tooltip
+		ShortcutsTooltip tooltip = new ShortcutsTooltip(inputScoreText);
+		tooltip.setPopupDelay(200);
 
 		// layout
 		int indent = FieldDecorationRegistry.getDefault()

@@ -1,4 +1,4 @@
-package org.opendarts.prototype.ui.utils;
+package org.opendarts.prototype.ui.utils.listener;
 
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;

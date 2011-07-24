@@ -35,6 +35,9 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	/** The Constant COLOR_ACTIVE. */
 	public static final String COLOR_INACTIVE = "InactiveBackgroundColor";
 
+	/** The Constant FONT_BOLD. */
+	public static final String FONT_BOLD = "FontBold";
+
 	/** The Constant FONT_SCORE_LEFT. */
 	public static final String FONT_SCORE_LEFT = "ScoreLeftFont";
 
@@ -72,6 +75,7 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		initialFont = fontRegistry.defaultFont();
 		registerFont(initialFont, FONT_SCORE_SHEET, 18);
 		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
+		fontRegistry.put(FONT_BOLD, initialFont.getFontData());
 		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 18);
 		registerFont(initialFont, FONT_SCORE_INPUT, 64);
 		registerFont(initialFont, FONT_SCORE_LEFT, 126);

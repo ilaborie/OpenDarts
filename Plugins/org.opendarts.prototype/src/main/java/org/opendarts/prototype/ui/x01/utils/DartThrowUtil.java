@@ -49,9 +49,22 @@ public class DartThrowUtil {
 	 */
 	public ThreeDartsThrow getDartThrow(String value, Integer leftScore)
 			throws NumberFormatException, InvalidDartThrowException {
-		ThreeDartsThrow result = new ThreeDartsThrow(value);
+		return getDartThrow(Integer.parseInt(value), leftScore);
+	}
+
+	/**
+	 * Gets the dart throw.
+	 *
+	 * @param score the score
+	 * @param leftScore the left score
+	 * @return the dart throw
+	 * @throws InvalidDartThrowException the invalid dart throw exception
+	 */
+	public ThreeDartsThrow getDartThrow(int score, Integer leftScore)
+			throws InvalidDartThrowException {
+		ThreeDartsThrow result = new ThreeDartsThrow(score);
 		// check finished
-		if (leftScore == result.getScore()) {
+		if (leftScore == score) {
 			// Dialog for Broken, 1, 2, 3 darts finish
 			GameX01FinishDialog dialog = new GameX01FinishDialog(
 					this.parentShell, this.game, this.player, leftScore);
