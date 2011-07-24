@@ -9,8 +9,7 @@ import org.opendarts.prototype.model.player.IPlayer;
 /**
  * The Class TotalDartStatsEntry.
  */
-public class TotalDartStatsEntry extends
-		AbstractStatsEntry<Integer> {
+public class TotalDartStatsEntry extends AbstractStatsEntry<Integer> {
 
 	/**
 	 * Instantiates a new total dart stats entry.
@@ -27,6 +26,23 @@ public class TotalDartStatsEntry extends
 	@Override
 	protected Integer getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		return dartsThrow.getScore();
+		Integer result = null;
+		if (dartsThrow != null) {
+			result = dartsThrow.getScore();
+		}
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	protected Integer getUndoInput(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		int result = 0;
+		if (dartsThrow != null) {
+			result = -dartsThrow.getScore();
+		}
+		return result;
 	}
 }

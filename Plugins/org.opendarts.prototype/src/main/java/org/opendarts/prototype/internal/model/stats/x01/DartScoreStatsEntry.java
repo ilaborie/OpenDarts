@@ -31,7 +31,7 @@ public class DartScoreStatsEntry extends IncrementStatsEntry {
 	@Override
 	protected boolean shouldIncrement(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		return (this.score == dartsThrow.getScore());
+		return (dartsThrow != null) && (this.score == dartsThrow.getScore());
 	}
 
 }

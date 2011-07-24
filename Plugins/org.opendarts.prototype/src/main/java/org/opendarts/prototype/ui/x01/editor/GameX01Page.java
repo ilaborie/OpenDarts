@@ -17,8 +17,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -44,6 +42,7 @@ import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.dialog.ThreeDartsComputerDialog;
+import org.opendarts.prototype.ui.utils.CancelTraverseListener;
 import org.opendarts.prototype.ui.utils.ColumnDescriptor;
 import org.opendarts.prototype.ui.utils.FixHeightListener;
 import org.opendarts.prototype.ui.utils.GrabColumnsListener;
@@ -277,7 +276,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					.applyTo(comp);
 
 			// Table
-			table = this.toolkit.createTable(comp, SWT.V_SCROLL | SWT.BORDER);
+			table = this.toolkit.createTable(comp, SWT.V_SCROLL | SWT.BORDER
+					| SWT.FULL_SELECTION);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
@@ -317,7 +317,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
 				// Table
-				table = this.toolkit.createTable(comp, SWT.V_SCROLL);
+				table = this.toolkit.createTable(comp, SWT.V_SCROLL
+						| SWT.BORDER | SWT.FULL_SELECTION);
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
@@ -403,12 +404,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				.getShell(), inputScoreText, this.game, player, dec);
 		inputScoreText.addKeyListener(listener);
 
-		inputScoreText.addTraverseListener(new TraverseListener() {
-			@Override
-			public void keyTraversed(TraverseEvent e) {
-				e.doit = false;
-			}
-		});
+		inputScoreText.addTraverseListener(new CancelTraverseListener());
 	}
 
 	/**
@@ -421,7 +417,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		List<ColumnDescriptor> result = new ArrayList<ColumnDescriptor>();
 
 		ColumnDescriptor colDescr = new ColumnDescriptor("");
-		colDescr.width(100);
+		colDescr.width(120);
 		colDescr.labelProvider(new TurnLabelProvider());
 
 		if (player == null) {
@@ -454,7 +450,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 		TableViewerColumn column;
 		ColumnDescriptor colDescr;
-		int width = 94;
+		int width = 100;
 
 		// Scored
 		colDescr = new ColumnDescriptor("Scored");
@@ -561,6 +557,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				case GAME_ENTRY_CREATED:
 					this.handleNewEntry(event.getEntry());
 					break;
+				case GAME_ENTRY_REMOVED:
+					this.handleRemoveEntry(event.getEntry());
+					break;
 				case GAME_ENTRY_UPDATED:
 					this.handleEntryUpdated(event.getPlayer(), event.getEntry());
 					break;
@@ -571,7 +570,6 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					this.handleGameFinished(event.getPlayer());
 					break;
 				case GAME_CANCELED:
-					// TODO cleanup
 					this.dirty = false;
 					this.mForm.dirtyStateChanged();
 			}
@@ -624,6 +622,24 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	}
 
 	/**
+	 * Handle remove entry.
+	 *
+	 * @param entry the entry
+	 */
+	private void handleRemoveEntry(IGameEntry entry) {
+		boolean twoPlayer = (this.game.getPlayers().size() == 2);
+		if (twoPlayer) {
+			// only one table
+			TableViewer tw = this.scoreViewers.get(this.game.getFirstPlayer());
+			tw.remove(entry);
+		} else {
+			for (TableViewer tw : this.scoreViewers.values()) {
+				tw.remove(entry);
+			}
+		}
+	}
+
+	/**
 	 * Handle entry updated.
 	 *
 	 * @param entry the entry
@@ -654,6 +670,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		// remove edition
 		for (Text inputTxt : this.playerScoreInput.values()) {
 			inputTxt.setEnabled(false);
+
+			inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+					.getColors().getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
 		}
 		for (TableViewerColumn col : this.playerColumn.values()) {
 			col.setEditingSupport(null);

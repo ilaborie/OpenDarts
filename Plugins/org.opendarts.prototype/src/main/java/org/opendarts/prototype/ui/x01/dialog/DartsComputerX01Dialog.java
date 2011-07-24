@@ -84,7 +84,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	 */
 	@Override
 	public String getFormTitle() {
-		return MessageFormat.format("#{1} round for {0} - Starting at {2}",
+		return MessageFormat.format("Round #{1} for {0} - Starting at {2}",
 				this.player, this.entry.getRound(), this.score);
 	}
 

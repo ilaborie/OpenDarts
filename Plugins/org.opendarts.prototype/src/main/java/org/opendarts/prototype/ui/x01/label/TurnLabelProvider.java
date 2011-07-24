@@ -66,7 +66,7 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Font getFont(Object element) {
 		return OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD);
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET);
 	}
 
 }

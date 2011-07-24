@@ -4,6 +4,8 @@ import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -11,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -181,4 +184,25 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		return column;
 	}
 
+	/**
+	 * Creates the tree column.
+	 *
+	 * @param viewer the viewer
+	 * @param descr the descr
+	 * @return the tree viewer column
+	 */
+	public TreeViewerColumn createTreeColumn(TreeViewer viewer,
+			ColumnDescriptor descr) {
+		TreeViewerColumn column = new TreeViewerColumn(viewer, descr.getStyle());
+		TreeColumn treeColumn = column.getColumn();
+		treeColumn.setText(descr.getLabel());
+		treeColumn.setWidth(descr.getDefaultWidth());
+		treeColumn.setResizable(descr.isResizable());
+
+		column.setEditingSupport(descr.getEditingSupport());
+		column.setLabelProvider(descr.getLabelProvider());
+
+		descr.setColumn(column);
+		return column;
+	}
 }

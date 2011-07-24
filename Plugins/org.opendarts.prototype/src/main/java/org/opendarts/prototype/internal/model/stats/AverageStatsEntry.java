@@ -1,4 +1,12 @@
+/*
+ * 
+ */
 package org.opendarts.prototype.internal.model.stats;
+
+import org.opendarts.prototype.model.dart.IDartsThrow;
+import org.opendarts.prototype.model.game.IGame;
+import org.opendarts.prototype.model.game.IGameEntry;
+import org.opendarts.prototype.model.player.IPlayer;
 
 /**
  * The Class MaxStatsEntry.
@@ -29,22 +37,55 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<Number> {
 	 * @return true, if successful
 	 */
 	@Override
-	public boolean addNewInput(Number input) {
+	protected boolean addNewInput(Number input) {
 		if (input != null) {
 			StatsValue<Number> value = (StatsValue<Number>) this.getValue();
 			if (value == null) {
 				// new value
 				value = new StatsValue<Number>();
-				value.setValue(input);
 				this.setValue(value);
-				this.counter++;
+				this.counter = 1;
 				this.sum = input.doubleValue();
+				this.updateValue(value);
 			} else {
 				this.counter++;
 				this.sum += input.doubleValue();
+				this.updateValue(value);
+			}
+		}
+		return true;
+	}
 
-				double avg = this.sum / this.counter;
-				value.setValue(avg);
+	/**
+	 * Update value.
+	 *
+	 * @param value the value
+	 */
+	private void updateValue(StatsValue<Number> value) {
+		double avg = this.sum / this.counter;
+		value.setValue(avg);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	protected Number getUndoInput(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		return this.getInput(game, player, gameEntry, dartsThrow);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#undoNewInput(java.lang.Object)
+	 */
+	@Override
+	protected boolean undoNewInput(Number input) {
+		if (input != null) {
+			StatsValue<Number> value = (StatsValue<Number>) this.getValue();
+			if (value != null) {
+				this.counter--;
+				this.sum -= input.doubleValue();
+				this.updateValue(value);
 			}
 		}
 		return true;

@@ -221,19 +221,74 @@ public class GameX01 extends AbstractGame implements IGame {
 			ThreeDartsThrow newThrow) {
 		ThreeDartsThrow oldThrow = entry.getPlayerThrow().get(player);
 		if (oldThrow != null) {
-			if (newThrow != null) {
-				int score = this.getScore(player);
-				score += oldThrow.getScore();
-				score -= newThrow.getScore();
-				entry.getPlayerThrow().put(player, newThrow);
-				this.score.put(player, score);
+			// Update stats
+			if (this.statsService != null) {
+				this.statsService.undoStats(player, this, entry);
 			}
-			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
-					player, entry, newThrow));
+			entry.getPlayerThrow().put(player, newThrow);
 
 			// Update stats
 			if (this.statsService != null) {
 				this.statsService.updateStats(player, this, entry);
+			}
+
+			// update score
+			boolean update = false;
+			boolean win = (newThrow instanceof WinningX01DartsThrow);
+			int score = this.scoreToDo;
+			ThreeDartsThrow playerThrow;
+			for (GameX01Entry e : this.entries) {
+				playerThrow = e.getPlayerThrow().get(player);
+				if (playerThrow != null) {
+					if (!(playerThrow instanceof BrokenX01DartsThrow)) {
+						score -= playerThrow.getScore();
+					}
+					this.score.put(player, score);
+				}
+				if (update) {
+					if (win) {
+						if (this.statsService != null) {
+							this.statsService.undoStats(player, this, e);
+						}
+						this.fireGameEvent(GameEvent.Factory
+								.newGameEntryRemoveEvent(this, e));
+					} else {
+						this.fireGameEvent(GameEvent.Factory
+								.newGameEntryUpdatedEvent(this, player, e,
+										playerThrow));
+					}
+				} else if (entry.equals(e)) {
+					update = true;
+					if (win) {
+						entry.setNbPlayedDart(((entry.getRound() - 1) * 3)
+								+ ((WinningX01DartsThrow) newThrow)
+										.getNbDartToFinish());
+						// remove other next player throw
+						boolean clear = false;
+						for (IPlayer p : this.getParentSet()
+								.getGameDefinition().getPlayers()) {
+							if (clear) {
+								if (this.statsService != null) {
+									this.statsService.undoStats(p, this, e);
+								}
+								e.getPlayerThrow().put(p, null);
+							} else if (p.equals(player)) {
+								clear = true;
+							}
+
+						}
+					}
+					this.fireGameEvent(GameEvent.Factory
+							.newGameEntryUpdatedEvent(this, player, e,
+									playerThrow));
+				}
+			}
+			// winning
+			if (win) {
+				this.end(player);
+				this.fireGameEvent(GameEvent.Factory.newGameFinishedEvent(this,
+						this.getWinner(), entry, newThrow));
+				this.getParentSet().handleFinishedGame(this);
 			}
 		} else {
 			this.addPlayerThrow(player, newThrow);

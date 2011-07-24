@@ -402,10 +402,12 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		Label label = this.statsLabel.get(entry.getKey());
 		if (label != null) {
 			IStatValue value = entry.getValue();
-			String val = value.getValueAsString();
-			if (!label.isDisposed()) {
-				label.setText(val);
-				label.getParent().layout(new Control[] { label });
+			if (value != null) {
+				String val = value.getValueAsString();
+				if (!label.isDisposed()) {
+					label.setText(val);
+					label.getParent().layout(new Control[] { label });
+				}
 			}
 		}
 	}

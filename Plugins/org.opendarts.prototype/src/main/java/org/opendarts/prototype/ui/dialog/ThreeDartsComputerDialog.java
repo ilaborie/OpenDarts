@@ -62,6 +62,12 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 		this.txtWished = new Text[this.darts.length];
 	}
 
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Computer is playing ...");
+	}
+
 	/**
 	 * Gets the dart throw.
 	 *
@@ -223,8 +229,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 	 */
 	private Text buildText(Composite parent) {
 		Text txt = this.toolkit.createText(parent, "", SWT.READ_ONLY
-				| SWT.BORDER
-				| SWT.CENTER);
+				| SWT.BORDER | SWT.CENTER);
 		txt.setEnabled(false);
 		GridDataFactory.fillDefaults().grab(true, true)
 				.align(SWT.CENTER, SWT.CENTER).hint(220, SWT.DEFAULT)

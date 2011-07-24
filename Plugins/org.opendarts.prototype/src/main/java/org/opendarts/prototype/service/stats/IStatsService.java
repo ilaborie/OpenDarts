@@ -45,8 +45,16 @@ public interface IStatsService {
 	 * @param key the key
 	 * @param value the value
 	 */
-	<T> void updateStats(IPlayer player, IGame game,
-			IGameEntry entry);
+	void updateStats(IPlayer player, IGame game, IGameEntry entry);
+
+	/**
+	 * Undo stats.
+	 *
+	 * @param player the player
+	 * @param game the game
+	 * @param entry the entry
+	 */
+	void undoStats(IPlayer player, IGame game, IGameEntry entry);
 
 	/**
 	 * Adds the stats listener.

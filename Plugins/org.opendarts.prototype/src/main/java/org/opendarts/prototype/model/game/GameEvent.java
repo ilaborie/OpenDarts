@@ -6,6 +6,7 @@ import java.util.Calendar;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.player.IPlayer;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SetEvent.
  */
@@ -27,6 +28,9 @@ public class GameEvent {
 
 		/** The GAM e_ entr y_ created. */
 		GAME_ENTRY_CREATED,
+
+		/** The GAM e_ entr y_ removed. */
+		GAME_ENTRY_REMOVED,
 
 		/** The GAM e_ entr y_ updated. */
 		GAME_ENTRY_UPDATED,
@@ -199,6 +203,21 @@ public class GameEvent {
 		}
 
 		/**
+		 * New game entry remove event.
+		 *
+		 * @param game the game
+		 * @param entry the entry
+		 * @return the game event
+		 */
+		public static GameEvent newGameEntryRemoveEvent(IGame game,
+				IGameEntry entry) {
+			GameEvent result = new GameEvent(GameEventType.GAME_ENTRY_REMOVED,
+					game);
+			result.entry = entry;
+			return result;
+		}
+
+		/**
 		 * New game entry updated event.
 		 *
 		 * @param game the game
@@ -233,6 +252,7 @@ public class GameEvent {
 			result.entry = entry;
 			return result;
 		}
+
 	}
 
 }

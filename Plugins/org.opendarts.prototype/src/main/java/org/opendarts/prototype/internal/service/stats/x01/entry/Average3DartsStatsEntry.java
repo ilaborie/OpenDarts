@@ -27,15 +27,19 @@ public class Average3DartsStatsEntry extends AverageStatsEntry {
 	@Override
 	protected Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
 			IDartsThrow dartsThrow) {
-		int score = dartsThrow.getScore();
-		Number result = score;
-		if (dartsThrow instanceof WinningX01DartsThrow) {
-			WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
-			int nbDarts = winThrow.getNbDartToFinish();
-			if (nbDarts<3) {
-				result = ((double) 3) * (((double) score) / ((double) nbDarts));
+		if (dartsThrow != null) {
+			int score = dartsThrow.getScore();
+			Number result = score;
+			if (dartsThrow instanceof WinningX01DartsThrow) {
+				WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
+				int nbDarts = winThrow.getNbDartToFinish();
+				if (nbDarts < 3) {
+					result = ((double) 3)
+							* (((double) score) / ((double) nbDarts));
+				}
+				return result;
 			}
 		}
-		return result;
+		return null;
 	}
 }

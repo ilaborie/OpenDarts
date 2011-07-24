@@ -25,14 +25,17 @@ public class AverageDartStatsEntry extends AverageStatsEntry {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Number getInput(IGame game, IPlayer player,
-			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		int score = dartsThrow.getScore();
-		int nbDarts = 3;
-		if (dartsThrow instanceof WinningX01DartsThrow) {
-			WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
-			nbDarts = winThrow.getNbDartToFinish();
+	protected Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
+			IDartsThrow dartsThrow) {
+		if (dartsThrow != null) {
+			int score = dartsThrow.getScore();
+			int nbDarts = 3;
+			if (dartsThrow instanceof WinningX01DartsThrow) {
+				WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
+				nbDarts = winThrow.getNbDartToFinish();
+			}
+			return ((double) score) / ((double) nbDarts);
 		}
-		return ((double) score) / ((double) nbDarts);
+		return null;
 	}
 }

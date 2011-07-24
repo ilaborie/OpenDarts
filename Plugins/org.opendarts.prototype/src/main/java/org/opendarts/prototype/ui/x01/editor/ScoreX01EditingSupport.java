@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Shell;
 import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
+import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.model.dart.InvalidDartThrowException;
@@ -115,6 +116,14 @@ public class ScoreX01EditingSupport extends EditingSupport {
 			if (element instanceof GameX01Entry) {
 				GameX01Entry entry = (GameX01Entry) element;
 				Integer leftScore = this.game.getScore(this.player);
+
+				ThreeDartsThrow oldThrow = entry.getPlayerThrow().get(player);
+				if (oldThrow != null) {
+					if (!(oldThrow instanceof BrokenX01DartsThrow)) {
+						leftScore += oldThrow.getScore();
+					}
+				}
+
 				ThreeDartsThrow dartThrow;
 				try {
 					dartThrow = this.dartThrowUtil.getDartThrow((String) value,

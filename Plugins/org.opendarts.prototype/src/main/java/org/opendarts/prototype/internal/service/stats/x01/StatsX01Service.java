@@ -76,8 +76,7 @@ public class StatsX01Service extends AbstractStatsService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public <T> void updateStats(IPlayer player, IGame igame,
-			IGameEntry ientry) {
+	public void updateStats(IPlayer player, IGame igame, IGameEntry ientry) {
 		GameX01 game = (GameX01) igame;
 		GameSet set = game.getParentSet();
 		ISession session = set.getParentSession();
@@ -123,6 +122,56 @@ public class StatsX01Service extends AbstractStatsService {
 			se = (AbstractStatsEntry) gameStatsEntry;
 			if (se.handleDartsThrow(game, player, entry, dartsThrow)) {
 				this.fireEntryUpdated(gameStats, se);
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#undoStats(org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.game.IGameEntry)
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void undoStats(IPlayer player, IGame igame, IGameEntry ientry) {
+		GameX01 game = (GameX01) igame;
+		GameSet set = game.getParentSet();
+		ISession session = set.getParentSession();
+
+		GameX01Entry entry = (GameX01Entry) ientry;
+		ThreeDartsThrow dartsThrow = entry.getPlayerThrow().get(player);
+
+		AbstractStatsEntry se;
+		// session
+		IStats<ISession> sessionStats = this.getSessionStats(session).get(
+				player);
+		if (sessionStats != null) {
+			for (IStatsEntry gameStatsEntry : sessionStats.getAllEntries()
+					.values()) {
+				se = (AbstractStatsEntry) gameStatsEntry;
+				if (se.undoDartsThrow(game, player, entry, dartsThrow)) {
+					this.fireEntryUpdated(sessionStats, se);
+				}
+			}
+		}
+		// set
+		IStats<ISet> setStats = this.getSetStats(set).get(player);
+		if (setStats != null) {
+			for (IStatsEntry gameStatsEntry : setStats.getAllEntries().values()) {
+				se = (AbstractStatsEntry) gameStatsEntry;
+				if (se.undoDartsThrow(game, player, entry, dartsThrow)) {
+					this.fireEntryUpdated(setStats, se);
+				}
+			}
+		}
+
+		// game
+		IStats<IGame> gameStats = this.getGameStats(game).get(player);
+		if (gameStats != null) {
+			for (IStatsEntry gameStatsEntry : gameStats.getAllEntries()
+					.values()) {
+				se = (AbstractStatsEntry) gameStatsEntry;
+				if (se.undoDartsThrow(game, player, entry, dartsThrow)) {
+					this.fireEntryUpdated(gameStats, se);
+				}
 			}
 		}
 	}

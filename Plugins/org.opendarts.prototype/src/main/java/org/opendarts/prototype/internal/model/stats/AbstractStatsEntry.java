@@ -77,16 +77,51 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 				dartsThrow));
 	}
 
+	/**
+	 * Undo darts throw.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @param gameEntry the game entry
+	 * @param dartsThrow the darts throw
+	 * @return true, if successful
+	 */
+	public boolean undoDartsThrow(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		return this.undoNewInput(this.getUndoInput(game, player, gameEntry,
+				dartsThrow));
+	}
+
+	/**
+	 * Gets the input.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @param gameEntry the game entry
+	 * @param dartsThrow the darts throw
+	 * @return the input
+	 */
 	protected abstract T getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow);
 
+	/**
+	 * Gets the undo input.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @param gameEntry the game entry
+	 * @param dartsThrow the darts throw
+	 * @return the undo input
+	 */
+	protected abstract T getUndoInput(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow);
 	/**
 	 * Sets the value.
 	 *
 	 * @param input the input
 	 * @return true, if updated, false otherwise
 	 */
-	public boolean addNewInput(T input) {
+	protected boolean addNewInput(T input) {
 		boolean result = false;
 		StatsValue<T> value = (StatsValue<T>) this.getValue();
 		if (value == null) {
@@ -102,6 +137,15 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 			}
 		}
 		return result;
+	}
 
+	/**
+	 * Undo new input.
+	 *
+	 * @param undoInput the undo input
+	 * @return true, if successful
+	 */
+	protected boolean undoNewInput(T undoInput) {
+		return this.addNewInput(undoInput);
 	}
 }

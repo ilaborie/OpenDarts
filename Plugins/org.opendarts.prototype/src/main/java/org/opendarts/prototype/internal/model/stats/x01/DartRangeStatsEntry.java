@@ -36,7 +36,7 @@ public class DartRangeStatsEntry extends IncrementStatsEntry {
 	@Override
 	protected boolean shouldIncrement(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		return (this.scoreMin <= dartsThrow.getScore())
+		return (dartsThrow != null) && (this.scoreMin <= dartsThrow.getScore())
 				&& (this.scoreMax >= dartsThrow.getScore());
 	}
 

@@ -13,7 +13,7 @@ import org.opendarts.prototype.model.player.IPlayer;
  * The Class BestLegStatsEntry.
  */
 public class BestLegStatsEntry extends BestStatsEntry<Integer> {
-	
+
 	/**
 	 * Instantiates a new best leg stats entry.
 	 *
@@ -30,7 +30,7 @@ public class BestLegStatsEntry extends BestStatsEntry<Integer> {
 	protected Integer getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		Integer result = null;
-		if (dartsThrow instanceof WinningX01DartsThrow) {
+		if (dartsThrow != null && dartsThrow instanceof WinningX01DartsThrow) {
 			GameX01Entry gEntry = (GameX01Entry) gameEntry;
 			result = gEntry.getNbPlayedDart();
 		}

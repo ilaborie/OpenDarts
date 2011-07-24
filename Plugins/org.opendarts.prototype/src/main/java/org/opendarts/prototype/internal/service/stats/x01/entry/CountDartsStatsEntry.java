@@ -10,8 +10,7 @@ import org.opendarts.prototype.model.player.IPlayer;
 /**
  * The Class CountDartsStatsEntry.
  */
-public class CountDartsStatsEntry extends
-		AbstractStatsEntry<Integer> {
+public class CountDartsStatsEntry extends AbstractStatsEntry<Integer> {
 
 	/**
 	 * Instantiates a new sets the count darts stats entry.
@@ -28,12 +27,34 @@ public class CountDartsStatsEntry extends
 	@Override
 	protected Integer getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		int nbDarts = (gameEntry.getRound() - 1) * 3;
-		if (dartsThrow instanceof WinningX01DartsThrow) {
-			WinningX01DartsThrow wdt = (WinningX01DartsThrow) dartsThrow;
-			nbDarts += wdt.getNbDartToFinish();
-		} else {
-			nbDarts += 3;
+		int nbDarts = 0;
+		if (dartsThrow != null) {
+			nbDarts = (gameEntry.getRound() - 1) * 3;
+			if (dartsThrow instanceof WinningX01DartsThrow) {
+				WinningX01DartsThrow wdt = (WinningX01DartsThrow) dartsThrow;
+				nbDarts += wdt.getNbDartToFinish();
+			} else {
+				nbDarts += 3;
+			}
+		}
+		return nbDarts;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	protected Integer getUndoInput(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		int nbDarts = 0;
+		if (dartsThrow != null) {
+			nbDarts = (gameEntry.getRound() - 1) * 3;
+			if (dartsThrow instanceof WinningX01DartsThrow) {
+				WinningX01DartsThrow wdt = (WinningX01DartsThrow) dartsThrow;
+				nbDarts -= wdt.getNbDartToFinish();
+			} else {
+				nbDarts -= 3;
+			}
 		}
 		return nbDarts;
 	}
