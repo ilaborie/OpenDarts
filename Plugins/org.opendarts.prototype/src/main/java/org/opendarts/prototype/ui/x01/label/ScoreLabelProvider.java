@@ -4,11 +4,16 @@
 package org.opendarts.prototype.ui.x01.label;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IFormColors;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
@@ -28,6 +33,12 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	/** The player. */
 	private final IPlayer player;
 
+	private final Map<Integer, Color> colors;
+
+	private static RGB rgb60 = new RGB(0, 128, 64);
+	private static RGB rgb100 = new RGB(0, 0, 255);
+	private static RGB rgb180 = new RGB(128, 0, 128);
+
 	/**
 	 * Instantiates a new score label provider.
 	 *
@@ -36,6 +47,67 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	public ScoreLabelProvider(IPlayer player) {
 		super();
 		this.player = player;
+		this.colors = new HashMap<Integer, Color>();
+		this.initColors();
+	}
+
+	/**
+	 * Inits the colors.
+	 */
+	private void initColors() {
+		Display display = Display.getDefault();
+		for (int i = 0; i < 60; i++) {
+			colors.put(i, display.getSystemColor(SWT.COLOR_BLACK));
+		}
+		this.initColorRange(60, 100, rgb60, rgb100);
+		this.initColorRange(100, 180, rgb100, rgb180);
+		colors.put(180, new Color(display, rgb180));
+	}
+
+	/**
+	 * Inits the color range.
+	 *
+	 * @param from the from
+	 * @param to the to
+	 * @param rgbFrom the rgb from
+	 * @param rgbTo the rgb to
+	 */
+	private void initColorRange(int from, int to, RGB rgbFrom, RGB rgbTo) {
+		double delta;
+		double redRatio;
+		double greenRatio;
+		double blueRatio;
+		delta = (double) to - from;
+
+		if (rgbTo.red == rgbFrom.red) {
+			redRatio = 0d;
+		} else {
+			redRatio = (delta / ((double) rgbTo.red - rgbFrom.red));
+		}
+
+		if (rgbTo.green == rgbFrom.green) {
+			greenRatio = 0d;
+		} else {
+			greenRatio = (delta / ((double) rgbTo.green - rgbFrom.green));
+		}
+
+		if (rgbTo.blue == rgbFrom.blue) {
+			blueRatio = 0d;
+		} else {
+			blueRatio = (delta / ((double) rgbTo.blue - rgbFrom.blue));
+		}
+
+		int r;
+		int b;
+		int g;
+		RGB rgb;
+		for (int i = from; i < to; i++) {
+			r = (int) (rgbFrom.red + (i - from) * redRatio);
+			g = (int) (rgbFrom.green + (i - from) * greenRatio);
+			b = (int) (rgbFrom.blue + (i - from) * blueRatio);
+			rgb = new RGB(r, g, b);
+			colors.put(i, new Color(Display.getDefault(), rgb));
+		}
 	}
 
 	/* (non-Javadoc)
@@ -108,6 +180,32 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	public Font getFont(Object element) {
 		return OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getForeground(java.lang.Object)
+	 */
+	@Override
+	public Color getForeground(Object element) {
+		if (element instanceof GameX01Entry) {
+			GameX01Entry entry = (GameX01Entry) element;
+			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
+			if (dartThrow != null) {
+				int score = dartThrow.getScore();
+				return this.colors.get(score);
+			}
+		}
+		return super.getBackground(element);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.BaseLabelProvider#dispose()
+	 */
+	@Override
+	public void dispose() {
+		for (Color col : this.colors.values()) {
+			col.dispose();
+		}
 	}
 
 }
