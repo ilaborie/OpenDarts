@@ -5,6 +5,12 @@
 
    <aboutInfo>
       <image path="/org.opendarts.prototype/icons/app/about.png"/>
+      <text>
+         OpenDarts
+
+Version: prototype
+Visit http://github.com/ilaborie/OpenDarts
+      </text>
    </aboutInfo>
 
    <configIni use="default">
@@ -14,7 +20,7 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.opendarts.prototype/icons/app/opendarts_16.png" i32="/org.opendarts.prototype/icons/app/opendarts_32.png" i48="/org.opendarts.prototype/icons/app/opendarts_48.png"/>
+   <windowImages i16="/org.opendarts.prototype/icons/app/opendarts_16.png" i32="/org.opendarts.prototype/icons/app/opendarts_32.png" i48="/org.opendarts.prototype/icons/app/opendarts_48.png" i64="/org.opendarts.prototype/icons/app/opendarts_64.png" i128="/org.opendarts.prototype/icons/app/opendarts_128.png"/>
 
    <splash
       location="org.opendarts.prototype" />
