@@ -38,7 +38,6 @@ import org.opendarts.prototype.ui.player.label.PlayerLabelProvider;
 
 /**
  * The Class SetX01ConfigurationDialog.
- * FIXME validation
  */
 public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		SelectionListener, ISelectionChangedListener {
@@ -76,6 +75,12 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	/** The btn user del. */
 	private Button btnUserDel;
 
+	/** The btn up. */
+	private Button btnUp;
+
+	/** The btn down. */
+	private Button btnDown;
+
 	/** The btn user new. */
 	private Button btnUserNew;
 
@@ -87,7 +92,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 	/**
 	 * Instantiates a new sets the x01 configuration dialog.
-	 * @param newSetDialog 
+	 *
 	 */
 	public SetX01ConfigurationDialog() {
 		super();
@@ -226,7 +231,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.btnUserDel.setImage(ProtoPlugin
 				.getImage(ISharedImages.IMG_USER_DELETE));
 		GridDataFactory.fillDefaults().applyTo(this.btnUserDel);
-		this.btnUserDel.setEnabled(false);
+		this.btnUserDel.setEnabled(this.currentPlayer != null);
 		this.btnUserDel.addSelectionListener(this);
 
 		new Label(cmpBtn, SWT.HORIZONTAL);
@@ -238,8 +243,20 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		GridDataFactory.fillDefaults().applyTo(this.btnUserNew);
 		this.btnUserNew.addSelectionListener(this);
 
-		// TODO up & down
+		new Label(cmpBtn, SWT.HORIZONTAL);
 
+		// up & down
+		this.btnUp = new Button(cmpBtn, SWT.PUSH);
+		this.btnUp.setImage(ProtoPlugin.getImage(ISharedImages.IMG_UP));
+		GridDataFactory.fillDefaults().applyTo(this.btnUp);
+		this.btnUp.setEnabled(this.currentPlayer != null);
+		this.btnUp.addSelectionListener(this);
+
+		this.btnDown = new Button(cmpBtn, SWT.PUSH);
+		this.btnDown.setImage(ProtoPlugin.getImage(ISharedImages.IMG_DOWN));
+		GridDataFactory.fillDefaults().applyTo(this.btnDown);
+		this.btnDown.setEnabled(this.currentPlayer != null);
+		this.btnDown.addSelectionListener(this);
 		return group;
 	}
 
@@ -285,6 +302,16 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			}
 		} else if (obj.equals(this.btnUserNew)) {
 			this.newPlayer();
+		} else if (obj.equals(this.btnUp)) {
+			int index = this.players.indexOf(this.currentPlayer);
+			Collections.swap(this.players, index, index - 1);
+			this.tablePlayers.setInput(this.players);
+			this.updateButtonsState();
+		} else if (obj.equals(this.btnDown)) {
+			int index = this.players.indexOf(this.currentPlayer);
+			Collections.swap(this.players, index, index + 1);
+			this.tablePlayers.setInput(this.players);
+			this.updateButtonsState();
 		}
 		this.parentDialog.notifyUpdate();
 	}
@@ -328,7 +355,20 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		} else {
 			this.currentPlayer = null;
 		}
+		this.updateButtonsState();
+
+	}
+
+	/**
+	 * Update buttons state.
+	 */
+	private void updateButtonsState() {
 		this.btnUserDel.setEnabled(this.currentPlayer != null);
+
+		int index = this.players.indexOf(this.currentPlayer);
+		this.btnUp.setEnabled(this.currentPlayer != null && (index > 0));
+		this.btnDown.setEnabled(this.currentPlayer != null
+				&& (index < (this.players.size() - 1)));
 	}
 
 	/**
@@ -347,11 +387,15 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 		if (dialog.open() == Window.OK) {
 			IPlayer player;
+			List<IPlayer> added = new ArrayList<IPlayer>();
 			for (Object obj : dialog.getResult()) {
 				player = (IPlayer) obj;
 				if (!this.players.contains(player) && this.players.add(player)) {
 					this.tablePlayers.add(player);
+					added.add(player);
 				}
+				this.tablePlayers.setSelection(new StructuredSelection(added),
+						true);
 			}
 
 		}
