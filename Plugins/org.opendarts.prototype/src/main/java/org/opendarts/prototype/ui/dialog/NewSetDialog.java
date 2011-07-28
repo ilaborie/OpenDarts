@@ -27,7 +27,6 @@ public class NewSetDialog extends TitleAreaDialog {
 			.getLogger(NewSetDialog.class);
 
 	/** The last game definition. */
-	// TODO Store in pref
 	private static IGameDefinition lastGameDefinition;
 
 	/** The players. */

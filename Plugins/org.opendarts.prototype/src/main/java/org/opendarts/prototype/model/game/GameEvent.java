@@ -6,7 +6,6 @@ import java.util.Calendar;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.player.IPlayer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SetEvent.
  */

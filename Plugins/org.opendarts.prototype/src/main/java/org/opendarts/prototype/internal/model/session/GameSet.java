@@ -21,7 +21,6 @@ import org.opendarts.prototype.service.game.IGameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GameSet.
  */
@@ -248,7 +247,6 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	 * Cancel.
 	 */
 	public void cancelSet() {
-		// TODO may do something for stats
 		this.fireSetEvent(SetEvent.Factory.newSetCanceledEvent(this));
 	}
 

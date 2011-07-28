@@ -1,4 +1,7 @@
-Requirement
+Extra information here: https://github.com/ilaborie/OpenDarts
+
+Requirements:
+=============
 Java 1.6+ (see http://java.com/download)
 
 USES
