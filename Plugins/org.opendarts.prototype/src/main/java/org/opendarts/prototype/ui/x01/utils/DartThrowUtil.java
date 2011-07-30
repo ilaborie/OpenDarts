@@ -78,7 +78,8 @@ public class DartThrowUtil {
 			} else {
 				result = null;
 			}
-		} else if (leftScore < result.getScore()) {
+		} else if (leftScore < result.getScore()
+				|| ((leftScore - result.getScore()) == 1)) {
 			result = new BrokenX01DartsThrow(result);
 		}
 		return result;
