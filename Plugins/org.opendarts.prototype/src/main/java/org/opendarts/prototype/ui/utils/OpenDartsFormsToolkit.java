@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.opendarts.prototype.ui.utils.listener.FixWinFistColumnCenterListener;
 
 /**
  * The Class OpenDartsFormsToolkit.
@@ -176,18 +175,20 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	public TableViewerColumn createTableColumn(TableViewer viewer,
 			ColumnDescriptor descr) {
-		TableViewerColumn column = new TableViewerColumn(viewer,
-				descr.getStyle());
-
-		// XXX workaround bugs 337985
+		// XXX workaround to fix a weird issue in Window platform
+		// @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=43910
 		if (SWT.getPlatform().equals("win32")) {
 			Table table = viewer.getTable();
-			TableColumn tableColumn = table.getColumn(0);
-			if (column.equals(tableColumn)) {
-				column.getColumn().addListener(SWT.Resize,
-						new FixWinFistColumnCenterListener(table));
+			if (table.getColumnCount() == 0) {
+				TableColumn emptyCol = new TableColumn(table, SWT.LEFT, 0);
+				emptyCol.setText("First Column");
+				emptyCol.setWidth(0);
+				emptyCol.setResizable(false);
 			}
 		}
+
+		TableViewerColumn column = new TableViewerColumn(viewer,
+				descr.getStyle());
 		TableColumn tableColumn = column.getColumn();
 		tableColumn.setText(descr.getLabel());
 		tableColumn.setWidth(descr.getDefaultWidth());
