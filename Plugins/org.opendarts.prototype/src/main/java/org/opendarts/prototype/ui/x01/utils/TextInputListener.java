@@ -3,6 +3,7 @@ package org.opendarts.prototype.ui.x01.utils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
@@ -114,7 +115,18 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// Nothing to do
+		this.shortcuts.handleKeyEvent(e, this.shell, inputText, game, player,
+				decoration);
+		switch (e.keyCode) {
+			case 9: // Tab
+			case 32: // Space
+			case 13: // Enter
+			case SWT.KEYPAD_CR:
+				this.handleNewValue(this.inputText.getText());
+				break;
+			default:
+				break;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -122,8 +134,7 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		this.shortcuts.handleKeyEvent(e, this.shell, inputText, game, player,
-				decoration);
+		// Nothing to do
 	}
 
 	/**
