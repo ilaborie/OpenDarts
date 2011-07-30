@@ -147,6 +147,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	 * @param game the game
 	 */
 	private void handleGameActive(GameX01 game) {
+		LOG.info("Starting new game: {}", game);
 		// get new page
 		GameX01Page page;
 		page = this.pages.get(game);

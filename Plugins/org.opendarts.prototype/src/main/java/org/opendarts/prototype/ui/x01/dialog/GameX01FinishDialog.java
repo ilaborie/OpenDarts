@@ -5,8 +5,10 @@ import java.text.MessageFormat;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -23,7 +25,8 @@ import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 /**
  * The Class GameX01FinishDialog.
  */
-public class GameX01FinishDialog extends FormDialog {
+public class GameX01FinishDialog extends FormDialog implements
+		SelectionListener, KeyListener {
 
 	/** The nb dart. */
 	private int nbDarts;
@@ -40,12 +43,34 @@ public class GameX01FinishDialog extends FormDialog {
 	/** The score. */
 	private final int score;
 
+	/** The btn one. */
+	private Button btnOne;
+
+	/** The btn two. */
+	private Button btnTwo;
+
+	/** The btn three. */
+	private Button btnThree;
+
+	/** The btn broken. */
+	private Button btnBroken;
+
+	/** The could finish one. */
+	private boolean couldFinishOne;
+
+	/** The could finish two. */
+	private boolean couldFinishTwo;
+
+	/** The could finish three. */
+	private boolean couldFinishThree;
+
 	/**
 	 * Instantiates a new game x501 finish dialog.
 	 *
 	 * @param parentShell the parent shell
 	 * @param game the game
 	 * @param player the player
+	 * @param score the score
 	 */
 	public GameX01FinishDialog(Shell parentShell, GameX01 game, IPlayer player,
 			int score) {
@@ -54,6 +79,13 @@ public class GameX01FinishDialog extends FormDialog {
 		this.player = player;
 		this.score = score;
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
+
+		// What can be done
+		this.couldFinishOne = DartX01Util.couldFinish(this.score, 1);
+		this.couldFinishTwo = this.couldFinishOne
+				|| DartX01Util.couldFinish(this.score, 2);
+		this.couldFinishThree = this.couldFinishTwo
+				|| DartX01Util.couldFinish(this.score, 3);
 	}
 
 	/* (non-Javadoc)
@@ -69,6 +101,7 @@ public class GameX01FinishDialog extends FormDialog {
 
 		Composite body = form.getBody();
 		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(body);
+		body.addKeyListener(this);
 
 		// Message
 		String msg = MessageFormat.format("{0} has finished with {1} ?",
@@ -83,30 +116,102 @@ public class GameX01FinishDialog extends FormDialog {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(main);
 
 		GridDataFactory btnData = GridDataFactory.fillDefaults();
-		Button btn;
 		// Finish Buttons
-		btn = this.toolkit.createButton(main, "One Dart", SWT.PUSH);
-		btn.setEnabled(DartX01Util.couldFinish(this.score, 1));
-		btn.addSelectionListener(new NbDartSelectionListener(1));
-		btnData.copy().applyTo(btn);
+		this.btnOne = this.toolkit.createButton(main, "One Dart", SWT.PUSH);
+		this.btnOne.setEnabled(couldFinishOne);
+		this.btnOne.addSelectionListener(this);
+		btnData.copy().applyTo(this.btnOne);
 
-		btn = this.toolkit.createButton(main, "Two Dart", SWT.PUSH);
-		btn.setEnabled(DartX01Util.couldFinish(this.score, 2));
-		btn.addSelectionListener(new NbDartSelectionListener(2));
-		btnData.copy().applyTo(btn);
+		this.btnTwo = this.toolkit.createButton(main, "Two Dart", SWT.PUSH);
+		this.btnTwo.setEnabled(couldFinishTwo);
+		this.btnTwo.addSelectionListener(this);
+		btnData.copy().applyTo(this.btnTwo);
 
-		btn = this.toolkit.createButton(main, "Three Dart", SWT.PUSH);
-		btn.setEnabled(DartX01Util.couldFinish(this.score, 3));
-		btn.addSelectionListener(new NbDartSelectionListener(3));
-		btnData.copy().applyTo(btn);
+		this.btnThree = this.toolkit.createButton(main, "Three Dart", SWT.PUSH);
+		this.btnThree.setEnabled(couldFinishThree);
+		this.btnThree.addSelectionListener(this);
+		btnData.copy().applyTo(this.btnThree);
 
 		lbl = this.toolkit.createLabel(main, "", SWT.HORIZONTAL);
 		GridDataFactory.fillDefaults().span(3, 1).grab(true, false)
 				.applyTo(lbl);
 
-		btn = this.toolkit.createButton(main, "Broken", SWT.PUSH);
-		btn.addSelectionListener(new NbDartSelectionListener(0));
-		btnData.copy().applyTo(btn);
+		this.btnBroken = this.toolkit.createButton(main, "Broken", SWT.PUSH);
+		this.btnBroken.addSelectionListener(this);
+		btnData.copy().applyTo(this.btnBroken);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
+	 */
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// Do nothing
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+	 */
+	@Override
+	public void widgetSelected(SelectionEvent e) {
+		Object src = e.getSource();
+		if (this.btnBroken.equals(src)) {
+			this.end(0);
+		} else if (this.btnOne.equals(src)) {
+			this.end(1);
+		} else if (this.btnTwo.equals(src)) {
+			this.end(2);
+		} else if (this.btnThree.equals(src)) {
+			this.end(3);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.KeyListener#keyPressed(org.eclipse.swt.events.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch (e.keyCode) {
+			case SWT.KEYPAD_0:
+				this.end(0);
+				break;
+			case SWT.KEYPAD_1:
+				if (couldFinishOne) {
+					this.end(1);
+				}
+				break;
+			case SWT.KEYPAD_2:
+				if (couldFinishTwo) {
+					this.end(2);
+				}
+				break;
+			case SWT.KEYPAD_3:
+				if (couldFinishThree) {
+					this.end(3);
+				}
+				break;
+			default:
+				e.doit = true;
+				break;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.KeyListener#keyReleased(org.eclipse.swt.events.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Nothing to do
+	}
+
+	/**
+	 * End.
+	 *
+	 * @param nbDarts the nb darts
+	 */
+	protected void end(int nbDarts) {
+		this.nbDarts = nbDarts;
+		this.close();
 	}
 
 	/**
@@ -126,22 +231,4 @@ public class GameX01FinishDialog extends FormDialog {
 		return new Label(parent, SWT.NONE);
 	}
 
-	public class NbDartSelectionListener extends SelectionAdapter {
-
-		private final int nb;
-
-		public NbDartSelectionListener(int nb) {
-			super();
-			this.nb = nb;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-		 */
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			GameX01FinishDialog.this.nbDarts = this.nb;
-			GameX01FinishDialog.this.close();
-		}
-	}
 }
