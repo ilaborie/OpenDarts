@@ -297,6 +297,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(false);
+			table.setFont(OpenDartsFormsToolkit
+					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
 
 			// resize the row height using a MeasureItem listener
 			table.addListener(SWT.MeasureItem, new FixHeightListener());
@@ -338,6 +340,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
 				table.setLinesVisible(false);
+				table.setFont(OpenDartsFormsToolkit
+						.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
 
 				// resize the row height using a MeasureItem listener
 				table.addListener(SWT.MeasureItem, new FixHeightListener());
@@ -670,6 +674,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				txt.setText(this.getPlayerCurrentScore(player));
 				scoreViewer.reveal(entry);
 			}
+			this.setInputFocus(this.game.getCurrentPlayer());
 		}
 	}
 
@@ -727,22 +732,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				}
 			}
 			// enable/disable inputs & focus
-			Text playerInputTxt = this.playerScoreInput.get(player);
-			for (Text inputTxt : this.playerScoreInput.values()) {
-				if (playerInputTxt.equals(inputTxt)) {
-					inputTxt.setEnabled(true);
-					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-							.getColors()
-							.getColor(OpenDartsFormsToolkit.COLOR_ACTIVE));
-					inputTxt.setFocus();
-				} else {
-					inputTxt.setEnabled(false);
-					inputTxt.setText("");
-					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-							.getColors()
-							.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
-				}
-			}
+			this.setInputFocus(player);
 
 			// IA playing
 			if (player.isComputer()) {
@@ -759,6 +749,30 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					this.gameService.addPlayerThrow(this.game, player,
 							dartThrow);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Sets the input focus.
+	 *
+	 * @param player the new input focus
+	 */
+	private void setInputFocus(IPlayer player) {
+		Text playerInputTxt = this.playerScoreInput.get(player);
+		for (Text inputTxt : this.playerScoreInput.values()) {
+			if (playerInputTxt.equals(inputTxt)) {
+				inputTxt.setEnabled(true);
+				inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+						.getColors()
+						.getColor(OpenDartsFormsToolkit.COLOR_ACTIVE));
+				inputTxt.setFocus();
+			} else {
+				inputTxt.setEnabled(false);
+				inputTxt.setText("");
+				inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+						.getColors()
+						.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
 			}
 		}
 	}
