@@ -7,18 +7,13 @@ import org.eclipse.swt.widgets.Listener;
  * Fix component height (table)
  */
 public class FixHeightListener implements Listener {
-
-	/** The height. */
-	private final int height;
-
 	/**
 	 * Instantiates a new fix height listener.
 	 *
 	 * @param height the height
 	 */
-	public FixHeightListener(int height) {
+	public FixHeightListener() {
 		super();
-		this.height = height;
 	}
 
 	/**
@@ -28,7 +23,6 @@ public class FixHeightListener implements Listener {
 	 */
 	@Override
 	public void handleEvent(Event event) {
-		event.height = this.height;
+		event.height = (int) (2d * event.gc.getFontMetrics().getHeight());
 	}
-
 }

@@ -296,10 +296,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					| SWT.FULL_SELECTION);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
-			table.setLinesVisible(true);
+			table.setLinesVisible(false);
 
 			// resize the row height using a MeasureItem listener
-			table.addListener(SWT.MeasureItem, new FixHeightListener(24));
+			table.addListener(SWT.MeasureItem, new FixHeightListener());
 			viewer = new TableViewer(table);
 			viewer.setContentProvider(new GameX01ContentProvider());
 			List<ColumnDescriptor> columns = this.addColumns(null, viewer);
@@ -337,10 +337,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						| SWT.BORDER | SWT.FULL_SELECTION);
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
-				table.setLinesVisible(true);
+				table.setLinesVisible(false);
 
 				// resize the row height using a MeasureItem listener
-				table.addListener(SWT.MeasureItem, new FixHeightListener(24));
+				table.addListener(SWT.MeasureItem, new FixHeightListener());
 				viewer = new TableViewer(table);
 				viewer.setContentProvider(new GameX01ContentProvider());
 				List<ColumnDescriptor> columns = this
@@ -403,10 +403,6 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
 		inputScoreText.setEnabled(false);
 		this.playerScoreInput.put(player, inputScoreText);
-
-		// Tooltip
-		ShortcutsTooltip tooltip = new ShortcutsTooltip(inputScoreText);
-		tooltip.setPopupDelay(200);
 
 		// layout
 		int indent = FieldDecorationRegistry.getDefault()

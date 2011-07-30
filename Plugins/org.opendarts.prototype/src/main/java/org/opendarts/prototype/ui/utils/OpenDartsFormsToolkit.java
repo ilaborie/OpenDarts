@@ -12,11 +12,13 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.opendarts.prototype.ui.utils.listener.FixWinFistColumnCenterListener;
 
 /**
  * The Class OpenDartsFormsToolkit.
@@ -73,10 +75,10 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		Font initialFont;
 		// Fonts
 		initialFont = fontRegistry.defaultFont();
-		registerFont(initialFont, FONT_SCORE_SHEET, 18);
+		registerFont(initialFont, FONT_SCORE_SHEET, 32);
 		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
 		fontRegistry.put(FONT_BOLD, initialFont.getFontData());
-		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 18);
+		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 32);
 		registerFont(initialFont, FONT_SCORE_INPUT, 64);
 		registerFont(initialFont, FONT_SCORE_LEFT, 126);
 	}
@@ -176,6 +178,16 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 			ColumnDescriptor descr) {
 		TableViewerColumn column = new TableViewerColumn(viewer,
 				descr.getStyle());
+
+		// XXX workaround bugs 337985
+		if (SWT.getPlatform().equals("win32")) {
+			Table table = viewer.getTable();
+			TableColumn tableColumn = table.getColumn(0);
+			if (column.equals(tableColumn)) {
+				column.getColumn().addListener(SWT.Resize,
+						new FixWinFistColumnCenterListener(table));
+			}
+		}
 		TableColumn tableColumn = column.getColumn();
 		tableColumn.setText(descr.getLabel());
 		tableColumn.setWidth(descr.getDefaultWidth());
