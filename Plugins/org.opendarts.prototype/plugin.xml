@@ -5,7 +5,8 @@
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
-      <application>
+      <application
+            icon="icons/app/opendarts_16.png">
          <run
                class="org.opendarts.prototype.ui.application.OpenDartsApplication">
          </run>
