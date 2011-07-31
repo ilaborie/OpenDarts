@@ -78,19 +78,19 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 		if (rgbTo.red == rgbFrom.red) {
 			redRatio = 0d;
 		} else {
-			redRatio = (delta / ((double) rgbTo.red - rgbFrom.red));
+			redRatio = (((double) rgbTo.red - rgbFrom.red) / delta);
 		}
 
 		if (rgbTo.green == rgbFrom.green) {
 			greenRatio = 0d;
 		} else {
-			greenRatio = (delta / ((double) rgbTo.green - rgbFrom.green));
+			greenRatio = (((double) rgbTo.green - rgbFrom.green) / delta);
 		}
 
 		if (rgbTo.blue == rgbFrom.blue) {
 			blueRatio = 0d;
 		} else {
-			blueRatio = (delta / ((double) rgbTo.blue - rgbFrom.blue));
+			blueRatio = (((double) rgbTo.blue - rgbFrom.blue) / delta);
 		}
 
 		int r;
