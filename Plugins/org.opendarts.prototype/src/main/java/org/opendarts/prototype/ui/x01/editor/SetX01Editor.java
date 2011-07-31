@@ -170,8 +170,8 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private void handleSetFinished() {
 		this.dirty = false;
 		// End Game dialog
-		SetX01InfoDialog dialog = new SetX01InfoDialog(this
-				.getSite().getShell(), this.getSet());
+		SetX01InfoDialog dialog = new SetX01InfoDialog(this.getSite()
+				.getShell(), this.getSet());
 		dialog.open();
 		this.firePropertyChange(IEditorPart.PROP_DIRTY);
 	}

@@ -92,8 +92,8 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		// Stats
 		this.statsService = ProtoPlugin.getService(IStatsService.class);
-		if (statsService != null) {
-			statsService.addStatsListener(this);
+		if (this.statsService != null) {
+			this.statsService.addStatsListener(this);
 		}
 
 		this.main = this.toolkit.createComposite(parent);
@@ -345,7 +345,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		lbl = this.toolkit.createLabel(client, "");
 		lbl.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
-		if (statsService != null) {
+		if (this.statsService != null) {
 			// FIXME validity
 			IStatsEntry entry = this.statsService.getStatsEntry(this.session,
 					this.set, this.game, this.player, statsKey);

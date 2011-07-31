@@ -88,7 +88,7 @@ public class GrabColumnsListener extends ControlAdapter {
 		ScrollBar vBar = table.getVerticalBar();
 		int width = area.width - table.computeTrim(0, 0, 0, 0).width
 				- vBar.getSize().x;
-		if (size.y > area.height + table.getHeaderHeight()) {
+		if (size.y > (area.height + table.getHeaderHeight())) {
 			Point vBarSize = vBar.getSize();
 			width -= vBarSize.x;
 		}
@@ -124,7 +124,7 @@ public class GrabColumnsListener extends ControlAdapter {
 		for (ColumnDescriptor colDescr : this.columns) {
 			ratio = ((double) colDescr.getDefaultWidth())
 					/ ((double) totalDefaultWidth);
-			dWidth = ((double) width) * ratio;
+			dWidth = width * ratio;
 			colWidth = (int) Math.floor(dWidth);
 
 			column = colDescr.getColumn();
@@ -146,7 +146,7 @@ public class GrabColumnsListener extends ControlAdapter {
 		ScrollBar vBar = tree.getVerticalBar();
 		int width = area.width - tree.computeTrim(0, 0, 0, 0).width
 				- vBar.getSize().x;
-		if (size.y > area.height + tree.getHeaderHeight()) {
+		if (size.y > (area.height + tree.getHeaderHeight())) {
 			Point vBarSize = vBar.getSize();
 			width -= vBarSize.x;
 		}

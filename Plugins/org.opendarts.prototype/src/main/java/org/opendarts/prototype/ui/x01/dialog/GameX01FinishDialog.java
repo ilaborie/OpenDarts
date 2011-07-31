@@ -56,13 +56,13 @@ public class GameX01FinishDialog extends FormDialog implements
 	private Button btnBroken;
 
 	/** The could finish one. */
-	private boolean couldFinishOne;
+	private final boolean couldFinishOne;
 
 	/** The could finish two. */
-	private boolean couldFinishTwo;
+	private final boolean couldFinishTwo;
 
 	/** The could finish three. */
-	private boolean couldFinishThree;
+	private final boolean couldFinishThree;
 
 	/**
 	 * Instantiates a new game x501 finish dialog.
@@ -118,17 +118,17 @@ public class GameX01FinishDialog extends FormDialog implements
 		GridDataFactory btnData = GridDataFactory.fillDefaults();
 		// Finish Buttons
 		this.btnOne = this.toolkit.createButton(main, "One Dart", SWT.PUSH);
-		this.btnOne.setEnabled(couldFinishOne);
+		this.btnOne.setEnabled(this.couldFinishOne);
 		this.btnOne.addSelectionListener(this);
 		btnData.copy().applyTo(this.btnOne);
 
 		this.btnTwo = this.toolkit.createButton(main, "Two Dart", SWT.PUSH);
-		this.btnTwo.setEnabled(couldFinishTwo);
+		this.btnTwo.setEnabled(this.couldFinishTwo);
 		this.btnTwo.addSelectionListener(this);
 		btnData.copy().applyTo(this.btnTwo);
 
 		this.btnThree = this.toolkit.createButton(main, "Three Dart", SWT.PUSH);
-		this.btnThree.setEnabled(couldFinishThree);
+		this.btnThree.setEnabled(this.couldFinishThree);
 		this.btnThree.addSelectionListener(this);
 		btnData.copy().applyTo(this.btnThree);
 
@@ -176,17 +176,17 @@ public class GameX01FinishDialog extends FormDialog implements
 				this.end(0);
 				break;
 			case SWT.KEYPAD_1:
-				if (couldFinishOne) {
+				if (this.couldFinishOne) {
 					this.end(1);
 				}
 				break;
 			case SWT.KEYPAD_2:
-				if (couldFinishTwo) {
+				if (this.couldFinishTwo) {
 					this.end(2);
 				}
 				break;
 			case SWT.KEYPAD_3:
-				if (couldFinishThree) {
+				if (this.couldFinishThree) {
 					this.end(3);
 				}
 				break;

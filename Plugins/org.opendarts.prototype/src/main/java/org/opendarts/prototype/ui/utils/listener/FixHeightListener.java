@@ -23,6 +23,11 @@ public class FixHeightListener implements Listener {
 	 */
 	@Override
 	public void handleEvent(Event event) {
-		event.height = (int) (2d * event.gc.getFontMetrics().getHeight());
+		double ratio = 1d;
+		if (false) {
+			// if win XP ???
+			ratio = 2d;
+		}
+		event.height = (int) (ratio * event.gc.getFontMetrics().getHeight());
 	}
 }

@@ -31,7 +31,7 @@ public class StatsValue<T> implements IStatValue<T> {
 	 */
 	@Override
 	public String toString() {
-		return MessageFormat.format("{0}", value);
+		return MessageFormat.format("{0}", this.value);
 	}
 
 	/* (non-Javadoc)
@@ -60,7 +60,7 @@ public class StatsValue<T> implements IStatValue<T> {
 		if (this.value == null) {
 			result = "";
 		} else if (this.value instanceof Double) {
-			result = DOUBLE_FORMATTER.format((Double) this.value);
+			result = DOUBLE_FORMATTER.format(this.value);
 		} else {
 			result = String.valueOf(this.value);
 		}

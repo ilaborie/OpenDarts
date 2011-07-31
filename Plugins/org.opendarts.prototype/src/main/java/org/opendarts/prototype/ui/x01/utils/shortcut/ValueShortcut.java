@@ -26,7 +26,7 @@ public class ValueShortcut extends AbstractShortcut implements IShortcut {
 			.getLogger(ValueShortcut.class);
 
 	/** The value. */
-	private int value;
+	private final int value;
 
 	/**
 	 * Instantiates a new value shortcut.
@@ -70,7 +70,7 @@ public class ValueShortcut extends AbstractShortcut implements IShortcut {
 		ThreeDartsThrow dartThrow;
 		try {
 			dartThrow = dartThrowUtil.getDartThrow(this.value, leftScore);
-			if (dartThrow == null && inputText != null
+			if ((dartThrow == null) && (inputText != null)
 					&& !inputText.isDisposed()) {
 				inputText.setFocus();
 				inputText.selectAll();

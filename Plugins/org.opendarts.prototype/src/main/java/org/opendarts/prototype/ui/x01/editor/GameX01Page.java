@@ -783,6 +783,12 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		}
 		this.dirty = false;
 		this.mForm.dirtyStateChanged();
+		// update progress
+		ProgressBar bar = this.playerProgess.get(player);
+		if (bar != null) {
+			int current = bar.getSelection();
+			bar.setSelection(current + 1);
+		}
 	}
 
 	/**

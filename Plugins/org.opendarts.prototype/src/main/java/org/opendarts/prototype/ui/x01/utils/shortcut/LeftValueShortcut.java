@@ -63,7 +63,7 @@ public class LeftValueShortcut extends AbstractShortcut implements IShortcut {
 			// handle score
 			ThreeDartsThrow dartThrow = dartThrowUtil.getDartThrow(value,
 					leftScore);
-			if (dartThrow == null && inputText != null
+			if ((dartThrow == null) && (inputText != null)
 					&& !inputText.isDisposed()) {
 				inputText.setFocus();
 				inputText.selectAll();
@@ -77,7 +77,5 @@ public class LeftValueShortcut extends AbstractShortcut implements IShortcut {
 			this.applyError(msg, dec, inputText);
 		}
 	}
-
-
 
 }

@@ -10,7 +10,7 @@ import org.opendarts.prototype.model.player.IPlayer;
  * The Interface IShortcut.
  */
 public interface IShortcut {
-	
+
 	/**
 	 * Gets the label.
 	 *

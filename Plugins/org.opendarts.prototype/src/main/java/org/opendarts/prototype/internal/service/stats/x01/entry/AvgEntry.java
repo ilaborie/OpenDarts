@@ -84,7 +84,7 @@ public class AvgEntry implements Serializable {
 		if (this.count < 1) {
 			result = "-";
 		} else {
-			double d = this.sum / ((double) this.count);
+			double d = this.sum / this.count;
 			result = StatsValue.DOUBLE_FORMATTER.format(d);
 		}
 		return result;

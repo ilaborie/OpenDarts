@@ -366,8 +366,8 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.btnUserDel.setEnabled(this.currentPlayer != null);
 
 		int index = this.players.indexOf(this.currentPlayer);
-		this.btnUp.setEnabled(this.currentPlayer != null && (index > 0));
-		this.btnDown.setEnabled(this.currentPlayer != null
+		this.btnUp.setEnabled((this.currentPlayer != null) && (index > 0));
+		this.btnDown.setEnabled((this.currentPlayer != null)
 				&& (index < (this.players.size() - 1)));
 	}
 
@@ -407,10 +407,10 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	@Override
 	public List<ValidationEntry> validate() {
 		List<ValidationEntry> result = new ArrayList<ValidationEntry>();
-		if (players.isEmpty()) {
+		if (this.players.isEmpty()) {
 			result.add(new ValidationEntry(IMessageProvider.ERROR,
 					"Need at least two players"));
-		} else if (players.size() == 1) {
+		} else if (this.players.size() == 1) {
 			result.add(new ValidationEntry(IMessageProvider.WARNING,
 					"Playing alone is boring !"));
 		}

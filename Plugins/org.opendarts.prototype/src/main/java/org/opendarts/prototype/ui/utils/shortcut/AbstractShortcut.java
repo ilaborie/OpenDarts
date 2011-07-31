@@ -36,7 +36,7 @@ public abstract class AbstractShortcut implements IShortcut {
 	 */
 	@Override
 	public boolean apply(int keyCode, int stateMask) {
-		return this.keyCode == keyCode && this.stateMask == stateMask;
+		return (this.keyCode == keyCode) && (this.stateMask == stateMask);
 	}
 
 	/* (non-Javadoc)
@@ -133,7 +133,7 @@ public abstract class AbstractShortcut implements IShortcut {
 			dec.show();
 		}
 		// handler input text
-		if (inputText != null && !inputText.isDisposed()) {
+		if ((inputText != null) && !inputText.isDisposed()) {
 			inputText.setFocus();
 			inputText.selectAll();
 		}

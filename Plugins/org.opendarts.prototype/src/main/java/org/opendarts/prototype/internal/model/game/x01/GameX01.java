@@ -356,7 +356,7 @@ public class GameX01 extends AbstractGame implements IGame {
 	 * @return the nb dart to finish
 	 */
 	public Integer getNbDartToFinish() {
-		return nbDartToFinish;
+		return this.nbDartToFinish;
 	}
 
 	/**

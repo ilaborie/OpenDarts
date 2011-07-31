@@ -18,7 +18,6 @@ public class GameX01Definition extends GameDefinition {
 	/** The game service. */
 	private final IGameService gameService;
 
-
 	/**
 	 * Instantiates a new game x01 definition.
 	 *

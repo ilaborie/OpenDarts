@@ -117,7 +117,8 @@ public class ScoreX01EditingSupport extends EditingSupport {
 				GameX01Entry entry = (GameX01Entry) element;
 				Integer leftScore = this.game.getScore(this.player);
 
-				ThreeDartsThrow oldThrow = entry.getPlayerThrow().get(player);
+				ThreeDartsThrow oldThrow = entry.getPlayerThrow().get(
+						this.player);
 				if (oldThrow != null) {
 					if (!(oldThrow instanceof BrokenX01DartsThrow)) {
 						leftScore += oldThrow.getScore();
