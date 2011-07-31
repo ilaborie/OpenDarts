@@ -1,14 +1,10 @@
 package org.opendarts.prototype.ui.x01.editor;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISaveablePart2;
@@ -24,6 +20,7 @@ import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.service.session.ISetService;
 import org.opendarts.prototype.ui.editor.ISetEditor;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
+import org.opendarts.prototype.ui.x01.dialog.SetX01FinishSummaryDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,11 +170,9 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private void handleSetFinished() {
 		this.dirty = false;
 		// End Game dialog
-		String title = MessageFormat.format("{0} finished", this.getSet());
-		String message = this.getSet().getWinningMessage();
-		Shell shell = this.getSite().getShell();
-		MessageDialog.open(MessageDialog.INFORMATION, shell, title, message,
-				SWT.SHEET);
+		SetX01FinishSummaryDialog dialog = new SetX01FinishSummaryDialog(this
+				.getSite().getShell(), this.getSet());
+		dialog.open();
 		this.firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 

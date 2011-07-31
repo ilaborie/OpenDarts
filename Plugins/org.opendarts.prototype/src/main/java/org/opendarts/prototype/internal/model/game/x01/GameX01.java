@@ -40,6 +40,9 @@ public class GameX01 extends AbstractGame implements IGame {
 	/** The score to do. */
 	private final int scoreToDo;
 
+	/** The nb darts. */
+	private Integer nbDartToFinish;
+
 	/** The stats service. */
 	private final IStatsService statsService;
 
@@ -308,9 +311,11 @@ public class GameX01 extends AbstractGame implements IGame {
 
 		// Add darts
 		GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
+
 		entry.addPlayerThrow(player, dartThrow);
-		entry.setNbPlayedDart(((entry.getRound() - 1) * 3)
-				+ dartThrow.getNbDartToFinish());
+		this.nbDartToFinish = ((entry.getRound() - 1) * 3)
+				+ dartThrow.getNbDartToFinish();
+		entry.setNbPlayedDart(this.nbDartToFinish);
 
 		// Notify
 		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
@@ -337,13 +342,21 @@ public class GameX01 extends AbstractGame implements IGame {
 	public String getWinningMessage() {
 		String result = "";
 		if (this.getWinner() != null) {
-			GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
 			result = MessageFormat.format("{0} win with {1} darts",
-					this.getWinner(), entry.getNbPlayedDart());
+					this.getWinner(), this.nbDartToFinish);
 		} else {
 			result = "Draw game";
 		}
 		return result;
+	}
+
+	/**
+	 * Gets the nb dart to finish.
+	 *
+	 * @return the nb dart to finish
+	 */
+	public Integer getNbDartToFinish() {
+		return nbDartToFinish;
 	}
 
 	/**
