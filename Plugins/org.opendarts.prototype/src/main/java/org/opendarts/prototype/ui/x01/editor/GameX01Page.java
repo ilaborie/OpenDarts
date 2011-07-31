@@ -377,8 +377,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						ExpandableComposite.TITLE_BAR);
 				GridDataFactory.fillDefaults().grab(true, true)
 						.applyTo(section);
-				section.setText(MessageFormat.format("{0} - {1}", player,
-						this.game.getParentSet().getWinningGames(player)));
+				section.setText(player.getName());
+				section.setFont(OpenDartsFormsToolkit
+						.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
+
+				this.addProcressBar(section, player);
 
 				// Section body
 				client = this.toolkit.createComposite(section, SWT.WRAP);
@@ -413,6 +416,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				// End section definition
 				this.toolkit.paintBordersFor(client);
 				section.setClient(client);
+				section.layout(true);
 			}
 		}
 		this.toolkit.paintBordersFor(main);
@@ -442,8 +446,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Player Status
-		Composite cmpPlayerTwo = this.createPlayerComposite(client, player);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpPlayerTwo);
+		PlayerStatusComposite cmpStatus = new PlayerStatusComposite(client,
+				player, this.game);
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(cmpStatus.getControl());
 
 		// End section definition
 		this.toolkit.paintBordersFor(client);
@@ -569,12 +575,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
 
 		// Progress
-		ProgressBar playerBar = new ProgressBar(secPlayer, SWT.SMOOTH);
-		this.playerProgess.put(player, playerBar);
-		playerBar.setMaximum(this.gameDefinition.getNbGameToWin());
-		playerBar
-				.setSelection(this.game.getParentSet().getWinningGames(player));
-		secPlayer.setTextClient(playerBar);
+		this.addProcressBar(secPlayer, player);
 
 		Composite client = this.toolkit.createComposite(secPlayer, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().margins(2, 2).applyTo(client);
@@ -589,6 +590,21 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.toolkit.paintBordersFor(client);
 		main.layout(true);
 		return main;
+	}
+
+	/**
+	 * Adds the procress bar.
+	 *
+	 * @param section the section
+	 * @param player the player
+	 */
+	private void addProcressBar(Section section, IPlayer player) {
+		ProgressBar playerBar = new ProgressBar(section, SWT.SMOOTH);
+		this.playerProgess.put(player, playerBar);
+		playerBar.setMaximum(this.gameDefinition.getNbGameToWin());
+		playerBar
+				.setSelection(this.game.getParentSet().getWinningGames(player));
+		section.setTextClient(playerBar);
 	}
 
 	/**
