@@ -10,7 +10,6 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.forms.IFormColors;
-import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 
@@ -42,8 +41,6 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 			int round = gameEntry.getRound();
 			return formatter.format(round * 3);
 			//			return MessageFormat.format("#{1} ({0})", (round * 3), round);
-		} else if (element instanceof DummyX01Entry) {
-			return " ";
 		}
 		return super.getText(element);
 	}
