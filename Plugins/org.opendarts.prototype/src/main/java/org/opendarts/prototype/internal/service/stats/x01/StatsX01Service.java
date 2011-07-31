@@ -245,7 +245,7 @@ public class StatsX01Service extends AbstractStatsService {
 		stats.addEntry(new TotalDartStatsEntry(SET_TOTAL_SCORE));
 
 		// Set best outs
-		stats.addEntry(new OutsOver100StatsEntry(SET_BEST_OUT));
+		stats.addEntry(new OutsOver100StatsEntry(SET_OUT_OVER_100));
 
 		// TODO
 		//		public static final String SET_GAME_WIN = "Set.Game.Win";

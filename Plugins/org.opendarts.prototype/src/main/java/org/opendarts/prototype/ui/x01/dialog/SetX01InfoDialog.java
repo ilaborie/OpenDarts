@@ -37,7 +37,7 @@ import org.opendarts.prototype.ui.x01.label.SetStatsLabelProvider;
 /**
  * The Class GameX01FinishDialog.
  */
-public class SetX01FinishSummaryDialog extends FormDialog implements
+public class SetX01InfoDialog extends FormDialog implements
 		ControlListener {
 
 	/** The toolkit. */
@@ -58,7 +58,7 @@ public class SetX01FinishSummaryDialog extends FormDialog implements
 	 * @param parentShell the parent shell
 	 * @param set the set
 	 */
-	public SetX01FinishSummaryDialog(Shell parentShell, ISet set) {
+	public SetX01InfoDialog(Shell parentShell, ISet set) {
 		super(parentShell);
 		this.set = set;
 		// Stats
@@ -339,7 +339,8 @@ public class SetX01FinishSummaryDialog extends FormDialog implements
 	 * @return the game nb darts
 	 */
 	private String getGameNbDarts(GameX01 game) {
-		return String.valueOf(game.getNbDartToFinish());
+		Integer res = game.getNbDartToFinish();
+		return (res != null) ? String.valueOf(res) : "";
 	}
 
 	/**

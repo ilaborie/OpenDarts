@@ -8,7 +8,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.opendarts.prototype.model.session.ISet;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
-import org.opendarts.prototype.ui.x01.dialog.SetX01FinishSummaryDialog;
+import org.opendarts.prototype.ui.x01.dialog.SetX01InfoDialog;
 
 /**
  * The Class SetInfoHandler.
@@ -25,7 +25,7 @@ public class SetInfoHandler extends AbstractHandler implements IHandler {
 			if (editorInput instanceof SetEditorInput) {
 				SetEditorInput setEditorInput = (SetEditorInput) editorInput;
 				ISet set = setEditorInput.getSet();
-				SetX01FinishSummaryDialog dialog = new SetX01FinishSummaryDialog(
+				SetX01InfoDialog dialog = new SetX01InfoDialog(
 						HandlerUtil.getActiveShell(event), set);
 				dialog.open();
 			}

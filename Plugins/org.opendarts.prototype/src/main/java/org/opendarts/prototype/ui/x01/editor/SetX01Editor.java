@@ -20,7 +20,7 @@ import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.service.session.ISetService;
 import org.opendarts.prototype.ui.editor.ISetEditor;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
-import org.opendarts.prototype.ui.x01.dialog.SetX01FinishSummaryDialog;
+import org.opendarts.prototype.ui.x01.dialog.SetX01InfoDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,7 +170,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private void handleSetFinished() {
 		this.dirty = false;
 		// End Game dialog
-		SetX01FinishSummaryDialog dialog = new SetX01FinishSummaryDialog(this
+		SetX01InfoDialog dialog = new SetX01InfoDialog(this
 				.getSite().getShell(), this.getSet());
 		dialog.open();
 		this.firePropertyChange(IEditorPart.PROP_DIRTY);

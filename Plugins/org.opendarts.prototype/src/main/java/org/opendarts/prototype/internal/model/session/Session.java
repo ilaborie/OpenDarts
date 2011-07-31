@@ -8,14 +8,17 @@ import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.model.session.ISession;
 import org.opendarts.prototype.model.session.ISessionListener;
 import org.opendarts.prototype.model.session.ISet;
+import org.opendarts.prototype.model.session.ISetListener;
 import org.opendarts.prototype.model.session.SessionEvent;
+import org.opendarts.prototype.model.session.SetEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class Session.
  */
-public class Session extends GameContainer<ISet> implements ISession {
+public class Session extends GameContainer<ISet> implements ISession,
+		ISetListener {
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory.getLogger(Session.class);
@@ -48,11 +51,43 @@ public class Session extends GameContainer<ISet> implements ISession {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.session.GameContainer#addGame(java.lang.Object)
+	 */
+	@Override
+	public void addGame(ISet set) {
+		super.addGame(set);
+		set.addListener(this);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.model.session.ISession#addListener(org.opendarts.prototype.model.session.ISessionListener)
 	 */
 	@Override
 	public void addListener(ISessionListener listener) {
 		this.listeners.add(listener);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.session.ISetListener#notifySetEvent(org.opendarts.prototype.model.session.SetEvent)
+	 */
+	@Override
+	public void notifySetEvent(SetEvent event) {
+		ISet set = event.getSet();
+		if (this.getInternalsGame().contains(set)) {
+			switch (event.getType()) {
+				case SET_CANCELED:
+					set.removeListener(this);
+					break;
+				case SET_FINISHED:
+					IPlayer win = set.getWinner();
+					int winningSet = this.getWinningSet(win);
+					this.playerGames.put(win, winningSet + 1);
+					break;
+				case NEW_CURRENT_GAME:
+				case SET_INITIALIZED:
+					break;
+			}
+		}
 	}
 
 	/* (non-Javadoc)
