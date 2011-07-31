@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.opendarts.prototype.ui.x01.editor;
 
 import java.text.DecimalFormat;
@@ -22,6 +25,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -37,6 +41,7 @@ import org.eclipse.ui.menus.IMenuService;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.internal.model.game.x01.GameX01Definition;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.GameEvent;
@@ -87,6 +92,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	/** The player score input. */
 	private final Map<IPlayer, Text> playerScoreInput;
 
+	/** The player progess. */
+	private final Map<IPlayer, ProgressBar> playerProgess;
+
 	/** The player score. */
 	private final Map<IPlayer, TableViewerColumn> playerColumn;
 
@@ -105,6 +113,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	/** The dirty. */
 	private boolean dirty;
 
+	/** The game definition. */
+	private final GameX01Definition gameDefinition;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -115,6 +126,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	public GameX01Page(SetX01Editor gameEditor, GameX01 game, int index) {
 		super(gameEditor, String.valueOf(index), "Game #" + index);
 		this.game = game;
+		this.gameDefinition = (GameX01Definition) this.game.getParentSet()
+				.getGameDefinition();
+		this.playerProgess = new HashMap<IPlayer, ProgressBar>();
 		this.playerScoreLeft = new HashMap<IPlayer, Text>();
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
@@ -132,6 +146,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		ScrolledForm form = managedForm.getForm();
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		form.setText(this.game.getName());
+		form.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
 		this.toolkit.decorateFormHeading(form.getForm());
 
 		GridDataFactory playerData;
@@ -139,11 +155,17 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		scoreData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1);
 
 		List<IPlayer> players = this.game.getPlayers();
+		boolean onePlayer = (players.size() == 1);
 		boolean twoPlayer = (players.size() == 2);
 		// body
 		int nbCol;
 		int tableSpan;
-		if (twoPlayer) {
+		if (onePlayer) {
+			nbCol = 2;
+			tableSpan = 1;
+			playerData = GridDataFactory.fillDefaults().grab(false, true);
+			scoreData = GridDataFactory.fillDefaults().grab(true, false);
+		} else if (twoPlayer) {
 			nbCol = 4;
 			tableSpan = 2;
 			playerData = GridDataFactory.fillDefaults().grab(false, true);
@@ -159,7 +181,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
 				.equalWidth(true).applyTo(this.body);
 
-		if (twoPlayer) {
+		if (onePlayer || twoPlayer) {
 			// First Player Status
 			Composite cmpPlayerOne = this.createPlayerComposite(this.body,
 					this.game.getFirstPlayer());
@@ -238,10 +260,17 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(leftScoreBody);
 
 		Composite cmpPlayerLeftScore;
-		for (IPlayer player : this.game.getPlayers()) {
+		if (this.game.getPlayers().size() == 1) {
+			this.toolkit.createLabel(leftScoreBody, "");
 			cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
-					leftScoreBody, player);
+					leftScoreBody, this.game.getFirstPlayer());
 			scoreData.copy().applyTo(cmpPlayerLeftScore);
+		} else {
+			for (IPlayer player : this.game.getPlayers()) {
+				cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
+						leftScoreBody, player);
+				scoreData.copy().applyTo(cmpPlayerLeftScore);
+			}
 		}
 
 		this.toolkit.paintBordersFor(leftScoreBody);
@@ -274,6 +303,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 		List<IPlayer> players = this.game.getPlayers();
 		int nbPlayers = players.size();
+		boolean onePlayer = (nbPlayers == 1);
 		boolean twoPlayer = (nbPlayers == 2);
 
 		if (twoPlayer) {
@@ -285,7 +315,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 		TableViewer viewer;
 		Table table;
-		if (twoPlayer) {
+		if (onePlayer) {
 			Composite comp = this.toolkit.createComposite(main);
 			GridLayoutFactory.fillDefaults().applyTo(comp);
 			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
@@ -297,9 +327,37 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
+			table.setFont(OpenDartsFormsToolkit
+					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
 
 			// resize the row height using a MeasureItem listener
-			table.addListener(SWT.MeasureItem, new FixHeightListener(24));
+			table.addListener(SWT.MeasureItem, new FixHeightListener());
+			viewer = new TableViewer(table);
+			viewer.setContentProvider(new GameX01ContentProvider());
+			List<ColumnDescriptor> columns = this.addColumns(
+					this.game.getFirstPlayer(), viewer);
+			viewer.getControl().addControlListener(
+					new GrabColumnsListener(viewer, columns));
+
+			this.scoreViewers.put(this.game.getFirstPlayer(), viewer);
+
+		} else if (twoPlayer) {
+			Composite comp = this.toolkit.createComposite(main);
+			GridLayoutFactory.fillDefaults().applyTo(comp);
+			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
+					.applyTo(comp);
+
+			// Table
+			table = this.toolkit.createTable(comp, SWT.V_SCROLL | SWT.BORDER
+					| SWT.FULL_SELECTION);
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
+			table.setFont(OpenDartsFormsToolkit
+					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
+
+			// resize the row height using a MeasureItem listener
+			table.addListener(SWT.MeasureItem, new FixHeightListener());
 			viewer = new TableViewer(table);
 			viewer.setContentProvider(new GameX01ContentProvider());
 			List<ColumnDescriptor> columns = this.addColumns(null, viewer);
@@ -338,9 +396,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
+				table.setFont(OpenDartsFormsToolkit
+						.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
 
 				// resize the row height using a MeasureItem listener
-				table.addListener(SWT.MeasureItem, new FixHeightListener(24));
+				table.addListener(SWT.MeasureItem, new FixHeightListener());
 				viewer = new TableViewer(table);
 				viewer.setContentProvider(new GameX01ContentProvider());
 				List<ColumnDescriptor> columns = this
@@ -404,10 +464,6 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		inputScoreText.setEnabled(false);
 		this.playerScoreInput.put(player, inputScoreText);
 
-		// Tooltip
-		ShortcutsTooltip tooltip = new ShortcutsTooltip(inputScoreText);
-		tooltip.setPopupDelay(200);
-
 		// layout
 		int indent = FieldDecorationRegistry.getDefault()
 				.getMaximumDecorationWidth() + 2;
@@ -437,7 +493,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		List<ColumnDescriptor> result = new ArrayList<ColumnDescriptor>();
 
 		ColumnDescriptor colDescr = new ColumnDescriptor("");
-		colDescr.width(120);
+		colDescr.width(60);
 		colDescr.labelProvider(new TurnLabelProvider());
 
 		if (player == null) {
@@ -473,7 +529,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		int width = 100;
 
 		// Scored
-		colDescr = new ColumnDescriptor("Scored");
+		colDescr = new ColumnDescriptor(player.getName());
 		colDescr.width(width);
 		colDescr.labelProvider(new ScoreLabelProvider(player));
 		colDescr.editingSupport(new ScoreX01EditingSupport(shell, this.game,
@@ -483,7 +539,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.playerColumn.put(player, column);
 
 		// Scored
-		colDescr = new ColumnDescriptor("To Go");
+		colDescr = new ColumnDescriptor(
+				String.valueOf(this.game.getScoreToDo()));
 		colDescr.width(width);
 		colDescr.labelProvider(new ToGoLabelProvider(player));
 		this.toolkit.createTableColumn(viewer, colDescr);
@@ -508,18 +565,29 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						| ExpandableComposite.CLIENT_INDENT);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
 		secPlayer.setText(player.getName());
+		secPlayer.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
+
+		// Progress
+		ProgressBar playerBar = new ProgressBar(secPlayer, SWT.SMOOTH);
+		this.playerProgess.put(player, playerBar);
+		playerBar.setMaximum(this.gameDefinition.getNbGameToWin());
+		playerBar
+				.setSelection(this.game.getParentSet().getWinningGames(player));
+		secPlayer.setTextClient(playerBar);
 
 		Composite client = this.toolkit.createComposite(secPlayer, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().margins(2, 2).applyTo(client);
 
+		// Status
 		PlayerStatusComposite cmpStatus = new PlayerStatusComposite(client,
 				player, this.game);
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(cmpStatus.getControl());
 
-		this.toolkit.paintBordersFor(client);
 		secPlayer.setClient(client);
-
+		this.toolkit.paintBordersFor(client);
+		main.layout(true);
 		return main;
 	}
 
@@ -669,11 +737,18 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		TableViewer scoreViewer = this.scoreViewers.get(player);
 		scoreViewer.update(entry, null);
 		if (player != null) {
+			// Update score left
 			txt = this.playerScoreLeft.get(player);
 			if (!txt.isDisposed()) {
 				txt.setText(this.getPlayerCurrentScore(player));
 				scoreViewer.reveal(entry);
 			}
+			// Clear input
+			txt = this.playerScoreInput.get(player);
+			if (!txt.isDisposed()) {
+				txt.setText("");
+			}
+			this.setInputFocus(this.game.getCurrentPlayer());
 		}
 	}
 
@@ -731,22 +806,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				}
 			}
 			// enable/disable inputs & focus
-			Text playerInputTxt = this.playerScoreInput.get(player);
-			for (Text inputTxt : this.playerScoreInput.values()) {
-				if (playerInputTxt.equals(inputTxt)) {
-					inputTxt.setEnabled(true);
-					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-							.getColors()
-							.getColor(OpenDartsFormsToolkit.COLOR_ACTIVE));
-					inputTxt.setFocus();
-				} else {
-					inputTxt.setEnabled(false);
-					inputTxt.setText("");
-					inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-							.getColors()
-							.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
-				}
-			}
+			this.setInputFocus(player);
 
 			// IA playing
 			if (player.isComputer()) {
@@ -763,6 +823,30 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					this.gameService.addPlayerThrow(this.game, player,
 							dartThrow);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Sets the input focus.
+	 *
+	 * @param player the new input focus
+	 */
+	private void setInputFocus(IPlayer player) {
+		Text playerInputTxt = this.playerScoreInput.get(player);
+		for (Text inputTxt : this.playerScoreInput.values()) {
+			if (playerInputTxt.equals(inputTxt)) {
+				inputTxt.setEnabled(true);
+				inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+						.getColors()
+						.getColor(OpenDartsFormsToolkit.COLOR_ACTIVE));
+				inputTxt.setFocus();
+			} else {
+				inputTxt.setEnabled(false);
+				inputTxt.setText("");
+				inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
+						.getColors()
+						.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="proto" id="org.opendarts.prototype.product" application="org.opendarts.prototype.application" useFeatures="false" includeLaunchers="true">
+<product name="OpenDarts" id="org.opendarts.prototype.product" application="org.opendarts.prototype.application" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.opendarts.prototype/icons/app/about.png"/>
@@ -138,7 +138,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.swt"/>
       <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86.source" fragment=""/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86.source"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.workbench"/>

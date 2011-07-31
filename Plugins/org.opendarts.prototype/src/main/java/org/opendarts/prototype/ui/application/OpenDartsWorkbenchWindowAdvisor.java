@@ -1,6 +1,5 @@
 package org.opendarts.prototype.ui.application;
 
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -35,9 +34,18 @@ public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
-		configurer.setInitialSize(new Point(1024, 810));
 		configurer.setTitle("OpenDarts");
 		configurer.setShowFastViewBars(true);
 		configurer.setShowProgressIndicator(true);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.application.WorkbenchWindowAdvisor#postWindowOpen()
+	 */
+	@Override
+	public void postWindowOpen() {
+		super.postWindowOpen();
+		IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
+		configurer.getWindow().getShell().setMaximized(true);
 	}
 }

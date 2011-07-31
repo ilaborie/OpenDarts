@@ -8,7 +8,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
-import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.model.player.IPlayer;
@@ -50,9 +49,6 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 				result = String.valueOf(game.getScore(this.player));
 			}
 			return result;
-		} else if (element instanceof DummyX01Entry) {
-			DummyX01Entry entry = (DummyX01Entry) element;
-			return String.valueOf(entry.getGame().getScoreToDo());
 		}
 		return super.getText(element);
 	}

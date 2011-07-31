@@ -239,8 +239,10 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 	 * @return the i game
 	 */
 	private IGame createNewGame(IPlayer player) {
-		return this.gameService.createGame(this,
+		IGame game = this.gameService.createGame(this,
 				this.gameDefinition.getNextPlayers(this));
+		this.getInternalsGame().add(game);
+		return game;
 	}
 
 	/**

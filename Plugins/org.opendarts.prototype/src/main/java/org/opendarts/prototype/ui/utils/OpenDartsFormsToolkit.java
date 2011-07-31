@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.forms.FormColors;
@@ -50,6 +51,12 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	/** The Constant FONT_SCORE_INPUT. */
 	public static final String FONT_SCORE_INPUT = "ScoreInputFont";
 
+	/** The Constant FONT_STATS_BOLD. */
+	public static final String FONT_STATS_BOLD = "StatsBoldFont";
+
+	/** The Constant FONT_STATS. */
+	public static final String FONT_STATS = "StatsFont";
+
 	/** The form colors. */
 	private static FormColors formColors;
 
@@ -73,10 +80,13 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 		Font initialFont;
 		// Fonts
 		initialFont = fontRegistry.defaultFont();
-		registerFont(initialFont, FONT_SCORE_SHEET, 18);
+		registerFont(initialFont, FONT_SCORE_SHEET, 32);
+		registerFont(initialFont, FONT_STATS, 18);
+
 		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
 		fontRegistry.put(FONT_BOLD, initialFont.getFontData());
-		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 18);
+		registerFont(initialFont, FONT_STATS_BOLD, 18);
+		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 32);
 		registerFont(initialFont, FONT_SCORE_INPUT, 64);
 		registerFont(initialFont, FONT_SCORE_LEFT, 126);
 	}
@@ -174,6 +184,18 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	public TableViewerColumn createTableColumn(TableViewer viewer,
 			ColumnDescriptor descr) {
+		// XXX workaround to fix a weird issue in Window platform
+		// @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=43910
+		if (SWT.getPlatform().equals("win32")) {
+			Table table = viewer.getTable();
+			if (table.getColumnCount() == 0) {
+				TableColumn emptyCol = new TableColumn(table, SWT.LEFT, 0);
+				emptyCol.setText("First Column");
+				emptyCol.setWidth(0);
+				emptyCol.setResizable(false);
+			}
+		}
+
 		TableViewerColumn column = new TableViewerColumn(viewer,
 				descr.getStyle());
 		TableColumn tableColumn = column.getColumn();

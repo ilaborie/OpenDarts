@@ -14,7 +14,7 @@ public class ComputerPlayer extends Player {
 	 * Instantiates a new computer player.
 	 */
 	public ComputerPlayer() {
-		super("<COM> " + count++);
+		super("AI_" + count++);
 	}
 
 	/* (non-Javadoc)

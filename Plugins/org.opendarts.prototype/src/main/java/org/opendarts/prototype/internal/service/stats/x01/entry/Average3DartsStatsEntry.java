@@ -22,24 +22,29 @@ public class Average3DartsStatsEntry extends AverageStatsEntry {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 * @see org.opendarts.prototype.internal.model.stats.AverageStatsEntry#getEntryValue(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
-			IDartsThrow dartsThrow) {
+	protected Number getEntryValue(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		Number val = null;
 		if (dartsThrow != null) {
-			int score = dartsThrow.getScore();
-			Number result = score;
-			if (dartsThrow instanceof WinningX01DartsThrow) {
-				WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
-				int nbDarts = winThrow.getNbDartToFinish();
-				if (nbDarts < 3) {
-					result = ((double) 3)
-							* (((double) score) / ((double) nbDarts));
-				}
-				return result;
-			}
+			val = dartsThrow.getScore();
 		}
-		return null;
+		return val;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AverageStatsEntry#getEntryIncr(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	protected Number getEntryIncr(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		double incr = 1D;
+		if (dartsThrow instanceof WinningX01DartsThrow) {
+			WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
+			incr = ((double) winThrow.getNbDartToFinish()) / 3d;
+		}
+		return incr;
 	}
 }

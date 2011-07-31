@@ -148,7 +148,6 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 	private Composite createSessionComposite(Composite parent) {
 		Composite main = this.toolkit.createComposite(parent);
 		GridLayoutFactory.fillDefaults().applyTo(main);
-
 		// Section
 		Section section = this.toolkit.createSection(main,
 				ExpandableComposite.SHORT_TITLE_BAR
@@ -157,57 +156,72 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 						| ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 		section.setText("Session");
+		section.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
 
 		// Section body
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(client);
+		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(client);
 
 		Label lbl;
 		GridDataFactory lblData = GridDataFactory.fillDefaults()
-				.grab(false, false).align(SWT.BEGINNING, SWT.CENTER);
+				.grab(false, false).align(SWT.END, SWT.CENTER);
 		GridDataFactory valData = GridDataFactory.fillDefaults()
-				.grab(true, false).align(SWT.END, SWT.CENTER);
-
-		// Legs
-		lbl = this.toolkit.createLabel(client, "Legs:");
-		lblData.copy().applyTo(lbl);
-
-		int win = this.set.getWinningGames(this.player);
-		this.lblLegs = this.toolkit.createLabel(client, String.valueOf(win));
-		valData.copy().applyTo(this.lblLegs);
-
+				.grab(true, false).align(SWT.BEGINNING, SWT.CENTER);
+		int win;
 		// Sets
 		lbl = this.toolkit.createLabel(client, "Sets:");
+		lbl.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS));
 		lblData.copy().applyTo(lbl);
 
 		win = this.session.getWinningSet(this.player);
 		this.lblSets = this.toolkit.createLabel(client, String.valueOf(win));
+		this.lblSets.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
 		valData.copy().applyTo(this.lblSets);
 
+		// Legs
+		lbl = this.toolkit.createLabel(client, "Legs:");
+		lbl.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS));
+		lblData.copy().applyTo(lbl);
+
+		win = this.set.getWinningGames(this.player);
+		this.lblLegs = this.toolkit.createLabel(client, String.valueOf(win));
+		this.lblLegs.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
+		valData.copy().applyTo(this.lblLegs);
+		// 100
+		this.createStatEntry(client, StatsX01Service.SESSION_TONS, "Tons:",
+				lblData, valData);
 		// 180
 		this.createStatEntry(client, StatsX01Service.SESSION_180s, "180's:",
 				lblData, valData);
-		// 100
-		this.createStatEntry(client, StatsX01Service.SESSION_TONS, "Tons:",
+		// 60+
+		this.createStatEntry(client, StatsX01Service.SESSION_60_PLUS, "+60:",
 				lblData, valData);
 		// 100+
 		this.createStatEntry(client, StatsX01Service.SESSION_TONS_PLUS,
 				"+100:", lblData, valData);
-		// 60+
-		this.createStatEntry(client, StatsX01Service.SESSION_60_PLUS, "+60:",
-				lblData, valData);
+
 		// Avg. Dart
 		this.createStatEntry(client, StatsX01Service.SESSION_AVG_DART,
-				"Avg Dart:", lblData, valData);
+				"Avg. Dart:", lblData, valData);
 		// Avg. 3 Darts
 		this.createStatEntry(client, StatsX01Service.SESSION_AVG_3_DARTS,
-				"Avg 3 Darts:", lblData, valData);
+				"Avg. 3 Darts:", lblData, valData);
+
+		// Avg. Leg
+		this.createStatEntry(client, StatsX01Service.SESSION_AVG_LEG,
+				"Avg. leg:", lblData, valData);
 		// Best Leg
 		this.createStatEntry(client, StatsX01Service.SESSION_BEST_LEG,
 				"Best leg:", lblData, valData);
+
 		// High outs
 		this.createStatEntry(client, StatsX01Service.SESSION_OUT_OVER_100,
-				"High outs:", lblData, valData);
+				"High outs:", lblData, valData.copy().span(3, 1));
 
 		// End section
 		this.toolkit.paintBordersFor(client);
@@ -234,21 +248,28 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 						| ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 		section.setText("Set");
+		section.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
 
 		// Section body
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(client);
+		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(client);
 
-		GridDataFactory lblData = GridDataFactory.fillDefaults().grab(true,
-				false);
-		GridDataFactory valData = GridDataFactory.fillDefaults().align(SWT.END,
-				SWT.CENTER);
+		GridDataFactory lblData = GridDataFactory.fillDefaults()
+				.grab(false, false).align(SWT.END, SWT.CENTER);
+		GridDataFactory valData = GridDataFactory.fillDefaults()
+				.grab(true, false).align(SWT.BEGINNING, SWT.CENTER);
+
 		// Avg. Darts
-		this.createStatEntry(client, StatsX01Service.SET_AVG_DART, "Avg Dart:",
-				lblData, valData);
+		this.createStatEntry(client, StatsX01Service.SET_AVG_DART,
+				"Avg. Dart:", lblData, valData);
 		// Avg. 3 Darts
 		this.createStatEntry(client, StatsX01Service.SET_AVG_3_DARTS,
-				"Avg 3 Darts:", lblData, valData);
+				"Avg. 3 Darts:", lblData, valData);
+
+		// Avg. Leg
+		this.createStatEntry(client, StatsX01Service.SET_AVG_LEG, "Avg. leg:",
+				lblData, valData);
 		// Best Leg
 		this.createStatEntry(client, StatsX01Service.SET_BEST_LEG, "Best leg:",
 				lblData, valData);
@@ -277,22 +298,25 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 						| ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
-		section.setText("Game");
+		section.setText("Current Leg");
+		section.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
 
 		// Section body
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(client);
+		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(client);
 
-		GridDataFactory lblData = GridDataFactory.fillDefaults().grab(true,
-				false);
-		GridDataFactory valData = GridDataFactory.fillDefaults().align(SWT.END,
-				SWT.CENTER);
+		GridDataFactory lblData = GridDataFactory.fillDefaults()
+				.grab(false, false).align(SWT.END, SWT.CENTER);
+		GridDataFactory valData = GridDataFactory.fillDefaults()
+				.grab(true, false).align(SWT.BEGINNING, SWT.CENTER);
+
 		// Avg. Darts
 		this.createStatEntry(client, StatsX01Service.GAME_AVG_DART,
-				"Avg Dart:", lblData, valData);
+				"Avg. Dart:", lblData, valData);
 		// Avg. 3 Darts
 		this.createStatEntry(client, StatsX01Service.GAME_AVG_3_DARTS,
-				"Avg 3 Darts:", lblData, valData);
+				"Avg. 3 Darts:", lblData, valData);
 
 		// End section
 		this.toolkit.paintBordersFor(client);
@@ -313,13 +337,18 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 			String label, GridDataFactory lblData, GridDataFactory valData) {
 		// Label
 		Label lbl = this.toolkit.createLabel(client, label);
+		lbl.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS));
 		lblData.copy().applyTo(lbl);
 
 		// Value
 		lbl = this.toolkit.createLabel(client, "");
+		lbl.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
 		if (statsService != null) {
-			IStatsEntry entry = this.statsService.getSetStatEntry(this.player,
-					statsKey);
+			// FIXME validity
+			IStatsEntry entry = this.statsService.getStatsEntry(this.session,
+					this.set, this.game, this.player, statsKey);
 			if (entry != null) {
 				IStatValue value = entry.getValue();
 				if (value != null) {
@@ -375,7 +404,8 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 	@Override
 	public void updatedEntry(IStats stats, IStatsEntry entry) {
 		LOG.trace("Stat updated {}", entry);
-		if (this.player.equals(stats.getPlayer())) {
+		if (this.game.equals(this.set.getCurrentGame())
+				&& this.player.equals(stats.getPlayer())) {
 			if (stats instanceof GameStats) {
 				GameStats gStats = (GameStats) stats;
 				if (this.game.equals(gStats.getElement())) {

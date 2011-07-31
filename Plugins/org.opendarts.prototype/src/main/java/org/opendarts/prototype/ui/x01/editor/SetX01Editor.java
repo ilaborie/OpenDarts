@@ -1,14 +1,10 @@
 package org.opendarts.prototype.ui.x01.editor;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISaveablePart2;
@@ -24,6 +20,7 @@ import org.opendarts.prototype.service.game.IGameService;
 import org.opendarts.prototype.service.session.ISetService;
 import org.opendarts.prototype.ui.editor.ISetEditor;
 import org.opendarts.prototype.ui.editor.SetEditorInput;
+import org.opendarts.prototype.ui.x01.dialog.SetX01InfoDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +77,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		super.setInput(input);
 		this.setInput = (SetEditorInput) input;
 		ISet set = this.getSet();
-
+		this.setPartName(set.toString());
 		// Register listener
 		set.addListener(this);
 	}
@@ -147,6 +144,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	 * @param game the game
 	 */
 	private void handleGameActive(GameX01 game) {
+		LOG.info("Starting new game: {}", game);
 		// get new page
 		GameX01Page page;
 		page = this.pages.get(game);
@@ -157,6 +155,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 			try {
 				this.addPage(page);
 				this.setActivePage(String.valueOf(nb));
+				this.setPartName(this.getSet().toString());
 			} catch (PartInitException e) {
 				LOG.error("Could not add page", e);
 			}
@@ -171,11 +170,9 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	private void handleSetFinished() {
 		this.dirty = false;
 		// End Game dialog
-		String title = MessageFormat.format("{0} finished", this.getSet());
-		String message = this.getSet().getWinningMessage();
-		Shell shell = this.getSite().getShell();
-		MessageDialog.open(MessageDialog.INFORMATION, shell, title, message,
-				SWT.SHEET);
+		SetX01InfoDialog dialog = new SetX01InfoDialog(this
+				.getSite().getShell(), this.getSet());
+		dialog.open();
 		this.firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 

@@ -115,6 +115,7 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 	 */
 	protected abstract T getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow);
+
 	/**
 	 * Sets the value.
 	 *

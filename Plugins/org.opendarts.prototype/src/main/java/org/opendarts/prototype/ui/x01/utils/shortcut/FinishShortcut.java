@@ -46,7 +46,7 @@ public class FinishShortcut extends AbstractShortcut implements IShortcut {
 			case 2:
 				return "1nd Dart";
 			case 3:
-				return "1rd Dart";
+				return "3rd Dart";
 			default:
 				return MessageFormat.format("{0} Darts", this.nbDarts);
 		}

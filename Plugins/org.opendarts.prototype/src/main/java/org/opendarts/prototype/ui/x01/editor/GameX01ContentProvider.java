@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
 import org.opendarts.prototype.model.game.IGameEntry;
 
@@ -29,7 +28,6 @@ public class GameX01ContentProvider implements IStructuredContentProvider {
 		if (inputElement instanceof GameX01) {
 			GameX01 game = (GameX01) inputElement;
 			List<IGameEntry> entries = new ArrayList<IGameEntry>();
-			entries.add(new DummyX01Entry(game));
 			entries.addAll(game.getGameEntries());
 			return entries.toArray();
 		}

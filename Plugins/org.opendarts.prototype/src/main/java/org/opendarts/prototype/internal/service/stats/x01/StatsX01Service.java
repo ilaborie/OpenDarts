@@ -13,6 +13,7 @@ import org.opendarts.prototype.internal.model.stats.x01.DartScoreStatsEntry;
 import org.opendarts.prototype.internal.service.stats.AbstractStatsService;
 import org.opendarts.prototype.internal.service.stats.x01.entry.Average3DartsStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.AverageDartStatsEntry;
+import org.opendarts.prototype.internal.service.stats.x01.entry.AverageLegStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.BestLegStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.BestOutStatsEntry;
 import org.opendarts.prototype.internal.service.stats.x01.entry.CountDartsStatsEntry;
@@ -231,6 +232,9 @@ public class StatsX01Service extends AbstractStatsService {
 		// Best Leg
 		stats.addEntry(new BestLegStatsEntry(SET_BEST_LEG));
 
+		// Avg. Leg
+		stats.addEntry(new AverageLegStatsEntry(SET_AVG_LEG));
+
 		// Best out
 		stats.addEntry(new BestOutStatsEntry(SET_BEST_OUT));
 
@@ -241,10 +245,9 @@ public class StatsX01Service extends AbstractStatsService {
 		stats.addEntry(new TotalDartStatsEntry(SET_TOTAL_SCORE));
 
 		// Set best outs
-		stats.addEntry(new OutsOver100StatsEntry(SET_BEST_OUT));
+		stats.addEntry(new OutsOver100StatsEntry(SET_OUT_OVER_100));
 
 		// TODO
-		//		public static final String SET_AVG_LEG = "Set.avg.leg";
 		//		public static final String SET_GAME_WIN = "Set.Game.Win";
 		//		public static final String SET_NB_GAME = "Set.nb.Game";
 
@@ -279,6 +282,9 @@ public class StatsX01Service extends AbstractStatsService {
 		// Best Leg
 		stats.addEntry(new BestLegStatsEntry(SESSION_BEST_LEG));
 
+		// Avg Leg
+		stats.addEntry(new AverageLegStatsEntry(SESSION_AVG_LEG));
+
 		// Best out
 		stats.addEntry(new BestOutStatsEntry(SESSION_BEST_OUT));
 
@@ -292,7 +298,6 @@ public class StatsX01Service extends AbstractStatsService {
 		stats.addEntry(new OutsOver100StatsEntry(SESSION_OUT_OVER_100));
 
 		// TODO
-		//		public static final String SESSION_AVG_LEG = "Session.avg.leg";
 		//		public static final String SESSION_SET_WIN = "Session.Set.Win";
 		//		public static final String SESSION_NB_SET = "Session.nb.Set";
 		//		public static final String SESSION_NB_GAME = "Session.nb.Game";

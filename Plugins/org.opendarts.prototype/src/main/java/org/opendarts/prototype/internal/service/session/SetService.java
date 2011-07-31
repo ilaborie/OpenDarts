@@ -35,6 +35,7 @@ public class SetService implements ISetService {
 	@Override
 	public ISet createNewSet(ISession session, IGameDefinition gameDefinition) {
 		ISet set = new GameSet(session, (GameDefinition) gameDefinition);
+		session.addGame(set);
 		LOG.info("New set created: {}", set);
 		return set;
 	}

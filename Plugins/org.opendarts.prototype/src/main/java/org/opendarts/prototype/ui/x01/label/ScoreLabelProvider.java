@@ -13,15 +13,11 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.IFormColors;
-import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.ThreeDartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.BrokenX01DartsThrow;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
-import org.opendarts.prototype.internal.model.game.x01.DummyX01Entry;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.model.player.IPlayer;
-import org.opendarts.prototype.ui.ISharedImages;
 import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
 
 /**
@@ -78,19 +74,19 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 		if (rgbTo.red == rgbFrom.red) {
 			redRatio = 0d;
 		} else {
-			redRatio = (delta / ((double) rgbTo.red - rgbFrom.red));
+			redRatio = (((double) rgbTo.red - rgbFrom.red) / delta);
 		}
 
 		if (rgbTo.green == rgbFrom.green) {
 			greenRatio = 0d;
 		} else {
-			greenRatio = (delta / ((double) rgbTo.green - rgbFrom.green));
+			greenRatio = (((double) rgbTo.green - rgbFrom.green) / delta);
 		}
 
 		if (rgbTo.blue == rgbFrom.blue) {
 			blueRatio = 0d;
 		} else {
-			blueRatio = (delta / ((double) rgbTo.blue - rgbFrom.blue));
+			blueRatio = (((double) rgbTo.blue - rgbFrom.blue) / delta);
 		}
 
 		int r;
@@ -127,8 +123,6 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 				result = String.valueOf(dartThrow.getScore());
 			}
 			return result;
-		} else if (element instanceof DummyX01Entry) {
-			return "";
 		}
 		return super.getText(element);
 	}
@@ -138,12 +132,6 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof DummyX01Entry) {
-			DummyX01Entry entry = (DummyX01Entry) element;
-			if (this.player.equals(entry.getGame().getFirstPlayer())) {
-				return ProtoPlugin.getImage(ISharedImages.IMG_START_DECO);
-			}
-		}
 		return super.getImage(element);
 	}
 
@@ -152,10 +140,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Color getBackground(Object element) {
-		if (element instanceof DummyX01Entry) {
-			return OpenDartsFormsToolkit.getToolkit().getColors()
-					.getColor(IFormColors.H_GRADIENT_START);
-		} else if (element instanceof GameX01Entry) {
+		if (element instanceof GameX01Entry) {
 			GameX01Entry entry = (GameX01Entry) element;
 			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow instanceof BrokenX01DartsThrow) {
