@@ -3,6 +3,7 @@
  */
 package org.opendarts.prototype.internal.model.stats;
 
+import org.opendarts.prototype.internal.service.stats.x01.entry.AvgEntry;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.game.IGameEntry;
@@ -13,12 +14,7 @@ import org.opendarts.prototype.model.player.IPlayer;
  *
  * @param <T> the generic type
  */
-public abstract class AverageStatsEntry extends AbstractStatsEntry<Number> {
-
-	private int counter;
-
-	/** The sum. */
-	private double sum;
+public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 
 	/**
 	 * Instantiates a new best stats entry.
@@ -27,8 +23,44 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<Number> {
 	 */
 	public AverageStatsEntry(String key) {
 		super(key);
-		this.counter = 0;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#handleDartsThrow(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	public boolean handleDartsThrow(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		return this.addNewInput(
+				this.getEntryIncr(game, player, gameEntry, dartsThrow),
+				this.getEntryValue(game, player, gameEntry, dartsThrow));
+	}
+
+	/**
+	 * Gets the entry incr.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @param gameEntry the game entry
+	 * @param dartsThrow the darts throw
+	 * @return the entry incr
+	 */
+	protected Number getEntryIncr(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		return 1D;
+	}
+
+	/**
+	 * Gets the entry value.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @param gameEntry the game entry
+	 * @param dartsThrow the darts throw
+	 * @return the entry value
+	 */
+	protected abstract Number getEntryValue(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow);
 
 	/**
 	 * Adds the new input.
@@ -36,59 +68,67 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<Number> {
 	 * @param input the input
 	 * @return true, if successful
 	 */
-	@Override
-	protected boolean addNewInput(Number input) {
+	protected boolean addNewInput(Number incr, Number input) {
 		if (input != null) {
-			StatsValue<Number> value = (StatsValue<Number>) this.getValue();
+			StatsValue<AvgEntry> value = (StatsValue<AvgEntry>) this.getValue();
 			if (value == null) {
 				// new value
-				value = new StatsValue<Number>();
+				value = new StatsValue<AvgEntry>();
 				this.setValue(value);
-				this.counter = 1;
-				this.sum = input.doubleValue();
-				this.updateValue(value);
+				AvgEntry entry = new AvgEntry();
+				entry.addValue(incr, input);
+				value.setValue(entry);
 			} else {
-				this.counter++;
-				this.sum += input.doubleValue();
-				this.updateValue(value);
+				AvgEntry entry = value.getValue();
+				entry.addValue(incr, input);
 			}
 		}
 		return true;
 	}
 
-	/**
-	 * Update value.
-	 *
-	 * @param value the value
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
-	private void updateValue(StatsValue<Number> value) {
-		double avg = this.sum / this.counter;
-		value.setValue(avg);
+	@Override
+	protected AvgEntry getInput(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		// not called
+		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Number getUndoInput(IGame game, IPlayer player,
+	protected AvgEntry getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		return this.getInput(game, player, gameEntry, dartsThrow);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#undoNewInput(java.lang.Object)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#undoDartsThrow(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected boolean undoNewInput(Number input) {
-		if (input != null) {
-			StatsValue<Number> value = (StatsValue<Number>) this.getValue();
-			if (value != null) {
-				this.counter--;
-				this.sum -= input.doubleValue();
-				this.updateValue(value);
-			}
-		}
-		return true;
+	public boolean undoDartsThrow(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		return this.removeNewInput(
+				this.getEntryIncr(game, player, gameEntry, dartsThrow),
+				this.getEntryValue(game, player, gameEntry, dartsThrow));
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#undoNewInput(java.lang.Object)
+	 */
+	protected boolean removeNewInput(Number incr, Number input) {
+		boolean result = false;
+		if (input != null) {
+			StatsValue<AvgEntry> value = (StatsValue<AvgEntry>) this.getValue();
+			if (value != null) {
+				AvgEntry entry = value.getValue();
+				entry.removeValue(incr, input);
+				result = true;
+			}
+		}
+		return result;
+	}
 }

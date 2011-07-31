@@ -132,6 +132,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		ScrolledForm form = managedForm.getForm();
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		form.setText(this.game.getName());
+		form.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
 		this.toolkit.decorateFormHeading(form.getForm());
 
 		GridDataFactory playerData;
@@ -508,6 +510,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						| ExpandableComposite.CLIENT_INDENT);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
 		secPlayer.setText(player.getName());
+		secPlayer.setFont(OpenDartsFormsToolkit
+				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
 
 		Composite client = this.toolkit.createComposite(secPlayer, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().margins(2, 2).applyTo(client);
@@ -517,9 +521,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(cmpStatus.getControl());
 
-		this.toolkit.paintBordersFor(client);
 		secPlayer.setClient(client);
-
+		this.toolkit.paintBordersFor(client);
+		main.layout(true);
 		return main;
 	}
 

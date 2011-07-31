@@ -25,17 +25,26 @@ public class AverageDartStatsEntry extends AverageStatsEntry {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
-			IDartsThrow dartsThrow) {
+	protected Number getEntryValue(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		if (dartsThrow != null) {
-			int score = dartsThrow.getScore();
-			int nbDarts = 3;
-			if (dartsThrow instanceof WinningX01DartsThrow) {
-				WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
-				nbDarts = winThrow.getNbDartToFinish();
-			}
-			return ((double) score) / ((double) nbDarts);
+			return dartsThrow.getScore();
 		}
 		return null;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.internal.model.stats.AverageStatsEntry#getEntryIncr(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
+	 */
+	@Override
+	protected Number getEntryIncr(IGame game, IPlayer player,
+			IGameEntry gameEntry, IDartsThrow dartsThrow) {
+		int incr = 3;
+		if (dartsThrow instanceof WinningX01DartsThrow) {
+			WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
+			incr = winThrow.getNbDartToFinish();
+		}
+		return incr;
+	}
+
 }

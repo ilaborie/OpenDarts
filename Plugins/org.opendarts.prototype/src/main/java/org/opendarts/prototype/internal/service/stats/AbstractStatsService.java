@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.internal.model.session.GameSet;
 import org.opendarts.prototype.model.game.IGame;
 import org.opendarts.prototype.model.player.IPlayer;
 import org.opendarts.prototype.model.session.ISession;
@@ -228,6 +230,48 @@ public abstract class AbstractStatsService implements IStatsService {
 		if (map != null) {
 			result = map.get(statsKey);
 		}
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.service.stats.IStatsService#getStatsEntry(org.opendarts.prototype.model.session.ISession, org.opendarts.prototype.internal.model.session.GameSet, org.opendarts.prototype.internal.model.game.x01.GameX01, org.opendarts.prototype.model.player.IPlayer, java.lang.String)
+	 */
+	@Override
+	public IStatsEntry getStatsEntry(ISession session, GameSet set,
+			GameX01 game, IPlayer player, String statsKey) {
+		IStatsEntry result = null;
+		// try in session
+		Map<IPlayer, IStats<ISession>> sessionMap = this
+				.getSessionStats(session);
+		if (sessionMap != null) {
+			IStats<ISession> sessionStats = sessionMap.get(player);
+			if (sessionStats != null) {
+				result = sessionStats.getEntry(statsKey);
+			}
+		}
+
+		// try in set
+		if (result == null) {
+			Map<IPlayer, IStats<ISet>> setMap = this.setStats.get(set);
+			if (setMap != null) {
+				IStats<ISet> setStats = setMap.get(player);
+				if (setStats != null) {
+					result = setStats.getEntry(statsKey);
+				}
+			}
+		}
+
+		// try in game
+		if (result == null) {
+			Map<IPlayer, IStats<IGame>> gameMap = this.gameStats.get(game);
+			if (gameMap != null) {
+				IStats<IGame> gameStats = gameMap.get(player);
+				if (gameStats != null) {
+					result = gameStats.getEntry(statsKey);
+				}
+			}
+		}
+
 		return result;
 	}
 }
