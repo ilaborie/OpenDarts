@@ -22,6 +22,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -37,6 +38,7 @@ import org.eclipse.ui.menus.IMenuService;
 import org.opendarts.prototype.ProtoPlugin;
 import org.opendarts.prototype.internal.model.dart.x01.WinningX01DartsThrow;
 import org.opendarts.prototype.internal.model.game.x01.GameX01;
+import org.opendarts.prototype.internal.model.game.x01.GameX01Definition;
 import org.opendarts.prototype.internal.model.game.x01.GameX01Entry;
 import org.opendarts.prototype.model.dart.IDartsThrow;
 import org.opendarts.prototype.model.game.GameEvent;
@@ -87,6 +89,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	/** The player score input. */
 	private final Map<IPlayer, Text> playerScoreInput;
 
+	/** The player progess. */
+	private final Map<IPlayer, ProgressBar> playerProgess;
+
 	/** The player score. */
 	private final Map<IPlayer, TableViewerColumn> playerColumn;
 
@@ -105,6 +110,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	/** The dirty. */
 	private boolean dirty;
 
+	/** The game definition. */
+	private final GameX01Definition gameDefinition;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -115,6 +123,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	public GameX01Page(SetX01Editor gameEditor, GameX01 game, int index) {
 		super(gameEditor, String.valueOf(index), "Game #" + index);
 		this.game = game;
+		this.gameDefinition = (GameX01Definition) this.game.getParentSet()
+				.getGameDefinition();
+		this.playerProgess = new HashMap<IPlayer, ProgressBar>();
 		this.playerScoreLeft = new HashMap<IPlayer, Text>();
 		this.playerScoreInput = new HashMap<IPlayer, Text>();
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
@@ -514,9 +525,18 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		secPlayer.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
 
+		// Progress
+		ProgressBar playerBar = new ProgressBar(secPlayer, SWT.SMOOTH);
+		this.playerProgess.put(player, playerBar);
+		playerBar.setMaximum(this.gameDefinition.getNbGameToWin());
+		playerBar
+				.setSelection(this.game.getParentSet().getWinningGames(player));
+		secPlayer.setTextClient(playerBar);
+
 		Composite client = this.toolkit.createComposite(secPlayer, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().margins(2, 2).applyTo(client);
 
+		// Status
 		PlayerStatusComposite cmpStatus = new PlayerStatusComposite(client,
 				player, this.game);
 		GridDataFactory.fillDefaults().grab(true, false)

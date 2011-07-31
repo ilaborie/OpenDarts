@@ -80,7 +80,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		super.setInput(input);
 		this.setInput = (SetEditorInput) input;
 		ISet set = this.getSet();
-
+		this.setPartName(set.toString());
 		// Register listener
 		set.addListener(this);
 	}
@@ -158,6 +158,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 			try {
 				this.addPage(page);
 				this.setActivePage(String.valueOf(nb));
+				this.setPartName(this.getSet().toString());
 			} catch (PartInitException e) {
 				LOG.error("Could not add page", e);
 			}
