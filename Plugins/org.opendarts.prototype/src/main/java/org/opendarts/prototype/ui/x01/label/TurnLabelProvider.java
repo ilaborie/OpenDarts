@@ -3,7 +3,8 @@
  */
 package org.opendarts.prototype.ui.x01.label;
 
-import java.text.MessageFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
@@ -18,6 +19,9 @@ import org.opendarts.prototype.ui.utils.OpenDartsFormsToolkit;
  */
 public class TurnLabelProvider extends ColumnLabelProvider {
 
+	/** The formatter. */
+	private final NumberFormat formatter;
+
 	/**
 	 * Instantiates a new score label provider.
 	 *
@@ -25,6 +29,7 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	 */
 	public TurnLabelProvider() {
 		super();
+		this.formatter = new DecimalFormat("00");
 	}
 
 	/* (non-Javadoc)
@@ -35,9 +40,10 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 		if (element instanceof GameX01Entry) {
 			GameX01Entry gameEntry = (GameX01Entry) element;
 			int round = gameEntry.getRound();
-			return MessageFormat.format("#{1} ({0})", (round * 3), round);
+			return formatter.format(round * 3);
+			//			return MessageFormat.format("#{1} ({0})", (round * 3), round);
 		} else if (element instanceof DummyX01Entry) {
-			return "";
+			return " ";
 		}
 		return super.getText(element);
 	}

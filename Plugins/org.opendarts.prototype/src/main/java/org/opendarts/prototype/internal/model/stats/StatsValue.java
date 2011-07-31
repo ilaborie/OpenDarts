@@ -13,8 +13,8 @@ import org.opendarts.prototype.model.stats.IStatValue;
 public class StatsValue<T> implements IStatValue<T> {
 
 	/** The Constant DOUBLE_FORMATTER. */
-	private static final DecimalFormat DOUBLE_FORMATTER = new DecimalFormat(
-			"0.00");
+	public static final DecimalFormat DOUBLE_FORMATTER = new DecimalFormat(
+			"0.0");
 
 	/** The value. */
 	private T value;
@@ -58,7 +58,7 @@ public class StatsValue<T> implements IStatValue<T> {
 	public String getValueAsString() {
 		String result;
 		if (this.value == null) {
-			result = "-";
+			result = "";
 		} else if (this.value instanceof Double) {
 			result = DOUBLE_FORMATTER.format((Double) this.value);
 		} else {

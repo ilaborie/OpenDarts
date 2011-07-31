@@ -1,8 +1,8 @@
 package org.opendarts.prototype.internal.service.stats.x01.entry;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+
+import org.opendarts.prototype.internal.model.stats.StatsValue;
 
 /**
  * The Class AvgEntry.
@@ -11,9 +11,6 @@ public class AvgEntry implements Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -6504076456407189539L;
-
-	/** The Constant FORMATTER. */
-	public static final NumberFormat FORMATTER = new DecimalFormat("0.##");
 
 	/** The count. */
 	private double count;
@@ -88,7 +85,7 @@ public class AvgEntry implements Serializable {
 			result = "-";
 		} else {
 			double d = this.sum / ((double) this.count);
-			result = FORMATTER.format(d);
+			result = StatsValue.DOUBLE_FORMATTER.format(d);
 		}
 		return result;
 	}

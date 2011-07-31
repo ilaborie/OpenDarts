@@ -128,7 +128,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 			}
 			return result;
 		} else if (element instanceof DummyX01Entry) {
-			return "";
+			return " ";
 		}
 		return super.getText(element);
 	}

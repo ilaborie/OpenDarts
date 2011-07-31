@@ -298,7 +298,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 					| SWT.FULL_SELECTION);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
-			table.setLinesVisible(false);
+			table.setLinesVisible(true);
 			table.setFont(OpenDartsFormsToolkit
 					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
 
@@ -341,7 +341,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						| SWT.BORDER | SWT.FULL_SELECTION);
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
-				table.setLinesVisible(false);
+				table.setLinesVisible(true);
 				table.setFont(OpenDartsFormsToolkit
 						.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
 
@@ -439,7 +439,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		List<ColumnDescriptor> result = new ArrayList<ColumnDescriptor>();
 
 		ColumnDescriptor colDescr = new ColumnDescriptor("");
-		colDescr.width(120);
+		colDescr.width(60);
 		colDescr.labelProvider(new TurnLabelProvider());
 
 		if (player == null) {
@@ -475,7 +475,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		int width = 100;
 
 		// Scored
-		colDescr = new ColumnDescriptor("Scored");
+		colDescr = new ColumnDescriptor(player.getName());
 		colDescr.width(width);
 		colDescr.labelProvider(new ScoreLabelProvider(player));
 		colDescr.editingSupport(new ScoreX01EditingSupport(shell, this.game,
@@ -485,7 +485,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.playerColumn.put(player, column);
 
 		// Scored
-		colDescr = new ColumnDescriptor("To Go");
+		colDescr = new ColumnDescriptor(
+				String.valueOf(this.game.getScoreToDo()));
 		colDescr.width(width);
 		colDescr.labelProvider(new ToGoLabelProvider(player));
 		this.toolkit.createTableColumn(viewer, colDescr);
