@@ -170,10 +170,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.opendarts.prototype.application"
-            name="proto">
+            name="OpenDarts">
          <property
                name="appName"
-               value="proto">
+               value="OpenDarts">
          </property>
          <property
                name="preferenceCustomization"
