@@ -53,7 +53,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 		Display display = Display.getDefault();
 		this.initColorRange(60, 100, rgb60, rgb100);
 		this.initColorRange(100, 180, rgb100, rgb180);
-		colors.put(180, new Color(display, rgb180));
+		this.colors.put(180, new Color(display, rgb180));
 	}
 
 	/**
@@ -94,11 +94,11 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 		int g;
 		RGB rgb;
 		for (int i = from; i < to; i++) {
-			r = (int) (rgbFrom.red + (i - from) * redRatio);
-			g = (int) (rgbFrom.green + (i - from) * greenRatio);
-			b = (int) (rgbFrom.blue + (i - from) * blueRatio);
+			r = (int) (rgbFrom.red + ((i - from) * redRatio));
+			g = (int) (rgbFrom.green + ((i - from) * greenRatio));
+			b = (int) (rgbFrom.blue + ((i - from) * blueRatio));
 			rgb = new RGB(r, g, b);
-			colors.put(i, new Color(Display.getDefault(), rgb));
+			this.colors.put(i, new Color(Display.getDefault(), rgb));
 		}
 	}
 

@@ -28,7 +28,8 @@ public class BestOutStatsEntry extends BestNumberStatsEntry {
 	protected Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
 			IDartsThrow dartsThrow) {
 		Integer result = null;
-		if (dartsThrow != null && dartsThrow instanceof WinningX01DartsThrow) {
+		if ((dartsThrow != null)
+				&& (dartsThrow instanceof WinningX01DartsThrow)) {
 			result = dartsThrow.getScore();
 		}
 		return result;

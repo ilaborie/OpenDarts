@@ -146,7 +146,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return the label
 	 */
 	public String getLabel() {
-		return label;
+		return this.label;
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return the default width
 	 */
 	public int getDefaultWidth() {
-		return defaultWidth;
+		return this.defaultWidth;
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return the style
 	 */
 	public int getStyle() {
-		return style;
+		return this.style;
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return the label provider
 	 */
 	public ColumnLabelProvider getLabelProvider() {
-		return labelProvider;
+		return this.labelProvider;
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return the editing support
 	 */
 	public EditingSupport getEditingSupport() {
-		return editingSupport;
+		return this.editingSupport;
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return true, if is resizable
 	 */
 	public boolean isResizable() {
-		return resizable;
+		return this.resizable;
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @return the column
 	 */
 	public ViewerColumn getColumn() {
-		return column;
+		return this.column;
 	}
 
 	/**

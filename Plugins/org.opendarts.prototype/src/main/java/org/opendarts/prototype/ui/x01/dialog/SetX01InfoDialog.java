@@ -107,15 +107,15 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		this.toolkit.decorateFormHeading(form.getForm());
 
 		this.body = form.getBody();
-		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(body);
+		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(this.body);
 
 		// Table
-		Composite legsComposite = this.createLegsComposite(body);
+		Composite legsComposite = this.createLegsComposite(this.body);
 		GridDataFactory.fillDefaults().applyTo(legsComposite);
 
 		// Stats
 		if (this.statsService != null) {
-			Composite statsComposite = this.createStatsComposite(body);
+			Composite statsComposite = this.createStatsComposite(this.body);
 			GridDataFactory.fillDefaults().applyTo(statsComposite);
 		}
 	}
@@ -140,8 +140,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
-		Table table = toolkit.createTable(client, SWT.V_SCROLL | SWT.BORDER
-				| SWT.FULL_SELECTION);
+		Table table = this.toolkit.createTable(client, SWT.V_SCROLL
+				| SWT.BORDER | SWT.FULL_SELECTION);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -180,7 +180,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 			public String getText(Object element) {
 				if (element instanceof GameX01) {
 					GameX01 game = (GameX01) element;
-					int index = set.getAllGame().indexOf(game);
+					int index = SetX01InfoDialog.this.set.getAllGame().indexOf(
+							game);
 					return MessageFormat.format("#{0}", index + 1);
 				}
 				return super.getText(element);
@@ -197,7 +198,7 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 			public String getText(Object element) {
 				if (element instanceof GameX01) {
 					GameX01 game = (GameX01) element;
-					return getGamePlayers(game);
+					return SetX01InfoDialog.this.getGamePlayers(game);
 				}
 				return super.getText(element);
 			}
@@ -213,7 +214,7 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 			public String getText(Object element) {
 				if (element instanceof GameX01) {
 					GameX01 game = (GameX01) element;
-					return getGameWinner(game);
+					return SetX01InfoDialog.this.getGameWinner(game);
 				}
 				return super.getText(element);
 			}
@@ -229,7 +230,7 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 			public String getText(Object element) {
 				if (element instanceof GameX01) {
 					GameX01 game = (GameX01) element;
-					return getGameNbDarts(game);
+					return SetX01InfoDialog.this.getGameNbDarts(game);
 				}
 				return super.getText(element);
 			}
@@ -260,8 +261,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
-		Table table = toolkit.createTable(client, SWT.V_SCROLL | SWT.BORDER
-				| SWT.FULL_SELECTION);
+		Table table = this.toolkit.createTable(client, SWT.V_SCROLL
+				| SWT.BORDER | SWT.FULL_SELECTION);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);

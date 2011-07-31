@@ -21,7 +21,6 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 	/** The player. */
 	private final IPlayer player;
 
-
 	/**
 	 * Instantiates a new score label provider.
 	 *

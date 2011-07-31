@@ -29,7 +29,8 @@ public class AverageLegStatsEntry extends AverageStatsEntry {
 	protected Number getEntryValue(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		Number result = null;
-		if (dartsThrow != null && dartsThrow instanceof WinningX01DartsThrow) {
+		if ((dartsThrow != null)
+				&& (dartsThrow instanceof WinningX01DartsThrow)) {
 			GameX01Entry gEntry = (GameX01Entry) gameEntry;
 			result = gEntry.getNbPlayedDart();
 		}

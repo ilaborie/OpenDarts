@@ -43,7 +43,7 @@ public class Average3DartsStatsEntry extends AverageStatsEntry {
 		double incr = 1D;
 		if (dartsThrow instanceof WinningX01DartsThrow) {
 			WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartsThrow;
-			incr = ((double) winThrow.getNbDartToFinish()) / 3d;
+			incr = winThrow.getNbDartToFinish() / 3d;
 		}
 		return incr;
 	}

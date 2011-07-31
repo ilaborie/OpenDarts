@@ -115,8 +115,8 @@ public class TextInputListener implements FocusListener, SelectionListener,
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-		this.shortcuts.handleKeyEvent(e, this.shell, inputText, game, player,
-				decoration);
+		this.shortcuts.handleKeyEvent(e, this.shell, this.inputText, this.game,
+				this.player, this.decoration);
 		switch (e.keyCode) {
 			case 9: // Tab
 			case 32: // Space

@@ -37,7 +37,7 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 	 */
 	@Override
 	public String toString() {
-		return MessageFormat.format("{0} : {1}", key, value);
+		return MessageFormat.format("{0} : {1}", this.key, this.value);
 	}
 
 	/* (non-Javadoc)

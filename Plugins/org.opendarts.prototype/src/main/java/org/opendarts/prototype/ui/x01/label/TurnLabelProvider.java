@@ -39,7 +39,7 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 		if (element instanceof GameX01Entry) {
 			GameX01Entry gameEntry = (GameX01Entry) element;
 			int round = gameEntry.getRound();
-			return formatter.format(round * 3);
+			return this.formatter.format(round * 3);
 			//			return MessageFormat.format("#{1} ({0})", (round * 3), round);
 		}
 		return super.getText(element);
