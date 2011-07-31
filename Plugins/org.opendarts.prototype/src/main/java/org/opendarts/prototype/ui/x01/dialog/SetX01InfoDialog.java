@@ -37,8 +37,7 @@ import org.opendarts.prototype.ui.x01.label.SetStatsLabelProvider;
 /**
  * The Class GameX01FinishDialog.
  */
-public class SetX01InfoDialog extends FormDialog implements
-		ControlListener {
+public class SetX01InfoDialog extends FormDialog implements ControlListener {
 
 	/** The toolkit. */
 	private final OpenDartsFormsToolkit toolkit;
@@ -64,6 +63,14 @@ public class SetX01InfoDialog extends FormDialog implements
 		// Stats
 		this.statsService = ProtoPlugin.getService(IStatsService.class);
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.window.Window#getShellStyle()
+	 */
+	@Override
+	protected int getShellStyle() {
+		return super.getShellStyle() | SWT.SHEET;
 	}
 
 	/* (non-Javadoc)

@@ -30,6 +30,14 @@
             id="opendarts.cmd.setInfo"
             name="Set Info">
       </command>
+      <command
+            id="opendarts.cmd.fullscreen"
+            name="FullScreen">
+         <state
+               class="org.eclipse.ui.handlers.RegistryToggleState:false"
+               id="org.eclipse.ui.commands.toggleState">
+         </state>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -47,6 +55,14 @@
                   commandId="org.eclipse.ui.file.exit"
                   label="Quit"
                   style="push">
+            </command>
+         </menu>
+         <menu
+               label="Options">
+            <command
+                  commandId="opendarts.cmd.fullscreen"
+                  label="Full Screen"
+                  style="toggle">
             </command>
          </menu>
          <menu
@@ -77,12 +93,22 @@
                id="opendarts.toolbar.game"
                label="Game">
          </toolbar>
+         <toolbar
+               id="org.opendarts.prototype.toolbar1"
+               label="Display">
+            <command
+                  commandId="opendarts.cmd.fullscreen"
+                  label="Full Screen"
+                  style="toggle">
+            </command>
+         </toolbar>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="toolbar:openwis.editor.game.toolbar">
          <command
                commandId="opendarts.cmd.setInfo"
+               label="Set Info"
                style="push">
          </command>
       </menuContribution>
@@ -96,6 +122,10 @@
       <handler
             class="org.opendarts.prototype.ui.x01.handler.SetInfoHandler"
             commandId="opendarts.cmd.setInfo">
+      </handler>
+      <handler
+            class="org.opendarts.prototype.ui.handler.FullScreenHandler"
+            commandId="opendarts.cmd.fullscreen">
       </handler>
    </extension>
    <extension
@@ -121,6 +151,10 @@
       <image
             commandId="opendarts.cmd.setInfo"
             icon="icons/actions/info.png">
+      </image>
+      <image
+            commandId="opendarts.cmd.fullscreen"
+            icon="icons/actions/fullscreen.png">
       </image>
    </extension>
    <extension
