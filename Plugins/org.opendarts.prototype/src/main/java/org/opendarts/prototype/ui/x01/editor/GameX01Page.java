@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.opendarts.prototype.ui.x01.editor;
 
 import java.text.DecimalFormat;
@@ -152,11 +155,17 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		scoreData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1);
 
 		List<IPlayer> players = this.game.getPlayers();
+		boolean onePlayer = (players.size() == 1);
 		boolean twoPlayer = (players.size() == 2);
 		// body
 		int nbCol;
 		int tableSpan;
-		if (twoPlayer) {
+		if (onePlayer) {
+			nbCol = 2;
+			tableSpan = 1;
+			playerData = GridDataFactory.fillDefaults().grab(false, true);
+			scoreData = GridDataFactory.fillDefaults().grab(true, false);
+		} else if (twoPlayer) {
 			nbCol = 4;
 			tableSpan = 2;
 			playerData = GridDataFactory.fillDefaults().grab(false, true);
@@ -172,7 +181,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
 				.equalWidth(true).applyTo(this.body);
 
-		if (twoPlayer) {
+		if (onePlayer || twoPlayer) {
 			// First Player Status
 			Composite cmpPlayerOne = this.createPlayerComposite(this.body,
 					this.game.getFirstPlayer());
@@ -251,10 +260,17 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(leftScoreBody);
 
 		Composite cmpPlayerLeftScore;
-		for (IPlayer player : this.game.getPlayers()) {
+		if (this.game.getPlayers().size() == 1) {
+			this.toolkit.createLabel(leftScoreBody, "");
 			cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
-					leftScoreBody, player);
+					leftScoreBody, this.game.getFirstPlayer());
 			scoreData.copy().applyTo(cmpPlayerLeftScore);
+		} else {
+			for (IPlayer player : this.game.getPlayers()) {
+				cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
+						leftScoreBody, player);
+				scoreData.copy().applyTo(cmpPlayerLeftScore);
+			}
 		}
 
 		this.toolkit.paintBordersFor(leftScoreBody);
@@ -287,6 +303,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 		List<IPlayer> players = this.game.getPlayers();
 		int nbPlayers = players.size();
+		boolean onePlayer = (nbPlayers == 1);
 		boolean twoPlayer = (nbPlayers == 2);
 
 		if (twoPlayer) {
@@ -298,7 +315,33 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 		TableViewer viewer;
 		Table table;
-		if (twoPlayer) {
+		if (onePlayer) {
+			Composite comp = this.toolkit.createComposite(main);
+			GridLayoutFactory.fillDefaults().applyTo(comp);
+			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
+					.applyTo(comp);
+
+			// Table
+			table = this.toolkit.createTable(comp, SWT.V_SCROLL | SWT.BORDER
+					| SWT.FULL_SELECTION);
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
+			table.setFont(OpenDartsFormsToolkit
+					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
+
+			// resize the row height using a MeasureItem listener
+			table.addListener(SWT.MeasureItem, new FixHeightListener());
+			viewer = new TableViewer(table);
+			viewer.setContentProvider(new GameX01ContentProvider());
+			List<ColumnDescriptor> columns = this.addColumns(
+					this.game.getFirstPlayer(), viewer);
+			viewer.getControl().addControlListener(
+					new GrabColumnsListener(viewer, columns));
+
+			this.scoreViewers.put(this.game.getFirstPlayer(), viewer);
+
+		} else if (twoPlayer) {
 			Composite comp = this.toolkit.createComposite(main);
 			GridLayoutFactory.fillDefaults().applyTo(comp);
 			GridDataFactory.fillDefaults().span(2, 4).grab(true, true)
@@ -694,10 +737,16 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		TableViewer scoreViewer = this.scoreViewers.get(player);
 		scoreViewer.update(entry, null);
 		if (player != null) {
+			// Update score left
 			txt = this.playerScoreLeft.get(player);
 			if (!txt.isDisposed()) {
 				txt.setText(this.getPlayerCurrentScore(player));
 				scoreViewer.reveal(entry);
+			}
+			// Clear input
+			txt = this.playerScoreInput.get(player);
+			if (!txt.isDisposed()) {
+				txt.setText("");
 			}
 			this.setInputFocus(this.game.getCurrentPlayer());
 		}
