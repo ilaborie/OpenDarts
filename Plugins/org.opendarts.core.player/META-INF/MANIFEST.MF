@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts Core Player
+Bundle-SymbolicName: org.opendarts.core.player
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.opendarts.core.model.dart,
+ org.opendarts.core.model.player,
+ org.opendarts.core.service.dart,
+ org.opendarts.core.service.player
+Service-Component: OSGI-INF/PlayerService.xml
+Export-Package: org.opendarts.core.player.model
+Bundle-ActivationPolicy: lazy

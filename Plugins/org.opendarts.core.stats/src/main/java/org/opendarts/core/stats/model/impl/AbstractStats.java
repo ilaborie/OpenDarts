@@ -1,0 +1,79 @@
+package org.opendarts.core.stats.model.impl;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.stats.model.IStats;
+import org.opendarts.core.stats.model.IStatsEntry;
+
+/**
+ * The Class SessionStats.
+ */
+@SuppressWarnings("rawtypes")
+public class AbstractStats<T> implements IStats<T> {
+
+	private final T element;
+
+	/** The player. */
+	private final IPlayer player;
+
+	/** The entries map. */
+	private final Map<String, IStatsEntry> entriesMap;
+
+	/**
+	 * Instantiates a new session stats.
+	 *
+	 * @param session the session
+	 * @param player the player
+	 */
+	public AbstractStats(T element, IPlayer player) {
+		super();
+		this.element = element;
+		this.player = player;
+		this.entriesMap = new HashMap<String, IStatsEntry>();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.stats.IStats#getElement()
+	 */
+	@Override
+	public T getElement() {
+		return this.element;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.stats.IStats#getPlayer()
+	 */
+	@Override
+	public IPlayer getPlayer() {
+		return this.player;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.stats.IStats#getAllEntries()
+	 */
+	@Override
+	public Map<String, IStatsEntry> getAllEntries() {
+		return Collections.unmodifiableMap(this.entriesMap);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.stats.IStats#getEntry(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <U> IStatsEntry<U> getEntry(String key) {
+		return this.entriesMap.get(key);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.prototype.model.stats.IStats#addEntry(org.opendarts.prototype.model.stats.IStatsEntry)
+	 */
+	@Override
+	public <U> void addEntry(IStatsEntry<U> entry) {
+		this.entriesMap.put(entry.getKey(), entry);
+	}
+
+}

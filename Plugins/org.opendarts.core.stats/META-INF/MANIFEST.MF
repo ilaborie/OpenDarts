@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts Core Stats
+Bundle-SymbolicName: org.opendarts.core.stats
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.opendarts.core.model.dart,
+ org.opendarts.core.model.game,
+ org.opendarts.core.model.player,
+ org.opendarts.core.model.session,
+ org.slf4j;version="1.6.1"
+Export-Package: org.opendarts.core.stats.model,
+ org.opendarts.core.stats.model.impl,
+ org.opendarts.core.stats.service,
+ org.opendarts.core.stats.service.impl
+Bundle-ActivationPolicy: lazy

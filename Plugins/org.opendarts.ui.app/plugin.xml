@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.opendarts.ui.app.OpenDartsApplication">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="OpenDarts"
+            class="org.opendarts.ui.app.MainPerspective"
+            id="opendarts.perspective.main">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.opendarts.ui.app.application"
+            name="OpenDarts">
+         <property
+               name="appName"
+               value="OpenDarts">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/app/about.png">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/app/opendarts_16.png,icons/app/opendarts_32.png,icons/app/opendarts_48.png,icons/app/opendarts_64.png,icons/app/opendarts_128.png">
+         </property>
+         <property
+               name="aboutText"
+               value="OpenDarts&#x0A;&#x0A;Version: prototype&#x0A;Visit http://github.com/ilaborie/OpenDarts">
+         </property>
+      </product>
+   </extension>
+</plugin>

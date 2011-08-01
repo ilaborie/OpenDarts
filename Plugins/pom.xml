@@ -4,15 +4,22 @@
 	<parent>
 		<groupId>org.opendarts</groupId>
 		<artifactId>org.opendarts</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.opendarts</groupId>
 	<artifactId>org.opendarts.plugins</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>org.opendarts.prototype</module>
+		<module>org.opendarts.core</module>
+		<module>org.opendarts.core.ia</module>
+		<module>org.opendarts.core.player</module>
+		<module>org.opendarts.core.stats</module>
+		<module>org.opendarts.core.x01</module>
+		<module>org.opendarts.ui</module>
+		<module>org.opendarts.ui.app</module>
+		<module>org.opendarts.ui.x01</module>
 	</modules>
 
 </project>

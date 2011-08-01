@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts Core X01
+Bundle-SymbolicName: org.opendarts.core.x01
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.opendarts.core.model.dart,
+ org.opendarts.core.model.dart.impl,
+ org.opendarts.core.model.game,
+ org.opendarts.core.model.game.impl,
+ org.opendarts.core.model.player,
+ org.opendarts.core.model.session,
+ org.opendarts.core.model.session.impl,
+ org.opendarts.core.service.game,
+ org.opendarts.core.stats.model,
+ org.opendarts.core.stats.model.impl,
+ org.opendarts.core.stats.service,
+ org.opendarts.core.stats.service.impl,
+ org.slf4j;version="1.6.1"
+Export-Package: org.opendarts.core.x01.model,
+ org.opendarts.core.x01.service
+Bundle-ActivationPolicy: lazy

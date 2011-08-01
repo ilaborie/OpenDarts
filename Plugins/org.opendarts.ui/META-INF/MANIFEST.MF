@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts UI
+Bundle-SymbolicName: org.opendarts.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.opendarts.core.model.dart,
+ org.opendarts.core.model.dart.impl,
+ org.opendarts.core.model.game,
+ org.opendarts.core.model.player,
+ org.opendarts.core.model.session,
+ org.opendarts.core.player.model,
+ org.opendarts.core.service.player,
+ org.opendarts.core.service.session,
+ org.opendarts.core.x01.model,
+ org.opendarts.core.x01.service,
+ org.osgi.framework,
+ org.slf4j;version="1.6.1"
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.opendarts.ui.OpenDartsUiPlugin
+Export-Package: org.opendarts.ui.dialog,
+ org.opendarts.ui.editor,
+ org.opendarts.ui.handler,
+ org.opendarts.ui.label,
+ org.opendarts.ui.service,
+ org.opendarts.ui.utils,
+ org.opendarts.ui.utils.listener,
+ org.opendarts.ui.utils.shortcut
+Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.ui.forms;bundle-version="[3.5.100,4.0.0)"
