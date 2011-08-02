@@ -1,7 +1,5 @@
 package org.opendarts.core.internal.service;
 
-import java.util.Calendar;
-
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.impl.Session;
 import org.opendarts.core.service.session.ISessionService;
@@ -40,7 +38,7 @@ public class SessionService implements ISessionService {
 	@Override
 	public void closeSession() {
 		if (this.currentSession != null) {
-			this.currentSession.setEnd(Calendar.getInstance());
+			this.currentSession.finish();
 			this.currentSession = null;
 		}
 	}
@@ -51,7 +49,9 @@ public class SessionService implements ISessionService {
 	 * @return the i session
 	 */
 	private Session createSession() {
-		return new Session();
+		Session session= new Session();
+		session.init();
+		return session;
 	}
 
 }

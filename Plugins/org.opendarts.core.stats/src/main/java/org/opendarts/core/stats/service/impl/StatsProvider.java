@@ -78,8 +78,9 @@ public class StatsProvider implements IStatsProvider{
 		if (list==null) {
 			list = new ArrayList<IStatsService>();
 			this.sessionStats.put(session, list);
+		} else  if (!list.contains(statsService)) {
+			list.add(statsService);
 		}
-		list.add(statsService);
 	}
 
 	/* (non-Javadoc)
@@ -91,8 +92,9 @@ public class StatsProvider implements IStatsProvider{
 		if (list==null) {
 			list = new ArrayList<IStatsService>();
 			this.setStats.put(set, list);
+		} else  if (!list.contains(statsService)) {
+			list.add(statsService);
 		}
-		list.add(statsService);
 		// chain to session
 		this.registerStatsService(set.getParentSession(), statsService);
 	}
@@ -106,8 +108,9 @@ public class StatsProvider implements IStatsProvider{
 		if (list==null) {
 			list = new ArrayList<IStatsService>();
 			this.gameStats.put(game, list);
+		} else  if (!list.contains(statsService)) {
+			list.add(statsService);
 		}
-		list.add(statsService);
 		// chain to session
 		this.registerStatsService(game.getParentSet(), statsService);		
 	}

@@ -121,7 +121,7 @@ public class SessionEvent {
 		 * @param game the game
 		 * @return the sets the event
 		 */
-		public static SessionEvent newSessionEvent(ISession session,
+		public static SessionEvent newSessionFinishEvent(ISession session,
 				IPlayer winner, ISet set) {
 			SessionEvent result = new SessionEvent(
 					SessionEventType.SESSION_FINISHED, session);

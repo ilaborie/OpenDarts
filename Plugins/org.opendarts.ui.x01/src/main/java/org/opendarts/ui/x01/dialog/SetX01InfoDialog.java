@@ -25,6 +25,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISet;
+import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.service.StatsX01Service;
@@ -45,11 +46,12 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 	/** The set. */
 	private final ISet set;
 
-	/** The stats service. */
-	private final IStatsService statsService;
 
 	/** The body. */
 	private Composite body;
+
+	/** The stats services. */
+	private final List<IStatsService> statsServices;
 
 	/**
 	 * Instantiates a new game x501 finish dialog.
@@ -61,7 +63,7 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		super(parentShell);
 		this.set = set;
 		// Stats
-		this.statsService = X01UiPlugin.getService(IStatsService.class);
+		this.statsServices = X01UiPlugin.getService(IStatsProvider.class).getSetStats(set);
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 	}
 
@@ -114,10 +116,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		GridDataFactory.fillDefaults().applyTo(legsComposite);
 
 		// Stats
-		if (this.statsService != null) {
 			Composite statsComposite = this.createStatsComposite(this.body);
 			GridDataFactory.fillDefaults().applyTo(statsComposite);
-		}
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		for (String statKey : stats) {
 			colDescr = new ColumnDescriptor(labels.get(statKey));
 			colDescr.width(60);
-			colDescr.labelProvider(new SetStatsLabelProvider(this.statsService,
+			colDescr.labelProvider(new SetStatsLabelProvider(this.statsServices,
 					this.set, statKey));
 			this.toolkit.createTableColumn(viewer, colDescr);
 			result.add(colDescr);

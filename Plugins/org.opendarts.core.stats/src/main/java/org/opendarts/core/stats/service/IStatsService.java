@@ -1,43 +1,17 @@
 package org.opendarts.core.stats.service;
 
-import java.util.Map;
-
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
-import org.opendarts.core.stats.model.IStats;
+import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IStatsEntry;
 
 /**
  * The Interface IStatsService.
  */
 public interface IStatsService {
-
-	/**
-	 * Gets the session stats.
-	 *
-	 * @param session the session
-	 * @return the session stats
-	 */
-	Map<IPlayer, IStats<ISession>> getSessionStats(ISession session);
-
-	/**
-	 * Gets the sets the stats.
-	 *
-	 * @param set the set
-	 * @return the sets the stats
-	 */
-	Map<IPlayer, IStats<ISet>> getSetStats(ISet set);
-
-	/**
-	 * Gets the game stats.
-	 *
-	 * @param game the game
-	 * @return the game stats
-	 */
-	Map<IPlayer, IStats<IGame>> getGameStats(IGame game);
 
 	/**
 	 * Update stats.
@@ -95,4 +69,27 @@ public interface IStatsService {
 	IStatsEntry getStatsEntry(ISession session, ISet set, IGame game,
 			IPlayer player, String statsKey);
 
+	/**
+	 * Gets the session stats.
+	 *
+	 * @param session the session
+	 * @return the session stats
+	 */
+	IElementStats<ISession> getSessionStats(ISession session);
+	
+	/**
+	 * Gets the sets the stats.
+	 *
+	 * @param set the set
+	 * @return the sets the stats
+	 */
+	IElementStats<ISet> getSetStats(ISet set);
+	
+	/**
+	 * Gets the game stats.
+	 *
+	 * @param game the game
+	 * @return the game stats
+	 */
+	IElementStats<IGame> getGameStats(IGame game);
 }

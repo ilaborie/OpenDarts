@@ -29,4 +29,14 @@ public interface ISession extends IGameContainer<ISet> {
 	 */
 	void removeListener(ISessionListener listener);
 
+	/**
+	 * Initialize the session.
+	 */
+	void init();
+	
+	/**
+	 * Finish the session.
+	 */
+	void finish();
+
 }

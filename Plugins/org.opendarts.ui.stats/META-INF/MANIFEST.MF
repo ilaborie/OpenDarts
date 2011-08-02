@@ -20,4 +20,5 @@ Import-Package: org.opendarts.core.model.dart,
  org.opendarts.core.stats.model.impl,
  org.opendarts.core.stats.service,
  org.opendarts.ui,
+ org.opendarts.ui.label,
  org.opendarts.ui.utils

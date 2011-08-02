@@ -1,6 +1,5 @@
 package org.opendarts.core.stats.service.impl;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -9,8 +8,10 @@ import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
+import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IStats;
 import org.opendarts.core.stats.model.IStatsEntry;
+import org.opendarts.core.stats.model.impl.ElementStats;
 import org.opendarts.core.stats.service.IStatsListener;
 import org.opendarts.core.stats.service.IStatsService;
 import org.slf4j.Logger;
@@ -37,13 +38,13 @@ public abstract class AbstractStatsService implements IStatsService {
 	private final CopyOnWriteArraySet<IStatsListener> listeners;
 
 	/** The session stats. */
-	private final Map<ISession, Map<IPlayer, IStats<ISession>>> sessionStats;
+	private final Map<ISession, ElementStats<ISession>> sessionStats;
 
 	/** The set stats. */
-	private final Map<ISet, Map<IPlayer, IStats<ISet>>> setStats;
+	private final Map<ISet,ElementStats<ISet>> setStats;
 
 	/** The game stats. */
-	private final Map<IGame, Map<IPlayer, IStats<IGame>>> gameStats;
+	private final Map<IGame, ElementStats<IGame>> gameStats;
 
 	/** The entries. */
 	private final Map<IPlayer, Map<String, IStatsEntry>> entries;
@@ -54,24 +55,26 @@ public abstract class AbstractStatsService implements IStatsService {
 	public AbstractStatsService() {
 		super();
 		this.listeners = new CopyOnWriteArraySet<IStatsListener>();
-		this.sessionStats = new HashMap<ISession, Map<IPlayer, IStats<ISession>>>();
-		this.setStats = new HashMap<ISet, Map<IPlayer, IStats<ISet>>>();
-		this.gameStats = new HashMap<IGame, Map<IPlayer, IStats<IGame>>>();
+		this.sessionStats = new HashMap<ISession, ElementStats<ISession>>();
+		this.setStats = new HashMap<ISet, ElementStats<ISet>>();
+		this.gameStats = new HashMap<IGame, ElementStats<IGame>>();
 		this.entries = new HashMap<IPlayer, Map<String, IStatsEntry>>();
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatsService#getSessionStats(org.opendarts.prototype.model.session.ISession)
+	 * @see org.opendarts.core.stats.service.IStatsService#getSessionStats(org.opendarts.core.model.session.ISession)
 	 */
 	@Override
-	public Map<IPlayer, IStats<ISession>> getSessionStats(ISession session) {
-		Map<IPlayer, IStats<ISession>> map = this.sessionStats.get(session);
-		if (map == null) {
-			map = new HashMap<IPlayer, IStats<ISession>>();
-			this.sessionStats.put(session, map);
+	public IElementStats<ISession> getSessionStats(ISession session) {
+		ElementStats<ISession> stats = this.sessionStats.get(session);
+		if (stats == null) {
+			stats= new ElementStats<ISession>(session);
+			this.sessionStats.put(session, stats);
 		}
-		return Collections.unmodifiableMap(map);
+		return stats;
 	}
+	
+	
 
 	/**
 	 * Adds the session stats.
@@ -82,17 +85,12 @@ public abstract class AbstractStatsService implements IStatsService {
 	 */
 	protected void addSessionStats(ISession session, IPlayer player,
 			IStats<ISession> sessionStats) {
-		Map<IPlayer, IStats<ISession>> map = this.sessionStats.get(session);
-		if (map == null) {
-			map = new HashMap<IPlayer, IStats<ISession>>();
-			this.sessionStats.put(session, map);
+		ElementStats<ISession> sesStats = this.sessionStats.get(session);
+		if (sesStats==null) {
+			sesStats = new ElementStats<ISession>(session);
 		}
-
-		IStats<ISession> stats = map.get(player);
-		if (stats == null) {
-			map.put(player, sessionStats);
-		}
-
+		sesStats.addPlayerStats(player, sessionStats);
+		
 		// Entries
 		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
 		if (playerEntries == null) {
@@ -102,19 +100,21 @@ public abstract class AbstractStatsService implements IStatsService {
 		playerEntries.putAll(sessionStats.getAllEntries());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatsService#getSetStats(org.opendarts.prototype.model.session.ISet)
+	/**
+	 * Gets the sets the stats.
+	 *
+	 * @param set the set
+	 * @return the sets the stats
 	 */
 	@Override
-	public Map<IPlayer, IStats<ISet>> getSetStats(ISet set) {
-		Map<IPlayer, IStats<ISet>> map = this.setStats.get(set);
-		if (map == null) {
-			map = new HashMap<IPlayer, IStats<ISet>>();
-			this.setStats.put(set, map);
+	public IElementStats<ISet> getSetStats(ISet set) {
+		ElementStats<ISet> stats = this.setStats.get(set);
+		if (stats==null) {
+			stats = new ElementStats<ISet>(set);
+			this.setStats.put(set, stats);
 		}
-		return Collections.unmodifiableMap(map);
+		return stats;
 	}
-
 	/**
 	 * Adds the set stats.
 	 *
@@ -123,16 +123,11 @@ public abstract class AbstractStatsService implements IStatsService {
 	 * @param setStats the set stats
 	 */
 	protected void addSetStats(ISet set, IPlayer player, IStats<ISet> setStats) {
-		Map<IPlayer, IStats<ISet>> map = this.setStats.get(set);
-		if (map == null) {
-			map = new HashMap<IPlayer, IStats<ISet>>();
-			this.setStats.put(set, map);
+		ElementStats<ISet> sStats = this.setStats.get(set);
+		if (sStats==null) {
+			sStats = new ElementStats<ISet>(set);
 		}
-
-		IStats<ISet> stats = map.get(player);
-		if (stats == null) {
-			map.put(player, setStats);
-		}
+		sStats.addPlayerStats(player, setStats);
 
 		// Entries
 		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
@@ -144,18 +139,19 @@ public abstract class AbstractStatsService implements IStatsService {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatsService#getGameStats(org.opendarts.prototype.model.game.IGame)
+	 * @see org.opendarts.core.stats.service.IStatsService#getGameStats(org.opendarts.core.model.game.IGame)
 	 */
 	@Override
-	public Map<IPlayer, IStats<IGame>> getGameStats(IGame game) {
-		Map<IPlayer, IStats<IGame>> map = this.gameStats.get(game);
-		if (map == null) {
-			map = new HashMap<IPlayer, IStats<IGame>>();
-			this.gameStats.put(game, map);
+	public IElementStats<IGame> getGameStats(IGame game) {
+		ElementStats<IGame> stats = this.gameStats.get(game);
+		if (stats==null) {
+			stats = new ElementStats<IGame>(game);
+			this.gameStats.put(game, stats);
 		}
-		return Collections.unmodifiableMap(map);
+		return stats;
 	}
-
+	
+	
 	/**
 	 * Adds the game stats.
 	 *
@@ -165,16 +161,12 @@ public abstract class AbstractStatsService implements IStatsService {
 	 */
 	protected void addGameStats(IGame game, IPlayer player,
 			IStats<IGame> gameStats) {
-		Map<IPlayer, IStats<IGame>> map = this.gameStats.get(game);
-		if (map == null) {
-			map = new HashMap<IPlayer, IStats<IGame>>();
-			this.gameStats.put(game, map);
+		ElementStats<IGame> gStats = this.gameStats.get(game);
+		if (gStats==null) {
+			gStats = new ElementStats<IGame>(game);
 		}
+		gStats.addPlayerStats(player, gameStats);
 
-		IStats<IGame> stats = map.get(player);
-		if (stats == null) {
-			map.put(player, gameStats);
-		}
 		// Entries
 		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
 		if (playerEntries == null) {
@@ -239,34 +231,26 @@ public abstract class AbstractStatsService implements IStatsService {
 			IGame game, IPlayer player, String statsKey) {
 		IStatsEntry result = null;
 		// try in session
-		Map<IPlayer, IStats<ISession>> sessionMap = this
+		
+		IElementStats<ISession> sessionSt = this
 				.getSessionStats(session);
-		if (sessionMap != null) {
-			IStats<ISession> sessionStats = sessionMap.get(player);
-			if (sessionStats != null) {
-				result = sessionStats.getEntry(statsKey);
-			}
+		if (sessionSt != null) {
+			result = sessionSt.getStatsEntry(player, statsKey);
 		}
 
 		// try in set
 		if (result == null) {
-			Map<IPlayer, IStats<ISet>> setMap = this.setStats.get(set);
+			IElementStats<ISet> setMap = this.setStats.get(set);
 			if (setMap != null) {
-				IStats<ISet> setStats = setMap.get(player);
-				if (setStats != null) {
-					result = setStats.getEntry(statsKey);
-				}
+				result = setMap.getStatsEntry(player, statsKey);
 			}
 		}
 
 		// try in game
 		if (result == null) {
-			Map<IPlayer, IStats<IGame>> gameMap = this.gameStats.get(game);
+			IElementStats<IGame> gameMap = this.gameStats.get(game);
 			if (gameMap != null) {
-				IStats<IGame> gameStats = gameMap.get(player);
-				if (gameStats != null) {
-					result = gameStats.getEntry(statsKey);
-				}
+				result = gameMap.getStatsEntry(player, statsKey);
 			}
 		}
 

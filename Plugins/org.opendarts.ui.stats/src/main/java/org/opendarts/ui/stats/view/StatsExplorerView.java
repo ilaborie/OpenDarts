@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 import org.opendarts.core.service.session.ISessionService;
 import org.opendarts.ui.OpenDartsUiPlugin;
+import org.opendarts.ui.label.OpenDartsLabelProvider;
 import org.opendarts.ui.stats.content.StatsTreeContentProvider;
-import org.opendarts.ui.stats.label.StatsLabelProvider;
 
 /**
  * The Class StatsExplorerView.
@@ -43,13 +43,13 @@ public class StatsExplorerView extends ViewPart {
 		GridLayoutFactory.fillDefaults().applyTo(main);
 		
 		// Tree
-		Tree tree = new Tree(parent, SWT.SINGLE| SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridDataFactory.fillDefaults().applyTo(tree);
+		Tree tree = new Tree(main, SWT.SINGLE| SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(tree);
 
 		// Viewer
 		this.viewer = new TreeViewer(tree);
-		this.viewer.setContentProvider(new StatsTreeContentProvider());
-		this.viewer.setLabelProvider(new StatsLabelProvider());
+		this.viewer.setContentProvider(new StatsTreeContentProvider(this.viewer));
+		this.viewer.setLabelProvider(new OpenDartsLabelProvider());
 		this.viewer.setUseHashlookup(true);
 		
 		this.getSite().setSelectionProvider(this.viewer);

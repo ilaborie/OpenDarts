@@ -1,8 +1,10 @@
 package org.opendarts.core.model.session.impl;
 
 import java.text.MessageFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.opendarts.core.model.player.IPlayer;
@@ -37,6 +39,31 @@ public class Session extends GameContainer<ISet> implements ISession,
 		super();
 		this.listeners = new CopyOnWriteArraySet<ISessionListener>();
 		this.playerGames = new HashMap<IPlayer, Integer>();
+	}
+
+	/**
+	 * Inits the.
+	 */
+	@Override
+	public void init() {
+		this.setStart(Calendar.getInstance());
+		this.fireSessionEvent(SessionEvent.Factory.newSessionInitializedEvent(this));
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.session.ISession#finish()
+	 */
+	@Override
+	public void finish() {
+		this.setEnd(Calendar.getInstance());
+		IPlayer sessionWinner = null;
+		int max = 0;
+		for (Entry<IPlayer,Integer> entry : this.playerGames.entrySet()) {
+			if (entry.getValue()>max) {
+				sessionWinner = entry.getKey();
+			}
+		}
+		this.fireSessionEvent(SessionEvent.Factory.newSessionFinishEvent(this, sessionWinner, getCurrentGame()));
 	}
 
 	/* (non-Javadoc)
@@ -100,8 +127,11 @@ public class Session extends GameContainer<ISet> implements ISession,
 					int winningSet = this.getWinningSet(win);
 					this.playerGames.put(win, winningSet + 1);
 					break;
-				case NEW_CURRENT_GAME:
 				case SET_INITIALIZED:
+					this.setCurrentGame(set);
+					this.fireSessionEvent(SessionEvent.Factory.newSessionSetEvent(this, set));
+					break;
+				case NEW_CURRENT_GAME:
 					break;
 			}
 		}

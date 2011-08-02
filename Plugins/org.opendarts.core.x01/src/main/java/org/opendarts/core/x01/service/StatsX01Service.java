@@ -87,8 +87,7 @@ public class StatsX01Service extends AbstractStatsService {
 
 		AbstractStatsEntry se;
 		// session
-		IStats<ISession> sessionStats = this.getSessionStats(session).get(
-				player);
+		IStats<ISession> sessionStats = this.getSessionStats(session).getPlayerStats(player);
 		if (sessionStats == null) {
 			sessionStats = this.createSessionStats(session, player);
 			this.addSessionStats(session, player, sessionStats);
@@ -101,7 +100,7 @@ public class StatsX01Service extends AbstractStatsService {
 		}
 
 		// set
-		IStats<ISet> setStats = this.getSetStats(set).get(player);
+		IStats<ISet> setStats = this.getSetStats(set).getPlayerStats(player);
 		if (setStats == null) {
 			setStats = this.createSetStats(set, player);
 			this.addSetStats(set, player, setStats);
@@ -114,7 +113,7 @@ public class StatsX01Service extends AbstractStatsService {
 		}
 
 		// game
-		IStats<IGame> gameStats = this.getGameStats(game).get(player);
+		IStats<IGame> gameStats = this.getGameStats(game).getPlayerStats(player);
 		if (gameStats == null) {
 			gameStats = this.createGameStats(game, player);
 			this.addGameStats(game, player, gameStats);
@@ -142,8 +141,7 @@ public class StatsX01Service extends AbstractStatsService {
 
 		AbstractStatsEntry se;
 		// session
-		IStats<ISession> sessionStats = this.getSessionStats(session).get(
-				player);
+		IStats<ISession> sessionStats = this.getSessionStats(session).getPlayerStats(player);
 		if (sessionStats != null) {
 			for (IStatsEntry gameStatsEntry : sessionStats.getAllEntries()
 					.values()) {
@@ -154,7 +152,7 @@ public class StatsX01Service extends AbstractStatsService {
 			}
 		}
 		// set
-		IStats<ISet> setStats = this.getSetStats(set).get(player);
+		IStats<ISet> setStats = this.getSetStats(set).getPlayerStats(player);
 		if (setStats != null) {
 			for (IStatsEntry gameStatsEntry : setStats.getAllEntries().values()) {
 				se = (AbstractStatsEntry) gameStatsEntry;
@@ -165,7 +163,7 @@ public class StatsX01Service extends AbstractStatsService {
 		}
 
 		// game
-		IStats<IGame> gameStats = this.getGameStats(game).get(player);
+		IStats<IGame> gameStats = this.getGameStats(game).getPlayerStats(player);
 		if (gameStats != null) {
 			for (IStatsEntry gameStatsEntry : gameStats.getAllEntries()
 					.values()) {
@@ -302,4 +300,5 @@ public class StatsX01Service extends AbstractStatsService {
 		//		public static final String SESSION_NB_SET = "Session.nb.Set";
 		//		public static final String SESSION_NB_GAME = "Session.nb.Game";
 		return stats;
-	}}
+	}
+}
