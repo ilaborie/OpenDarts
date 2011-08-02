@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.opendarts.ui.stats.view.StatsExplorerView"
+            icon="icons/view/stats.png"
+            id="opendarts.view.stats.explorer"
+            name="Stats Explorer"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.opendarts.ui.stats.perspective.StatsPerspective"
+            icon="icons/view/stats.png"
+            id="opendarts.perspective.stats"
+            name="Statistics">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <perspectiveShortcut
+               id="opendarts.perspective.stats">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>

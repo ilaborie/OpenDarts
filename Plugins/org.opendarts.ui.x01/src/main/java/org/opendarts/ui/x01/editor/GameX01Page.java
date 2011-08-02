@@ -46,6 +46,7 @@ import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.dialog.ThreeDartsComputerDialog;
+import org.opendarts.ui.label.PlayerLabelProvider;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.ISharedImages;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
@@ -112,6 +113,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 	/** The game definition. */
 	private final GameX01Definition gameDefinition;
+	
+	/** The player label provider. */
+	private final PlayerLabelProvider playerLabelProvider;
 
 	/**
 	 * Instantiates a new game page.
@@ -123,6 +127,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	public GameX01Page(SetX01Editor gameEditor, GameX01 game, int index) {
 		super(gameEditor, String.valueOf(index), "Game #" + index);
 		this.game = game;
+		this.playerLabelProvider = new PlayerLabelProvider();
 		this.gameDefinition = (GameX01Definition) this.game.getParentSet()
 				.getGameDefinition();
 		this.playerProgess = new HashMap<IPlayer, ProgressBar>();
@@ -567,7 +572,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				ExpandableComposite.TITLE_BAR
 						| ExpandableComposite.CLIENT_INDENT);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
-		secPlayer.setText(player.getName());
+		secPlayer.setText(this.playerLabelProvider.getText(player));
 		secPlayer.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
 

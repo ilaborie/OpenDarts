@@ -13,9 +13,10 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="OpenDarts"
             class="org.opendarts.ui.app.MainPerspective"
-            id="opendarts.perspective.main">
+            icon="icons/app/opendarts_16.png"
+            id="opendarts.perspective.main"
+            name="OpenDarts">
       </perspective>
    </extension>
    <extension

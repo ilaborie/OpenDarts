@@ -17,7 +17,7 @@ import org.opendarts.core.model.game.impl.AbstractGame;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.impl.GameSet;
 import org.opendarts.core.stats.service.IStatsService;
-import org.opendarts.core.x01.service.StatsX01Service;
+import org.opendarts.core.x01.OpenDartsX01Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +57,8 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.score = new HashMap<IPlayer, Integer>();
 		this.entries = new ArrayList<GameX01Entry>();
 		this.scoreToDo = startScore;
-		// stats
-		this.statsService = new StatsX01Service();
+		// Stats
+		this.statsService = OpenDartsX01Bundle.getStatsService(this);
 	}
 
 	/**
@@ -362,14 +362,5 @@ public class GameX01 extends AbstractGame implements IGame {
 	 */
 	public void cancelGame() {
 		this.fireGameEvent(GameEvent.Factory.newGameCanceledEvent(this));
-	}
-
-	/**
-	 * Gets the stats service.
-	 *
-	 * @return the stats service
-	 */
-	public IStatsService getStatsService() {
-		return this.statsService;
 	}
 }

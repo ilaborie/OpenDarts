@@ -19,6 +19,8 @@
 		<module>org.opendarts.core.x01</module>
 		<module>org.opendarts.ui</module>
 		<module>org.opendarts.ui.app</module>
+		<module>org.opendarts.ui.player</module>
+		<module>org.opendarts.ui.stats</module>
 		<module>org.opendarts.ui.x01</module>
 	</modules>
 

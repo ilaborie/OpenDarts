@@ -1,6 +1,7 @@
 package org.opendarts.ui.x01.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -24,10 +25,12 @@ import org.opendarts.core.stats.model.IStatsEntry;
 import org.opendarts.core.stats.model.impl.GameStats;
 import org.opendarts.core.stats.model.impl.SetStats;
 import org.opendarts.core.stats.service.IStatsListener;
+import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.service.StatsX01Service;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
+import org.opendarts.ui.x01.X01UiPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +73,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 	private final Map<String, Label> statsLabel;
 
 	/** The stats service. */
-	private final IStatsService statsService;
+	private final List<IStatsService> statsServices;
 
 	/**
 	 * Instantiates a new player status composite.
@@ -90,8 +93,9 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		this.statsLabel = new HashMap<String, Label>();
 
 		// Stats
-		this.statsService = game.getStatsService();
-		if (statsService != null) {
+		this.statsServices = X01UiPlugin.getService(IStatsProvider.class)
+				.getGameStats(game);
+		for (IStatsService statsService : this.statsServices) {
 			statsService.addStatsListener(this);
 		}
 
@@ -341,21 +345,22 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		lbl = this.toolkit.createLabel(client, "");
 		lbl.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
-		if (this.statsService != null) {
-			IStatsEntry entry = this.statsService.getStatsEntry(this.session,
-					this.set, this.game, this.player, statsKey);
-			if (entry != null) {
-				IStatValue value = entry.getValue();
-				if (value != null) {
-					lbl.setText(value.getValueAsString());
+			for(IStatsService statsService : this.statsServices) {
+				IStatsEntry entry = statsService.getStatsEntry(this.session,
+						this.set, this.game, this.player, statsKey);
+				if (entry != null) {
+					IStatValue value = entry.getValue();
+					if (value != null) {
+						lbl.setText(value.getValueAsString());
+					}
+					break;
 				}
 			}
-		}
 		valData.copy().applyTo(lbl);
 
 		// register stats
 		this.statsLabel.put(statsKey, lbl);
-}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.model.session.ISetListener#notifySetEvent(org.opendarts.prototype.model.session.SetEvent)

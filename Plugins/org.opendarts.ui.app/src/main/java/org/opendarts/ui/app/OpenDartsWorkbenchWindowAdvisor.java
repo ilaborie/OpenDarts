@@ -37,6 +37,7 @@ public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setTitle("OpenDarts");
 		configurer.setShowFastViewBars(true);
 		configurer.setShowProgressIndicator(true);
+		configurer.setShowPerspectiveBar(true);
 	}
 
 	/* (non-Javadoc)

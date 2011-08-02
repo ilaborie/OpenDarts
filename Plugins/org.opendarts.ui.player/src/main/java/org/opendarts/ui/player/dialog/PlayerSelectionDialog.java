@@ -1,4 +1,4 @@
-package org.opendarts.ui.dialog;
+package org.opendarts.ui.player.dialog;
 
 import java.util.ArrayList;
 import java.util.List;

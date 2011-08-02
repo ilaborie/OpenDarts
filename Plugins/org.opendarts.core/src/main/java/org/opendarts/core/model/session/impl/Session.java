@@ -1,5 +1,6 @@
 package org.opendarts.core.model.session.impl;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -46,6 +47,22 @@ public class Session extends GameContainer<ISet> implements ISession,
 		int result = 0;
 		if (this.playerGames.containsKey(player)) {
 			result = this.playerGames.get(player);
+		}
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String result;
+		if (this.isFinished()) {
+			result = MessageFormat.format(
+					"Session [{0,date,medium} - {1,date,medium}]", this
+							.getStart().getTime(), this.getEnd().getTime());
+		} else {
+			result = "Current Session";
 		}
 		return result;
 	}

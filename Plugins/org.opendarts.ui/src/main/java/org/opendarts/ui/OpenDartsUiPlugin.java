@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class OpenDartsUiPlugin.
+ * The Class OpenDartsX01Bundle.
  */
 public class OpenDartsUiPlugin extends AbstractUIPlugin {
 

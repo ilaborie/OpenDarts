@@ -1,25 +1,23 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenDarts Core X01
-Bundle-SymbolicName: org.opendarts.core.x01
+Bundle-Name: OpenDarts UI Stats
+Bundle-SymbolicName: org.opendarts.ui.stats;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.ui.forms;bundle-version="[3.5.100,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)"
 Import-Package: org.opendarts.core.model.dart,
- org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
- org.opendarts.core.model.game.impl,
  org.opendarts.core.model.player,
  org.opendarts.core.model.session,
- org.opendarts.core.model.session.impl,
  org.opendarts.core.service.game,
+ org.opendarts.core.service.player,
+ org.opendarts.core.service.session,
  org.opendarts.core.stats.model,
  org.opendarts.core.stats.model.impl,
  org.opendarts.core.stats.service,
- org.opendarts.core.stats.service.impl,
- org.osgi.framework;version="1.6.0",
- org.slf4j;version="1.6.1"
-Export-Package: org.opendarts.core.x01.model,
- org.opendarts.core.x01.service
-Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.opendarts.core.x01.OpenDartsX01Bundle
+ org.opendarts.ui,
+ org.opendarts.ui.utils

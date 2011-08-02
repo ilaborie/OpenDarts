@@ -19,7 +19,8 @@ Import-Package: org.opendarts.core.model.dart,
  org.slf4j;version="1.6.1"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.opendarts.ui.OpenDartsUiPlugin
-Export-Package: org.opendarts.ui.dialog,
+Export-Package: org.opendarts.ui,
+ org.opendarts.ui.dialog,
  org.opendarts.ui.editor,
  org.opendarts.ui.handler,
  org.opendarts.ui.label,
