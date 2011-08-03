@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="OpenDarts" id="org.opendarts.ui.app.product" application="org.opendarts.ui.app.application" useFeatures="false" includeLaunchers="true">
+<product name="OpenDarts" id="org.opendarts.ui.app.product" application="org.opendarts.ui.app.application" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.opendarts.ui.app/icons/app/about.png"/>
@@ -31,7 +31,6 @@ Visit http://github.com/ilaborie/OpenDarts
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
@@ -155,6 +154,11 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.opendarts.ui.x01"/>
       <plugin id="org.slf4j.api"/>
    </plugins>
+
+   <features>
+      <feature id="org.opendarts.feature" version="1.0.0.qualifier"/>
+      <feature id="org.opendarts.x01.feature" version="1.0.0.qualifier"/>
+   </features>
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />

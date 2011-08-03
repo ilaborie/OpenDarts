@@ -13,8 +13,6 @@ Import-Package: org.opendarts.core.model.dart,
  org.opendarts.core.player.model,
  org.opendarts.core.service.player,
  org.opendarts.core.service.session,
- org.opendarts.core.x01.model,
- org.opendarts.core.x01.service,
  org.osgi.framework,
  org.slf4j;version="1.6.1"
 Bundle-ActivationPolicy: lazy
