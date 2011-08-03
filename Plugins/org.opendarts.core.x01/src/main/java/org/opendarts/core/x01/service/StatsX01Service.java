@@ -35,20 +35,24 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SESSION_AVG_DART = "Session.avg.dart";
 	public static final String SESSION_AVG_3_DARTS = "Session.avg.3darts";
 	public static final String SESSION_180s = "Session.180";
+	public static final String SESSION_140 = "Session.140";
 	public static final String SESSION_TONS = "Session.100";
+	public static final String SESSION_60 = "Session.60";
 	public static final String SESSION_60_PLUS = "Session.60+";
 	public static final String SESSION_TONS_PLUS = "Session.100+";
 	public static final String SESSION_BEST_LEG = "Session.best.leg";
 	public static final String SESSION_AVG_LEG = "Session.avg.leg";
 	public static final String SESSION_BEST_OUT = "Session.best.out";
 	public static final String SESSION_COUNT_DARTS = "Session.darts.count";
-	public static final String SESSION_TOTAL_SCORE = "Session.darts.count";
+	public static final String SESSION_TOTAL_SCORE = "Session.total.score";
 	public static final String SESSION_OUT_OVER_100 = "Session.out.100+";
 
 	public static final String SET_AVG_DART = "Set.avg.dart";
 	public static final String SET_AVG_3_DARTS = "Set.avg.3darts";
 	public static final String SET_180s = "Set.180";
+	public static final String SET_140 = "Set.140";
 	public static final String SET_TONS = "Set.100";
+	public static final String SET_60 = "Set.60";
 	public static final String SET_60_PLUS = "Set.60+";
 	public static final String SET_TONS_PLUS = "Set.100+";
 	public static final String SET_BEST_LEG = "Set.best.leg";
@@ -61,7 +65,9 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String GAME_AVG_DART = "Game.avg.dart";
 	public static final String GAME_AVG_3_DARTS = "Game.avg.3darts";
 	public static final String GAME_180s = "Game.180";
+	public static final String GAME_140 = "Game.140";
 	public static final String GAME_TONS = "Game.100";
+	public static final String GAME_60 = "Game.100";
 	public static final String GAME_60_PLUS = "Game.60+";
 	public static final String GAME_TONS_PLUS = "Game.100+";
 
@@ -70,6 +76,14 @@ public class StatsX01Service extends AbstractStatsService {
 	 */
 	public StatsX01Service() {
 		super();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.service.IStatsService#getName()
+	 */
+	@Override
+	public String getName() {
+		return "x01 statistics";
 	}
 
 	/* (non-Javadoc)
@@ -191,8 +205,14 @@ public class StatsX01Service extends AbstractStatsService {
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(GAME_180s, 180));
 
+		// 140
+		stats.addEntry(new DartScoreStatsEntry(GAME_140, 140));
+
 		// Tons
 		stats.addEntry(new DartScoreStatsEntry(GAME_TONS, 100));
+
+		// 60
+		stats.addEntry(new DartScoreStatsEntry(GAME_60, 60));
 
 		// Tons+
 		stats.addEntry(new DartRangeStatsEntry(GAME_TONS_PLUS, 101, 180));
@@ -218,8 +238,14 @@ public class StatsX01Service extends AbstractStatsService {
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(SET_180s, 180));
 
+		// 140
+		stats.addEntry(new DartScoreStatsEntry(SET_140, 140));
+
 		// Tons
 		stats.addEntry(new DartScoreStatsEntry(SET_TONS, 100));
+
+		// 60
+		stats.addEntry(new DartScoreStatsEntry(SET_60, 60));
 
 		// Tons+
 		stats.addEntry(new DartRangeStatsEntry(SET_TONS_PLUS, 101, 180));
@@ -268,8 +294,14 @@ public class StatsX01Service extends AbstractStatsService {
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(SESSION_180s, 180));
 
+		// 140
+		stats.addEntry(new DartScoreStatsEntry(SESSION_140, 140));
+
 		// Tons
 		stats.addEntry(new DartScoreStatsEntry(SESSION_TONS, 100));
+
+		// 60
+		stats.addEntry(new DartScoreStatsEntry(SESSION_60, 60));
 
 		// Tons+
 		stats.addEntry(new DartRangeStatsEntry(SESSION_TONS_PLUS, 101, 180));

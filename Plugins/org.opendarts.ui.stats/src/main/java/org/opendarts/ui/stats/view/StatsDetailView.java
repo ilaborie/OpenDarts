@@ -17,13 +17,13 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.ViewPart;
 import org.opendarts.core.model.game.IGame;
@@ -141,33 +141,132 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 			ISession session = (ISession) selected;
 			stats = this.statsProvider.getSessionStats(session);
 			for (IStatsService statsService : stats) {
-				this.createStats(statsService.getSessionStats(session));
+				this.createSessionStats(this.body,statsService,session,statsService.getName());
 			}
 		} else if (selected instanceof ISet) {
 			ISet set = (ISet) selected;
 			stats = this.statsProvider.getSetStats(set);
 			for (IStatsService statsService : stats) {
-				this.createStats(statsService.getSetStats(set));
+				this.createSetStats(this.body,statsService,set,statsService.getName());
 			}
 		} else if (selected instanceof IGame) {
 			IGame game = (IGame) selected;
 			stats = this.statsProvider.getGameStats(game);
 			for (IStatsService statsService : stats) {
-				this.createStats(statsService.getGameStats(game));
+				this.createGameStats(this.body,statsService,game,statsService.getName());
 			}
 		}		
 	}
-
 	
+	/**
+	 * Creates the session stats.
+	 *
+	 * @param statsService the stats service
+	 * @param sessionStats the session stats
+	 */
+	private void createSessionStats(Composite parent,IStatsService statsService,
+			ISession session,String name) {
+		IElementStats<ISession> sessionStats = statsService.getSessionStats(session); 
+		// Section
+		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		section.setText(name);
+
+		// Section body
+		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
+		GridLayoutFactory.fillDefaults().applyTo(client);
+
+		// Fill client
+		this.createStats(client,sessionStats);
+
+		// Add all set stats
+		List<ISet> allSet = sessionStats.getElement().getAllGame();
+		Composite setComposite = this.toolkit.createComposite(client);
+		GridLayoutFactory.fillDefaults().numColumns(allSet.size()).equalWidth(true).applyTo(setComposite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(setComposite);
+		for (ISet set :allSet) {
+			this.createSetStats(setComposite, statsService, set, set.getName());
+		}
+
+		// End section definition
+		this.toolkit.paintBordersFor(client);
+		section.setClient(client);
+	}
+	
+	/**
+	 * Creates the set stats.
+	 *
+	 * @param parent the parent
+	 * @param statsService the stats service
+	 * @param set the set
+	 * @param name the name
+	 */
+	private void createSetStats(Composite parent,IStatsService statsService,
+			ISet set,String name) {
+		IElementStats<ISet> setStats = statsService.getSetStats(set);
+		// Section
+		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		section.setText(name);
+
+		// Section body
+		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
+		GridLayoutFactory.fillDefaults().applyTo(client);
+
+		// Fill client
+		this.createStats(client,setStats);
+
+		// Add all game stats
+		List<IGame> allGame = setStats.getElement().getAllGame();
+		Composite gameComposite = this.toolkit.createComposite(client);
+		GridLayoutFactory.fillDefaults().numColumns(allGame.size()).equalWidth(true).applyTo(gameComposite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(gameComposite);
+		for (IGame game :allGame) {
+			this.createGameStats(gameComposite, statsService, game, game.getName());
+		}
+
+		// End section definition
+		this.toolkit.paintBordersFor(client);
+		section.setClient(client);
+	}
+	
+	/**
+	 * Creates the game stats.
+	 *
+	 * @param parent the parent
+	 * @param statsService the stats service
+	 * @param game the game
+	 * @param name the name
+	 */
+	private void createGameStats(Composite parent,IStatsService statsService,
+			IGame game,String name) {
+		IElementStats<IGame> gameStats = statsService.getGameStats(game);
+		// Section
+		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		section.setText(name);
+
+		// Section body
+		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
+		GridLayoutFactory.fillDefaults().applyTo(client);
+
+		// Fill client
+		this.createStats(client,gameStats);
+
+		// End section definition
+		this.toolkit.paintBordersFor(client);
+		section.setClient(client);
+	}
+
 	/**
 	 * Creates the stats.
 	 *
 	 * @param player the player
 	 * @param stats the stats
 	 */
-	private void createStats(IElementStats<?> eltStats) {
+	private void createStats(Composite parent, IElementStats<?> eltStats) {
 		// Create client
-		Table table = this.toolkit.createTable(this.body, SWT.FULL_SELECTION);
+		Table table = this.toolkit.createTable(parent, SWT.FULL_SELECTION);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -220,8 +319,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 			this.body.dispose();
 		}
 		this.createBody(this.lastSelected);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.body);
-		this.main.layout(true,true);
+		this.layoutBody();
 	}
 
 	/**
@@ -234,9 +332,20 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 			this.body.dispose();
 		}
 		this.createBody(selection);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.body);
-		this.main.layout(true,true);
-		this.main.layout(true);
+		this.layoutBody();
+	}
+
+	/**
+	 * Layout body.
+	 */
+	private void layoutBody() {
+		if (this.body != null && !this.body.isDisposed()) {
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(this.body);
+		}
+		if (!this.main.isDisposed()) {
+			this.main.layout(true,true);
+			this.main.layout(true);
+		}		
 	}
 
 	/* (non-Javadoc)

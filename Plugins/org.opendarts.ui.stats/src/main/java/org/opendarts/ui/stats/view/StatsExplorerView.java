@@ -55,6 +55,7 @@ public class StatsExplorerView extends ViewPart {
 		this.getSite().setSelectionProvider(this.viewer);
 		
 		this.viewer.setInput(this.sessionService);
+		this.viewer.expandToLevel(2);
 	}
 
 	/* (non-Javadoc)

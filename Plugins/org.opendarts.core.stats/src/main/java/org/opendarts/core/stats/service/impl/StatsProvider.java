@@ -11,17 +11,17 @@ import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 
-public class StatsProvider implements IStatsProvider{
-	
+public class StatsProvider implements IStatsProvider {
+
 	/** The session stats. */
-	private final Map<ISession, List<IStatsService>>  sessionStats;
-	
+	private final Map<ISession, List<IStatsService>> sessionStats;
+
 	/** The set stats. */
-	private final Map<ISet, List<IStatsService>>  setStats;
-	
+	private final Map<ISet, List<IStatsService>> setStats;
+
 	/** The game stats. */
-	private final Map<IGame, List<IStatsService>>  gameStats;
-	
+	private final Map<IGame, List<IStatsService>> gameStats;
+
 	/**
 	 * Instantiates a new stats provider.
 	 */
@@ -74,11 +74,12 @@ public class StatsProvider implements IStatsProvider{
 	@Override
 	public void registerStatsService(ISession session,
 			IStatsService statsService) {
-		List<IStatsService>list = this.sessionStats.get(session);
-		if (list==null) {
+		List<IStatsService> list = this.sessionStats.get(session);
+		if (list == null) {
 			list = new ArrayList<IStatsService>();
 			this.sessionStats.put(session, list);
-		} else  if (!list.contains(statsService)) {
+		}
+		if (!list.contains(statsService)) {
 			list.add(statsService);
 		}
 	}
@@ -88,11 +89,12 @@ public class StatsProvider implements IStatsProvider{
 	 */
 	@Override
 	public void registerStatsService(ISet set, IStatsService statsService) {
-		List<IStatsService>list = this.setStats.get(set);
-		if (list==null) {
+		List<IStatsService> list = this.setStats.get(set);
+		if (list == null) {
 			list = new ArrayList<IStatsService>();
 			this.setStats.put(set, list);
-		} else  if (!list.contains(statsService)) {
+		}
+		if (!list.contains(statsService)) {
 			list.add(statsService);
 		}
 		// chain to session
@@ -104,15 +106,16 @@ public class StatsProvider implements IStatsProvider{
 	 */
 	@Override
 	public void registerStatsService(IGame game, IStatsService statsService) {
-		List<IStatsService>list = this.gameStats.get(game);
-		if (list==null) {
+		List<IStatsService> list = this.gameStats.get(game);
+		if (list == null) {
 			list = new ArrayList<IStatsService>();
 			this.gameStats.put(game, list);
-		} else  if (!list.contains(statsService)) {
+		}
+		if (!list.contains(statsService)) {
 			list.add(statsService);
 		}
 		// chain to session
-		this.registerStatsService(game.getParentSet(), statsService);		
+		this.registerStatsService(game.getParentSet(), statsService);
 	}
 
 }

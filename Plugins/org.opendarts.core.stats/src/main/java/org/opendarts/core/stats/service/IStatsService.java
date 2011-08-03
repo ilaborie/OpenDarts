@@ -92,4 +92,11 @@ public interface IStatsService {
 	 * @return the game stats
 	 */
 	IElementStats<IGame> getGameStats(IGame game);
+
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
+	String getName();
 }
