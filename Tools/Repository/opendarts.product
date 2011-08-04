@@ -24,9 +24,12 @@ Visit http://github.com/ilaborie/OpenDarts
 
    <splash
       location="org.opendarts.ui.app" />
-   <launcher name="eclipse">
+   <launcher name="OpenDarts">
+      <linux icon="/org.opendarts.ui.app/icons/app/opendarts_48.xpm"/>
+      <macosx icon="/org.opendarts.ui.app/icons/app/opendarts.icns"/>
       <solaris/>
       <win useIco="true">
+         <ico path="/org.opendarts.ui.app/icons/app/opendarts.ico"/>
          <bmp/>
       </win>
    </launcher>
