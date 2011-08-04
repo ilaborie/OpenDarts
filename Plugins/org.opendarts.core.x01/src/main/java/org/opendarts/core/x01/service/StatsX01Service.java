@@ -77,7 +77,7 @@ public class StatsX01Service extends AbstractStatsService {
 	public StatsX01Service() {
 		super();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.service.IStatsService#getName()
 	 */
@@ -101,7 +101,8 @@ public class StatsX01Service extends AbstractStatsService {
 
 		AbstractStatsEntry se;
 		// session
-		IStats<ISession> sessionStats = this.getSessionStats(session).getPlayerStats(player);
+		IStats<ISession> sessionStats = this.getSessionStats(session)
+				.getPlayerStats(player);
 		if (sessionStats == null) {
 			sessionStats = this.createSessionStats(session, player);
 			this.addSessionStats(session, player, sessionStats);
@@ -127,7 +128,8 @@ public class StatsX01Service extends AbstractStatsService {
 		}
 
 		// game
-		IStats<IGame> gameStats = this.getGameStats(game).getPlayerStats(player);
+		IStats<IGame> gameStats = this.getGameStats(game)
+				.getPlayerStats(player);
 		if (gameStats == null) {
 			gameStats = this.createGameStats(game, player);
 			this.addGameStats(game, player, gameStats);
@@ -155,7 +157,8 @@ public class StatsX01Service extends AbstractStatsService {
 
 		AbstractStatsEntry se;
 		// session
-		IStats<ISession> sessionStats = this.getSessionStats(session).getPlayerStats(player);
+		IStats<ISession> sessionStats = this.getSessionStats(session)
+				.getPlayerStats(player);
 		if (sessionStats != null) {
 			for (IStatsEntry gameStatsEntry : sessionStats.getAllEntries()
 					.values()) {
@@ -177,7 +180,8 @@ public class StatsX01Service extends AbstractStatsService {
 		}
 
 		// game
-		IStats<IGame> gameStats = this.getGameStats(game).getPlayerStats(player);
+		IStats<IGame> gameStats = this.getGameStats(game)
+				.getPlayerStats(player);
 		if (gameStats != null) {
 			for (IStatsEntry gameStatsEntry : gameStats.getAllEntries()
 					.values()) {

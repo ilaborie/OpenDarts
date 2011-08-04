@@ -8,7 +8,7 @@ import org.opendarts.ui.x01.dialog.SetX01ConfigurationDialog;
 /**
  * The Class GameX01DefinitionProvider.
  */
-public class GameX01DefinitionProvider implements IGameDefinitionProvider{
+public class GameX01DefinitionProvider implements IGameDefinitionProvider {
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.service.IGameDefinitionProvider#createGameDefinitionComposite()

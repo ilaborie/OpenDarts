@@ -15,10 +15,10 @@ public class OpenDartsX01Bundle implements BundleActivator {
 
 	/** The stats provider. */
 	private static IStatsProvider statsProvider;
-	
+
 	/** The stats x01 service. */
 	private static StatsX01Service statsX01Service;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -31,13 +31,14 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
-		ServiceReference<IStatsProvider> serviceRef = context.getServiceReference(IStatsProvider.class);
+		ServiceReference<IStatsProvider> serviceRef = context
+				.getServiceReference(IStatsProvider.class);
 		if (serviceRef != null) {
-			 statsProvider =  context.getService(serviceRef);
-			 statsX01Service = new StatsX01Service();
+			statsProvider = context.getService(serviceRef);
+			statsX01Service = new StatsX01Service();
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
@@ -46,7 +47,7 @@ public class OpenDartsX01Bundle implements BundleActivator {
 		statsProvider = null;
 		statsX01Service = null;
 	}
-	
+
 	/**
 	 * Gets the stats service.
 	 *
@@ -55,7 +56,7 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 */
 	public static IStatsService getStatsService(GameX01 game) {
 		IStatsService result = statsX01Service;
-		if (result!=null) {
+		if (result != null) {
 			statsProvider.registerStatsService(game, result);
 		}
 		return result;

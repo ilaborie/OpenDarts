@@ -46,7 +46,6 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 	/** The set. */
 	private final ISet set;
 
-
 	/** The body. */
 	private Composite body;
 
@@ -63,7 +62,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		super(parentShell);
 		this.set = set;
 		// Stats
-		this.statsServices = X01UiPlugin.getService(IStatsProvider.class).getSetStats(set);
+		this.statsServices = X01UiPlugin.getService(IStatsProvider.class)
+				.getSetStats(set);
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 	}
 
@@ -116,8 +116,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		GridDataFactory.fillDefaults().applyTo(legsComposite);
 
 		// Stats
-			Composite statsComposite = this.createStatsComposite(this.body);
-			GridDataFactory.fillDefaults().applyTo(statsComposite);
+		Composite statsComposite = this.createStatsComposite(this.body);
+		GridDataFactory.fillDefaults().applyTo(statsComposite);
 	}
 
 	/**
@@ -331,8 +331,8 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		for (String statKey : stats) {
 			colDescr = new ColumnDescriptor(labels.get(statKey));
 			colDescr.width(60);
-			colDescr.labelProvider(new SetStatsLabelProvider(this.statsServices,
-					this.set, statKey));
+			colDescr.labelProvider(new SetStatsLabelProvider(
+					this.statsServices, this.set, statKey));
 			this.toolkit.createTableColumn(viewer, colDescr);
 			result.add(colDescr);
 		}

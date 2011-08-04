@@ -16,13 +16,13 @@ import org.opendarts.ui.stats.content.StatsTreeContentProvider;
  * The Class StatsExplorerView.
  */
 public class StatsExplorerView extends ViewPart {
-	
+
 	/** The Constant VIEW_ID. */
-	public static final String VIEW_ID ="opendarts.view.stats.explorer";
+	public static final String VIEW_ID = "opendarts.view.stats.explorer";
 
 	/** The viewer. */
 	private TreeViewer viewer;
-	
+
 	/** The session service. */
 	private final ISessionService sessionService;
 
@@ -31,7 +31,8 @@ public class StatsExplorerView extends ViewPart {
 	 */
 	public StatsExplorerView() {
 		super();
-		this.sessionService = OpenDartsUiPlugin.getService(ISessionService.class);
+		this.sessionService = OpenDartsUiPlugin
+				.getService(ISessionService.class);
 	}
 
 	/* (non-Javadoc)
@@ -41,19 +42,21 @@ public class StatsExplorerView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		Composite main = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().applyTo(main);
-		
+
 		// Tree
-		Tree tree = new Tree(main, SWT.SINGLE| SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		Tree tree = new Tree(main, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL
+				| SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tree);
 
 		// Viewer
 		this.viewer = new TreeViewer(tree);
-		this.viewer.setContentProvider(new StatsTreeContentProvider(this.viewer));
+		this.viewer
+				.setContentProvider(new StatsTreeContentProvider(this.viewer));
 		this.viewer.setLabelProvider(new OpenDartsLabelProvider());
 		this.viewer.setUseHashlookup(true);
-		
+
 		this.getSite().setSelectionProvider(this.viewer);
-		
+
 		this.viewer.setInput(this.sessionService);
 		this.viewer.expandToLevel(2);
 	}
@@ -67,4 +70,3 @@ public class StatsExplorerView extends ViewPart {
 	}
 
 }
-

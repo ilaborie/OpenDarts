@@ -31,7 +31,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		ISetListener, ISaveablePart2 {
 
 	/** The ID. */
-	public static String ID = "opendarts.editor.x01";
+	public static final String ID = "opendarts.editor.x01";
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
@@ -238,4 +238,5 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	@Override
 	public int promptToSaveOnClose() {
 		return ISaveablePart2.YES;
-	}}
+	}
+}

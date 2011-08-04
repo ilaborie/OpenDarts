@@ -47,9 +47,10 @@ public class Session extends GameContainer<ISet> implements ISession,
 	@Override
 	public void init() {
 		this.setStart(Calendar.getInstance());
-		this.fireSessionEvent(SessionEvent.Factory.newSessionInitializedEvent(this));
+		this.fireSessionEvent(SessionEvent.Factory
+				.newSessionInitializedEvent(this));
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.session.ISession#finish()
 	 */
@@ -58,12 +59,13 @@ public class Session extends GameContainer<ISet> implements ISession,
 		this.setEnd(Calendar.getInstance());
 		IPlayer sessionWinner = null;
 		int max = 0;
-		for (Entry<IPlayer,Integer> entry : this.playerGames.entrySet()) {
-			if (entry.getValue()>max) {
+		for (Entry<IPlayer, Integer> entry : this.playerGames.entrySet()) {
+			if (entry.getValue() > max) {
 				sessionWinner = entry.getKey();
 			}
 		}
-		this.fireSessionEvent(SessionEvent.Factory.newSessionFinishEvent(this, sessionWinner, getCurrentGame()));
+		this.fireSessionEvent(SessionEvent.Factory.newSessionFinishEvent(this,
+				sessionWinner, this.getCurrentGame()));
 	}
 
 	/* (non-Javadoc)
@@ -129,7 +131,8 @@ public class Session extends GameContainer<ISet> implements ISession,
 					break;
 				case SET_INITIALIZED:
 					this.setCurrentGame(set);
-					this.fireSessionEvent(SessionEvent.Factory.newSessionSetEvent(this, set));
+					this.fireSessionEvent(SessionEvent.Factory
+							.newSessionSetEvent(this, set));
 					break;
 				case NEW_CURRENT_GAME:
 					break;

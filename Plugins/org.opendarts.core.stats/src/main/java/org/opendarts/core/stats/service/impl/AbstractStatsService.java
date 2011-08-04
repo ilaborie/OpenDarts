@@ -41,7 +41,7 @@ public abstract class AbstractStatsService implements IStatsService {
 	private final Map<ISession, ElementStats<ISession>> sessionStats;
 
 	/** The set stats. */
-	private final Map<ISet,ElementStats<ISet>> setStats;
+	private final Map<ISet, ElementStats<ISet>> setStats;
 
 	/** The game stats. */
 	private final Map<IGame, ElementStats<IGame>> gameStats;
@@ -60,7 +60,7 @@ public abstract class AbstractStatsService implements IStatsService {
 		this.gameStats = new HashMap<IGame, ElementStats<IGame>>();
 		this.entries = new HashMap<IPlayer, Map<String, IStatsEntry>>();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.service.IStatsService#getSessionStats(org.opendarts.core.model.session.ISession)
 	 */
@@ -68,13 +68,11 @@ public abstract class AbstractStatsService implements IStatsService {
 	public IElementStats<ISession> getSessionStats(ISession session) {
 		ElementStats<ISession> stats = this.sessionStats.get(session);
 		if (stats == null) {
-			stats= new ElementStats<ISession>(session);
+			stats = new ElementStats<ISession>(session);
 			this.sessionStats.put(session, stats);
 		}
 		return stats;
 	}
-	
-	
 
 	/**
 	 * Adds the session stats.
@@ -86,11 +84,11 @@ public abstract class AbstractStatsService implements IStatsService {
 	protected void addSessionStats(ISession session, IPlayer player,
 			IStats<ISession> sessionStats) {
 		ElementStats<ISession> sesStats = this.sessionStats.get(session);
-		if (sesStats==null) {
+		if (sesStats == null) {
 			sesStats = new ElementStats<ISession>(session);
 		}
 		sesStats.addPlayerStats(player, sessionStats);
-		
+
 		// Entries
 		Map<String, IStatsEntry> playerEntries = this.entries.get(player);
 		if (playerEntries == null) {
@@ -109,12 +107,13 @@ public abstract class AbstractStatsService implements IStatsService {
 	@Override
 	public IElementStats<ISet> getSetStats(ISet set) {
 		ElementStats<ISet> stats = this.setStats.get(set);
-		if (stats==null) {
+		if (stats == null) {
 			stats = new ElementStats<ISet>(set);
 			this.setStats.put(set, stats);
 		}
 		return stats;
 	}
+
 	/**
 	 * Adds the set stats.
 	 *
@@ -124,7 +123,7 @@ public abstract class AbstractStatsService implements IStatsService {
 	 */
 	protected void addSetStats(ISet set, IPlayer player, IStats<ISet> setStats) {
 		ElementStats<ISet> sStats = this.setStats.get(set);
-		if (sStats==null) {
+		if (sStats == null) {
 			sStats = new ElementStats<ISet>(set);
 		}
 		sStats.addPlayerStats(player, setStats);
@@ -144,14 +143,13 @@ public abstract class AbstractStatsService implements IStatsService {
 	@Override
 	public IElementStats<IGame> getGameStats(IGame game) {
 		ElementStats<IGame> stats = this.gameStats.get(game);
-		if (stats==null) {
+		if (stats == null) {
 			stats = new ElementStats<IGame>(game);
 			this.gameStats.put(game, stats);
 		}
 		return stats;
 	}
-	
-	
+
 	/**
 	 * Adds the game stats.
 	 *
@@ -162,7 +160,7 @@ public abstract class AbstractStatsService implements IStatsService {
 	protected void addGameStats(IGame game, IPlayer player,
 			IStats<IGame> gameStats) {
 		ElementStats<IGame> gStats = this.gameStats.get(game);
-		if (gStats==null) {
+		if (gStats == null) {
 			gStats = new ElementStats<IGame>(game);
 		}
 		gStats.addPlayerStats(player, gameStats);
@@ -227,13 +225,12 @@ public abstract class AbstractStatsService implements IStatsService {
 	 * @see org.opendarts.prototype.service.stats.IStatsService#getStatsEntry(org.opendarts.prototype.model.session.ISession, org.opendarts.prototype.internal.model.session.GameSet, org.opendarts.prototype.internal.model.game.x01.GameX01, org.opendarts.prototype.model.player.IPlayer, java.lang.String)
 	 */
 	@Override
-	public IStatsEntry getStatsEntry(ISession session, ISet set,
-			IGame game, IPlayer player, String statsKey) {
+	public IStatsEntry getStatsEntry(ISession session, ISet set, IGame game,
+			IPlayer player, String statsKey) {
 		IStatsEntry result = null;
 		// try in session
-		
-		IElementStats<ISession> sessionSt = this
-				.getSessionStats(session);
+
+		IElementStats<ISession> sessionSt = this.getSessionStats(session);
 		if (sessionSt != null) {
 			result = sessionSt.getStatsEntry(player, statsKey);
 		}
@@ -255,4 +252,5 @@ public abstract class AbstractStatsService implements IStatsService {
 		}
 
 		return result;
-	}}
+	}
+}

@@ -10,7 +10,7 @@ import org.opendarts.core.model.session.ISet;
  * The Interface IStatsProvider.
  */
 public interface IStatsProvider {
-	
+
 	/**
 	 * Gets the session stats.
 	 *
@@ -18,7 +18,7 @@ public interface IStatsProvider {
 	 * @return the session stats
 	 */
 	List<IStatsService> getSessionStats(ISession session);
-	
+
 	/**
 	 * Gets the sets the stats.
 	 *
@@ -26,7 +26,7 @@ public interface IStatsProvider {
 	 * @return the sets the stats
 	 */
 	List<IStatsService> getSetStats(ISet set);
-	
+
 	/**
 	 * Gets the game stats.
 	 *
@@ -34,29 +34,29 @@ public interface IStatsProvider {
 	 * @return the game stats
 	 */
 	List<IStatsService> getGameStats(IGame game);
-	
+
 	/**
 	 * Register stats service.
 	 *
 	 * @param session the session
 	 * @param statsService the stats service
 	 */
-	void registerStatsService(ISession session,IStatsService statsService);
-	
+	void registerStatsService(ISession session, IStatsService statsService);
+
 	/**
 	 * Register stats service.
 	 *
 	 * @param set the set
 	 * @param statsService the stats service
 	 */
-	void registerStatsService(ISet set,IStatsService statsService);
-	
+	void registerStatsService(ISet set, IStatsService statsService);
+
 	/**
 	 * Register stats service.
 	 *
 	 * @param game the game
 	 * @param statsService the stats service
 	 */
-	void registerStatsService(IGame game,IStatsService statsService);
+	void registerStatsService(IGame game, IStatsService statsService);
 
 }

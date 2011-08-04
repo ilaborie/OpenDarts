@@ -49,7 +49,7 @@ public class SessionService implements ISessionService {
 	 * @return the i session
 	 */
 	private Session createSession() {
-		Session session= new Session();
+		Session session = new Session();
 		session.init();
 		return session;
 	}

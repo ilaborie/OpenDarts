@@ -45,8 +45,7 @@ public interface IGameService {
 	 * @param player the player
 	 * @param dartThrow the dart throw
 	 */
-	void addWinningPlayerThrow(IGame game, IPlayer player,
-			IDartsThrow dartThrow);
+	void addWinningPlayerThrow(IGame game, IPlayer player, IDartsThrow dartThrow);
 
 	/**
 	 * Choose best dart.

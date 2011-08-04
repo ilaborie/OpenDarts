@@ -345,17 +345,17 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		lbl = this.toolkit.createLabel(client, "");
 		lbl.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_BOLD));
-			for(IStatsService statsService : this.statsServices) {
-				IStatsEntry entry = statsService.getStatsEntry(this.session,
-						this.set, this.game, this.player, statsKey);
-				if (entry != null) {
-					IStatValue value = entry.getValue();
-					if (value != null) {
-						lbl.setText(value.getValueAsString());
-					}
-					break;
+		for (IStatsService statsService : this.statsServices) {
+			IStatsEntry entry = statsService.getStatsEntry(this.session,
+					this.set, this.game, this.player, statsKey);
+			if (entry != null) {
+				IStatValue value = entry.getValue();
+				if (value != null) {
+					lbl.setText(value.getValueAsString());
 				}
+				break;
 			}
+		}
 		valData.copy().applyTo(lbl);
 
 		// register stats

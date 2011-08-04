@@ -18,17 +18,17 @@ import org.opendarts.core.stats.model.IStatsEntry;
  *
  * @param <E> the element type
  */
-public class ElementStats<E> implements IElementStats<E>{
-	
+public class ElementStats<E> implements IElementStats<E> {
+
 	/** The element. */
 	private final E element;
-	
+
 	/** The players stats. */
-	private final Map<IPlayer, Map<String,IStatsEntry<E>>> playersEntries;
-	
+	private final Map<IPlayer, Map<String, IStatsEntry<E>>> playersEntries;
+
 	/** The players stats. */
 	private final Map<IPlayer, IStats<E>> playersStats;
-	
+
 	/**
 	 * Instantiates a new element stats.
 	 *
@@ -36,11 +36,11 @@ public class ElementStats<E> implements IElementStats<E>{
 	 */
 	public ElementStats(E element) {
 		super();
-		this.element =element;
-		this.playersEntries = new HashMap<IPlayer, Map<String,IStatsEntry<E>>>();
+		this.element = element;
+		this.playersEntries = new HashMap<IPlayer, Map<String, IStatsEntry<E>>>();
 		this.playersStats = new HashMap<IPlayer, IStats<E>>();
 	}
-	
+
 	/**
 	 * Gets the element.
 	 *
@@ -50,19 +50,19 @@ public class ElementStats<E> implements IElementStats<E>{
 	public E getElement() {
 		return this.element;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.model.IElementStats#getStatsKeys()
 	 */
 	@Override
 	public List<String> getStatsKeys() {
 		Set<String> result = new TreeSet<String>();
-		for (Map<String,IStatsEntry<E>> entry : this.playersEntries.values()) {
+		for (Map<String, IStatsEntry<E>> entry : this.playersEntries.values()) {
 			result.addAll(entry.keySet());
 		}
 		return new ArrayList<String>(result);
 	}
-	
+
 	/**
 	 * Adds the player stats.
 	 *
@@ -73,16 +73,16 @@ public class ElementStats<E> implements IElementStats<E>{
 	public void addPlayerStats(IPlayer player, IStats<E> stats) {
 		// Stats
 		this.playersStats.put(player, stats);
-			
+
 		// Entries
 		Map<String, IStatsEntry<E>> map = this.playersEntries.get(player);
-		if (map==null) {
+		if (map == null) {
 			map = new HashMap<String, IStatsEntry<E>>();
 			this.playersEntries.put(player, map);
 		}
 		Map<String, IStatsEntry> allEntries = stats.getAllEntries();
 		map.putAll((Map<String, ? extends IStatsEntry<E>>) allEntries);
- 	}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.model.IElementStats#getStatsEntry(org.opendarts.core.model.player.IPlayer, java.lang.String)
@@ -91,12 +91,12 @@ public class ElementStats<E> implements IElementStats<E>{
 	public IStatsEntry<E> getStatsEntry(IPlayer player, String key) {
 		IStatsEntry<E> result = null;
 		Map<String, IStatsEntry<E>> map = this.playersEntries.get(player);
-		if (map !=null) {
+		if (map != null) {
 			result = map.get(key);
 		}
 		return result;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.model.IElementStats#getPlayerStats(org.opendarts.core.model.player.IPlayer)
 	 */
@@ -104,7 +104,7 @@ public class ElementStats<E> implements IElementStats<E>{
 	public IStats<E> getPlayerStats(IPlayer player) {
 		return this.playersStats.get(player);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.model.IElementStats#getPlayers()
 	 */
@@ -112,7 +112,7 @@ public class ElementStats<E> implements IElementStats<E>{
 	public List<IPlayer> getPlayers() {
 		return new ArrayList<IPlayer>(this.playersStats.keySet());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.model.IElementStats#getStatsEntries()
 	 */
@@ -124,12 +124,12 @@ public class ElementStats<E> implements IElementStats<E>{
 		}
 		return result;
 	}
-	
+
 	/**
 	 * The Class Entry.
 	 */
 	private final class Entry implements IEntry<E> {
-		
+
 		/** The key. */
 		private final String key;
 		private final ElementStats<E> eltStats;
@@ -139,7 +139,7 @@ public class ElementStats<E> implements IElementStats<E>{
 		 *
 		 * @param key the key
 		 */
-		private Entry(String key,ElementStats<E> eltStats) {
+		private Entry(String key, ElementStats<E> eltStats) {
 			super();
 			this.key = key;
 			this.eltStats = eltStats;
@@ -160,9 +160,7 @@ public class ElementStats<E> implements IElementStats<E>{
 		public IStatsEntry<E> getPlayerEntry(IPlayer player) {
 			return this.eltStats.getStatsEntry(player, this.key);
 		}
-		
+
 	}
-	
-	
 
 }

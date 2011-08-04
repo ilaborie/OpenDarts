@@ -107,18 +107,19 @@ public class NewSetDialog extends TitleAreaDialog implements
 
 		// Main composite
 		this.main = new Composite(comp, SWT.NONE);
-		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(2).applyTo(main);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(main);
+		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(2)
+				.applyTo(this.main);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.main);
 
 		List<IGameDefinitionProvider> allGameDefinition = OpenDartsUiPlugin
 				.getAllService(IGameDefinitionProvider.class);
 
 		// Combo for selecting game
-		Label lblGameAvailable = new Label(main,SWT.WRAP );
+		Label lblGameAvailable = new Label(this.main, SWT.WRAP);
 		lblGameAvailable.setText("Available(s) games: ");
 		GridDataFactory.fillDefaults().applyTo(lblGameAvailable);
-		
-		this.cbGamesAvailable = new ComboViewer(main);
+
+		this.cbGamesAvailable = new ComboViewer(this.main);
 		this.cbGamesAvailable
 				.setLabelProvider(new GameDefinitionLabelProvider());
 
@@ -126,8 +127,9 @@ public class NewSetDialog extends TitleAreaDialog implements
 		this.cbGamesAvailable.addSelectionChangedListener(this);
 		this.cbGamesAvailable.setInput(allGameDefinition);
 
-		this.body = new Composite(main, SWT.NONE);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(this.body);
+		this.body = new Composite(this.main, SWT.NONE);
+		GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
+				.applyTo(this.body);
 		GridLayoutFactory.fillDefaults().applyTo(this.body);
 
 		if (!allGameDefinition.isEmpty()) {
@@ -226,8 +228,9 @@ public class NewSetDialog extends TitleAreaDialog implements
 	public void selectionChanged(SelectionChangedEvent event) {
 		this.body.dispose();
 
-		this.body = new Composite(main, SWT.NONE);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true).applyTo(this.body);
+		this.body = new Composite(this.main, SWT.NONE);
+		GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
+				.applyTo(this.body);
 		GridLayoutFactory.fillDefaults().applyTo(this.body);
 
 		ISelection sel = this.cbGamesAvailable.getSelection();
@@ -239,7 +242,7 @@ public class NewSetDialog extends TitleAreaDialog implements
 			Composite composite = this.compGameDef.createSetConfiguration(this,
 					this.body, lastGameDefinition);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
-			
+
 			this.main.layout(true);
 		}
 	}

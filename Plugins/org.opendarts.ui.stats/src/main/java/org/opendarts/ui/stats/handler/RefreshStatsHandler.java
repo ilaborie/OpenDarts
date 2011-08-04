@@ -19,7 +19,7 @@ public class RefreshStatsHandler extends AbstractHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
-		if (part!= null) {
+		if (part != null) {
 			if (part instanceof StatsDetailView) {
 				StatsDetailView view = (StatsDetailView) part;
 				view.refresh();

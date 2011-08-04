@@ -55,6 +55,7 @@ public interface IStatsService {
 	 */
 	@SuppressWarnings("rawtypes")
 	IStatsEntry getSetStatEntry(IPlayer player, String statsKey);
+
 	/**
 	 * Gets the stats entry.
 	 *
@@ -76,7 +77,7 @@ public interface IStatsService {
 	 * @return the session stats
 	 */
 	IElementStats<ISession> getSessionStats(ISession session);
-	
+
 	/**
 	 * Gets the sets the stats.
 	 *
@@ -84,7 +85,7 @@ public interface IStatsService {
 	 * @return the sets the stats
 	 */
 	IElementStats<ISet> getSetStats(ISet set);
-	
+
 	/**
 	 * Gets the game stats.
 	 *

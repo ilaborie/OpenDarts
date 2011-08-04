@@ -113,7 +113,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 	/** The game definition. */
 	private final GameX01Definition gameDefinition;
-	
+
 	/** The player label provider. */
 	private final PlayerLabelProvider playerLabelProvider;
 

@@ -23,7 +23,7 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 		ISetListener, ISessionListener {
 
 	/** The viewer. */
-	private TreeViewer viewer;
+	private final TreeViewer viewer;
 
 	/**
 	 * Instantiates a new stats tree content provider.
@@ -105,7 +105,7 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 	public void dispose() {
 		// Nothing to dispose
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.session.ISessionListener#notifySessionEvent(org.opendarts.core.model.session.SessionEvent)
 	 */
@@ -118,13 +118,13 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 				this.viewer.refresh(event.getSession());
 				break;
 			case NEW_CURRENT_SET:
-				this.viewer.add(event.getSession(),event.getSet());
+				this.viewer.add(event.getSession(), event.getSet());
 				break;
 			default:
 				break;
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.session.ISetListener#notifySetEvent(org.opendarts.core.model.session.SetEvent)
 	 */

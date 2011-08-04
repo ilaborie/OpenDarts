@@ -272,7 +272,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		return new GameX01Definition(this.startScore, this.players,
 				this.nbGameToWin, this.playAllGames);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.dialog.IGameDefinitionComposite#getEditorId()
 	 */
@@ -384,7 +384,8 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 * Adds the player.
 	 */
 	private void addPlayer() {
-		PlayerSelectionDialog dialog = new PlayerSelectionDialog(this.parentDialog.getShell());
+		PlayerSelectionDialog dialog = new PlayerSelectionDialog(
+				this.parentDialog.getShell());
 		if (dialog.open() == Window.OK) {
 			List<IPlayer> added = new ArrayList<IPlayer>(dialog.getPlayers());
 			for (IPlayer player : added) {

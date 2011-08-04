@@ -7,8 +7,8 @@ import org.opendarts.ui.service.IGameDefinitionProvider;
 /**
  * The Class GameDefinitionLabelProvider.
  */
-public class GameDefinitionLabelProvider extends ColumnLabelProvider{
-	
+public class GameDefinitionLabelProvider extends ColumnLabelProvider {
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 	 */
@@ -20,7 +20,7 @@ public class GameDefinitionLabelProvider extends ColumnLabelProvider{
 		}
 		return super.getText(element);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getImage(java.lang.Object)
 	 */

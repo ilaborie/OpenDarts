@@ -23,7 +23,7 @@ public class PlayerService implements IPlayerService {
 
 	/** The players. */
 	private final Map<String, IPlayer> players;
-	
+
 	/** The dart service. */
 	private final AtomicReference<IDartService> dartService = new AtomicReference<IDartService>();
 
@@ -183,7 +183,7 @@ public class PlayerService implements IPlayerService {
 		}
 		return this.dartService.get().createDart(sector, zone);
 	}
-	
+
 	/**
 	 * Sets the dart service.
 	 *
@@ -192,7 +192,7 @@ public class PlayerService implements IPlayerService {
 	public void setDartService(IDartService dartService) {
 		this.dartService.set(dartService);
 	}
-	
+
 	/**
 	 * Unset dart service.
 	 *
@@ -203,4 +203,3 @@ public class PlayerService implements IPlayerService {
 	}
 
 }
-

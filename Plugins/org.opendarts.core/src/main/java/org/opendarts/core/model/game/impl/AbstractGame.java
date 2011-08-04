@@ -1,4 +1,3 @@
-
 package org.opendarts.core.model.game.impl;
 
 import java.util.ArrayList;

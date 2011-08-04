@@ -33,7 +33,7 @@ public interface ISession extends IGameContainer<ISet> {
 	 * Initialize the session.
 	 */
 	void init();
-	
+
 	/**
 	 * Finish the session.
 	 */

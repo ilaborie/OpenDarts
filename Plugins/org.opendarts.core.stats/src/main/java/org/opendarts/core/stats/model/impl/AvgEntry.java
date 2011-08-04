@@ -87,4 +87,4 @@ public class AvgEntry implements Serializable {
 		}
 		return result;
 	}
-}
+}

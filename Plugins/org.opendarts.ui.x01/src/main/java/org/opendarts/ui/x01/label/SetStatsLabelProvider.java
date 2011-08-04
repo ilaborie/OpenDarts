@@ -49,7 +49,7 @@ public class SetStatsLabelProvider extends ColumnLabelProvider {
 		if (element instanceof IPlayer) {
 			IPlayer player = (IPlayer) element;
 			for (IStatsService statsService : this.statsServices) {
-				IStats<ISet> stats = statsService.getSetStats(set)
+				IStats<ISet> stats = statsService.getSetStats(this.set)
 						.getPlayerStats(player);
 				if (stats != null) {
 					IStatsEntry<Object> entry = stats.getEntry(this.statsKey);

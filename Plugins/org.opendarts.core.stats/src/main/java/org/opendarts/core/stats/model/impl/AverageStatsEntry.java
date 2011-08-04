@@ -129,4 +129,5 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 			}
 		}
 		return result;
-	}}
+	}
+}

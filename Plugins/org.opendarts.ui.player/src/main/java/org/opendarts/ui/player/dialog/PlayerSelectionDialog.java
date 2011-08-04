@@ -14,11 +14,11 @@ import org.opendarts.ui.utils.ISharedImages;
 /**
  * The Class PlayerSelectionDialog.
  */
-public class PlayerSelectionDialog extends ElementListSelectionDialog{
-	
+public class PlayerSelectionDialog extends ElementListSelectionDialog {
+
 	/** The player service. */
 	private final IPlayerService playerService;
-	
+
 	private final List<IPlayer> players;
 
 	/**
@@ -32,34 +32,33 @@ public class PlayerSelectionDialog extends ElementListSelectionDialog{
 		this.setTitle("Select Players");
 		this.playerService = OpenDartsUiPlugin.getService(IPlayerService.class);
 		this.players = new ArrayList<IPlayer>();
-		
+
 		this.setElements(this.playerService.getAllPlayers().toArray());
 		this.setEmptyListMessage("Please select at least one player");
 		this.setHelpAvailable(false);
 		this.setMessage("Choose player(s)");
 		this.setMultipleSelection(true);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.SelectionStatusDialog#okPressed()
 	 */
 	@Override
 	protected void okPressed() {
 		this.players.clear();
-		for (Object obj: this.getSelectedElements() ) {
-			players.add((IPlayer) obj);
+		for (Object obj : this.getSelectedElements()) {
+			this.players.add((IPlayer) obj);
 		}
 		super.okPressed();
 	}
-	
-	
+
 	/**
 	 * Gets the players.
 	 *
 	 * @return the players
 	 */
 	public List<IPlayer> getPlayers() {
-		return players;
+		return this.players;
 	}
 
 }

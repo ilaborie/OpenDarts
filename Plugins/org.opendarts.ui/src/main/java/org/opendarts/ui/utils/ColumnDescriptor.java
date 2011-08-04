@@ -36,7 +36,6 @@ public class ColumnDescriptor implements Cloneable {
 	 */
 	public ColumnDescriptor(String label) {
 		this(label, SWT.CENTER);
-
 	}
 
 	/**
@@ -68,7 +67,7 @@ public class ColumnDescriptor implements Cloneable {
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public ColumnDescriptor clone() throws CloneNotSupportedException {
 		return this.copy();
 	}
 

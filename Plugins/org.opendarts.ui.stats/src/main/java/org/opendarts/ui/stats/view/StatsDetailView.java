@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.menus.IMenuService;
@@ -84,14 +85,14 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		this.sform = toolkit.createScrolledForm(parent);
+		this.sform = this.toolkit.createScrolledForm(parent);
 		this.sform.setAlwaysShowScrollBars(true);
 		this.sform.setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridLayoutFactory.fillDefaults().applyTo(sform.getForm());
+		GridLayoutFactory.fillDefaults().applyTo(this.sform.getForm());
 
 		this.main = this.sform.getBody();
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.main);
-		GridLayoutFactory.fillDefaults().applyTo(main);
+		GridLayoutFactory.fillDefaults().applyTo(this.main);
 
 		IWorkbenchPage page = this.getSite().getPage();
 		page.addSelectionListener(this);
@@ -114,12 +115,13 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * @param selection the selection
 	 */
 	private void createBody(ISelection selection) {
-		if (selection!=null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
+		if ((selection != null) && !selection.isEmpty()
+				&& (selection instanceof IStructuredSelection)) {
 			Object selected = ((IStructuredSelection) selection)
 					.getFirstElement();
 			this.lastSelected = selected;
-			this.createBody( selected);
-			
+			this.createBody(selected);
+
 		}
 	}
 
@@ -129,7 +131,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * @param selected the selected
 	 */
 	private void createBody(Object selected) {
-		this.body = this.toolkit.createComposite(this.main,SWT.NONE);
+		this.body = this.toolkit.createComposite(this.main, SWT.NONE);
 		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(this.body);
 
 		this.sform.setImage(this.labelProvider.getImage(selected));
@@ -141,34 +143,39 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 			ISession session = (ISession) selected;
 			stats = this.statsProvider.getSessionStats(session);
 			for (IStatsService statsService : stats) {
-				this.createSessionStats(this.body,statsService,session,statsService.getName());
+				this.createSessionStats(this.body, statsService, session,
+						statsService.getName());
 			}
 		} else if (selected instanceof ISet) {
 			ISet set = (ISet) selected;
 			stats = this.statsProvider.getSetStats(set);
 			for (IStatsService statsService : stats) {
-				this.createSetStats(this.body,statsService,set,statsService.getName());
+				this.createSetStats(this.body, statsService, set,
+						statsService.getName());
 			}
 		} else if (selected instanceof IGame) {
 			IGame game = (IGame) selected;
 			stats = this.statsProvider.getGameStats(game);
 			for (IStatsService statsService : stats) {
-				this.createGameStats(this.body,statsService,game,statsService.getName());
+				this.createGameStats(this.body, statsService, game,
+						statsService.getName());
 			}
-		}		
+		}
 	}
-	
+
 	/**
 	 * Creates the session stats.
 	 *
 	 * @param statsService the stats service
 	 * @param sessionStats the session stats
 	 */
-	private void createSessionStats(Composite parent,IStatsService statsService,
-			ISession session,String name) {
-		IElementStats<ISession> sessionStats = statsService.getSessionStats(session); 
+	private void createSessionStats(Composite parent,
+			IStatsService statsService, ISession session, String name) {
+		IElementStats<ISession> sessionStats = statsService
+				.getSessionStats(session);
 		// Section
-		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR);
+		Section section = this.toolkit.createSection(parent,
+				ExpandableComposite.TITLE_BAR);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 		section.setText(name);
 
@@ -177,14 +184,15 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Fill client
-		this.createStats(client,sessionStats);
+		this.createStats(client, sessionStats);
 
 		// Add all set stats
 		List<ISet> allSet = sessionStats.getElement().getAllGame();
 		Composite setComposite = this.toolkit.createComposite(client);
-		GridLayoutFactory.fillDefaults().numColumns(allSet.size()).equalWidth(true).applyTo(setComposite);
+		GridLayoutFactory.fillDefaults().numColumns(allSet.size())
+				.equalWidth(true).applyTo(setComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(setComposite);
-		for (ISet set :allSet) {
+		for (ISet set : allSet) {
 			this.createSetStats(setComposite, statsService, set, set.getName());
 		}
 
@@ -192,7 +200,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 		this.toolkit.paintBordersFor(client);
 		section.setClient(client);
 	}
-	
+
 	/**
 	 * Creates the set stats.
 	 *
@@ -201,11 +209,12 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * @param set the set
 	 * @param name the name
 	 */
-	private void createSetStats(Composite parent,IStatsService statsService,
-			ISet set,String name) {
+	private void createSetStats(Composite parent, IStatsService statsService,
+			ISet set, String name) {
 		IElementStats<ISet> setStats = statsService.getSetStats(set);
 		// Section
-		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR);
+		Section section = this.toolkit.createSection(parent,
+				ExpandableComposite.TITLE_BAR);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 		section.setText(name);
 
@@ -214,22 +223,24 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Fill client
-		this.createStats(client,setStats);
+		this.createStats(client, setStats);
 
 		// Add all game stats
 		List<IGame> allGame = setStats.getElement().getAllGame();
 		Composite gameComposite = this.toolkit.createComposite(client);
-		GridLayoutFactory.fillDefaults().numColumns(allGame.size()).equalWidth(true).applyTo(gameComposite);
+		GridLayoutFactory.fillDefaults().numColumns(allGame.size())
+				.equalWidth(true).applyTo(gameComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(gameComposite);
-		for (IGame game :allGame) {
-			this.createGameStats(gameComposite, statsService, game, game.getName());
+		for (IGame game : allGame) {
+			this.createGameStats(gameComposite, statsService, game,
+					game.getName());
 		}
 
 		// End section definition
 		this.toolkit.paintBordersFor(client);
 		section.setClient(client);
 	}
-	
+
 	/**
 	 * Creates the game stats.
 	 *
@@ -238,11 +249,12 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * @param game the game
 	 * @param name the name
 	 */
-	private void createGameStats(Composite parent,IStatsService statsService,
-			IGame game,String name) {
+	private void createGameStats(Composite parent, IStatsService statsService,
+			IGame game, String name) {
 		IElementStats<IGame> gameStats = statsService.getGameStats(game);
 		// Section
-		Section section = this.toolkit.createSection(parent, Section.TITLE_BAR);
+		Section section = this.toolkit.createSection(parent,
+				ExpandableComposite.TITLE_BAR);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 		section.setText(name);
 
@@ -251,7 +263,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Fill client
-		this.createStats(client,gameStats);
+		this.createStats(client, gameStats);
 
 		// End section definition
 		this.toolkit.paintBordersFor(client);
@@ -301,12 +313,13 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 		columns.add(column);
 		column.width(200).labelProvider(new KeyLabelProvider());
 
-		
 		// Player value
 		for (IPlayer player : eltStats.getPlayers()) {
-			column = new ColumnDescriptor(this.labelProvider.getText(player), SWT.LEFT);
+			column = new ColumnDescriptor(this.labelProvider.getText(player),
+					SWT.LEFT);
 			columns.add(column);
-			column.width(200).labelProvider(new PlayerStatsLabelProvider(player));
+			column.width(200).labelProvider(
+					new PlayerStatsLabelProvider(player));
 		}
 		return columns;
 	}
@@ -315,7 +328,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (this.body != null && !this.body.isDisposed()) {
+		if ((this.body != null) && !this.body.isDisposed()) {
 			this.body.dispose();
 		}
 		this.createBody(this.lastSelected);
@@ -328,7 +341,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * @param selection the selection
 	 */
 	private void refresh(ISelection selection) {
-		if (this.body != null && !this.body.isDisposed()) {
+		if ((this.body != null) && !this.body.isDisposed()) {
 			this.body.dispose();
 		}
 		this.createBody(selection);
@@ -339,13 +352,13 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 * Layout body.
 	 */
 	private void layoutBody() {
-		if (this.body != null && !this.body.isDisposed()) {
+		if ((this.body != null) && !this.body.isDisposed()) {
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(this.body);
 		}
 		if (!this.main.isDisposed()) {
-			this.main.layout(true,true);
+			this.main.layout(true, true);
 			this.main.layout(true);
-		}		
+		}
 	}
 
 	/* (non-Javadoc)
