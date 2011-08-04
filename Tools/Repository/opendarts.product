@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="OpenDarts" id="org.opendarts.prototype.product" application="org.opendarts.prototype.application" useFeatures="true" includeLaunchers="true">
+<product name="OpenDarts" uid="org.opendarts.ui.app.product.id" id="org.opendarts.ui.app.product" application="org.opendarts.ui.app.application" version="1.0.0" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.opendarts.ui.app/icons/app/about.png"/>
@@ -24,10 +24,9 @@ Visit http://github.com/ilaborie/OpenDarts
 
    <splash
       location="org.opendarts.ui.app" />
-   <launcher name="OpenDarts">
+   <launcher name="eclipse">
       <solaris/>
       <win useIco="true">
-         <ico path="/org.opendarts.ui.app/icons/app/opendarts.ico"/>
          <bmp/>
       </win>
    </launcher>
@@ -138,17 +137,29 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
       <plugin id="org.eclipse.ui"/>
+      <plugin id="org.eclipse.ui.cocoa" fragment="true"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.workbench"/>
-      <plugin id="org.opendarts.prototype" fragment=""/>
+      <plugin id="org.opendarts.core"/>
+      <plugin id="org.opendarts.core.ia"/>
+      <plugin id="org.opendarts.core.player"/>
+      <plugin id="org.opendarts.core.stats"/>
+      <plugin id="org.opendarts.core.x01"/>
+      <plugin id="org.opendarts.ui"/>
+      <plugin id="org.opendarts.ui.app"/>
+      <plugin id="org.opendarts.ui.player"/>
+      <plugin id="org.opendarts.ui.stats"/>
+      <plugin id="org.opendarts.ui.x01"/>
       <plugin id="org.slf4j.api"/>
    </plugins>
 
    <features>
       <feature id="org.opendarts.feature" version="1.0.0.qualifier"/>
       <feature id="org.opendarts.x01.feature" version="1.0.0.qualifier"/>
+      <feature id="org.slf4j.feature" version="1.0.0.qualifier"/>
+      <feature id="org.opendarts.eclipse.feature" version="1.0.0.qualifier"/>
    </features>
 
    <configurations>

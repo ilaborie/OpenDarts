@@ -21,6 +21,7 @@
    </extension>
    <extension
          id="product"
+         name="OpenDarts"
          point="org.eclipse.core.runtime.products">
       <product
             application="org.opendarts.ui.app.application"

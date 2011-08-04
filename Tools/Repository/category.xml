@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.opendarts.feature_1.0.0.qualifier.jar" id="org.opendarts.feature" version="1.0.0.qualifier">
+      <category name="category.opendarts"/>
+   </feature>
+   <feature url="features/org.opendarts.x01.feature_1.0.0.qualifier.jar" id="org.opendarts.x01.feature" version="1.0.0.qualifier">
+      <category name="category.opendarts"/>
+   </feature>
+   <category-def name="category.opendarts" label="OpenDarts"/>
+</site>
