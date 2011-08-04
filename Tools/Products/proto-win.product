@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="proto" id="org.opendarts.prototype.product" application="org.opendarts.prototype.application" useFeatures="false" includeLaunchers="true">
+<product name="OpenDarts" id="org.opendarts.prototype.product" application="org.opendarts.prototype.application" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/org.opendarts.prototype/icons/app/about.png"/>
+      <image path="/org.opendarts.ui.app/icons/app/about.png"/>
       <text>
          OpenDarts
 
@@ -20,17 +20,18 @@ Visit http://github.com/ilaborie/OpenDarts
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.opendarts.prototype/icons/app/opendarts_16.png" i32="/org.opendarts.prototype/icons/app/opendarts_32.png" i48="/org.opendarts.prototype/icons/app/opendarts_48.png" i64="/org.opendarts.prototype/icons/app/opendarts_64.png" i128="/org.opendarts.prototype/icons/app/opendarts_128.png"/>
+   <windowImages i16="/org.opendarts.ui.app/icons/app/opendarts_16.png" i32="/org.opendarts.ui.app/icons/app/opendarts_32.png" i48="/org.opendarts.ui.app/icons/app/opendarts_48.png" i64="/org.opendarts.ui.app/icons/app/opendarts_64.png" i128="/org.opendarts.ui.app/icons/app/opendarts_128.png"/>
 
    <splash
-      location="org.opendarts.prototype" />
+      location="org.opendarts.ui.app" />
    <launcher name="OpenDarts">
       <solaris/>
       <win useIco="true">
-         <ico path="/org.opendarts.prototype/icons/app/opendarts.ico"/>
+         <ico path="/org.opendarts.ui.app/icons/app/opendarts.ico"/>
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
@@ -141,9 +142,14 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.workbench"/>
-      <plugin id="org.opendarts.prototype"/>
+      <plugin id="org.opendarts.prototype" fragment=""/>
       <plugin id="org.slf4j.api"/>
    </plugins>
+
+   <features>
+      <feature id="org.opendarts.feature" version="1.0.0.qualifier"/>
+      <feature id="org.opendarts.x01.feature" version="1.0.0.qualifier"/>
+   </features>
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
