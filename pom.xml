@@ -104,5 +104,6 @@
 	</build>
 	<modules>
     	<module>Plugins</module>
+    	<module>Features</module>
     </modules>
 </project>
