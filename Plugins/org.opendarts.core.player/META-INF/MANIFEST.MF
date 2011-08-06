@@ -5,7 +5,9 @@ Bundle-SymbolicName: org.opendarts.core.player
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.opendarts.core.model.dart,
+Import-Package: javax.persistence;jpa="2.0";version="1.1.0",
+ org.apache.derby.jdbc;version="10.5.1.1",
+ org.opendarts.core.model.dart,
  org.opendarts.core.model.player,
  org.opendarts.core.service.dart,
  org.opendarts.core.service.player

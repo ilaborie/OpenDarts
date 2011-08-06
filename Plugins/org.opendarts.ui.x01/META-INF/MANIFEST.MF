@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.opendarts.ui.x01;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.opendarts.core.model.dart,
+Import-Package: org.opendarts.core.ia.service,
+ org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
  org.opendarts.core.model.game.impl,

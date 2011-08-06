@@ -1,20 +1,22 @@
 package org.opendarts.core.player.model;
 
+import javax.persistence.Entity;
+
+import org.opendarts.core.model.player.IComputerPlayer;
+
 /**
  * The Class ComputerPlayer.
  */
-public class ComputerPlayer extends Player {
-
-	/**
-	 * A counter
-	 */
-	private static int count = 1;
+@Entity
+public class ComputerPlayer extends Player implements IComputerPlayer {
+	
+	/** The level. */
+	private int level;
 
 	/**
 	 * Instantiates a new computer player.
 	 */
 	public ComputerPlayer() {
-		super("AI_" + count++);
 	}
 
 	/* (non-Javadoc)
@@ -24,5 +26,26 @@ public class ComputerPlayer extends Player {
 	public boolean isComputer() {
 		return true;
 	}
+
+	/**
+	 * Gets the level.
+	 *
+	 * @return the level
+	 */
+	@Override
+	public int getLevel() {
+		return this.level;
+	}
+
+	/**
+	 * Sets the level.
+	 *
+	 * @param level the new level
+	 */
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	
 
 }

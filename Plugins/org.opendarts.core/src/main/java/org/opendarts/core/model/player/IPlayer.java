@@ -4,7 +4,14 @@ package org.opendarts.core.model.player;
  * The Interface IPlayer.
  */
 public interface IPlayer {
-
+	
+	/**
+	 * Gets the uUID.
+	 *
+	 * @return the uUID
+	 */
+	String getUuid();
+	
 	/**
 	 * Gets the name.
 	 *

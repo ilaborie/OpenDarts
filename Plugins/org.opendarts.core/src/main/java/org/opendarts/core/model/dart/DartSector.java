@@ -329,4 +329,61 @@ public enum DartSector {
 		return result;
 	}
 
+	/**
+	 * Gets the single.
+	 *
+	 * @param value the value
+	 * @return the single
+	 */
+	public static DartSector getSingle(int value) {
+		switch (value) {
+			case 0:
+				return OUT_OF_TARGET;
+			case 1:
+				return ONE;
+			case 2:
+				return TWO;
+			case 3:
+				return THREE;
+			case 4:
+				return FOUR;
+			case 5:
+				return FIVE;
+			case 6:
+				return SIX;
+			case 7:
+				return SEVEN;
+			case 8:
+				return EIGHT;
+			case 9:
+				return NINE;
+			case 10:
+				return TEN;
+			case 11:
+				return ELEVEN;
+			case 12:
+				return TWELVE;
+			case 13:
+				return THIRTEEN;
+			case 14:
+				return FOURTEEN;
+			case 15:
+				return FIVETEEN;
+			case 16:
+				return SIXTEEN;
+			case 17:
+				return SEVENTEEN;
+			case 18:
+				return EIGHT;
+			case 19:
+				return NINETEEN;
+			case 20:
+				return TWENTY;
+			case 25:
+				return BULL;
+			default:
+				return NONE;
+		}
+	}
+
 }

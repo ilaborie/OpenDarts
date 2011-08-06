@@ -1,0 +1,4 @@
+#Fri Aug 05 00:10:02 CEST 2011
+eclipse.preferences.version=1
+org.eclipse.jpt.core.platform=generic2_0
+org.eclipse.jpt.jpa.core.metamodelSourceFolderName=src/main/java

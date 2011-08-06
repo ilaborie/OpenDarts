@@ -14,14 +14,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.progress.UIJob;
+import org.opendarts.core.ia.service.IComputerPlayerDartService;
 import org.opendarts.core.model.dart.DartZone;
 import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.dart.InvalidDartThrowException;
 import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGameEntry;
-import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.service.game.IGameService;
-import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.core.x01.model.BrokenX01DartsThrow;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Entry;
@@ -47,7 +47,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	private final IGameEntry entry;
 
 	/** The player. */
-	private final IPlayer player;
+	private final IComputerPlayer player;
 
 	/** The score. */
 	private int score;
@@ -56,7 +56,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	private final IGameService gameService;
 
 	/** The player service. */
-	private final IPlayerService playerService;
+	private final IComputerPlayerDartService computerService;
 
 	/**
 	 * Instantiates a new computer throw.
@@ -67,13 +67,13 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	 * @param entry the entry
 	 * @param gameService 
 	 */
-	public DartsComputerX01Dialog(Shell parentShell, IPlayer player,
+	public DartsComputerX01Dialog(Shell parentShell, IComputerPlayer player,
 			GameX01 game, GameX01Entry entry) {
 		super(parentShell, player, game, entry);
 		this.player = player;
 		this.entry = entry;
 		this.gameService = game.getParentSet().getGameService();
-		this.playerService = X01UiPlugin.getService(IPlayerService.class);
+		this.computerService = X01UiPlugin.getService(IComputerPlayerDartService.class);
 		this.score = game.getScore(player);
 	}
 
@@ -243,7 +243,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 				this.getDarts().length - index);
 		this.displayWished(wished, index);
 
-		IDart done = this.playerService.getComputerDart(wished);
+		IDart done = this.computerService.getComputerDart(this.player,wished);
 		LOG.debug("Computer wish: {}, done, {}", wished, done);
 		return done;
 	}

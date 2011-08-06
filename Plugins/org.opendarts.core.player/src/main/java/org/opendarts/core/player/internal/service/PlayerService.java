@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.opendarts.core.model.dart.DartSector;
-import org.opendarts.core.model.dart.DartZone;
-import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.player.model.ComputerPlayer;
 import org.opendarts.core.player.model.Player;
@@ -39,16 +36,45 @@ public class PlayerService implements IPlayerService {
 		if ((name == null) || "".equals(name)) {
 			name = System.getenv("USERNAME");
 		}
-		player = new Player(name);
+		player = this.createPlayer(name);
 		this.players.put(player.getName(), player);
 
 		// A computer
-		player = this.getComputerPlayer();
-		this.players.put(player.getName(), player);
-
-		// Another computer
-		player = this.getComputerPlayer();
-		this.players.put(player.getName(), player);
+		for (int lvl = 0; lvl<13 ; lvl++) {
+			player = this.createComputer(lvl);
+			this.players.put(player.getName(), player);
+		}
+	}
+	
+	/**
+	 * Creates the player.
+	 *
+	 * @param name the name
+	 * @return the player
+	 */
+	private Player createPlayer(String name) {
+		Player player = new Player();
+		player.setUuid(UUID.randomUUID().toString());
+		if (name==null || "".equals(name)) {
+			player.setName("The misterious player");
+		} else {
+			player.setName(name);
+		}
+		return player;
+	}
+	
+	/**
+	 * Creates the computer.
+	 *
+	 * @param level the level
+	 * @return the computer player
+	 */
+	private ComputerPlayer createComputer(int level) {
+		ComputerPlayer player = new ComputerPlayer();
+		player.setUuid(UUID.randomUUID().toString());
+		player.setName("COM_"+level);
+		player.setLevel(level);
+		return player;
 	}
 
 	/* (non-Javadoc)
@@ -79,109 +105,6 @@ public class PlayerService implements IPlayerService {
 	public List<IPlayer> getAllPlayers() {
 		ArrayList<IPlayer> list = new ArrayList<IPlayer>(this.players.values());
 		return list;
-	}
-
-	/**
-	 * Gets the computer dart.
-	 *
-	 * @param wished the wished
-	 * @return the computer dart
-	 */
-	@Override
-	public IDart getComputerDart(IDart wished) {
-		DartZone zone;
-		DartSector sector = null;
-
-		// Zone
-		Random random = new Random();
-		int rand = random.nextInt(1000);
-		switch (wished.getZone()) {
-			case DOUBLE:
-				if (rand < 10) { // unlucky
-					zone = DartZone.NONE;
-					sector = DartSector.UNLUCKY_DART;
-				} else if (rand < 320) { // Yeah
-					zone = DartZone.DOUBLE;
-				} else if (rand > 990) {// ouch
-					zone = DartZone.TRIPLE;
-				} else if (rand > 750) {// out of target
-					zone = DartZone.NONE;
-					sector = DartSector.OUT_OF_TARGET;
-				} else {
-					zone = DartZone.SINGLE;
-				}
-				break;
-			case TRIPLE:
-				if (rand < 10) { // unlucky
-					zone = DartZone.NONE;
-					sector = DartSector.UNLUCKY_DART;
-				} else if (rand < 270) { // Yeah
-					zone = DartZone.TRIPLE;
-				} else if (rand > 995) {// ouch
-					zone = DartZone.NONE;
-					sector = DartSector.OUT_OF_TARGET;
-				} else if (rand > 980) {// oops
-					zone = DartZone.DOUBLE;
-				} else {
-					zone = DartZone.SINGLE;
-				}
-				break;
-			default:
-				if (rand < 5) { // unlucky
-					zone = DartZone.NONE;
-					sector = DartSector.UNLUCKY_DART;
-				} else if (rand < 70) { // oops
-					zone = DartZone.TRIPLE;
-				} else if (rand > 990) {// ouch
-					zone = DartZone.NONE;
-					sector = DartSector.OUT_OF_TARGET;
-				} else if (rand > 950) {// oops
-					zone = DartZone.DOUBLE;
-				} else {
-					zone = DartZone.SINGLE;
-				}
-				break;
-		}
-
-		// Sector
-		if (sector == null) {
-			rand = random.nextInt(1000);
-			switch (wished.getSector()) {
-				case BULL:
-					if (rand < 20) {
-						sector = DartSector.UNLUCKY_DART;
-						zone = DartZone.SINGLE;
-					} else if (rand < 120) {
-						sector = DartSector.BULL;
-						zone = DartZone.DOUBLE;
-					} else if (rand < 350) {
-						sector = DartSector.BULL;
-						zone = DartZone.SINGLE;
-					} else {
-						// random single
-						int i = random.nextInt(DartSector.values().length);
-						sector = DartSector.values()[i];
-						zone = DartZone.SINGLE;
-					}
-					break;
-				case NONE:
-				case OUT_OF_TARGET:
-				case UNLUCKY_DART:
-					sector = DartSector.NONE;
-					break;
-				default:
-					// basic
-					if (rand < 180) {
-						sector = wished.getSector().getNext();
-					} else if (rand > 720) {
-						sector = wished.getSector().getPrevious();
-					} else {
-						sector = wished.getSector();
-					}
-					break;
-			}
-		}
-		return this.dartService.get().createDart(sector, zone);
 	}
 
 	/**

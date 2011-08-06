@@ -39,6 +39,7 @@ import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.GameEvent;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.game.IGameListener;
+import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.service.game.IGameService;
 import org.opendarts.core.x01.model.GameX01;
@@ -835,7 +836,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			// IA playing
 			if (player.isComputer()) {
 				ThreeDartsComputerDialog computerThrow = new DartsComputerX01Dialog(
-						this.getSite().getShell(), player, this.game,
+						this.getSite().getShell(), (IComputerPlayer) player, this.game,
 						(GameX01Entry) entry);
 				computerThrow.open();
 

@@ -2,7 +2,6 @@ package org.opendarts.core.service.player;
 
 import java.util.List;
 
-import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.player.IPlayer;
 
 /**
@@ -31,13 +30,5 @@ public interface IPlayerService {
 	 * @return the all players
 	 */
 	List<IPlayer> getAllPlayers();
-
-	/**
-	 * Gets the computer dart.
-	 *
-	 * @param wished the wished
-	 * @return the computer dart
-	 */
-	IDart getComputerDart(IDart wished);
 
 }

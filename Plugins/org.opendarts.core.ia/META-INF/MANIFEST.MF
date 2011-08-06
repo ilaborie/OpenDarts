@@ -6,3 +6,9 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Import-Package: org.opendarts.core.model.dart,
+ org.opendarts.core.model.player,
+ org.opendarts.core.service.dart,
+ org.slf4j;version="1.6.1"
+Export-Package: org.opendarts.core.ia.service
+Service-Component: OSGI-INF/ComputerPlayerDartService.xml
