@@ -5,13 +5,15 @@ Bundle-SymbolicName: org.opendarts.core.x01
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.opendarts.core.model.dart,
+Import-Package: org.opendarts.core.ia.service,
+ org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
  org.opendarts.core.model.game.impl,
  org.opendarts.core.model.player,
  org.opendarts.core.model.session,
  org.opendarts.core.model.session.impl,
+ org.opendarts.core.service.dart,
  org.opendarts.core.service.game,
  org.opendarts.core.stats.model,
  org.opendarts.core.stats.model.impl,

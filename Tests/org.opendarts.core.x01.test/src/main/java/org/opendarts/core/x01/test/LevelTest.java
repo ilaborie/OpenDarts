@@ -7,12 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.opendarts.core.ia.service.IComputerPlayerDartService;
-import org.opendarts.core.model.dart.DartZone;
-import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.dart.IDartsThrow;
-import org.opendarts.core.model.dart.InvalidDartThrowException;
-import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.model.player.IPlayer;
@@ -22,7 +17,6 @@ import org.opendarts.core.service.game.IGameService;
 import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.core.service.session.ISessionService;
 import org.opendarts.core.service.session.ISetService;
-import org.opendarts.core.x01.model.BrokenX01DartsThrow;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
@@ -51,12 +45,6 @@ public class LevelTest {
 	
 	/** The player. */
 	private IComputerPlayer player;
-	
-	/** The darts. */
-	private IDart[] darts;
-	
-	/** The darts throw. */
-	private IDartsThrow dartsThrow;
 
 	// Services
 	/** The session service. */
@@ -70,9 +58,6 @@ public class LevelTest {
 
 	/** The game service. */
 	private IGameService gameService;
-
-	/** The computer player dart service. */
-	private IComputerPlayerDartService computerPlayerDartService;
 	
 	/**
 	 * Instantiates a new level test.
@@ -112,91 +97,16 @@ public class LevelTest {
 	 * Play game.
 	 */
 	private void playGame() {
+		IDartsThrow dartsThrow;
 		while(!this.game.isFinished()) {
-			this.throwDarts();
-			if (this.dartsThrow instanceof WinningX01DartsThrow) {
-				this.gameService.addWinningPlayerThrow(this.game, this.player, this.dartsThrow);
+			dartsThrow = this.gameService.getComputerDartsThrow(this.game, this.player).getDartsThrow();
+			if (dartsThrow instanceof WinningX01DartsThrow) {
+				this.gameService.addWinningPlayerThrow(this.game, this.player, dartsThrow);
 			} else {
-				this.gameService.addPlayerThrow(this.game, this.player, this.dartsThrow);
+				this.gameService.addPlayerThrow(this.game, this.player, dartsThrow);
 			}
 		}
 	}
-	
-	
-
-	/**
-	 * Throw darts.
-	 *
-	 * @return the i darts throw
-	 */
-	private void throwDarts() {
-		int score;
-		IDart dart;
-		
-		this.darts = new IDart[3];
-		this.dartsThrow = null;
-		score = this.game.getScore(this.player);
-		try {
-			dart = this.throwDart(score, 0);
-			
-			if(this.dartsThrow ==null) {
-				score -=  dart.getScore();
-				dart =this.throwDart(score, 1);
-				
-				if (this.dartsThrow==null) {
-					this.throwDart(score, 2);
-					if( this.dartsThrow ==null) {
-						this.dartsThrow = new ThreeDartsThrow(darts);
-					}
-				}
-			}
-			
-		} catch (InvalidDartThrowException e) {
-			LOG.error("WTF !",e);
-		}
-	}
-	
-	private IDart throwDart(int score, int index)
-			throws InvalidDartThrowException {
-		IDart dart = this.getDart(score, index);
-		this.darts[index] = dart;
-		if (score == dart.getScore()) {
-			if (DartZone.DOUBLE.equals(dart.getZone())) {
-				// win
-				this.dartsThrow = new WinningX01DartsThrow(this.darts);
-			} else {
-				// broken
-				this.dartsThrow = new BrokenX01DartsThrow(this.darts);
-			}
-		} else if ((score - dart.getScore()) < 2) {
-			// broken
-			this.dartsThrow =new BrokenX01DartsThrow(this.darts);
-		}
-		return dart;
-	}
-
-	/**
-	 * Gets the dart.
-	 *
-	 * @param score the score
-	 * @param index the index
-	 * @return the first dart
-	 */
-	private IDart getDart(int score, int index) {
-		IDart wished = this.gameService.chooseBestDart(score,
-				this.darts.length - index);
-		IDart done = this.computerPlayerDartService.getComputerDart(this.player,wished);
-		return done;
-	}
-	
-	
-	/**
-	 * Shutdown.
-	 */
-	public void shutdown() {
-		this.display();
-	}
-	
 
 	/**
 	 * Shutdown.
@@ -272,15 +182,5 @@ public class LevelTest {
 	
 	public void unsetSetService(ISetService setService) {
 		this.setService = null;
-	}
-	
-	public void setComputerPlayerDartService(
-			IComputerPlayerDartService computerPlayerDartService) {
-		this.computerPlayerDartService = computerPlayerDartService;
-	}
-	
-	public void unsetComputerPlayerDartService(
-			IComputerPlayerDartService computerPlayerDartService) {
-		this.computerPlayerDartService = computerPlayerDartService;
 	}
 }

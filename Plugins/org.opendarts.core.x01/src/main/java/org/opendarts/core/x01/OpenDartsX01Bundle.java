@@ -1,5 +1,7 @@
 package org.opendarts.core.x01;
 
+import org.opendarts.core.ia.service.IComputerPlayerDartService;
+import org.opendarts.core.service.dart.IDartService;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.model.GameX01;
@@ -19,6 +21,11 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	/** The stats x01 service. */
 	private static StatsX01Service statsX01Service;
 
+	/** The computer player dart service. */
+	private static IComputerPlayerDartService computerPlayerDartService;
+
+	private static IDartService dartService;
+
 	/**
 	 * The constructor
 	 */
@@ -33,10 +40,23 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		ServiceReference<IStatsProvider> serviceRef = context
 				.getServiceReference(IStatsProvider.class);
+		// Stats
 		if (serviceRef != null) {
 			statsProvider = context.getService(serviceRef);
 			statsX01Service = new StatsX01Service();
 		}
+		
+		// Computer player
+		 ServiceReference<IComputerPlayerDartService> ref = context.getServiceReference(IComputerPlayerDartService.class);
+		 if (ref !=null) {
+			 computerPlayerDartService = context.getService(ref);
+		 }
+		 
+		 // Dart Service
+		 ServiceReference<IDartService> dartServiceRef = context.getServiceReference(IDartService.class);
+		 if (dartServiceRef !=null) {
+			 dartService = context.getService(dartServiceRef);
+		 }
 	}
 
 	/* (non-Javadoc)
@@ -60,5 +80,18 @@ public class OpenDartsX01Bundle implements BundleActivator {
 			statsProvider.registerStatsService(game, result);
 		}
 		return result;
+	}
+
+	/**
+	 * Gets the computer player dart service.
+	 *
+	 * @return the computer player dart service
+	 */
+	public static IComputerPlayerDartService getComputerPlayerDartService() {
+		return computerPlayerDartService;
+	}
+
+	public static IDartService getDartService() {
+		return dartService;
 	}
 }

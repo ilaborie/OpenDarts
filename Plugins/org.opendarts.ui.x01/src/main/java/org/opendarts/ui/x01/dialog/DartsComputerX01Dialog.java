@@ -1,6 +1,7 @@
 package org.opendarts.ui.x01.dialog;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -14,20 +15,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.progress.UIJob;
-import org.opendarts.core.ia.service.IComputerPlayerDartService;
-import org.opendarts.core.model.dart.DartZone;
+import org.opendarts.core.model.dart.IComputerThrow;
 import org.opendarts.core.model.dart.IDart;
-import org.opendarts.core.model.dart.InvalidDartThrowException;
 import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.service.game.IGameService;
-import org.opendarts.core.x01.model.BrokenX01DartsThrow;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Entry;
-import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.dialog.ThreeDartsComputerDialog;
-import org.opendarts.ui.x01.X01UiPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +51,8 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	/** The game service. */
 	private final IGameService gameService;
 
-	/** The player service. */
-	private final IComputerPlayerDartService computerService;
+	/** The game. */
+	private final GameX01 game;
 
 	/**
 	 * Instantiates a new computer throw.
@@ -72,8 +68,8 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 		super(parentShell, player, game, entry);
 		this.player = player;
 		this.entry = entry;
+		this.game = game;
 		this.gameService = game.getParentSet().getGameService();
-		this.computerService = X01UiPlugin.getService(IComputerPlayerDartService.class);
 		this.score = game.getScore(player);
 	}
 
@@ -130,34 +126,42 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 			 */
 			@Override
 			public void shellActivated(ShellEvent event) {
+				DartsComputerX01Dialog dialog = DartsComputerX01Dialog.this;
+				final IComputerThrow dartsThrow = dialog.gameService
+						.getComputerDartsThrow(dialog.game, dialog.player);
+
+				List<IDart> wishedList = dartsThrow.getWished();
+				List<IDart> doneList = dartsThrow.getDone();
+
 				// Throw darts
 				ThrowDartsJob job;
-				for (int i = 0; i < DartsComputerX01Dialog.this.getDarts().length; i++) {
-					job = new ThrowDartsJob(i);
-					job.schedule(DELAY * (i + 1));
+				IDart wished;
+				IDart done;
+				int i;
+				for (i = 0; i < wishedList.size(); i++) {
+					wished = wishedList.get(0);
+					done = doneList.get(0);
+					if (wished != null) {
+						job = new ThrowDartsJob(i, wished, done);
+						job.schedule(DELAY * (i + 1));
+					}
 				}
 
 				// Close
 				UIJob closeJob = new UIJob("Closer") {
 					@Override
 					public IStatus runInUIThread(IProgressMonitor monitor) {
-						try {
-							if (DartsComputerX01Dialog.this.getDartThrow() == null) {
-								DartsComputerX01Dialog.this
-										.setDartThrow(new ThreeDartsThrow(
-												DartsComputerX01Dialog.this
-														.getDarts()));
-							}
-							LOG.info("Throw: {}",
-									DartsComputerX01Dialog.this.getDartThrow());
-						} catch (InvalidDartThrowException e) {
-							LOG.error("WTF, computer is dumb?", e);
+						if (DartsComputerX01Dialog.this.getDartThrow() == null) {
+							DartsComputerX01Dialog.this
+									.setDartThrow((ThreeDartsThrow) dartsThrow);
 						}
+						LOG.info("Throw: {}",
+								DartsComputerX01Dialog.this.getDartThrow());
 						DartsComputerX01Dialog.this.close();
 						return Status.OK_STATUS;
 					}
 				};
-				closeJob.schedule(5 * DELAY);
+				closeJob.schedule((i + 1) * DELAY);
 			}
 		};
 	}
@@ -169,15 +173,21 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 
 		/** The index. */
 		private final int index;
+		private IDart wished;
+		private IDart done;
 
 		/**
 		 * Instantiates a new throw darts job.
 		 *
 		 * @param score the score
 		 * @param i the i
+		 * @param done 
+		 * @param wished 
 		 */
-		public ThrowDartsJob(int i) {
+		public ThrowDartsJob(int i, IDart wished, IDart done) {
 			super("Throw Dart");
+			this.wished = wished;
+			this.done = done;
 			this.index = i;
 		}
 
@@ -186,65 +196,11 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 		 */
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			try {
-				if (DartsComputerX01Dialog.this.getDartThrow() != null) {
-					return Status.CANCEL_STATUS;
-				}
-				IDart dart = DartsComputerX01Dialog.this.throwDart(
+			DartsComputerX01Dialog.this.displayWished(this.wished, index);
+				DartsComputerX01Dialog.this.displayDart(this.done,
 						DartsComputerX01Dialog.this.score, this.index);
-				DartsComputerX01Dialog.this.score -= dart.getScore();
-				DartsComputerX01Dialog.this.getDarts()[this.index] = dart;
-				DartsComputerX01Dialog.this.displayDart(dart,
-						DartsComputerX01Dialog.this.score, this.index);
-			} catch (InvalidDartThrowException e) {
-				LOG.error("WTF, the computer is not allowed to cheat!", e);
-			}
 			return Status.OK_STATUS;
 		}
 
-	}
-
-	/**
-	 * Throw dart.
-	 *
-	 * @param score the score
-	 * @param index the index
-	 * @return the thrown dart
-	 * @throws InvalidDartThrowException the invalid dart throw exception
-	 */
-	private IDart throwDart(int score, int index)
-			throws InvalidDartThrowException {
-		IDart dart = this.getDart(score, index);
-		this.getDarts()[index] = dart;
-		if (score == dart.getScore()) {
-			if (DartZone.DOUBLE.equals(dart.getZone())) {
-				// win
-				this.setDartThrow(new WinningX01DartsThrow(this.getDarts()));
-			} else {
-				// broken
-				this.setDartThrow(new BrokenX01DartsThrow(this.getDarts()));
-			}
-		} else if ((score - dart.getScore()) < 2) {
-			// broken
-			this.setDartThrow(new BrokenX01DartsThrow(this.getDarts()));
-		}
-		return dart;
-	}
-
-	/**
-	 * Gets the dart.
-	 *
-	 * @param score the score
-	 * @param index the index
-	 * @return the first dart
-	 */
-	private IDart getDart(int score, int index) {
-		IDart wished = this.gameService.chooseBestDart(score,
-				this.getDarts().length - index);
-		this.displayWished(wished, index);
-
-		IDart done = this.computerService.getComputerDart(this.player,wished);
-		LOG.debug("Computer wish: {}, done, {}", wished, done);
-		return done;
 	}
 }

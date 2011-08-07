@@ -2,9 +2,11 @@ package org.opendarts.core.service.game;
 
 import java.util.List;
 
+import org.opendarts.core.model.dart.IComputerThrow;
 import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
+import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISet;
 
@@ -46,15 +48,15 @@ public interface IGameService {
 	 * @param dartThrow the dart throw
 	 */
 	void addWinningPlayerThrow(IGame game, IPlayer player, IDartsThrow dartThrow);
-
+	
 	/**
-	 * Choose best dart.
+	 * Gets the computer darts throw.
 	 *
-	 * @param score the score
-	 * @param nbDartLeft the number of dart left
-	 * @return the i dart
+	 * @param game the game
+	 * @param player the player
+	 * @return the computer darts throw
 	 */
-	IDart chooseBestDart(int score, int nbDartLeft);
+	IComputerThrow getComputerDartsThrow(IGame game, IComputerPlayer player); 
 
 	/**
 	 * Cancel game.
@@ -62,4 +64,14 @@ public interface IGameService {
 	 * @param game the game
 	 */
 	void cancelGame(IGame game);
+
+	/**
+	 * Choose best dart.
+	 *
+	 * @param player the player
+	 * @param score the score
+	 * @param nbDart the nb dart
+	 * @return the  dart
+	 */
+	IDart chooseBestDart(IComputerPlayer player, int score, int nbDart);
 }
