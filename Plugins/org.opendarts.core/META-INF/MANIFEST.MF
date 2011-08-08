@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.opendarts.core
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.opendarts.core.model.dart,
+Export-Package: org.opendarts.core.internal.service;x-friends:="org.opendarts.ui.x01.test",
+ org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
  org.opendarts.core.model.game.impl,

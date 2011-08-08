@@ -12,5 +12,6 @@ Import-Package: javax.persistence;jpa="2.0";version="1.1.0",
  org.opendarts.core.service.dart,
  org.opendarts.core.service.player
 Service-Component: OSGI-INF/PlayerService.xml
-Export-Package: org.opendarts.core.player.model
+Export-Package: org.opendarts.core.player.internal.service;x-friends:="org.opendarts.ui.x01.test",
+ org.opendarts.core.player.model
 Bundle-ActivationPolicy: lazy

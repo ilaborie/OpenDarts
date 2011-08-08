@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.opendarts.ui.x01.test.handler.TestComputerHandler"
+            commandId="opendarts.cmd.TestComputer">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="opendarts.cmd.TestComputer"
+            icon="icons/actions/test.png">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="opendarts.toolbar.test">
+            <command
+                  commandId="opendarts.cmd.TestComputer"
+                  label="Test"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               label="Test">
+            <command
+                  commandId="opendarts.cmd.TestComputer"
+                  label="Test"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="opendarts.cmd.TestComputer"
+            name="Test Computer x01">
+      </command>
+   </extension>
+
+</plugin>
