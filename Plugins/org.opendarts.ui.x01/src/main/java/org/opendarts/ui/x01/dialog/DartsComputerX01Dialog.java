@@ -139,8 +139,8 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 				IDart done;
 				int i;
 				for (i = 0; i < wishedList.size(); i++) {
-					wished = wishedList.get(0);
-					done = doneList.get(0);
+					wished = wishedList.get(i);
+					done = doneList.get(i);
 					if (wished != null) {
 						job = new ThrowDartsJob(i, wished, done);
 						job.schedule(DELAY * (i + 1));
@@ -153,7 +153,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 					public IStatus runInUIThread(IProgressMonitor monitor) {
 						if (DartsComputerX01Dialog.this.getDartThrow() == null) {
 							DartsComputerX01Dialog.this
-									.setDartThrow((ThreeDartsThrow) dartsThrow);
+									.setDartThrow( (ThreeDartsThrow) dartsThrow.getDartsThrow());
 						}
 						LOG.info("Throw: {}",
 								DartsComputerX01Dialog.this.getDartThrow());

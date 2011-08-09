@@ -343,7 +343,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 					}
 				});
 		if (dialog.open() == Window.OK) {
-			IPlayer player = this.playerService.getPlayer(dialog.getValue());
+			IPlayer player = this.playerService.createPlayer(dialog.getValue());
 			if (player != null) {
 				this.players.add(player);
 				this.tablePlayers.add(player);

@@ -2,7 +2,10 @@ package org.opendarts.core.player.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.opendarts.core.model.player.IPlayer;
 
@@ -10,10 +13,20 @@ import org.opendarts.core.model.player.IPlayer;
  * The Class Player.
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name="Player.byUuid", query="Select p From Player p Where p.uuid = :uuid"),
+	@NamedQuery(name="Player.byName", query="Select p From Player p Where p.name = :name"),
+	@NamedQuery(name="Player.all", query="Select p From Player p"),
+	})
 public class Player implements IPlayer {
 	
-	/** The uuid. */
+	/** The id. */
 	@Id
+	@GeneratedValue
+	private Long id;
+	
+	/** The uuid. */
+	@Column(nullable=false, unique=true)
 	private String uuid;
 
 	/** The name. */
@@ -86,6 +99,23 @@ public class Player implements IPlayer {
 	public boolean isComputer() {
 		return false;
 	}
-	
+
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
+	protected Long getId() {
+		return this.id;
+	}
+
+	/**
+	 * Sets the id.
+	 *
+	 * @param id the new id
+	 */
+	protected void setId(Long id) {
+		this.id = id;
+	}
 
 }

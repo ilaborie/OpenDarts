@@ -5,13 +5,16 @@ Bundle-SymbolicName: org.opendarts.core.player
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: javax.persistence;jpa="2.0";version="1.1.0",
- org.apache.derby.jdbc;version="10.5.1.1",
+Import-Package: javax.persistence,
+ org.apache.derby.jdbc,
  org.opendarts.core.model.dart,
  org.opendarts.core.model.player,
  org.opendarts.core.service.dart,
- org.opendarts.core.service.player
+ org.opendarts.core.service.player,
+ org.slf4j;version="1.6.1"
 Service-Component: OSGI-INF/PlayerService.xml
 Export-Package: org.opendarts.core.player.internal.service;x-friends:="org.opendarts.ui.x01.test",
  org.opendarts.core.player.model
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+JPA-PersistenceUnits: OpenDartsPlayer
