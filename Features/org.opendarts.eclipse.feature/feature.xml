@@ -20,6 +20,10 @@
          id="org.eclipse.rcp"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.persistence.jpa"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.jface" version="3.6.0" match="compatible"/>
@@ -49,7 +53,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.opendarts.jpa"
+         id="org.eclipse.persistence.jpa.osgi"
          download-size="0"
          install-size="0"
          version="0.0.0"

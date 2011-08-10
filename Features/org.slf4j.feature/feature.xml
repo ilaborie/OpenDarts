@@ -19,7 +19,6 @@
    <requires>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="javax.servlet"/>
-      <import plugin="javax.mail.glassfish"/>
       <import plugin="org.slf4j.api" version="1.6.1" match="equivalent"/>
    </requires>
 

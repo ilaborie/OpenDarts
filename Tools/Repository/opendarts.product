@@ -31,7 +31,6 @@ Visit http://github.com/ilaborie/OpenDarts
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
@@ -167,6 +166,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+      <plugin id="org.eclipse.persistence.jpa.osgi" autoStart="true" startLevel="3" />
    </configurations>
 
 </product>

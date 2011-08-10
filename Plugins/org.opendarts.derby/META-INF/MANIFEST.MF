@@ -4,8 +4,7 @@ Bundle-Name: OpenDarts Debry
 Bundle-SymbolicName: org.opendarts.derby
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: javax.xml,
- org.eclipse.core.runtime,
- org.opendarts.jpa;bundle-version="1.0.0"
+ org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.derby.authentication,
  org.apache.derby.catalog,
