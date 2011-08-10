@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -62,6 +66,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	/** The game. */
 	private GameX01 game;
 
+	/** The game. */
+	private GameX01 worstGame;
+
 	/** The player. */
 	private IComputerPlayer player;
 
@@ -105,12 +112,92 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/** The txt worst. */
 	private Text txtWorst;
+	
+	/** The job. */
+	private final Job job;
 
 	/**
 	 * Instantiates a new computer level ui tester.
 	 */
 	public ComputerLevelUITester() {
 		super();
+		
+		this.job = new Job("Process Computer Games") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				final ComputerLevelUITester tester = ComputerLevelUITester.this;
+				
+				ISession session = sessionService.getSession();
+				List<IPlayer> players = Collections
+						.singletonList((IPlayer) tester.player);
+
+				IGameDefinition gameDefinition = new GameX01Definition(501, players,
+						tester.nbGames, false);
+				GameSet set = (GameSet) setService
+						.createNewSet(session, gameDefinition);
+				tester.gameService = set.getGameService();
+
+				// init stats
+				tester.min = Integer.MAX_VALUE;
+				tester.count = 0;
+				tester.max = 0;
+				tester.played = 0;
+
+				// UI
+				tester.display.asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						tester.viewer.getControl().setEnabled(false);
+						tester.spinner.setEnabled(false);
+						tester.btn.setEnabled(false);
+						tester.progress.setMaximum(tester.nbGames);
+						tester.progress.setSelection(tester.played);
+					}
+				});
+
+				int current;
+				tester.setService.startSet(set);
+				while (tester.played < nbGames) {
+					tester.game = (GameX01) set.getCurrentGame();
+					tester.gameService.startGame(tester.game);
+
+					tester.playGame();
+
+					// update stats
+					tester.played++;
+					current = tester.game.getNbDartToFinish();
+					tester.min = Math.min(tester.min, current);
+					if (current>tester.max) {
+						tester.worstGame = tester.game; 
+					}
+					tester.max = Math.max(tester.max, current);
+					tester.count += current;
+
+					// Update UI
+					tester.display.asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							tester.progress.setSelection(tester.played);
+							tester.txtBest.setText(String.valueOf(tester.min));
+							tester.txtAvg.setText(String.valueOf(((double) tester.count)
+									/ ((double) tester.played)));
+							tester.txtWorst.setText(String.valueOf(tester.max));
+						}
+					});
+					tester.game = null;
+				}
+				// UI reactivation
+				tester.display.asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						tester.viewer.getControl().setEnabled(true);
+						tester.spinner.setEnabled(true);
+						tester.btn.setEnabled(true);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
 	}
 
 	/* (non-Javadoc)
@@ -124,7 +211,6 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 			this.player = null;
 		} else {
 			this.player = (IComputerPlayer) sel.getFirstElement();
-			;
 		}
 		this.btn.setEnabled(!sel.isEmpty());
 	}
@@ -144,7 +230,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	public void widgetSelected(SelectionEvent e) {
 		Object src = e.getSource();
 		if (this.btn.equals(src)) {
-			this.run();
+			this.job.schedule();
 		} else if (this.spinner.equals(src)) {
 			this.nbGames = this.spinner.getSelection();
 		}
@@ -153,59 +239,6 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	/**
 	 * Run.
 	 */
-	private void run() {
-		ISession session = sessionService.getSession();
-		List<IPlayer> players = Collections
-				.singletonList((IPlayer) this.player);
-
-		IGameDefinition gameDefinition = new GameX01Definition(501, players,
-				this.nbGames, false);
-		GameSet set = (GameSet) setService
-				.createNewSet(session, gameDefinition);
-		this.gameService = set.getGameService();
-
-		// init stats
-		this.min = Integer.MAX_VALUE;
-		this.count = 0;
-		this.max = 0;
-		this.played = 0;
-
-		// UI
-		this.viewer.getControl().setEnabled(false);
-		this.spinner.setEnabled(false);
-		this.btn.setEnabled(false);
-		this.progress.setMaximum(this.nbGames);
-		this.progress.setSelection(this.played);
-
-		int current;
-		this.setService.startSet(set);
-		while (this.played < nbGames) {
-			this.game = (GameX01) set.getCurrentGame();
-			this.gameService.startGame(this.game);
-
-			this.playGame();
-
-			// update stats
-			this.played++;
-			current = this.game.getNbDartToFinish();
-			this.min = Math.min(this.min, current);
-			this.max = Math.max(this.max, current);
-			this.count += current;
-
-			// Update UI
-			this.progress.setSelection(this.played);
-			this.txtBest.setText(String.valueOf(this.min));
-			this.txtAvg.setText(String.valueOf(((double) this.count)
-					/ ((double) this.played)));
-			this.txtWorst.setText(String.valueOf(this.max));
-
-			this.game = null;
-		}
-
-		this.viewer.getControl().setEnabled(true);
-		this.spinner.setEnabled(true);
-		this.btn.setEnabled(true);
-	}
 
 	/**
 	 * Play game.
