@@ -28,7 +28,11 @@ public class Dart implements IDart {
 		super();
 		this.sector = sector;
 		this.zone = zone;
-		this.score = this.computeScore();
+		if (zone!=null && sector!=null) {
+			this.score = this.computeScore();
+		} else {
+			this.score =0;
+		}
 	}
 
 	/**

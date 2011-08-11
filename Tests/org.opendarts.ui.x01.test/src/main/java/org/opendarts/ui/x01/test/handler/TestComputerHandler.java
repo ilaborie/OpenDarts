@@ -27,7 +27,6 @@ public class TestComputerHandler extends AbstractHandler implements IHandler {
 		dialog.setSetService(OpenDartsUiPlugin.getService(ISetService.class));
 		
 		Shell shell = dialog.startup();
-		shell.open();
 		return null;
 	}
 }

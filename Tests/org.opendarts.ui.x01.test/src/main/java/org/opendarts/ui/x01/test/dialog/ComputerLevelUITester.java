@@ -1,7 +1,6 @@
 package org.opendarts.ui.x01.test.dialog;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -112,7 +111,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/** The txt worst. */
 	private Text txtWorst;
-	
+
 	/** The job. */
 	private final Job job;
 
@@ -121,20 +120,41 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	 */
 	public ComputerLevelUITester() {
 		super();
-		
+
 		this.job = new Job("Process Computer Games") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				final ComputerLevelUITester tester = ComputerLevelUITester.this;
-				
-				ISession session = sessionService.getSession();
-				List<IPlayer> players = Collections
-						.singletonList((IPlayer) tester.player);
 
-				IGameDefinition gameDefinition = new GameX01Definition(501, players,
-						tester.nbGames, false);
-				GameSet set = (GameSet) setService
-						.createNewSet(session, gameDefinition);
+				ISession session = sessionService.getSession();
+				List<IPlayer> players = new ArrayList<IPlayer>();
+				players.add(tester.player);
+				players.add(new IPlayer() {
+					@Override
+					public String toString() {
+						return "x";
+					}
+
+					@Override
+					public boolean isComputer() {
+						return false;
+					}
+
+					@Override
+					public String getUuid() {
+						return null;
+					}
+
+					@Override
+					public String getName() {
+						return "Dumbo";
+					}
+				});
+
+				IGameDefinition gameDefinition = new GameX01Definition(501,
+						players, tester.nbGames, false);
+				GameSet set = (GameSet) setService.createNewSet(session,
+						gameDefinition);
 				tester.gameService = set.getGameService();
 
 				// init stats
@@ -167,8 +187,8 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 					tester.played++;
 					current = tester.game.getNbDartToFinish();
 					tester.min = Math.min(tester.min, current);
-					if (current>tester.max) {
-						tester.worstGame = tester.game; 
+					if (current > tester.max) {
+						tester.worstGame = tester.game;
 					}
 					tester.max = Math.max(tester.max, current);
 					tester.count += current;
@@ -179,8 +199,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 						public void run() {
 							tester.progress.setSelection(tester.played);
 							tester.txtBest.setText(String.valueOf(tester.min));
-							tester.txtAvg.setText(String.valueOf(((double) tester.count)
-									/ ((double) tester.played)));
+							tester.txtAvg.setText(String
+									.valueOf(((double) tester.count)
+											/ ((double) tester.played)));
 							tester.txtWorst.setText(String.valueOf(tester.max));
 						}
 					});
@@ -245,15 +266,17 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	 */
 	private void playGame() {
 		IDartsThrow dartsThrow;
+		IPlayer p;
 		while (!this.game.isFinished()) {
+			p = this.game.getCurrentPlayer();
+
 			dartsThrow = this.gameService.getComputerDartsThrow(this.game,
-					this.player).getDartsThrow();
+					(IComputerPlayer) player).getDartsThrow();
 			if (dartsThrow instanceof WinningX01DartsThrow) {
-				this.gameService.addWinningPlayerThrow(this.game, this.player,
-						dartsThrow);
+				this.gameService
+						.addWinningPlayerThrow(this.game, p, dartsThrow);
 			} else {
-				this.gameService.addPlayerThrow(this.game, this.player,
-						dartsThrow);
+				this.gameService.addPlayerThrow(this.game, p, dartsThrow);
 			}
 		}
 	}
@@ -272,7 +295,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 		lbl = new Label(this.shell, SWT.NONE);
 		GridDataFactory.fillDefaults().applyTo(lbl);
 		lbl.setText("Computer: ");
-		this.viewer = new ComboViewer(this.shell, SWT.BORDER);
+		this.viewer = new ComboViewer(this.shell, SWT.BORDER | SWT.READ_ONLY);
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(this.viewer.getControl());
 		this.viewer.setLabelProvider(new PlayerLabelProvider());
@@ -329,7 +352,8 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	 */
 	private Composite buildStats(Composite parent) {
 		Composite main = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(6).equalWidth(true).applyTo(main);
+		GridLayoutFactory.fillDefaults().numColumns(6).equalWidth(true)
+				.applyTo(main);
 
 		Label lbl;
 
@@ -340,7 +364,8 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 		this.txtBest = new Text(main, SWT.READ_ONLY);
 		this.txtBest.setText("-");
-		GridDataFactory.fillDefaults().hint(100, SWT.DEFAULT).applyTo(this.txtBest);
+		GridDataFactory.fillDefaults().hint(100, SWT.DEFAULT)
+				.applyTo(this.txtBest);
 
 		// Average
 		lbl = new Label(main, SWT.NONE);

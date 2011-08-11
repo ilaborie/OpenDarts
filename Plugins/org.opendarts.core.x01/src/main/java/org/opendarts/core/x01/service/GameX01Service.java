@@ -102,7 +102,7 @@ public class GameX01Service implements IGameService {
 		GameX01 game = (GameX01) igame;
 		ComputerPlayerThrow computerPlayerThrow = new ComputerPlayerThrow(game,
 				player);
-		int score = game.getScore(player);
+		int score = game.getScore(game.getCurrentPlayer());
 		return computerPlayerThrow.getComputerThrow(score);
 	}
 
