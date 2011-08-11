@@ -56,10 +56,20 @@ public class StatsValue<T> implements IStatValue<T> {
 	 */
 	@Override
 	public String getValueAsString() {
+		return displayValue(this.value);
+	}
+
+	/**
+	 * Extracted.
+	 *
+	 * @param value the value
+	 * @return the string
+	 */
+	private String displayValue(Object value) {
 		String result;
-		if (this.value == null) {
+		if (value == null) {
 			result = "";
-		} else if (this.value instanceof Double) {
+		} else if (value instanceof Double) {
 			result = DOUBLE_FORMATTER.format(this.value);
 		} else {
 			result = String.valueOf(this.value);
