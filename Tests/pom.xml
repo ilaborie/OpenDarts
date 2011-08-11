@@ -13,6 +13,7 @@
 	
 	<modules>
 		<module>org.opendarts.core.player.test</module>
+		<module>org.opendarts.core.test</module>
 	</modules>
 
 </project>

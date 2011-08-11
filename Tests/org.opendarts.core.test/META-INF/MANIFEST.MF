@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts Core Test
+Bundle-SymbolicName: org.opendarts.core.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.opendarts.core.test.CoreTestBundle
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.junit;version="4.8.2",
+ org.opendarts.core.model.dart,
+ org.opendarts.core.model.dart.impl,
+ org.opendarts.core.model.game,
+ org.opendarts.core.model.game.impl,
+ org.opendarts.core.model.player,
+ org.opendarts.core.model.session,
+ org.opendarts.core.model.session.impl,
+ org.opendarts.core.service.dart,
+ org.opendarts.core.service.game,
+ org.opendarts.core.service.session,
+ org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy

@@ -17,4 +17,12 @@ public interface IDartService {
 	 * @return the i dart
 	 */
 	public IDart createDart(DartSector sector, DartZone zone);
+	
+	/**
+	 * Gets the dart.
+	 *
+	 * @param dart the dart
+	 * @return the dart
+	 */
+	public IDart getDart(String dart);
 }
