@@ -98,7 +98,8 @@ public class ComputerPlayerThrow {
 		} catch (InvalidDartThrowException e) {
 			LOG.error("WTF !", e);
 		}
-		return new ComputerThrow(dartsThrow,  Arrays.asList(this.wished),Arrays.asList(this.darts)) ;
+		return new ComputerThrow(dartsThrow, Arrays.asList(this.wished),
+				Arrays.asList(this.darts));
 	}
 
 	/**
@@ -137,7 +138,7 @@ public class ComputerPlayerThrow {
 	 */
 	private IDart getDart(int score, int index) {
 		IDart wished = this.gameService.chooseBestDart(this.player, score,
-				this.darts.length - index);
+				this.darts.length - index, this.game);
 		this.wished[index] = wished;
 		IDart done = this.computerPlayerDartService.getComputerDart(
 				this.player, wished);

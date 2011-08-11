@@ -22,6 +22,7 @@ import org.opendarts.core.service.game.IGameService;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
+import org.opendarts.core.x01.service.impl.BestDart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +99,8 @@ public class GameX01Service implements IGameService {
 	 * @see org.opendarts.core.service.game.IGameService#getComputerDartsThrow(org.opendarts.core.model.game.IGame, org.opendarts.core.model.player.IComputerPlayer)
 	 */
 	@Override
-	public IComputerThrow getComputerDartsThrow(IGame igame, IComputerPlayer player) {
+	public IComputerThrow getComputerDartsThrow(IGame igame,
+			IComputerPlayer player) {
 		GameX01 game = (GameX01) igame;
 		ComputerPlayerThrow computerPlayerThrow = new ComputerPlayerThrow(game,
 				player);
@@ -110,7 +112,8 @@ public class GameX01Service implements IGameService {
 	 * @see org.opendarts.core.service.game.IGameService#chooseBestDart(int, int)
 	 */
 	@Override
-	public IDart chooseBestDart(IComputerPlayer player, int score, int nbDart) {
+	public IDart chooseBestDart(IComputerPlayer player, int score, int nbDart,
+			IGame game) {
 		BestDart bestDart = this.bestDarts.get(nbDart);
 		if (bestDart == null) {
 			Properties props = new Properties();
@@ -138,6 +141,6 @@ public class GameX01Service implements IGameService {
 				}
 			}
 		}
-		return bestDart.getBestDart(score);
+		return bestDart.getBestDart(player, score, game);
 	}
 }

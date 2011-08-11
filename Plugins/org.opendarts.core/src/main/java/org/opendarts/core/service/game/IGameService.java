@@ -48,7 +48,7 @@ public interface IGameService {
 	 * @param dartThrow the dart throw
 	 */
 	void addWinningPlayerThrow(IGame game, IPlayer player, IDartsThrow dartThrow);
-	
+
 	/**
 	 * Gets the computer darts throw.
 	 *
@@ -56,7 +56,7 @@ public interface IGameService {
 	 * @param player the player
 	 * @return the computer darts throw
 	 */
-	IComputerThrow getComputerDartsThrow(IGame game, IComputerPlayer player); 
+	IComputerThrow getComputerDartsThrow(IGame game, IComputerPlayer player);
 
 	/**
 	 * Cancel game.
@@ -73,5 +73,6 @@ public interface IGameService {
 	 * @param nbDart the nb dart
 	 * @return the  dart
 	 */
-	IDart chooseBestDart(IComputerPlayer player, int score, int nbDart);
+	IDart chooseBestDart(IComputerPlayer player, int score, int nbDart,
+			IGame game);
 }

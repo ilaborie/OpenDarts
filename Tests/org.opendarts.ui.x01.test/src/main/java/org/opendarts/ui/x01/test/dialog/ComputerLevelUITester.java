@@ -1,5 +1,7 @@
 package org.opendarts.ui.x01.test.dialog;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,9 @@ import org.opendarts.ui.label.PlayerLabelProvider;
  */
 public class ComputerLevelUITester implements ISelectionChangedListener,
 		SelectionListener {
+	
+	/** The Constant NUMBER_FORMAT. */
+	private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("0.##");
 
 	// Model
 	/** The number of games played. */
@@ -64,9 +69,6 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/** The game. */
 	private GameX01 game;
-
-	/** The game. */
-	private GameX01 worstGame;
 
 	/** The player. */
 	private IComputerPlayer player;
@@ -187,9 +189,6 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 					tester.played++;
 					current = tester.game.getNbDartToFinish();
 					tester.min = Math.min(tester.min, current);
-					if (current > tester.max) {
-						tester.worstGame = tester.game;
-					}
 					tester.max = Math.max(tester.max, current);
 					tester.count += current;
 
@@ -199,9 +198,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 						public void run() {
 							tester.progress.setSelection(tester.played);
 							tester.txtBest.setText(String.valueOf(tester.min));
-							tester.txtAvg.setText(String
-									.valueOf(((double) tester.count)
-											/ ((double) tester.played)));
+							double avg = ((double) tester.count)
+							/ ((double) tester.played);
+							tester.txtAvg.setText(NUMBER_FORMAT.format(avg));
 							tester.txtWorst.setText(String.valueOf(tester.max));
 						}
 					});
