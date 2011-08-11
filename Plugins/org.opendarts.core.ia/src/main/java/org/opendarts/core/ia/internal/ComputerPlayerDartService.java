@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.opendarts.core.ia.service.IComputerPlayerDartService;
 import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.player.IComputerPlayer;
+import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.core.service.dart.IDartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,10 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 			.getLogger(ComputerPlayerDartService.class);
 
 	/** The dart service. */
-	private final AtomicReference<IDartService> dartService = new AtomicReference<IDartService>();
+	private final AtomicReference<IDartService> dartService;
+
+	/** The player service. */
+	private final AtomicReference<IPlayerService> playerService;
 
 	/** The gaussian props. */
 	private final Properties boardProps;
@@ -37,6 +41,8 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 	public ComputerPlayerDartService() {
 		super();
 		this.boardProps = new Properties();
+		this.dartService = new AtomicReference<IDartService>();
+		this.playerService = new AtomicReference<IPlayerService>();
 	}
 
 	/**
@@ -63,7 +69,7 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 			}
 		}
 		
-		this.gaussianStats = new GaussianStats(this.dartService.get(), this.boardProps);
+		this.gaussianStats = new GaussianStats(this.dartService.get(), this.boardProps,this.playerService.get().getAllComputerPlayers().size());
 	}
 
 	/**
@@ -97,6 +103,24 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 	 */
 	public void unsetDartService(IDartService dartService) {
 		this.dartService.compareAndSet(dartService, null);
+	}
+	
+	/**
+	 * Sets the player service.
+	 *
+	 * @param playerService the new player service
+	 */
+	public void setPlayerService(IPlayerService playerService) {
+		this.playerService.set(playerService);
+	}
+
+	/**
+	 * Unset player service.
+	 *
+	 * @param playerService the player service
+	 */
+	public void unsetPlayerService(IPlayerService playerService) {
+		this.playerService.compareAndSet(playerService,null);
 	}
 
 }

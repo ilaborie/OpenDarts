@@ -74,7 +74,7 @@ public class PlayerService implements IPlayerService {
 		// Create computers (if needed)
 		if (this.getAllComputerPlayers().isEmpty()) {
 			LOG.warn("Missing comupters players, gonna create then");
-			for (int lvl = 0; lvl < 13; lvl++) {
+			for (int lvl = 0; lvl < 16; lvl++) {
 				this.createComputer(lvl);
 			}
 		}

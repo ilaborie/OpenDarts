@@ -5,4 +5,5 @@
    <service>
       <provide interface="org.opendarts.core.ia.service.IComputerPlayerDartService"/>
    </service>
+   <reference bind="setPlayerService" cardinality="1..1" interface="org.opendarts.core.service.player.IPlayerService" name="IPlayerService" policy="static" unbind="unsetPlayerService"/>
 </scr:component>

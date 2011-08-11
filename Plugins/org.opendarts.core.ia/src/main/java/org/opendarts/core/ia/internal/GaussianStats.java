@@ -72,17 +72,7 @@ public class GaussianStats {
 	/** The dart service. */
 	private final IDartService dartService;
 
-	/** The factor a. */
-	private final double factorA;
-	
-	/** The factor b. */
-	private final double factorB;
-	
-	/** The factor c. */
-	private final double factorC;
-	
-	/** The factor d. */
-	private final double factorD;
+	private final double[] lvlFactor;
 
 	/** The rand. */
 	private final Random rand;
@@ -92,7 +82,7 @@ public class GaussianStats {
 	 *
 	 * @param dartService the dart service
 	 */
-	public GaussianStats(IDartService dartService, Properties props) {
+	public GaussianStats(IDartService dartService, Properties props,int maxComputerLvl) {
 		super();
 		this.dartService = dartService;
 		this.rand = new Random();
@@ -134,12 +124,12 @@ public class GaussianStats {
 				.getProperty("doubleNextNext"));
 		this.doubleNextNextNext = Double.valueOf(props
 				.getProperty("doubleNextNextNext"));
-		
-		// Factor
-		this.factorA = Double.valueOf(props.getProperty("factor.a"));
-		this.factorB = Double.valueOf(props.getProperty("factor.b"));
-		this.factorC = Double.valueOf(props.getProperty("factor.c"));
-		this.factorD = Double.valueOf(props.getProperty("factor.d"));
+
+		// Level Factor
+		this.lvlFactor = new double[maxComputerLvl];
+		for(int lvl=0;lvl <this.lvlFactor.length;lvl++) {
+			this.lvlFactor[lvl] = Double.valueOf(props.getProperty("level."+lvl));
+		}
 	}
 
 	/**
@@ -340,8 +330,7 @@ public class GaussianStats {
 	 * @return the player factor
 	 */
 	private double getPlayerFactor(IComputerPlayer player) {
-		double lvl = player.getLevel();
-		return  factorA + (factorB-factorA)/ (factorC*lvl*lvl +factorD);
+		return this.lvlFactor[player.getLevel()];
 	}
 
 	/**
