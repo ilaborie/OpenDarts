@@ -87,6 +87,7 @@ public class ComputerPlayerThrow {
 				dart = this.throwDart(score, 1);
 
 				if (this.dartsThrow == null) {
+					score -= dart.getScore();
 					this.throwDart(score, 2);
 					if (this.dartsThrow == null) {
 						this.dartsThrow = new ThreeDartsThrow(darts);
