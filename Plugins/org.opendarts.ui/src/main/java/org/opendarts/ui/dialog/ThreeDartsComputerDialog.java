@@ -22,6 +22,7 @@ import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 
 /**
@@ -216,7 +217,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 		// Text
 		this.txtDart[i] = this.buildText(result);
 		this.txtDart[i].setBackground(this.toolkit.getColors().getColor(
-				OpenDartsFormsToolkit.COLOR_ACTIVE));
+				IGeneralPrefs.COLOR_ACTIVE));
 
 		return result;
 	}
@@ -235,7 +236,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 				.align(SWT.CENTER, SWT.CENTER).hint(220, SWT.DEFAULT)
 				.applyTo(txt);
 		txt.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
+				.getFont(IGeneralPrefs.FONT_SCORE_INPUT));
 		return txt;
 	}
 

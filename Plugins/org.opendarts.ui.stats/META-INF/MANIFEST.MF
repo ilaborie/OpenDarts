@@ -22,3 +22,5 @@ Import-Package: org.opendarts.core.model.dart,
  org.opendarts.ui,
  org.opendarts.ui.label,
  org.opendarts.ui.utils
+Bundle-Activator: org.opendarts.ui.stats.OpenDartsStatsUiPlugin
+Export-Package: org.opendarts.ui.stats

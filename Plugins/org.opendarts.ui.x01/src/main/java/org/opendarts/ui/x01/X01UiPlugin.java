@@ -1,5 +1,6 @@
 package org.opendarts.ui.x01;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -51,6 +52,15 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+	}
+	
+	/**
+	 * Gets the x01 preferences.
+	 *
+	 * @return the x01 preferences
+	 */
+	public static IPreferenceStore getX01Preferences() {
+		return plugin.getPreferenceStore();
 	}
 
 	/**

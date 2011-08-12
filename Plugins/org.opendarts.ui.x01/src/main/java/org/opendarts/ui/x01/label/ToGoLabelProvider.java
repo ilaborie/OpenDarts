@@ -11,6 +11,7 @@ import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
+import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 
 /**
@@ -58,7 +59,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Font getFont(Object element) {
 		return OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD);
+				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT);
 	}
 
 	/* (non-Javadoc)
@@ -71,7 +72,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow instanceof WinningX01DartsThrow) {
 				return OpenDartsFormsToolkit.getToolkit().getColors()
-						.getColor(OpenDartsFormsToolkit.COLOR_WINNING);
+						.getColor(IGeneralPrefs.COLOR_WINNING);
 			}
 		}
 		return super.getBackground(element);

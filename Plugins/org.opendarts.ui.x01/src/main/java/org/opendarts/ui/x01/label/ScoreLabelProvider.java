@@ -17,6 +17,7 @@ import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.x01.model.BrokenX01DartsThrow;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
+import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 
 /**
@@ -136,10 +137,10 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow instanceof BrokenX01DartsThrow) {
 				return OpenDartsFormsToolkit.getToolkit().getColors()
-						.getColor(OpenDartsFormsToolkit.COLOR_BROKEN);
+						.getColor(IGeneralPrefs.COLOR_BROKEN);
 			} else if (dartThrow instanceof WinningX01DartsThrow) {
 				return OpenDartsFormsToolkit.getToolkit().getColors()
-						.getColor(OpenDartsFormsToolkit.COLOR_WINNING);
+						.getColor(IGeneralPrefs.COLOR_WINNING);
 			}
 		}
 		return super.getBackground(element);
@@ -151,7 +152,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Font getFont(Object element) {
 		return OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET);
+				.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
 	}
 
 	/* (non-Javadoc)

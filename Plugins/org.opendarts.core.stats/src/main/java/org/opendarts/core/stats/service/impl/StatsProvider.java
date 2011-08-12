@@ -2,8 +2,10 @@ package org.opendarts.core.stats.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.session.ISession;
@@ -116,6 +118,24 @@ public class StatsProvider implements IStatsProvider {
 		}
 		// chain to session
 		this.registerStatsService(game.getParentSet(), statsService);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.service.IStatsProvider#getAllStatsService()
+	 */
+	@Override
+	public Set<IStatsService> getAllStatsService() {
+		Set<IStatsService> result = new HashSet<IStatsService>();
+		for (List<IStatsService> lst : this.sessionStats.values()) {
+			result.addAll(lst);
+		}
+		for (List<IStatsService> lst : this.setStats.values()) {
+			result.addAll(lst);
+		}
+		for (List<IStatsService> lst : this.gameStats.values()) {
+			result.addAll(lst);
+		}
+		return result;
 	}
 
 }

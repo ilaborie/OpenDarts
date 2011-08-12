@@ -1,5 +1,10 @@
 package org.opendarts.ui.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.TableViewer;
@@ -18,44 +23,13 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.opendarts.ui.OpenDartsUiPlugin;
+import org.opendarts.ui.pref.IGeneralPrefs;
 
 /**
  * The Class OpenDartsFormsToolkit.
  */
-public class OpenDartsFormsToolkit extends FormToolkit {
-
-	/** The Constant COLOR_BROKEN. */
-	public static final String COLOR_BROKEN = "BrokenBackgroundColor";
-
-	/** The Constant COLOR_WINNING. */
-	public static final String COLOR_WINNING = "WinningBackgroundColor";
-
-	/** The Constant COLOR_ACTIVE. */
-	public static final String COLOR_ACTIVE = "ActiveBackgroundColor";
-
-	/** The Constant COLOR_ACTIVE. */
-	public static final String COLOR_INACTIVE = "InactiveBackgroundColor";
-
-	/** The Constant FONT_BOLD. */
-	public static final String FONT_BOLD = "FontBold";
-
-	/** The Constant FONT_SCORE_LEFT. */
-	public static final String FONT_SCORE_LEFT = "ScoreLeftFont";
-
-	/** The Constant FONT_SCORE_SHEET. */
-	public static final String FONT_SCORE_SHEET = "ScoreSheetFont";
-
-	/** The Constant FONT_SCORE_SHEET_BOLD. */
-	public static final String FONT_SCORE_SHEET_BOLD = "ScoreSheetFontBold";
-
-	/** The Constant FONT_SCORE_INPUT. */
-	public static final String FONT_SCORE_INPUT = "ScoreInputFont";
-
-	/** The Constant FONT_STATS_BOLD. */
-	public static final String FONT_STATS_BOLD = "StatsBoldFont";
-
-	/** The Constant FONT_STATS. */
-	public static final String FONT_STATS = "StatsFont";
+public class OpenDartsFormsToolkit extends FormToolkit implements IGeneralPrefs {
 
 	/** The form colors. */
 	private static FormColors formColors;
@@ -76,19 +50,19 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	private OpenDartsFormsToolkit(FormColors colors) {
 		super(colors);
+		fontRegistry
+				.put(FONT_BOLD,
+						fontRegistry.getBold(JFaceResources.DEFAULT_FONT)
+								.getFontData());
+		List<String> fonts = Arrays.asList(FONT_SCORE_INPUT, FONT_SCORE_LEFT,
+				FONT_SCORE_SHEET, FONT_SCORE_SHEET_LEFT, FONT_STATS,
+				FONT_STATS_LABEL);
 
-		Font initialFont;
-		// Fonts
-		initialFont = fontRegistry.defaultFont();
-		registerFont(initialFont, FONT_SCORE_SHEET, 32);
-		registerFont(initialFont, FONT_STATS, 18);
-
-		initialFont = fontRegistry.getBold(JFaceResources.DEFAULT_FONT);
-		fontRegistry.put(FONT_BOLD, initialFont.getFontData());
-		registerFont(initialFont, FONT_STATS_BOLD, 18);
-		registerFont(initialFont, FONT_SCORE_SHEET_BOLD, 32);
-		registerFont(initialFont, FONT_SCORE_INPUT, 64);
-		registerFont(initialFont, FONT_SCORE_LEFT, 126);
+		for (String key : fonts) {
+			FontData[] fontDataArray = PreferenceConverter.getFontDataArray(
+					OpenDartsUiPlugin.getOpenDartsPreference(), key);
+			fontRegistry.put(key, fontDataArray);
+		}
 	}
 
 	/**
@@ -99,31 +73,21 @@ public class OpenDartsFormsToolkit extends FormToolkit {
 	 */
 	public static FormColors getFormColors(Display display) {
 		if (formColors == null) {
+			IPreferenceStore store = OpenDartsUiPlugin.getOpenDartsPreference();
+
 			formColors = new FormColors(display);
-			formColors.createColor(COLOR_ACTIVE, 0xF2, 0xDA, 0x2E);
-			formColors.createColor(COLOR_BROKEN, 0xD0, 0x6D, 0x58);
-			formColors.createColor(COLOR_INACTIVE, 0xC1, 0xC1, 0xC1);
-			formColors.createColor(COLOR_WINNING,
-					formColors.getColor(IFormColors.H_GRADIENT_START).getRGB());
+
+			List<String> colors = Arrays.asList(COLOR_ACTIVE, COLOR_INACTIVE,
+					COLOR_WINNING, COLOR_BROKEN);
+
+			for (String key : colors) {
+				formColors.createColor(key,
+						PreferenceConverter.getColor(store, key));
+			}
+
 			formColors.markShared();
 		}
 		return formColors;
-	}
-
-	/**
-	 * Gets the font.
-	 *
-	 * @param initialFont the initial font
-	 * @param key the key
-	 * @param height the height
-	 * @return the font
-	 */
-	private static void registerFont(Font initialFont, String key, int height) {
-		FontData[] fontData = initialFont.getFontData();
-		for (FontData element : fontData) {
-			element.setHeight(height);
-		}
-		fontRegistry.put(key, fontData);
 	}
 
 	/**

@@ -42,6 +42,11 @@
                   label="Full Screen"
                   style="toggle">
             </command>
+            <command
+                  commandId="org.eclipse.ui.window.preferences"
+                  label="Preferences ..."
+                  style="push">
+            </command>
          </menu>
          <menu
                label="?">
@@ -97,7 +102,7 @@
          point="org.eclipse.ui.commandImages">
       <image
             commandId="opendarts.cmd.newSet"
-            icon="icons/actions/add.png">
+            icon="icons/actions/plus.png">
       </image>
       <image
             commandId="org.eclipse.ui.file.exit"
@@ -115,6 +120,32 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+G">
       </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.opendarts.ui.pref.GeneralPreferencesPage"
+            id="opendarts.pref.ui.general"
+            name="General">
+      </page>
+      <page
+            category="opendarts.pref.ui.general"
+            class="org.opendarts.ui.pref.GeneralColorPreferencesPage"
+            id="opendarts.pref.ui.general.colors"
+            name="Colors">
+      </page>
+      <page
+            category="opendarts.pref.ui.general"
+            class="org.opendarts.ui.pref.GeneralFontPreferencesPage"
+            id="opendarts.pref.ui.general.font"
+            name="Fonts">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.opendarts.ui.pref.OpenDartsPreferenceInitializer">
+      </initializer>
    </extension>
    
 </plugin>

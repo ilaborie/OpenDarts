@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -63,6 +64,15 @@ public class OpenDartsUiPlugin extends AbstractUIPlugin {
 	 */
 	public static OpenDartsUiPlugin getDefault() {
 		return plugin;
+	}
+	
+	/**
+	 * Gets the preference store.
+	 *
+	 * @return the preference store
+	 */
+	public static IPreferenceStore getOpenDartsPreference() {
+		return plugin.getPreferenceStore();
 	}
 
 	/**

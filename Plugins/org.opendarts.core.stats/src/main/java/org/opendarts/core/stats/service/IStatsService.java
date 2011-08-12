@@ -1,5 +1,7 @@
 package org.opendarts.core.stats.service;
 
+
+import org.eclipse.swt.graphics.Image;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
@@ -100,4 +102,8 @@ public interface IStatsService {
 	 * @return the name
 	 */
 	String getName();
+
+	Image getImage(String statsKey);
+
+	String getText(String statsKey);
 }

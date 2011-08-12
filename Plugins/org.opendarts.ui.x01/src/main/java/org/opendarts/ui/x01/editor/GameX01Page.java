@@ -48,6 +48,7 @@ import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.dialog.ThreeDartsComputerDialog;
 import org.opendarts.ui.label.PlayerLabelProvider;
+import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.ISharedImages;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
@@ -60,6 +61,7 @@ import org.opendarts.ui.x01.dialog.ShortcutsTooltip;
 import org.opendarts.ui.x01.label.ScoreLabelProvider;
 import org.opendarts.ui.x01.label.ToGoLabelProvider;
 import org.opendarts.ui.x01.label.TurnLabelProvider;
+import org.opendarts.ui.x01.pref.IX01Prefs;
 import org.opendarts.ui.x01.utils.PlayerStatusComposite;
 import org.opendarts.ui.x01.utils.TextInputListener;
 import org.slf4j.Logger;
@@ -118,6 +120,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	/** The player label provider. */
 	private final PlayerLabelProvider playerLabelProvider;
 
+	private final List<IPlayer> players;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -137,6 +141,32 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.playerColumn = new HashMap<IPlayer, TableViewerColumn>();
 		this.gameService = gameEditor.getSet().getGameService();
 		this.scoreViewers = new HashMap<IPlayer, TableViewer>();
+
+		// Players
+		if (X01UiPlugin.getX01Preferences().getBoolean(
+				IX01Prefs.SWITCH_USER_POSITION)) {
+			this.players = this.game.getPlayers();
+		} else {
+			this.players = this.gameDefinition.getInitialPlayers();
+		}
+	}
+
+	/**
+	 * Gets the first player.
+	 *
+	 * @return the first player
+	 */
+	protected IPlayer getFirstPlayer() {
+		return this.players.get(0);
+	}
+
+	/**
+	 * Gets the second player.
+	 *
+	 * @return the second player
+	 */
+	protected IPlayer getSecondPlayer() {
+		return this.players.get(1);
 	}
 
 	/* (non-Javadoc)
@@ -150,16 +180,15 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		form.setText(this.game.getName());
 		form.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
+				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
 		this.toolkit.decorateFormHeading(form.getForm());
 
 		GridDataFactory playerData;
 		GridDataFactory scoreData;
 		scoreData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1);
 
-		List<IPlayer> players = this.game.getPlayers();
-		boolean onePlayer = (players.size() == 1);
-		boolean twoPlayer = (players.size() == 2);
+		boolean onePlayer = (this.players.size() == 1);
+		boolean twoPlayer = (this.players.size() == 2);
 		// body
 		int nbCol;
 		int tableSpan;
@@ -175,7 +204,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			scoreData = GridDataFactory.fillDefaults().grab(true, false)
 					.span(2, 1);
 		} else {
-			nbCol = players.size();
+			nbCol = this.players.size();
 			tableSpan = nbCol;
 			playerData = GridDataFactory.fillDefaults().grab(false, true);
 			scoreData = GridDataFactory.fillDefaults().grab(true, false);
@@ -187,7 +216,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		if (onePlayer || twoPlayer) {
 			// First Player Status
 			Composite cmpPlayerOne = this.createPlayerComposite(this.body,
-					this.game.getFirstPlayer());
+					this.getFirstPlayer());
 			playerData.copy().applyTo(cmpPlayerOne);
 		} else {
 			// create multi player stats
@@ -201,7 +230,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		if (twoPlayer) {
 			// Second Player Status
 			Composite cmpPlayerTwo = this.createPlayerComposite(this.body,
-					this.game.getSecondPlayer());
+					this.getSecondPlayer());
 			playerData.copy().applyTo(cmpPlayerTwo);
 		}
 
@@ -250,10 +279,16 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 */
 	private Composite createLeftScoreComposite(int nbCol,
 			GridDataFactory scoreData) {
+
+		int style = SWT.NONE;
+		if (X01UiPlugin.getX01Preferences().getBoolean(
+				IX01Prefs.SHOW_SCORE_LEFT)) {
+			style = ExpandableComposite.EXPANDED;
+		}
+
 		ExpandableComposite leftScoreMain = this.toolkit
 				.createExpandableComposite(this.body,
-						ExpandableComposite.TWISTIE
-								| ExpandableComposite.EXPANDED
+						ExpandableComposite.TWISTIE | style
 								| ExpandableComposite.NO_TITLE);
 		GridLayoutFactory.fillDefaults().applyTo(leftScoreMain);
 
@@ -263,13 +298,13 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(leftScoreBody);
 
 		Composite cmpPlayerLeftScore;
-		if (this.game.getPlayers().size() == 1) {
+		if (this.players.size() == 1) {
 			this.toolkit.createLabel(leftScoreBody, "");
 			cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
-					leftScoreBody, this.game.getFirstPlayer());
+					leftScoreBody, this.getFirstPlayer());
 			scoreData.copy().applyTo(cmpPlayerLeftScore);
 		} else {
-			for (IPlayer player : this.game.getPlayers()) {
+			for (IPlayer player : this.players) {
 				cmpPlayerLeftScore = this.createPlayerScoreLeftComposite(
 						leftScoreBody, player);
 				scoreData.copy().applyTo(cmpPlayerLeftScore);
@@ -304,8 +339,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	private Composite createScoreTableComposite(Composite parent) {
 		Composite main = this.toolkit.createComposite(parent);
 
-		List<IPlayer> players = this.game.getPlayers();
-		int nbPlayers = players.size();
+		int nbPlayers = this.players.size();
 		boolean onePlayer = (nbPlayers == 1);
 		boolean twoPlayer = (nbPlayers == 2);
 
@@ -331,18 +365,18 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
 			table.setFont(OpenDartsFormsToolkit
-					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
+					.getFont(IGeneralPrefs.FONT_SCORE_SHEET));
 
 			// resize the row height using a MeasureItem listener
 			table.addListener(SWT.MeasureItem, new FixHeightListener());
 			viewer = new TableViewer(table);
 			viewer.setContentProvider(new GameX01ContentProvider());
 			List<ColumnDescriptor> columns = this.addColumns(
-					this.game.getFirstPlayer(), viewer);
+					this.getFirstPlayer(), viewer);
 			viewer.getControl().addControlListener(
 					new GrabColumnsListener(viewer, columns));
 
-			this.scoreViewers.put(this.game.getFirstPlayer(), viewer);
+			this.scoreViewers.put(this.getFirstPlayer(), viewer);
 
 		} else if (twoPlayer) {
 			Composite comp = this.toolkit.createComposite(main);
@@ -357,7 +391,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
 			table.setFont(OpenDartsFormsToolkit
-					.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
+					.getFont(IGeneralPrefs.FONT_SCORE_SHEET));
 
 			// resize the row height using a MeasureItem listener
 			table.addListener(SWT.MeasureItem, new FixHeightListener());
@@ -368,8 +402,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			viewer.getControl().addControlListener(
 					new GrabColumnsListener(viewer, columns));
 
-			this.scoreViewers.put(this.game.getFirstPlayer(), viewer);
-			this.scoreViewers.put(this.game.getSecondPlayer(), viewer);
+			this.scoreViewers.put(this.getFirstPlayer(), viewer);
+			this.scoreViewers.put(this.getSecondPlayer(), viewer);
 
 		} else {
 			Section section;
@@ -382,7 +416,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						.applyTo(section);
 				section.setText(player.getName());
 				section.setFont(OpenDartsFormsToolkit
-						.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
+						.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
 
 				this.addProcressBar(section, player);
 
@@ -403,7 +437,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
 				table.setFont(OpenDartsFormsToolkit
-						.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET));
+						.getFont(IGeneralPrefs.FONT_SCORE_SHEET));
 
 				// resize the row height using a MeasureItem listener
 				table.addListener(SWT.MeasureItem, new FixHeightListener());
@@ -469,7 +503,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		Text inputScoreText = this.toolkit.createText(main, "", SWT.CENTER
 				| SWT.BORDER);
 		inputScoreText.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_INPUT));
+				.getFont(IGeneralPrefs.FONT_SCORE_INPUT));
 		inputScoreText.setEnabled(false);
 		this.playerScoreInput.put(player, inputScoreText);
 
@@ -477,8 +511,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		int indent = FieldDecorationRegistry.getDefault()
 				.getMaximumDecorationWidth() + 2;
 		GridDataFactory.fillDefaults().grab(true, false)
-				.indent(indent, SWT.DEFAULT).hint(SWT.DEFAULT, 100)
-				.applyTo(inputScoreText);
+				.indent(indent, SWT.DEFAULT).applyTo(inputScoreText);
 
 		// decoration
 		ControlDecoration dec = new ControlDecoration(inputScoreText, SWT.TOP
@@ -508,12 +541,12 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		if (player == null) {
 			// Two player
 			result.addAll(this.createPlayerColumns(viewer,
-					this.game.getFirstPlayer()));
+					this.getFirstPlayer()));
 
 			this.toolkit.createTableColumn(viewer, colDescr);
 			result.add(colDescr);
 			result.addAll(this.createPlayerColumns(viewer,
-					this.game.getSecondPlayer()));
+					this.getSecondPlayer()));
 		} else {
 			this.toolkit.createTableColumn(viewer, colDescr);
 			result.add(colDescr);
@@ -575,7 +608,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
 		secPlayer.setText(this.playerLabelProvider.getText(player));
 		secPlayer.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET_BOLD));
+				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
 
 		// Progress
 		this.addProcressBar(secPlayer, player);
@@ -626,7 +659,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 				this.getPlayerCurrentScore(player), SWT.READ_ONLY | SWT.CENTER
 						| SWT.BORDER);
 		txtScore.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_LEFT));
+				.getFont(IGeneralPrefs.FONT_SCORE_LEFT));
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(txtScore);
 		this.playerScoreLeft.put(player, txtScore);
 
@@ -688,7 +721,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 */
 	private void handleGameInitialized() {
 		Text txt;
-		for (IPlayer p : this.game.getPlayers()) {
+		for (IPlayer p : this.players) {
 			txt = this.playerScoreLeft.get(p);
 			txt.setText(this.getPlayerCurrentScore(p));
 		}
@@ -714,10 +747,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 * @param entry the entry
 	 */
 	private void handleNewEntry(IGameEntry entry) {
-		boolean twoPlayer = (this.game.getPlayers().size() == 2);
+		boolean twoPlayer = (this.players.size() == 2);
 		if (twoPlayer) {
 			// only one table
-			TableViewer tw = this.scoreViewers.get(this.game.getFirstPlayer());
+			TableViewer tw = this.scoreViewers.get(this.getFirstPlayer());
 			tw.add(entry);
 			tw.reveal(entry);
 		} else {
@@ -734,10 +767,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 * @param entry the entry
 	 */
 	private void handleRemoveEntry(IGameEntry entry) {
-		boolean twoPlayer = (this.game.getPlayers().size() == 2);
+		boolean twoPlayer = (this.players.size() == 2);
 		if (twoPlayer) {
 			// only one table
-			TableViewer tw = this.scoreViewers.get(this.game.getFirstPlayer());
+			TableViewer tw = this.scoreViewers.get(this.getFirstPlayer());
 			tw.remove(entry);
 		} else {
 			for (TableViewer tw : this.scoreViewers.values()) {
@@ -786,7 +819,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			inputTxt.setEnabled(false);
 
 			inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-					.getColors().getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
+					.getColors().getColor(IGeneralPrefs.COLOR_INACTIVE));
 		}
 		for (TableViewerColumn col : this.playerColumn.values()) {
 			col.setEditingSupport(null);
@@ -821,7 +854,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			// mark column
 			column = this.playerColumn.get(player);
 			TableViewerColumn c;
-			for (IPlayer p : this.game.getPlayers()) {
+			for (IPlayer p : this.players) {
 				c = this.playerColumn.get(p);
 				if (c.equals(column)) {
 					c.getColumn().setImage(
@@ -836,8 +869,8 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			// IA playing
 			if (player.isComputer()) {
 				ThreeDartsComputerDialog computerThrow = new DartsComputerX01Dialog(
-						this.getSite().getShell(), (IComputerPlayer) player, this.game,
-						(GameX01Entry) entry);
+						this.getSite().getShell(), (IComputerPlayer) player,
+						this.game, (GameX01Entry) entry);
 				computerThrow.open();
 
 				IDartsThrow dartThrow = computerThrow.getComputerThrow();
@@ -863,15 +896,13 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			if (playerInputTxt.equals(inputTxt)) {
 				inputTxt.setEnabled(true);
 				inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-						.getColors()
-						.getColor(OpenDartsFormsToolkit.COLOR_ACTIVE));
+						.getColors().getColor(IGeneralPrefs.COLOR_ACTIVE));
 				inputTxt.setFocus();
 			} else {
 				inputTxt.setEnabled(false);
 				inputTxt.setText("");
 				inputTxt.setBackground(OpenDartsFormsToolkit.getToolkit()
-						.getColors()
-						.getColor(OpenDartsFormsToolkit.COLOR_INACTIVE));
+						.getColors().getColor(IGeneralPrefs.COLOR_INACTIVE));
 			}
 		}
 	}

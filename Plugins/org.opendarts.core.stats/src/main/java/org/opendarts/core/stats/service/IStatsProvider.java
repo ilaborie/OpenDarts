@@ -1,6 +1,7 @@
 package org.opendarts.core.stats.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.session.ISession;
@@ -58,5 +59,12 @@ public interface IStatsProvider {
 	 * @param statsService the stats service
 	 */
 	void registerStatsService(IGame game, IStatsService statsService);
+
+	/**
+	 * Gets the all stats service.
+	 *
+	 * @return the all stats service
+	 */
+	Set<IStatsService> getAllStatsService();
 
 }

@@ -19,4 +19,7 @@ public interface ISharedImages {
 	String IMG_USER_NEW = "icons/actions/user_new.png";
 	String IMG_UP = "icons/actions/up.png";
 	String IMG_DOWN = "icons/actions/down.png";
+	
+	String IMG_ADD = "icons/actions/add.png";
+	String IMG_REMOVE = "icons/actions/remove.png";
 }

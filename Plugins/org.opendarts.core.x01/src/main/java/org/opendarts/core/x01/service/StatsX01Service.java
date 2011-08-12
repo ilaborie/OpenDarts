@@ -1,5 +1,9 @@
 package org.opendarts.core.x01.service;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.eclipse.swt.graphics.Image;
 import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
@@ -26,11 +30,17 @@ import org.opendarts.core.x01.service.entry.DartRangeStatsEntry;
 import org.opendarts.core.x01.service.entry.DartScoreStatsEntry;
 import org.opendarts.core.x01.service.entry.OutsOver100StatsEntry;
 import org.opendarts.core.x01.service.entry.TotalDartStatsEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class StatsX01Service.
  */
 public class StatsX01Service extends AbstractStatsService {
+
+	/** The logger. */
+	private static final Logger LOG = LoggerFactory
+			.getLogger(StatsX01Service.class);
 
 	public static final String SESSION_AVG_DART = "Session.avg.dart";
 	public static final String SESSION_AVG_3_DARTS = "Session.avg.3darts";
@@ -67,15 +77,19 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String GAME_180s = "Game.180";
 	public static final String GAME_140 = "Game.140";
 	public static final String GAME_TONS = "Game.100";
-	public static final String GAME_60 = "Game.100";
+	public static final String GAME_60 = "Game.60";
 	public static final String GAME_60_PLUS = "Game.60+";
 	public static final String GAME_TONS_PLUS = "Game.100+";
+
+	/** The bundle. */
+	private final ResourceBundle bundle;
 
 	/**
 	 * Instantiates a new stats x01 service.
 	 */
 	public StatsX01Service() {
 		super();
+		this.bundle = ResourceBundle.getBundle("Messages");
 	}
 
 	/* (non-Javadoc)
@@ -336,5 +350,29 @@ public class StatsX01Service extends AbstractStatsService {
 		//		public static final String SESSION_NB_SET = "Session.nb.Set";
 		//		public static final String SESSION_NB_GAME = "Session.nb.Game";
 		return stats;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.service.IStatsService#getImage(java.lang.String)
+	 */
+	@Override
+	public Image getImage(String statsKey) {
+		// No images
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.service.IStatsService#getText(java.lang.String)
+	 */
+	@Override
+	public String getText(String statsKey) {
+		String result = null;
+		try {
+			result = this.bundle.getString(statsKey);
+		} catch (MissingResourceException mre) {
+			LOG.warn("Could not retrieve label for key {}", statsKey);
+			result = statsKey;
+		}
+		return result;
 	}
 }

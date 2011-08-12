@@ -28,6 +28,7 @@ import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.core.x01.model.GameX01Definition;
+import org.opendarts.ui.OpenDartsUiPlugin;
 import org.opendarts.ui.dialog.IGameDefinitionComposite;
 import org.opendarts.ui.dialog.NewSetDialog;
 import org.opendarts.ui.dialog.ValidationEntry;
@@ -248,13 +249,13 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 		// up & down
 		this.btnUp = new Button(cmpBtn, SWT.PUSH);
-		this.btnUp.setImage(X01UiPlugin.getImage(ISharedImages.IMG_UP));
+		this.btnUp.setImage(OpenDartsUiPlugin.getImage(ISharedImages.IMG_UP));
 		GridDataFactory.fillDefaults().applyTo(this.btnUp);
 		this.btnUp.setEnabled(this.currentPlayer != null);
 		this.btnUp.addSelectionListener(this);
 
 		this.btnDown = new Button(cmpBtn, SWT.PUSH);
-		this.btnDown.setImage(X01UiPlugin.getImage(ISharedImages.IMG_DOWN));
+		this.btnDown.setImage(OpenDartsUiPlugin.getImage(ISharedImages.IMG_DOWN));
 		GridDataFactory.fillDefaults().applyTo(this.btnDown);
 		this.btnDown.setEnabled(this.currentPlayer != null);
 		this.btnDown.addSelectionListener(this);

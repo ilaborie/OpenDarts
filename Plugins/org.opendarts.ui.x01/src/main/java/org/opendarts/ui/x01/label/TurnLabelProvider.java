@@ -11,6 +11,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.forms.IFormColors;
 import org.opendarts.core.x01.model.GameX01Entry;
+import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 
 /**
@@ -69,7 +70,7 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Font getFont(Object element) {
 		return OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_SCORE_SHEET);
+				.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
 	}
 
 }

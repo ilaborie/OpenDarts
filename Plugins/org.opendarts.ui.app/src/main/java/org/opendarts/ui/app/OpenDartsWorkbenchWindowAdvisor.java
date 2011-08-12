@@ -1,5 +1,6 @@
 package org.opendarts.ui.app;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -46,7 +47,13 @@ public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void postWindowOpen() {
 		super.postWindowOpen();
-		IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
-		configurer.getWindow().getShell().setMaximized(true);
+
+		// FullScreen
+		boolean isFullScreen = Platform.getPreferencesService().getBoolean(
+				"org.opendarts.ui", "OpenDarts.pref.fullscreen", true, null);
+		if (isFullScreen) {
+			IWorkbenchWindowConfigurer configurer = this.getWindowConfigurer();
+			configurer.getWindow().getShell().setMaximized(true);
+		}
 	}
 }

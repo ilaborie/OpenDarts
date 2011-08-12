@@ -44,4 +44,36 @@
             name="Set Info">
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.opendarts.ui.x01.pref.X01PreferencePage"
+            id="opendarts.pref.ui.x01"
+            name="x01">
+      </page>
+      <page
+            category="opendarts.pref.ui.stats"
+            class="org.opendarts.ui.x01.pref.X01SessionStatsPreferencePage"
+            id="opendarts.pref.ui.x01.stats.session"
+            name="x01 Session Statistics">
+      </page>
+      <page
+            category="opendarts.pref.ui.stats"
+            class="org.opendarts.ui.x01.pref.X01SetStatsPreferencePage"
+            id="opendarts.pref.ui.x01.stats.set"
+            name="x01 Set Statistics">
+      </page>
+      <page
+            category="opendarts.pref.ui.stats"
+            class="org.opendarts.ui.x01.pref.GameStatsPreferencePage"
+            id="opendarts.pref.ui.x01.stats.game"
+            name="x01 Game Statistics">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.opendarts.ui.x01.pref.X01PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

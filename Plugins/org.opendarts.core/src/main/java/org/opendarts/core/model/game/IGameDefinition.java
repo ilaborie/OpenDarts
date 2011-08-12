@@ -6,6 +6,7 @@ import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.service.game.IGameService;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface IGameDefinition.
  */
@@ -56,4 +57,11 @@ public interface IGameDefinition {
 	 * @return the game service
 	 */
 	IGameService getGameService();
+
+	/**
+	 * Gets the initial players.
+	 *
+	 * @return the initial players
+	 */
+	List<IPlayer> getInitialPlayers();
 }

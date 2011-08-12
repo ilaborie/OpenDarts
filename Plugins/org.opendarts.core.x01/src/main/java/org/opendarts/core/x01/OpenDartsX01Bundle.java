@@ -24,6 +24,7 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	/** The computer player dart service. */
 	private static IComputerPlayerDartService computerPlayerDartService;
 
+	/** The dart service. */
 	private static IDartService dartService;
 
 	/**
@@ -66,6 +67,15 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		statsProvider = null;
 		statsX01Service = null;
+	}
+	
+	/**
+	 * Gets the stats x01 service.
+	 *
+	 * @return the stats x01 service
+	 */
+	public static StatsX01Service getStatsX01Service() {
+		return statsX01Service;
 	}
 
 	/**
