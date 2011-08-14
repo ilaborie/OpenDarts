@@ -22,7 +22,6 @@
 		<module>org.opendarts.ui.player</module>
 		<module>org.opendarts.ui.stats</module>
 		<module>org.opendarts.ui.x01</module>
-		<module>org.opendarts.jpa</module>
 		<module>org.opendarts.derby</module>
 	</modules>
 
