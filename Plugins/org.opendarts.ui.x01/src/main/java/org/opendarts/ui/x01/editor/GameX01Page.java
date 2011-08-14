@@ -181,6 +181,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		form.setText(this.game.getName());
 		form.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
+		
 		this.toolkit.decorateFormHeading(form.getForm());
 
 		GridDataFactory playerData;
@@ -210,7 +211,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			scoreData = GridDataFactory.fillDefaults().grab(true, false);
 		}
 		this.body = form.getBody();
-		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(nbCol)
+		GridLayoutFactory.fillDefaults().margins(2,2).numColumns(nbCol)
 				.equalWidth(true).applyTo(this.body);
 
 		if (onePlayer || twoPlayer) {
@@ -603,8 +604,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		GridLayoutFactory.fillDefaults().applyTo(main);
 
 		Section secPlayer = this.toolkit.createSection(main,
-				ExpandableComposite.TITLE_BAR
-						| ExpandableComposite.CLIENT_INDENT);
+				ExpandableComposite.TITLE_BAR);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
 		secPlayer.setText(this.playerLabelProvider.getText(player));
 		secPlayer.setFont(OpenDartsFormsToolkit
@@ -614,7 +614,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.addProcressBar(secPlayer, player);
 
 		Composite client = this.toolkit.createComposite(secPlayer, SWT.WRAP);
-		GridLayoutFactory.fillDefaults().margins(2, 2).applyTo(client);
+		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Status
 		PlayerStatusComposite cmpStatus = new PlayerStatusComposite(client,
@@ -635,11 +635,16 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	 * @param player the player
 	 */
 	private void addProcressBar(Section section, IPlayer player) {
+		int winningGames = this.game.getParentSet().getWinningGames(player);
+		int nbGameToWin = this.gameDefinition.getNbGameToWin();
+
 		ProgressBar playerBar = new ProgressBar(section, SWT.SMOOTH);
 		this.playerProgess.put(player, playerBar);
-		playerBar.setMaximum(this.gameDefinition.getNbGameToWin());
+		playerBar.setMaximum(nbGameToWin);
 		playerBar
-				.setSelection(this.game.getParentSet().getWinningGames(player));
+				.setSelection(winningGames);
+		playerBar.setToolTipText(MessageFormat.format("{0}, need {1} to win", winningGames,nbGameToWin));
+		
 		section.setTextClient(playerBar);
 	}
 

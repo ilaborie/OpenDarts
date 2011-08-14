@@ -11,6 +11,8 @@ public interface IX01Prefs {
 	/** The SWITC h_ use r_ position. */
 	String SWITCH_USER_POSITION = "OpenDarts.pref.x01.switchUserPosition";
 	
+	String SHOW_ROW_NUMBER = "OpenDarts.pref.x01.showRowNumber";
+	
 	/** The SHO w_ scor e_ left. */
 	String SHOW_SCORE_LEFT = "OpenDarts.pref.x01.showScoreLeft";
 	

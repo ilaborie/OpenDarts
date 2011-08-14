@@ -53,7 +53,7 @@ public class OpenDartsPreferenceInitializer extends
 		FontData[] stats = getFontData(defaultFont, 18, SWT.NORMAL);
 		FontData[] statsLabel = getFontData(defaultFont, 16, SWT.BOLD);
 		FontData[] scoreInput = getFontData(defaultFont, 64, SWT.BOLD);
-		FontData[] scoreLeft = getFontData(defaultFont, 126, SWT.BOLD);
+		FontData[] scoreLeft = getFontData(defaultFont, 96, SWT.BOLD);
 
 		PreferenceConverter.setDefault(store, FONT_SCORE_SHEET, scoreSheet);
 		PreferenceConverter.setDefault(store, FONT_STATS, stats);

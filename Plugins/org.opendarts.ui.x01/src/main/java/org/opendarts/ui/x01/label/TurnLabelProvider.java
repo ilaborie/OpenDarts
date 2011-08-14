@@ -3,9 +3,9 @@
  */
 package org.opendarts.ui.x01.label;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.text.MessageFormat;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -13,14 +13,15 @@ import org.eclipse.ui.forms.IFormColors;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
+import org.opendarts.ui.x01.X01UiPlugin;
+import org.opendarts.ui.x01.pref.IX01Prefs;
 
 /**
  * The Class ScoreLabelProvider.
  */
 public class TurnLabelProvider extends ColumnLabelProvider {
 
-	/** The formatter. */
-	private final NumberFormat formatter;
+	private final String pattern;
 
 	/**
 	 * Instantiates a new score label provider.
@@ -29,7 +30,12 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	 */
 	public TurnLabelProvider() {
 		super();
-		this.formatter = new DecimalFormat("00");
+		IPreferenceStore store = X01UiPlugin.getX01Preferences();
+		if (store.getBoolean(IX01Prefs.SHOW_ROW_NUMBER)) {
+			this.pattern = "#{0}";
+		} else {
+			this.pattern = "{1,number,00}";
+		}
 	}
 
 	/* (non-Javadoc)
@@ -40,8 +46,7 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 		if (element instanceof GameX01Entry) {
 			GameX01Entry gameEntry = (GameX01Entry) element;
 			int round = gameEntry.getRound();
-			return this.formatter.format(round * 3);
-			//			return MessageFormat.format("#{1} ({0})", (round * 3), round);
+			return MessageFormat.format(this.pattern, round, round * 3);
 		}
 		return super.getText(element);
 	}
@@ -69,8 +74,7 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Font getFont(Object element) {
-		return OpenDartsFormsToolkit
-				.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
+		return OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
 	}
 
 }

@@ -31,8 +31,9 @@ public class X01PreferenceInitializer extends AbstractPreferenceInitializer
 		// Omit DEFAUlT_GAME_DEFINITION
 
 		// Basic
-		store.setDefault(SWITCH_USER_POSITION, true);
+		store.setDefault(SWITCH_USER_POSITION, false);
 		store.setDefault(SHOW_SCORE_LEFT, true);
+		store.setDefault(SHOW_ROW_NUMBER, false);
 
 		List<String> stats;
 		// Session Stats

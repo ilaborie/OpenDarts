@@ -47,6 +47,10 @@ public class X01PreferencePage extends FieldEditorPreferencePage implements
 		editor = new BooleanFieldEditor(SWITCH_USER_POSITION,
 				"Switch User Position", parent);
 		this.addField(editor);
+
+		// Show row number
+		editor = new BooleanFieldEditor(SHOW_ROW_NUMBER,
+				"Show row number", parent);
 		this.addField(editor);
 	}
 

@@ -48,14 +48,14 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SESSION_140 = "Session.140";
 	public static final String SESSION_TONS = "Session.100";
 	public static final String SESSION_60 = "Session.60";
-	public static final String SESSION_60_PLUS = "Session.60+";
-	public static final String SESSION_TONS_PLUS = "Session.100+";
+	public static final String SESSION_60_PLUS = "Session.60.plus";
+	public static final String SESSION_TONS_PLUS = "Session.100.plus";
 	public static final String SESSION_BEST_LEG = "Session.best.leg";
 	public static final String SESSION_AVG_LEG = "Session.avg.leg";
 	public static final String SESSION_BEST_OUT = "Session.best.out";
 	public static final String SESSION_COUNT_DARTS = "Session.darts.count";
 	public static final String SESSION_TOTAL_SCORE = "Session.total.score";
-	public static final String SESSION_OUT_OVER_100 = "Session.out.100+";
+	public static final String SESSION_OUT_OVER_100 = "Session.out.100.plus";
 
 	public static final String SET_AVG_DART = "Set.avg.dart";
 	public static final String SET_AVG_3_DARTS = "Set.avg.3darts";
@@ -63,14 +63,14 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SET_140 = "Set.140";
 	public static final String SET_TONS = "Set.100";
 	public static final String SET_60 = "Set.60";
-	public static final String SET_60_PLUS = "Set.60+";
-	public static final String SET_TONS_PLUS = "Set.100+";
+	public static final String SET_60_PLUS = "Set.60.plus";
+	public static final String SET_TONS_PLUS = "Set.100.plus";
 	public static final String SET_BEST_LEG = "Set.best.leg";
 	public static final String SET_AVG_LEG = "Set.avg.leg";
 	public static final String SET_BEST_OUT = "Set.best.out";
 	public static final String SET_COUNT_DARTS = "Set.darts.count";
 	public static final String SET_TOTAL_SCORE = "Set.total.score";
-	public static final String SET_OUT_OVER_100 = "Set.out.100+";
+	public static final String SET_OUT_OVER_100 = "Set.out.100.plus";
 
 	public static final String GAME_AVG_DART = "Game.avg.dart";
 	public static final String GAME_AVG_3_DARTS = "Game.avg.3darts";
@@ -78,8 +78,8 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String GAME_140 = "Game.140";
 	public static final String GAME_TONS = "Game.100";
 	public static final String GAME_60 = "Game.60";
-	public static final String GAME_60_PLUS = "Game.60+";
-	public static final String GAME_TONS_PLUS = "Game.100+";
+	public static final String GAME_60_PLUS = "Game.60.plus";
+	public static final String GAME_TONS_PLUS = "Game.100.plus";
 
 	/** The bundle. */
 	private final ResourceBundle bundle;

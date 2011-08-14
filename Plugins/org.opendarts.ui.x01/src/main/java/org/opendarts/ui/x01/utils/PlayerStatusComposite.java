@@ -136,12 +136,12 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		childData.copy().applyTo(cmpSession);
 
 		// Set
-		Composite cmpTotal = this.createSetComposite(client);
-		childData.copy().applyTo(cmpTotal);
+		Composite cmpSet = this.createSetComposite(client);
+		childData.copy().applyTo(cmpSet);
 
 		// Game
-		Composite cmpBest = this.createGameComposite(client);
-		childData.copy().applyTo(cmpBest);
+		Composite cmpLeg = this.createGameComposite(client);
+		childData.copy().applyTo(cmpLeg);
 
 	}
 
@@ -157,10 +157,10 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		GridLayoutFactory.fillDefaults().applyTo(main);
 		// Section
 		Section section = this.toolkit.createSection(main,
-				ExpandableComposite.SHORT_TITLE_BAR
+				ExpandableComposite.TITLE_BAR
 						| ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Session");
 		section.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
@@ -228,7 +228,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
 		valData.copy().applyTo(this.lblLegs);
 
-		for (String col2Stat : col1Stats) {
+		for (String col2Stat : col2Stats) {
 			this.createStatEntry(col2, col2Stat, lblData, valData);
 		}
 
@@ -251,10 +251,10 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		// Section
 		Section section = this.toolkit.createSection(main,
-				ExpandableComposite.SHORT_TITLE_BAR
+				ExpandableComposite.TITLE_BAR
 						| ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Set");
 		section.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
@@ -319,10 +319,10 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		// Section
 		Section section = this.toolkit.createSection(main,
-				ExpandableComposite.SHORT_TITLE_BAR
+				ExpandableComposite.TITLE_BAR
 						| ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Current Leg");
 		section.setFont(OpenDartsFormsToolkit
 				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
