@@ -27,3 +27,4 @@ Export-Package: org.opendarts.core.x01,
  org.opendarts.core.x01.service
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.opendarts.core.x01.OpenDartsX01Bundle
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0"
