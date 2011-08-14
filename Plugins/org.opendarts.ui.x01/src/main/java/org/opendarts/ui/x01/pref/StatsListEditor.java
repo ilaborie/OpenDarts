@@ -42,7 +42,7 @@ public class StatsListEditor extends ListViewerEditor<String>{
 	 */
 	@Override
 	protected String createList(List<String> items) {
-		return ListUtils.getListAsString(items);
+		return PreferencesConverterUtils.getListAsString(items);
 	}
 	
 	/* (non-Javadoc)
@@ -80,7 +80,7 @@ public class StatsListEditor extends ListViewerEditor<String>{
 	 */
 	@Override
 	protected List<String> parseString(String stringList) {
-		List<String> result = ListUtils.getStringAsList(stringList);
+		List<String> result = PreferencesConverterUtils.getStringAsList(stringList);
 		return result;
 	}
 

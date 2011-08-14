@@ -4,21 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.window.Window;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -26,29 +19,22 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
-import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.core.x01.model.GameX01Definition;
-import org.opendarts.ui.OpenDartsUiPlugin;
 import org.opendarts.ui.dialog.IGameDefinitionComposite;
 import org.opendarts.ui.dialog.NewSetDialog;
 import org.opendarts.ui.dialog.ValidationEntry;
-import org.opendarts.ui.label.PlayerLabelProvider;
-import org.opendarts.ui.player.dialog.PlayerSelectionDialog;
-import org.opendarts.ui.utils.ISharedImages;
+import org.opendarts.ui.player.composite.IPlayerSelectionListener;
+import org.opendarts.ui.player.composite.PlayerSelectionComposite;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.editor.SetX01Editor;
+import org.opendarts.ui.x01.pref.IX01Prefs;
+import org.opendarts.ui.x01.pref.PreferencesConverterUtils;
 
 /**
  * The Class SetX01ConfigurationDialog.
  */
 public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
-		SelectionListener, ISelectionChangedListener {
-
-	/** The player service. */
-	private final IPlayerService playerService;
-
-	/** The players. */
-	private final List<IPlayer> players;
+		SelectionListener, IPlayerSelectionListener {
 
 	/** The score start. */
 	private int startScore;
@@ -68,37 +54,23 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	/** The btn play all. */
 	private Button btnPlayAll;
 
-	/** The current player. */
-	private IPlayer currentPlayer;
-
-	/** The btn user add. */
-	private Button btnUserAdd;
-
-	/** The btn user del. */
-	private Button btnUserDel;
-
-	/** The btn up. */
-	private Button btnUp;
-
-	/** The btn down. */
-	private Button btnDown;
-
-	/** The btn user new. */
-	private Button btnUserNew;
-
-	/** The table players. */
-	private TableViewer tablePlayers;
-
 	/** The parent dialog. */
 	private NewSetDialog parentDialog;
 
+	/** The players. */
+	private ArrayList<IPlayer> players;
+
+	/** The players composite. */
+	private PlayerSelectionComposite playersComposite;
+
+	/** The btn store default. */
+	private Button btnStoreDefault;
+
 	/**
 	 * Instantiates a new sets the x01 configuration dialog.
-	 *
 	 */
 	public SetX01ConfigurationDialog() {
 		super();
-		this.playerService = X01UiPlugin.getService(IPlayerService.class);
 		this.players = new ArrayList<IPlayer>();
 	}
 
@@ -116,14 +88,30 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.players.clear();
 
 		// Get last configuration
-		if ((lastGameDefinition != null)
+		GameX01Definition gameDef = null;
+		boolean rotate = false;
+		if (lastGameDefinition == null) {
+			IPreferenceStore store = X01UiPlugin.getX01Preferences();
+			String s = store.getString(IX01Prefs.DEFAUlT_GAME_DEFINITION);
+			if (s != null) {
+				gameDef = PreferencesConverterUtils
+						.getStringAsGameDefinition(s);
+			}
+		} else if ((lastGameDefinition != null)
 				&& (lastGameDefinition instanceof GameX01Definition)) {
-			GameX01Definition gameDef = (GameX01Definition) lastGameDefinition;
+			gameDef = (GameX01Definition) lastGameDefinition;
+			rotate = true;
+		}
+
+		// Initial game definition
+		if (gameDef != null) {
 			this.startScore = gameDef.getStartScore();
 			this.playAllGames = gameDef.isPlayAllGames();
 			this.nbGameToWin = gameDef.getNbGameToWin();
 			this.players.addAll(gameDef.getPlayers());
-			Collections.rotate(this.players, 1);
+			if (rotate) {
+				Collections.rotate(this.players, 1);
+			}
 		}
 
 		// Main component
@@ -140,6 +128,17 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		GridDataFactory.fillDefaults().applyTo(grpPlayers);
 
 		return main;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.dialog.IGameDefinitionComposite#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
+	 */
+	@Override
+	public void createButtonsForButtonBar(Composite parent) {
+		((GridLayout) parent.getLayout()).numColumns++;
+		this.btnStoreDefault = new Button(parent, SWT.PUSH);
+		this.btnStoreDefault.setText("Set as default");
+		this.btnStoreDefault.addSelectionListener(this);
 	}
 
 	/**
@@ -207,58 +206,10 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 				.applyTo(group);
 		group.setText("Players");
 
-		this.tablePlayers = new TableViewer(group, SWT.V_SCROLL);
-		GridDataFactory.fillDefaults().hint(100, 60).grab(true, true)
-				.applyTo(this.tablePlayers.getTable());
-		this.tablePlayers.setLabelProvider(new PlayerLabelProvider());
-		this.tablePlayers.setContentProvider(new ArrayContentProvider());
-		this.tablePlayers.setInput(this.players);
-		this.tablePlayers.addSelectionChangedListener(this);
+		this.playersComposite = new PlayerSelectionComposite(group,
+				this.players);
+		this.playersComposite.addListener(this);
 
-		// buttons
-		Composite cmpBtn = new Composite(group, SWT.NONE);
-		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BEGINNING)
-				.applyTo(cmpBtn);
-		GridLayoutFactory.fillDefaults().applyTo(cmpBtn);
-
-		// Add
-		this.btnUserAdd = new Button(cmpBtn, SWT.PUSH);
-		this.btnUserAdd.setImage(X01UiPlugin
-				.getImage(ISharedImages.IMG_USER_ADD));
-		GridDataFactory.fillDefaults().applyTo(this.btnUserAdd);
-		this.btnUserAdd.addSelectionListener(this);
-
-		// Remove
-		this.btnUserDel = new Button(cmpBtn, SWT.PUSH);
-		this.btnUserDel.setImage(X01UiPlugin
-				.getImage(ISharedImages.IMG_USER_DELETE));
-		GridDataFactory.fillDefaults().applyTo(this.btnUserDel);
-		this.btnUserDel.setEnabled(this.currentPlayer != null);
-		this.btnUserDel.addSelectionListener(this);
-
-		new Label(cmpBtn, SWT.HORIZONTAL);
-
-		// New
-		this.btnUserNew = new Button(cmpBtn, SWT.PUSH);
-		this.btnUserNew.setImage(X01UiPlugin
-				.getImage(ISharedImages.IMG_USER_NEW));
-		GridDataFactory.fillDefaults().applyTo(this.btnUserNew);
-		this.btnUserNew.addSelectionListener(this);
-
-		new Label(cmpBtn, SWT.HORIZONTAL);
-
-		// up & down
-		this.btnUp = new Button(cmpBtn, SWT.PUSH);
-		this.btnUp.setImage(OpenDartsUiPlugin.getImage(ISharedImages.IMG_UP));
-		GridDataFactory.fillDefaults().applyTo(this.btnUp);
-		this.btnUp.setEnabled(this.currentPlayer != null);
-		this.btnUp.addSelectionListener(this);
-
-		this.btnDown = new Button(cmpBtn, SWT.PUSH);
-		this.btnDown.setImage(OpenDartsUiPlugin.getImage(ISharedImages.IMG_DOWN));
-		GridDataFactory.fillDefaults().applyTo(this.btnDown);
-		this.btnDown.setEnabled(this.currentPlayer != null);
-		this.btnDown.addSelectionListener(this);
 		return group;
 	}
 
@@ -267,11 +218,12 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 */
 	@Override
 	public IGameDefinition getGameDefinition() {
-		if (this.players.isEmpty()) {
+		if (this.playersComposite.getPlayers().isEmpty()) {
 			throw new IllegalArgumentException("Not enought players");
 		}
-		return new GameX01Definition(this.startScore, this.players,
-				this.nbGameToWin, this.playAllGames);
+		return new GameX01Definition(this.startScore,
+				this.playersComposite.getPlayers(), this.nbGameToWin,
+				this.playAllGames);
 	}
 
 	/* (non-Javadoc)
@@ -302,102 +254,26 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			this.nbGameToWin = this.spiNbGame.getSelection();
 		} else if (obj.equals(this.btnPlayAll)) {
 			this.playAllGames = this.btnPlayAll.getSelection();
-		} else if (obj.equals(this.btnUserAdd)) {
-			this.addPlayer();
-		} else if (obj.equals(this.btnUserDel)) {
-			boolean remove = this.players.remove(this.currentPlayer);
-			if (remove) {
-				this.tablePlayers.remove(this.currentPlayer);
-				this.tablePlayers.setSelection(StructuredSelection.EMPTY);
-			}
-		} else if (obj.equals(this.btnUserNew)) {
-			this.newPlayer();
-		} else if (obj.equals(this.btnUp)) {
-			int index = this.players.indexOf(this.currentPlayer);
-			Collections.swap(this.players, index, index - 1);
-			this.tablePlayers.setInput(this.players);
-			this.updateButtonsState();
-		} else if (obj.equals(this.btnDown)) {
-			int index = this.players.indexOf(this.currentPlayer);
-			Collections.swap(this.players, index, index + 1);
-			this.tablePlayers.setInput(this.players);
-			this.updateButtonsState();
+		} else if (obj.equals(this.btnStoreDefault)) {
+			IPreferenceStore store = X01UiPlugin.getX01Preferences();
+			store.setValue(IX01Prefs.DEFAUlT_GAME_DEFINITION,
+					PreferencesConverterUtils
+							.getGameDefinitionAsString((GameX01Definition) this
+									.getGameDefinition()));
 		}
 		this.parentDialog.notifyUpdate();
 	}
-
+	
 	/**
-	 * New player.
-	 */
-	private void newPlayer() {
-		InputDialog dialog = new InputDialog(this.parentDialog.getShell(),
-				"New user", "Enter the user name:", "<name>",
-				new IInputValidator() {
-
-					/* (non-Javadoc)
-					 * @see org.eclipse.jface.dialogs.IInputValidator#isValid(java.lang.String)
-					 */
-					@Override
-					public String isValid(String newText) {
-						return "".equals(newText) ? "Name should not being empty"
-								: null;
-					}
-				});
-		if (dialog.open() == Window.OK) {
-			IPlayer player = this.playerService.createPlayer(dialog.getValue());
-			if (player != null) {
-				this.players.add(player);
-				this.tablePlayers.add(player);
-				this.tablePlayers.setSelection(new StructuredSelection(player));
-			}
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+	 * Notify selection change.
+	 *
+	 * @param players the players
 	 */
 	@Override
-	public void selectionChanged(SelectionChangedEvent event) {
-		IStructuredSelection sel = (IStructuredSelection) this.tablePlayers
-				.getSelection();
-		if (!sel.isEmpty()) {
-			this.currentPlayer = (IPlayer) sel.getFirstElement();
-		} else {
-			this.currentPlayer = null;
-		}
-		this.updateButtonsState();
-
-	}
-
-	/**
-	 * Update buttons state.
-	 */
-	private void updateButtonsState() {
-		this.btnUserDel.setEnabled(this.currentPlayer != null);
-
-		int index = this.players.indexOf(this.currentPlayer);
-		this.btnUp.setEnabled((this.currentPlayer != null) && (index > 0));
-		this.btnDown.setEnabled((this.currentPlayer != null)
-				&& (index < (this.players.size() - 1)));
-	}
-
-	/**
-	 * Adds the player.
-	 */
-	private void addPlayer() {
-		PlayerSelectionDialog dialog = new PlayerSelectionDialog(
-				this.parentDialog.getShell());
-		if (dialog.open() == Window.OK) {
-			List<IPlayer> added = new ArrayList<IPlayer>(dialog.getPlayers());
-			for (IPlayer player : added) {
-				if (!this.players.contains(player) && this.players.add(player)) {
-					this.tablePlayers.add(player);
-				}
-				this.tablePlayers.setSelection(new StructuredSelection(added),
-						true);
-			}
-
-		}
+	public void notifySelectionChange(List<IPlayer> players) {
+		this.players.clear();
+		this.players.addAll(players);
+		this.parentDialog.notifyUpdate();
 	}
 
 	/* (non-Javadoc)
@@ -406,10 +282,11 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	@Override
 	public List<ValidationEntry> validate() {
 		List<ValidationEntry> result = new ArrayList<ValidationEntry>();
-		if (this.players.isEmpty()) {
+		List<IPlayer> list = this.playersComposite.getPlayers();
+		if (list.isEmpty()) {
 			result.add(new ValidationEntry(IMessageProvider.ERROR,
 					"Need at least two players"));
-		} else if (this.players.size() == 1) {
+		} else if (list.size() == 1) {
 			result.add(new ValidationEntry(IMessageProvider.WARNING,
 					"Playing alone is boring !"));
 		}

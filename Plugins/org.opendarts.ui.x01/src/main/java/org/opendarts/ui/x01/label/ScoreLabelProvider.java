@@ -7,6 +7,8 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -19,6 +21,8 @@ import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
+import org.opendarts.ui.x01.X01UiPlugin;
+import org.opendarts.ui.x01.pref.IX01Prefs;
 
 /**
  * The Class ScoreLabelProvider.
@@ -30,9 +34,6 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 
 	private final Map<Integer, Color> colors;
 
-	private static RGB rgb60 = new RGB(0, 128, 64);
-	private static RGB rgb100 = new RGB(0, 0, 255);
-	private static RGB rgb180 = new RGB(128, 0, 128);
 
 	/**
 	 * Instantiates a new score label provider.
@@ -51,8 +52,16 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	private void initColors() {
 		Display display = Display.getDefault();
-		this.initColorRange(60, 100, rgb60, rgb100);
-		this.initColorRange(100, 180, rgb100, rgb180);
+		IPreferenceStore store = X01UiPlugin.getX01Preferences();
+		
+		RGB rgbNormal = PreferenceConverter.getColor(store, IX01Prefs.COLOR_NORMAL);
+		RGB rgb60 = PreferenceConverter.getColor(store, IX01Prefs.COLOR_60);
+		RGB rgb100 = PreferenceConverter.getColor(store, IX01Prefs.COLOR_100);
+		RGB rgb180 = PreferenceConverter.getColor(store, IX01Prefs.COLOR_180);
+		
+		this.initColorRange(0, 60, rgbNormal, rgb60,store.getBoolean(IX01Prefs.COLOR_NORMAL_GRADIENT));
+		this.initColorRange(60,100, rgb60, rgb100,store.getBoolean(IX01Prefs.COLOR_60_GRADIENT));
+		this.initColorRange(100, 180, rgb100, rgb180,store.getBoolean(IX01Prefs.COLOR_100_GRADIENT));
 		this.colors.put(180, new Color(display, rgb180));
 	}
 
@@ -63,8 +72,9 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 * @param to the to
 	 * @param rgbFrom the rgb from
 	 * @param rgbTo the rgb to
+	 * @param gradient 
 	 */
-	private void initColorRange(int from, int to, RGB rgbFrom, RGB rgbTo) {
+	private void initColorRange(int from, int to, RGB rgbFrom, RGB rgbTo, boolean gradient) {
 		double delta;
 		double redRatio;
 		double greenRatio;
@@ -94,10 +104,15 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 		int g;
 		RGB rgb;
 		for (int i = from; i < to; i++) {
-			r = (int) (rgbFrom.red + ((i - from) * redRatio));
-			g = (int) (rgbFrom.green + ((i - from) * greenRatio));
-			b = (int) (rgbFrom.blue + ((i - from) * blueRatio));
-			rgb = new RGB(r, g, b);
+			if (gradient) {
+				r = (int) (rgbFrom.red + ((i - from) * redRatio));
+				g = (int) (rgbFrom.green + ((i - from) * greenRatio));
+				b = (int) (rgbFrom.blue + ((i - from) * blueRatio));
+				rgb = new RGB(r, g, b);
+			} else {
+				rgb = rgbFrom;
+			}
+			 
 			this.colors.put(i, new Color(Display.getDefault(), rgb));
 		}
 	}

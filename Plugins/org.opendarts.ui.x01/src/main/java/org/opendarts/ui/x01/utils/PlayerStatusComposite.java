@@ -34,7 +34,7 @@ import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.pref.IX01Prefs;
-import org.opendarts.ui.x01.pref.ListUtils;
+import org.opendarts.ui.x01.pref.PreferencesConverterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,7 +175,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		String sesStats = X01UiPlugin.getX01Preferences().getString(
 				IX01Prefs.SESSION_STATS);
-		List<String> statsList = ListUtils.getStringAsList(sesStats);
+		List<String> statsList = PreferencesConverterUtils.getStringAsList(sesStats);
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
@@ -269,7 +269,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		String sesStats = X01UiPlugin.getX01Preferences().getString(
 				IX01Prefs.SET_STATS);
-		List<String> statsList = ListUtils.getStringAsList(sesStats);
+		List<String> statsList = PreferencesConverterUtils.getStringAsList(sesStats);
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
@@ -333,7 +333,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		String sesStats = X01UiPlugin.getX01Preferences().getString(
 				IX01Prefs.GAME_STATS);
-		List<String> statsList = ListUtils.getStringAsList(sesStats);
+		List<String> statsList = PreferencesConverterUtils.getStringAsList(sesStats);
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);

@@ -41,4 +41,11 @@ public interface IGameDefinitionComposite {
 	 * @return the editor id
 	 */
 	String getEditorId();
+
+	/**
+	 * Creates the buttons for button bar.
+	 *
+	 * @param parent the parent
+	 */
+	void createButtonsForButtonBar(Composite parent);
 }

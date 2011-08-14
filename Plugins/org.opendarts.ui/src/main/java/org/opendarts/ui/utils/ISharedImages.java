@@ -14,9 +14,6 @@ public interface ISharedImages {
 	String IMG_OBJ_SET = "icons/obj/set.png";
 	String IMG_OBJ_GAME = "icons/obj/game.png";
 
-	String IMG_USER_ADD = "icons/actions/user_add.png";
-	String IMG_USER_DELETE = "icons/actions/user_delete.png";
-	String IMG_USER_NEW = "icons/actions/user_new.png";
 	String IMG_UP = "icons/actions/up.png";
 	String IMG_DOWN = "icons/actions/down.png";
 	

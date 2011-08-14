@@ -69,6 +69,12 @@
             id="opendarts.pref.ui.x01.stats.game"
             name="x01 Game Statistics">
       </page>
+      <page
+            category="opendarts.pref.ui.x01"
+            class="org.opendarts.ui.x01.pref.X01ColorsPreferencePage"
+            id="opendarts.pref.ui.x01.colors"
+            name="Colors">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

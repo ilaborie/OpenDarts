@@ -1,4 +1,4 @@
-package org.opendarts.ui.label;
+package org.opendarts.ui.player.label;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;

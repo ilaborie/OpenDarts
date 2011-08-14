@@ -24,4 +24,16 @@ public interface IX01Prefs {
 	
 	/** The GAM e_ stats. */
 	String GAME_STATS = "OpenDarts.pref.x01.gameStats";
+	
+	
+	String COLOR_NORMAL = "OpenDarts.pref.x01.color.normal";
+	String COLOR_NORMAL_GRADIENT = "OpenDarts.pref.x01.color.normal.gradiant";
+
+	String COLOR_60 = "OpenDarts.pref.x01.color.60";
+	String COLOR_60_GRADIENT = "OpenDarts.pref.x01.color.60.gradiant";
+
+	String COLOR_100 = "OpenDarts.pref.x01.color.100";
+	String COLOR_100_GRADIENT = "OpenDarts.pref.x01.color.100.gradiant";
+	
+	String COLOR_180 = "OpenDarts.pref.x01.color.180";
 }

@@ -47,7 +47,7 @@ import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.dialog.ThreeDartsComputerDialog;
-import org.opendarts.ui.label.PlayerLabelProvider;
+import org.opendarts.ui.player.label.PlayerLabelProvider;
 import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.ISharedImages;
@@ -181,7 +181,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		form.setText(this.game.getName());
 		form.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
-		
+
 		this.toolkit.decorateFormHeading(form.getForm());
 
 		GridDataFactory playerData;
@@ -211,7 +211,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			scoreData = GridDataFactory.fillDefaults().grab(true, false);
 		}
 		this.body = form.getBody();
-		GridLayoutFactory.fillDefaults().margins(2,2).numColumns(nbCol)
+		GridLayoutFactory.fillDefaults().margins(2, 2).numColumns(nbCol)
 				.equalWidth(true).applyTo(this.body);
 
 		if (onePlayer || twoPlayer) {
@@ -606,7 +606,11 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		Section secPlayer = this.toolkit.createSection(main,
 				ExpandableComposite.TITLE_BAR);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(secPlayer);
-		secPlayer.setText(this.playerLabelProvider.getText(player));
+		if (this.game.getFirstPlayer().equals(player)) {
+			secPlayer.setText("* " + this.playerLabelProvider.getText(player));
+		} else {
+			secPlayer.setText(this.playerLabelProvider.getText(player));
+		}
 		secPlayer.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
 
@@ -641,10 +645,10 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		ProgressBar playerBar = new ProgressBar(section, SWT.SMOOTH);
 		this.playerProgess.put(player, playerBar);
 		playerBar.setMaximum(nbGameToWin);
-		playerBar
-				.setSelection(winningGames);
-		playerBar.setToolTipText(MessageFormat.format("{0}, need {1} to win", winningGames,nbGameToWin));
-		
+		playerBar.setSelection(winningGames);
+		playerBar.setToolTipText(MessageFormat.format("{0}, need {1} to win",
+				winningGames, nbGameToWin));
+
 		section.setTextClient(playerBar);
 	}
 

@@ -10,9 +10,14 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
  org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)",
  org.eclipse.ui.forms;bundle-version="[3.5.100,4.0.0)"
 Import-Package: org.opendarts.core.model.player,
+ org.opendarts.core.player.model,
  org.opendarts.core.service.player,
  org.opendarts.ui,
  org.opendarts.ui.label,
  org.opendarts.ui.utils,
  org.slf4j;version="1.6.1"
-Export-Package: org.opendarts.ui.player.dialog
+Export-Package: org.opendarts.ui.player,
+ org.opendarts.ui.player.composite,
+ org.opendarts.ui.player.dialog,
+ org.opendarts.ui.player.label
+Bundle-Activator: org.opendarts.ui.player.OpenDartsPlayerUiPlugin

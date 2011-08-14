@@ -40,7 +40,7 @@ import org.opendarts.core.service.session.ISetService;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
-import org.opendarts.ui.label.PlayerLabelProvider;
+import org.opendarts.ui.player.label.PlayerLabelProvider;
 
 /**
  * The Class 

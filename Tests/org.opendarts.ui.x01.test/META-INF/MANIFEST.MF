@@ -20,6 +20,7 @@ Import-Package: org.opendarts.core.internal.service,
  org.opendarts.core.x01.model,
  org.opendarts.ui,
  org.opendarts.ui.label,
+ org.opendarts.ui.player.label,
  org.slf4j;version="1.6.1"
 Require-Bundle: org.eclipse.swt;bundle-version="[3.7.0,4.0.0)",
  org.eclipse.jface;bundle-version="[3.7.0,4.0.0)",

@@ -8,7 +8,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.ui.OpenDartsUiPlugin;
-import org.opendarts.ui.label.PlayerLabelProvider;
+import org.opendarts.ui.player.label.PlayerLabelProvider;
 import org.opendarts.ui.utils.ISharedImages;
 
 /**
