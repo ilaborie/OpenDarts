@@ -17,6 +17,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
@@ -33,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PlayerSelectionComposite extends Composite implements
-		ISelectionChangedListener, SelectionListener {
+		ISelectionChangedListener, SelectionListener, KeyListener {
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
@@ -71,6 +73,9 @@ public class PlayerSelectionComposite extends Composite implements
 
 	/**
 	 * Instantiates a new player selection composite.
+	 *
+	 * @param parent the parent
+	 * @param players the players
 	 */
 	public PlayerSelectionComposite(Composite parent, List<IPlayer> players) {
 		super(parent, SWT.NONE);
@@ -102,6 +107,14 @@ public class PlayerSelectionComposite extends Composite implements
 		this.listeners.remove(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.widgets.Composite#setFocus()
+	 */
+	@Override
+	public boolean setFocus() {
+		return this.btnUserAdd.setFocus();
+	}
+
 	/**
 	 * Fire players updated.
 	 */
@@ -130,8 +143,7 @@ public class PlayerSelectionComposite extends Composite implements
 	 *
 	 * @param parent the parent
 	 */
-	private void createContents(Composite parent) {
-
+	protected void createContents(Composite parent) {
 		this.tablePlayers = new TableViewer(parent, SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().hint(100, 60).grab(true, true)
 				.applyTo(this.tablePlayers.getTable());
@@ -139,6 +151,7 @@ public class PlayerSelectionComposite extends Composite implements
 		this.tablePlayers.setContentProvider(new ArrayContentProvider());
 		this.tablePlayers.setInput(this.players);
 		this.tablePlayers.addSelectionChangedListener(this);
+		this.tablePlayers.getTable().addKeyListener(this);
 
 		// buttons
 		Composite cmpBtn = new Composite(parent, SWT.NONE);
@@ -229,11 +242,7 @@ public class PlayerSelectionComposite extends Composite implements
 		if (obj.equals(this.btnUserAdd)) {
 			this.addPlayer();
 		} else if (obj.equals(this.btnUserDel)) {
-			boolean remove = this.players.remove(this.currentPlayer);
-			if (remove) {
-				this.tablePlayers.remove(this.currentPlayer);
-				this.tablePlayers.setSelection(StructuredSelection.EMPTY);
-			}
+			this.removePlayer();
 		} else if (obj.equals(this.btnUserNew)) {
 			this.newPlayer();
 		} else if (obj.equals(this.btnUp)) {
@@ -248,6 +257,35 @@ public class PlayerSelectionComposite extends Composite implements
 			this.updateButtonsState();
 		}
 		this.firePlayersUpdated();
+	}
+
+	/**
+	 * Removes the player.
+	 */
+	private void removePlayer() {
+		boolean remove = this.players.remove(this.currentPlayer);
+		if (remove) {
+			this.tablePlayers.remove(this.currentPlayer);
+			this.tablePlayers.setSelection(StructuredSelection.EMPTY);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.KeyListener#keyPressed(org.eclipse.swt.events.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// Nothing to do
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.KeyListener#keyReleased(org.eclipse.swt.events.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.keyCode == SWT.DEL && this.currentPlayer != null) {
+			this.removePlayer();
+		}
 	}
 
 	/**

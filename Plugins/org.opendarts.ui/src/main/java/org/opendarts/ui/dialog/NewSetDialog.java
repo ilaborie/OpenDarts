@@ -253,6 +253,7 @@ public class NewSetDialog extends TitleAreaDialog implements
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
 
 			this.main.layout(true);
+			this.compGameDef.setFocus();
 		}
 	}
 

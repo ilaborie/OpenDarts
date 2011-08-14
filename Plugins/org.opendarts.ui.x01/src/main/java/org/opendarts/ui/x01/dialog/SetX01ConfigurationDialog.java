@@ -212,6 +212,14 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 		return group;
 	}
+	
+	/**
+	 * Sets the focus.
+	 */
+	@Override
+	public void setFocus() {
+		this.playersComposite.setFocus();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.ui.dialog.IGameDefinitionComposite#getGameDefinition()

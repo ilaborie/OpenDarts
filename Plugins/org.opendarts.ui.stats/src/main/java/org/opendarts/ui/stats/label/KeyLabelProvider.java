@@ -7,7 +7,7 @@ import org.opendarts.core.stats.model.IElementStats.IEntry;
  * The Class KeyLabelProvider.
  */
 public class KeyLabelProvider extends ColumnLabelProvider {
-
+	// FIXME  use StatsUiService
 	/**
 	 * Instantiates a new key label provider.
 	 */

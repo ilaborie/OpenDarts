@@ -48,4 +48,9 @@ public interface IGameDefinitionComposite {
 	 * @param parent the parent
 	 */
 	void createButtonsForButtonBar(Composite parent);
+	
+	/**
+	 * Sets the focus.
+	 */
+	void setFocus();
 }
