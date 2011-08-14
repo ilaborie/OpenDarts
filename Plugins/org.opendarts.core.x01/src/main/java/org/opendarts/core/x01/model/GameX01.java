@@ -315,14 +315,14 @@ public class GameX01 extends AbstractGame implements IGame {
 				+ dartThrow.getNbDartToFinish();
 		entry.setNbPlayedDart(this.nbDartToFinish);
 
-		// Notify
-		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
-				player, entry, dartThrow));
-
 		// Update stats
 		if (this.statsService != null) {
 			this.statsService.updateStats(player, this, entry);
 		}
+		
+		// Notify
+		this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
+				player, entry, dartThrow));
 
 		// Handle winning
 		this.end(player);
@@ -330,6 +330,7 @@ public class GameX01 extends AbstractGame implements IGame {
 				this.getWinner(), entry, dartThrow));
 
 		this.getParentSet().handleFinishedGame(this);
+		
 	}
 
 	/**

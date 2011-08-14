@@ -126,6 +126,7 @@ public abstract class GameDefinition implements IGameDefinition {
 	 *
 	 * @return the nb game to win
 	 */
+	@Override
 	public int getNbGameToWin() {
 		return this.nbGameToWin;
 	}

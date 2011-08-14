@@ -29,7 +29,11 @@ import org.opendarts.core.x01.service.entry.CountDartsStatsEntry;
 import org.opendarts.core.x01.service.entry.DartRangeStatsEntry;
 import org.opendarts.core.x01.service.entry.DartScoreStatsEntry;
 import org.opendarts.core.x01.service.entry.OutsOver100StatsEntry;
+import org.opendarts.core.x01.service.entry.PlayedGameStatsEntry;
+import org.opendarts.core.x01.service.entry.PlayedSetStatsEntry;
 import org.opendarts.core.x01.service.entry.TotalDartStatsEntry;
+import org.opendarts.core.x01.service.entry.WinningGameStatsEntry;
+import org.opendarts.core.x01.service.entry.WinningSetStatsEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +54,12 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SESSION_60 = "Session.60";
 	public static final String SESSION_60_PLUS = "Session.60.plus";
 	public static final String SESSION_TONS_PLUS = "Session.100.plus";
-	public static final String SESSION_BEST_LEG = "Session.best.leg";
-	public static final String SESSION_AVG_LEG = "Session.avg.leg";
-	public static final String SESSION_BEST_OUT = "Session.best.out";
-	public static final String SESSION_COUNT_DARTS = "Session.darts.count";
-	public static final String SESSION_TOTAL_SCORE = "Session.total.score";
+	public static final String SESSION_BEST_LEG = "Session.leg.best";
+	public static final String SESSION_AVG_LEG = "Session.leg.avg";
+	public static final String SESSION_BEST_OUT = "Session.out.best";
 	public static final String SESSION_OUT_OVER_100 = "Session.out.100.plus";
+	public static final String SESSION_COUNT_DARTS = "Session.darts.count";
+	public static final String SESSION_TOTAL_SCORE = "Session.darts.total";
 
 	public static final String SET_AVG_DART = "Set.avg.dart";
 	public static final String SET_AVG_3_DARTS = "Set.avg.3darts";
@@ -65,12 +69,12 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String SET_60 = "Set.60";
 	public static final String SET_60_PLUS = "Set.60.plus";
 	public static final String SET_TONS_PLUS = "Set.100.plus";
-	public static final String SET_BEST_LEG = "Set.best.leg";
-	public static final String SET_AVG_LEG = "Set.avg.leg";
-	public static final String SET_BEST_OUT = "Set.best.out";
-	public static final String SET_COUNT_DARTS = "Set.darts.count";
-	public static final String SET_TOTAL_SCORE = "Set.total.score";
 	public static final String SET_OUT_OVER_100 = "Set.out.100.plus";
+	public static final String SET_BEST_LEG = "Set.leg.best";
+	public static final String SET_AVG_LEG = "Set.leg.avg";
+	public static final String SET_BEST_OUT = "Set.out.best";
+	public static final String SET_COUNT_DARTS = "Set.darts.count";
+	public static final String SET_TOTAL_SCORE = "Set.darts.total";
 
 	public static final String GAME_AVG_DART = "Game.avg.dart";
 	public static final String GAME_AVG_3_DARTS = "Game.avg.3darts";
@@ -289,10 +293,12 @@ public class StatsX01Service extends AbstractStatsService {
 		// Set best outs
 		stats.addEntry(new OutsOver100StatsEntry(SET_OUT_OVER_100));
 
-		// TODO
-		//		public static final String SET_GAME_WIN = "Set.Game.Win";
-		//		public static final String SET_NB_GAME = "Set.nb.Game";
-
+		// Winning Games
+		stats.addEntry(new WinningGameStatsEntry(SET_GAME_WIN));
+		
+		// Played Game
+		stats.addEntry(new PlayedGameStatsEntry(SET_NB_GAME));
+		
 		return stats;
 	}
 
@@ -345,10 +351,18 @@ public class StatsX01Service extends AbstractStatsService {
 		// Session best outs
 		stats.addEntry(new OutsOver100StatsEntry(SESSION_OUT_OVER_100));
 
-		// TODO
-		//		public static final String SESSION_SET_WIN = "Session.Set.Win";
-		//		public static final String SESSION_NB_SET = "Session.nb.Set";
-		//		public static final String SESSION_NB_GAME = "Session.nb.Game";
+		// Games win
+		stats.addEntry(new WinningGameStatsEntry(SESSION_GAME_WIN));
+		
+		// Played Game
+		stats.addEntry(new PlayedGameStatsEntry(SESSION_NB_GAME));
+
+		// Set win
+		stats.addEntry(new WinningSetStatsEntry(SESSION_SET_WIN));
+		
+		// Played set
+		stats.addEntry(new PlayedSetStatsEntry(SESSION_NB_SET));
+
 		return stats;
 	}
 

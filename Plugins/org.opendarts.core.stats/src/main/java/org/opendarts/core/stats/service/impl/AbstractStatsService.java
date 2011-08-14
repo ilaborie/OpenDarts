@@ -23,12 +23,13 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("rawtypes")
 public abstract class AbstractStatsService implements IStatsService {
 
-	public static final String SESSION_SET_WIN = "Session.Set.Win";
-	public static final String SESSION_NB_SET = "Session.nb.Set";
-	public static final String SESSION_NB_GAME = "Session.nb.Game";
+	public static final String SESSION_SET_WIN = "Session.Set.win";
+	public static final String SESSION_NB_SET = "Session.Set.played";
+	public static final String SESSION_GAME_WIN = "Session.Game.win";
+	public static final String SESSION_NB_GAME = "Session.Game.played";
 
-	public static final String SET_GAME_WIN = "Set.Game.Win";
-	public static final String SET_NB_GAME = "Set.nb.Game";
+	public static final String SET_GAME_WIN = "Set.Game.win";
+	public static final String SET_NB_GAME = "Set.Game.played";
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory

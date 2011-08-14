@@ -214,6 +214,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 
 		// check end
 		if (this.getGameDefinition().isSetFinished(this)) {
+			LOG.info("Set win by {}",player);
 			this.fireSetEvent(SetEvent.Factory.newSetFinishedEvent(this,
 					this.getWinner(), game));
 		} else {
