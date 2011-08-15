@@ -1,22 +1,21 @@
-package org.opendarts.core.x01.service.entry;
+package org.opendarts.core.stats.model.impl;
 
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
-import org.opendarts.core.stats.model.impl.IncrementStatsEntry;
 
 /**
  * The Class WinningGameStatsEntry.
  */
-public class PlayedGameStatsEntry extends IncrementStatsEntry {
+public class PlayedSetStatsEntry extends IncrementStatsEntry {
 
 	/**
 	 * Instantiates a new winning game stats entry.
 	 *
 	 * @param key the key
 	 */
-	public PlayedGameStatsEntry(String key) {
+	public PlayedSetStatsEntry(String key) {
 		super(key);
 	}
 
@@ -26,7 +25,8 @@ public class PlayedGameStatsEntry extends IncrementStatsEntry {
 	@Override
 	protected boolean shouldIncrement(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		return (gameEntry.getRound() == 1);
+		return (gameEntry.getRound() == 1 && game.getParentSet().getAllGame()
+				.size() == 1);
 	}
 
 }

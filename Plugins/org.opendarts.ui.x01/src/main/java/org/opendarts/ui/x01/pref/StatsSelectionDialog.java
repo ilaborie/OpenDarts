@@ -2,10 +2,9 @@ package org.opendarts.ui.x01.pref;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.opendarts.core.x01.OpenDartsX01Bundle;
-import org.opendarts.ui.label.StatsLabelProvider;
 
 /**
  * The Class StatsSelectionDialog.
@@ -20,9 +19,10 @@ public class StatsSelectionDialog extends ElementListSelectionDialog {
 	 *
 	 * @param parent the parent
 	 * @param allStats the all stats
+	 * @param labelProvider the label provider
 	 */
-	public StatsSelectionDialog(Shell parent, List<String> allStats) {
-		super(parent, new StatsLabelProvider(OpenDartsX01Bundle.getStatsX01Service()));
+	public StatsSelectionDialog(Shell parent, List<String> allStats, ILabelProvider labelProvider) {
+		super(parent, labelProvider);
 		this.setTitle("Select Statistics");
 
 		this.setElements(allStats.toArray());

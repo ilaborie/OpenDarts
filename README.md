@@ -10,7 +10,7 @@ The prototype contains:
   A scoring module for X01 game (501, 701, 170, ...)
   Support Two or more players.
   With a dumb user selection.
-  A Computer player with a basic IA (does not support level)
+  A Computer player with a basic IA (does not support yet level)
   A basic statistics system (no persited)
 
 Roadmap for V1
@@ -67,6 +67,21 @@ License
 -------
 This application is on the Eclipse Public License (1.0)
 
+Contributions
+-------------
+Free software could be better than others, you can fork or contribute:
+* Give thanks
+* Report Bugs
+* Speaking about the project
+* Improvements and new Feature suggestions
+* Fix Spelling mistakes
+* Writing documentations (help, ...)
+* Translation (not yet available)
+* Create and animate a WebSite
+* Graphical contribution (icons, splash screen, ...)
+* Create install package (Windows, debian .deb, osx .app)
+
+If you are a Java/EclipseRCP developer you also could help me, fork me on github ;-) 
 
 
 

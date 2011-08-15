@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,6 +32,8 @@ import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.ui.pref.IGeneralPrefs;
+import org.opendarts.ui.stats.service.IStatsUiProvider;
+import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.pref.IX01Prefs;
@@ -79,6 +82,9 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 	/** The stats service. */
 	private final List<IStatsService> statsServices;
 
+	/** The stats ui provider. */
+	private final IStatsUiProvider statsUiProvider;
+
 	/**
 	 * Instantiates a new player status composite.
 	 *
@@ -99,6 +105,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		// Stats
 		this.statsServices = X01UiPlugin.getService(IStatsProvider.class)
 				.getGameStats(game);
+		this.statsUiProvider = X01UiPlugin.getService(IStatsUiProvider.class);
 		for (IStatsService statsService : this.statsServices) {
 			statsService.addStatsListener(this);
 		}
@@ -157,8 +164,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		GridLayoutFactory.fillDefaults().applyTo(main);
 		// Section
 		Section section = this.toolkit.createSection(main,
-				ExpandableComposite.TITLE_BAR
-						| ExpandableComposite.EXPANDED
+				ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Session");
@@ -175,7 +181,8 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		String sesStats = X01UiPlugin.getX01Preferences().getString(
 				IX01Prefs.SESSION_STATS);
-		List<String> statsList = PreferencesConverterUtils.getStringAsList(sesStats);
+		List<String> statsList = PreferencesConverterUtils
+				.getStringAsList(sesStats);
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
@@ -251,8 +258,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		// Section
 		Section section = this.toolkit.createSection(main,
-				ExpandableComposite.TITLE_BAR
-						| ExpandableComposite.EXPANDED
+				ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Set");
@@ -269,7 +275,8 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		String sesStats = X01UiPlugin.getX01Preferences().getString(
 				IX01Prefs.SET_STATS);
-		List<String> statsList = PreferencesConverterUtils.getStringAsList(sesStats);
+		List<String> statsList = PreferencesConverterUtils
+				.getStringAsList(sesStats);
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
@@ -319,8 +326,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		// Section
 		Section section = this.toolkit.createSection(main,
-				ExpandableComposite.TITLE_BAR
-						| ExpandableComposite.EXPANDED
+				ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Current Leg");
@@ -333,7 +339,8 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 		String sesStats = X01UiPlugin.getX01Preferences().getString(
 				IX01Prefs.GAME_STATS);
-		List<String> statsList = PreferencesConverterUtils.getStringAsList(sesStats);
+		List<String> statsList = PreferencesConverterUtils
+				.getStringAsList(sesStats);
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
@@ -387,10 +394,16 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 	private void createStatEntry(Composite client, String statsKey,
 			GridDataFactory lblLayoutData, GridDataFactory valLayoutData) {
 		String label = "";
+		String description = null;
 		String s;
+		IStatsUiService statsUiService;
 		for (IStatsService statsService : this.statsServices) {
-			s = statsService.getText(statsKey);
-			if (s != null) {
+			statsUiService = this.statsUiProvider
+					.getStatsUiService(statsService);
+			if (statsUiService != null) {
+				ColumnLabelProvider labelProvider = statsUiService.getStatsLabelProvider();
+				description = labelProvider.getToolTipText(statsKey);
+				s = labelProvider.getText(statsKey);
 				label = s + ":";
 				break;
 			}
@@ -399,6 +412,9 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		// Label
 		Label lbl = this.toolkit.createLabel(client, label);
 		lbl.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
+		if (description != null) {
+			lbl.setToolTipText(description);
+		}
 		lblLayoutData.applyTo(lbl);
 
 		// Value

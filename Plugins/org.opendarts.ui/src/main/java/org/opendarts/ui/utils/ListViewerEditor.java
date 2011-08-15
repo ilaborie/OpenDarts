@@ -8,6 +8,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -206,6 +207,8 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 		gd = new GridData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		this.buttonBox.setLayoutData(gd);
+		
+		ColumnViewerToolTipSupport.enableFor(this.tableViewer);
 	}
 
 	/* (non-Javadoc)

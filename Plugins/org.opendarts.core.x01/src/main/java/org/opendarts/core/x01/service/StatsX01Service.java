@@ -1,9 +1,8 @@
 package org.opendarts.core.x01.service;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.Arrays;
+import java.util.List;
 
-import org.eclipse.swt.graphics.Image;
 import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
@@ -15,6 +14,8 @@ import org.opendarts.core.stats.model.IStats;
 import org.opendarts.core.stats.model.IStatsEntry;
 import org.opendarts.core.stats.model.impl.AbstractStatsEntry;
 import org.opendarts.core.stats.model.impl.GameStats;
+import org.opendarts.core.stats.model.impl.PlayedGameStatsEntry;
+import org.opendarts.core.stats.model.impl.PlayedSetStatsEntry;
 import org.opendarts.core.stats.model.impl.SessionStats;
 import org.opendarts.core.stats.model.impl.SetStats;
 import org.opendarts.core.stats.service.impl.AbstractStatsService;
@@ -29,22 +30,14 @@ import org.opendarts.core.x01.service.entry.CountDartsStatsEntry;
 import org.opendarts.core.x01.service.entry.DartRangeStatsEntry;
 import org.opendarts.core.x01.service.entry.DartScoreStatsEntry;
 import org.opendarts.core.x01.service.entry.OutsOver100StatsEntry;
-import org.opendarts.core.x01.service.entry.PlayedGameStatsEntry;
-import org.opendarts.core.x01.service.entry.PlayedSetStatsEntry;
 import org.opendarts.core.x01.service.entry.TotalDartStatsEntry;
 import org.opendarts.core.x01.service.entry.WinningGameStatsEntry;
 import org.opendarts.core.x01.service.entry.WinningSetStatsEntry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class StatsX01Service.
  */
 public class StatsX01Service extends AbstractStatsService {
-
-	/** The logger. */
-	private static final Logger LOG = LoggerFactory
-			.getLogger(StatsX01Service.class);
 
 	public static final String SESSION_AVG_DART = "Session.avg.dart";
 	public static final String SESSION_AVG_3_DARTS = "Session.avg.3darts";
@@ -84,16 +77,62 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String GAME_60 = "Game.60";
 	public static final String GAME_60_PLUS = "Game.60.plus";
 	public static final String GAME_TONS_PLUS = "Game.100.plus";
-
-	/** The bundle. */
-	private final ResourceBundle bundle;
+	
+	public final List<String> keys;
 
 	/**
 	 * Instantiates a new stats x01 service.
 	 */
 	public StatsX01Service() {
 		super();
-		this.bundle = ResourceBundle.getBundle("Messages");
+		this.keys = Arrays.asList(
+				SESSION_SET_WIN,
+				SESSION_NB_SET,
+				SESSION_GAME_WIN,
+				SESSION_NB_GAME,
+
+				SET_GAME_WIN,
+				SET_NB_GAME,
+				
+				SESSION_AVG_DART,
+				SESSION_AVG_3_DARTS,
+				SESSION_180s,
+				SESSION_140,
+				SESSION_TONS,
+				SESSION_60,
+				SESSION_60_PLUS,
+				SESSION_TONS_PLUS,
+				SESSION_BEST_LEG,
+				SESSION_AVG_LEG,
+				SESSION_BEST_OUT,
+				SESSION_OUT_OVER_100,
+				SESSION_COUNT_DARTS,
+				SESSION_TOTAL_SCORE,
+
+				SET_AVG_DART,
+				SET_AVG_3_DARTS,
+				SET_180s,
+				SET_140,
+				SET_TONS,
+				SET_60,
+				SET_60_PLUS ,
+				SET_TONS_PLUS,
+				SET_OUT_OVER_100,
+				SET_BEST_LEG,
+				SET_AVG_LEG,
+				SET_BEST_OUT,
+				SET_COUNT_DARTS,
+				SET_TOTAL_SCORE,
+
+				GAME_AVG_DART,
+				GAME_AVG_3_DARTS,
+				GAME_180s,
+				GAME_140,
+				GAME_TONS,
+				GAME_60,
+				GAME_60_PLUS ,
+				GAME_TONS_PLUS
+				);
 	}
 
 	/* (non-Javadoc)
@@ -365,28 +404,12 @@ public class StatsX01Service extends AbstractStatsService {
 
 		return stats;
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.opendarts.core.stats.service.IStatsService#getImage(java.lang.String)
+	 * @see org.opendarts.core.stats.service.IStatsService#contains(java.lang.String)
 	 */
 	@Override
-	public Image getImage(String statsKey) {
-		// No images
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.opendarts.core.stats.service.IStatsService#getText(java.lang.String)
-	 */
-	@Override
-	public String getText(String statsKey) {
-		String result = null;
-		try {
-			result = this.bundle.getString(statsKey);
-		} catch (MissingResourceException mre) {
-			LOG.warn("Could not retrieve label for key {}", statsKey);
-			result = statsKey;
-		}
-		return result;
+	public boolean contains(String statsKey) {
+		return this.keys.contains(statsKey);
 	}
 }

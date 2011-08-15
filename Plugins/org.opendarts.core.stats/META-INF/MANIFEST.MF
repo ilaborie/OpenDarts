@@ -5,8 +5,7 @@ Bundle-SymbolicName: org.opendarts.core.stats
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.swt.graphics,
- org.opendarts.core.model.dart,
+Import-Package: org.opendarts.core.model.dart,
  org.opendarts.core.model.game,
  org.opendarts.core.model.player,
  org.opendarts.core.model.session,

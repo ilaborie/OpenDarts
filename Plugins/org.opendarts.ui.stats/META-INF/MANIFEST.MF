@@ -21,6 +21,15 @@ Import-Package: org.opendarts.core.model.dart,
  org.opendarts.core.stats.service,
  org.opendarts.ui,
  org.opendarts.ui.label,
- org.opendarts.ui.utils
+ org.opendarts.ui.utils,
+ org.slf4j;version="1.6.1"
 Bundle-Activator: org.opendarts.ui.stats.OpenDartsStatsUiPlugin
-Export-Package: org.opendarts.ui.stats
+Export-Package: org.opendarts.ui.stats,
+ org.opendarts.ui.stats.content,
+ org.opendarts.ui.stats.handler,
+ org.opendarts.ui.stats.label,
+ org.opendarts.ui.stats.perspective,
+ org.opendarts.ui.stats.pref,
+ org.opendarts.ui.stats.service,
+ org.opendarts.ui.stats.view
+Service-Component: OSGI-INF/StatsUiProvider.xml

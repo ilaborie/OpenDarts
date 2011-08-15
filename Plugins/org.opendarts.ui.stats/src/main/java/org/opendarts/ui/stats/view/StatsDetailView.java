@@ -11,6 +11,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -34,8 +35,8 @@ import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
-import org.opendarts.ui.OpenDartsUiPlugin;
 import org.opendarts.ui.label.OpenDartsLabelProvider;
+import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.stats.label.KeyLabelProvider;
 import org.opendarts.ui.stats.label.PlayerStatsLabelProvider;
 import org.opendarts.ui.utils.ColumnDescriptor;
@@ -75,7 +76,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 	 */
 	public StatsDetailView() {
 		super();
-		this.statsProvider = OpenDartsUiPlugin.getService(IStatsProvider.class);
+		this.statsProvider = OpenDartsStatsUiPlugin.getService(IStatsProvider.class);
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		this.labelProvider = new OpenDartsLabelProvider();
 	}
@@ -284,6 +285,7 @@ public class StatsDetailView extends ViewPart implements ISelectionListener {
 		table.setHeaderVisible(true);
 
 		TableViewer viewer = new TableViewer(table);
+		ColumnViewerToolTipSupport.enableFor(viewer);
 
 		viewer.setContentProvider(new ArrayContentProvider());
 

@@ -4,6 +4,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.opendarts.core.x01.OpenDartsX01Bundle;
+import org.opendarts.ui.stats.service.IStatsUiProvider;
+import org.opendarts.ui.x01.service.StatsX01UiService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
@@ -42,6 +45,13 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		// Register the StatsUiService
+		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
+		if (uiProvider != null) {
+			uiProvider.registerStatsUiService(
+					OpenDartsX01Bundle.getStatsX01Service(),
+					new StatsX01UiService());
+		}
 	}
 
 	/*
@@ -51,9 +61,14 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
+		if (uiProvider != null) {
+			uiProvider.unregisterStatsUiService(OpenDartsX01Bundle
+					.getStatsX01Service());
+		}
 		super.stop(context);
 	}
-	
+
 	/**
 	 * Gets the x01 preferences.
 	 *

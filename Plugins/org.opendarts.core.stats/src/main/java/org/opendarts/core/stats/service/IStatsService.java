@@ -1,7 +1,6 @@
 package org.opendarts.core.stats.service;
 
 
-import org.eclipse.swt.graphics.Image;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
@@ -103,7 +102,11 @@ public interface IStatsService {
 	 */
 	String getName();
 
-	Image getImage(String statsKey);
-
-	String getText(String statsKey);
+	/**
+	 * Contains.
+	 *
+	 * @param statsKey the stats key
+	 * @return true, if successful
+	 */
+	boolean contains(String statsKey);
 }

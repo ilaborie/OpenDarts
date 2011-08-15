@@ -138,4 +138,16 @@ public class StatsProvider implements IStatsProvider {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.service.IStatsProvider#getStatsService(java.lang.String)
+	 */
+	@Override
+	public IStatsService getStatsService(String statsKey) {
+		for (IStatsService statsService : this.getAllStatsService()) {
+			if (statsService.contains(statsKey)) {
+				return statsService;
+			}
+		}
+		return null;
+	}
 }

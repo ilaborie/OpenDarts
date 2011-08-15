@@ -67,4 +67,12 @@ public interface IStatsProvider {
 	 */
 	Set<IStatsService> getAllStatsService();
 
+	/**
+	 * Gets the stats service.
+	 *
+	 * @param statsKey the stats key
+	 * @return the stats service
+	 */
+	IStatsService getStatsService(String statsKey);
+
 }
