@@ -118,9 +118,9 @@ public class TextInputListener implements FocusListener, SelectionListener,
 		this.shortcuts.handleKeyEvent(e, this.shell, this.inputText, this.game,
 				this.player, this.decoration);
 		switch (e.keyCode) {
-			case 9: // Tab
-			case 32: // Space
-			case 13: // Enter
+			case SWT.SPACE:
+			case SWT.TAB:
+			case SWT.CR:
 			case SWT.KEYPAD_CR:
 				this.handleNewValue(this.inputText.getText());
 				break;
