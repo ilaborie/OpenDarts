@@ -78,6 +78,8 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		this.setInput = (SetEditorInput) input;
 		ISet set = this.getSet();
 		this.setPartName(set.toString());
+		this.gameService = this.getSet().getGameService();
+
 		// Register listener
 		set.addListener(this);
 	}
@@ -130,7 +132,6 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	* Start.
 	*/
 	private void handleSetInitialize() {
-		this.gameService = this.getSet().getGameService();
 		IGame game = this.getSet().getCurrentGame();
 		if ((game != null) && !game.isFinished()) {
 			this.handleGameActive((GameX01) game);

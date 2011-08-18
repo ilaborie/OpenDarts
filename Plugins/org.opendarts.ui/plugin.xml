@@ -16,6 +16,10 @@
                id="org.eclipse.ui.commands.toggleState">
          </state>
       </command>
+      <command
+            id="opendarts.cmd.newSession"
+            name="New Session">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -24,6 +28,11 @@
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
                label="File">
+            <command
+                  commandId="opendarts.cmd.newSession"
+                  label="New Session..."
+                  style="push">
+            </command>
             <command
                   commandId="opendarts.cmd.newSet"
                   label="New Game..."
@@ -64,6 +73,10 @@
                id="opendarts.toolbar.file"
                label="File">
             <command
+                  commandId="opendarts.cmd.newSession"
+                  style="push">
+            </command>
+            <command
                   commandId="opendarts.cmd.newSet"
                   style="push">
             </command>
@@ -97,6 +110,10 @@
             class="org.opendarts.ui.handler.FullScreenHandler"
             commandId="opendarts.cmd.fullscreen">
       </handler>
+      <handler
+            class="org.opendarts.ui.handler.NewSessionHandler"
+            commandId="opendarts.cmd.newSession">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
@@ -111,6 +128,10 @@
       <image
             commandId="opendarts.cmd.fullscreen"
             icon="icons/actions/fullscreen.png">
+      </image>
+      <image
+            commandId="opendarts.cmd.newSession"
+            icon="icons/actions/plusPlus.png">
       </image>
    </extension>
    <extension

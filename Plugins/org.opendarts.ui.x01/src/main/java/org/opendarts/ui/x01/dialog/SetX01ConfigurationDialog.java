@@ -21,7 +21,7 @@ import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.ui.dialog.IGameDefinitionComposite;
-import org.opendarts.ui.dialog.NewSetDialog;
+import org.opendarts.ui.dialog.INewContainerDialog;
 import org.opendarts.ui.dialog.ValidationEntry;
 import org.opendarts.ui.player.composite.IPlayerSelectionListener;
 import org.opendarts.ui.player.composite.PlayerSelectionComposite;
@@ -55,7 +55,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	private Button btnPlayAll;
 
 	/** The parent dialog. */
-	private NewSetDialog parentDialog;
+	private INewContainerDialog parentDialog;
 
 	/** The players. */
 	private ArrayList<IPlayer> players;
@@ -78,7 +78,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 * @see org.opendarts.prototype.ui.dialog.IGameDefinitionComposite#createSetConfiguration(org.opendarts.prototype.ui.dialog.NewSetDialog, org.eclipse.swt.widgets.Composite, org.opendarts.prototype.model.game.IGameDefinition)
 	 */
 	@Override
-	public Composite createSetConfiguration(NewSetDialog dialog,
+	public Composite createSetConfiguration(INewContainerDialog dialog,
 			Composite parent, IGameDefinition lastGameDefinition) {
 		// init
 		this.parentDialog = dialog;

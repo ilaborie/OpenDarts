@@ -14,11 +14,14 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.ui.OpenDartsUiPlugin;
@@ -30,12 +33,12 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class NewSetDialog.
  */
-public class NewSetDialog extends TitleAreaDialog implements
-		ISelectionChangedListener, INewContainerDialog {
+public class NewSessionDialog extends TitleAreaDialog implements
+		ISelectionChangedListener, INewContainerDialog, SelectionListener {
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
-			.getLogger(NewSetDialog.class);
+			.getLogger(NewSessionDialog.class);
 
 	/** The last game definition. */
 	private static IGameDefinition lastGameDefinition;
@@ -61,12 +64,18 @@ public class NewSetDialog extends TitleAreaDialog implements
 	/** The cb games available. */
 	private ComboViewer cbGamesAvailable;
 
+	/** The spi nb sets. */
+	private Spinner spiNbSets;
+	
+	/** The nb set. */
+	private int nbSets = 5;
+
 	/**
 	 * Instantiates a new new game dialog.
 	 *
 	 * @param parentShell the parent shell
 	 */
-	public NewSetDialog(Shell parentShell) {
+	public NewSessionDialog(Shell parentShell) {
 		super(parentShell);
 		this.setHelpAvailable(false);
 	}
@@ -77,7 +86,7 @@ public class NewSetDialog extends TitleAreaDialog implements
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Set ...");
+		newShell.setText("New Session ...");
 	}
 
 	/* (non-Javadoc)
@@ -114,19 +123,35 @@ public class NewSetDialog extends TitleAreaDialog implements
 		List<IGameDefinitionProvider> allGameDefinition = OpenDartsUiPlugin
 				.getAllService(IGameDefinitionProvider.class);
 
+		Label lbl;
 		// Combo for selecting game
-		Label lblGameAvailable = new Label(this.main, SWT.WRAP);
-		lblGameAvailable.setText("Available(s) games: ");
-		GridDataFactory.fillDefaults().applyTo(lblGameAvailable);
+		lbl = new Label(this.main, SWT.WRAP);
+		GridDataFactory.fillDefaults().applyTo(lbl);
+		lbl.setText("Available(s) games: ");
 
 		this.cbGamesAvailable = new ComboViewer(this.main);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(this.cbGamesAvailable.getControl());
 		this.cbGamesAvailable
 				.setLabelProvider(new GameDefinitionLabelProvider());
 
 		this.cbGamesAvailable.setContentProvider(new ArrayContentProvider());
 		this.cbGamesAvailable.addSelectionChangedListener(this);
 		this.cbGamesAvailable.setInput(allGameDefinition);
-
+		
+		// Nb Set
+		lbl = new Label(this.main, SWT.WRAP);
+		GridDataFactory.fillDefaults().applyTo(lbl);
+		lbl.setText("Nb set: ");
+		
+		this.spiNbSets = new Spinner(this.main, SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(this.spiNbSets);
+		this.spiNbSets.setMinimum(1);
+		this.spiNbSets.setIncrement(1);
+		this.spiNbSets.setPageIncrement(5);
+		this.spiNbSets.addSelectionListener(this);
+		this.spiNbSets.setSelection(this.nbSets);
+		
+		// Game Definition
 		this.body = new Composite(this.main, SWT.NONE);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
 				.applyTo(this.body);
@@ -136,7 +161,7 @@ public class NewSetDialog extends TitleAreaDialog implements
 			IGameDefinitionProvider gdp = allGameDefinition.get(0);
 			this.cbGamesAvailable.setSelection(new StructuredSelection(gdp));
 		}
-
+		this.spiNbSets.setFocus();
 		return comp;
 	}
 	
@@ -229,6 +254,34 @@ public class NewSetDialog extends TitleAreaDialog implements
 	 */
 	public IGameDefinition getGameDefinition() {
 		return this.gameDefinition;
+	}
+	
+	/**
+	 * Gets the nb sets.
+	 *
+	 * @return the nb sets
+	 */
+	public int getNbSets() {
+		return this.nbSets;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
+	 */
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// Nothing to do
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+	 */
+	@Override
+	public void widgetSelected(SelectionEvent e) {
+		Object src = e.getSource();
+		if (this.spiNbSets.equals(src)) {
+			this.nbSets = this.spiNbSets.getSelection();
+		}
 	}
 
 	/* (non-Javadoc)

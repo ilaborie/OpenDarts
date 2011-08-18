@@ -18,7 +18,7 @@ public interface IGameDefinitionComposite {
 	 * @param lastGameDefinition the last game definition
 	 * @return the composite
 	 */
-	Composite createSetConfiguration(NewSetDialog dialog, Composite parent,
+	Composite createSetConfiguration(INewContainerDialog dialog, Composite parent,
 			IGameDefinition lastGameDefinition);
 
 	/**

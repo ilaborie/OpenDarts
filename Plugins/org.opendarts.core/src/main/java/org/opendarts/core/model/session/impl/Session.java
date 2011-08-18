@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISessionListener;
@@ -31,16 +32,33 @@ public class Session extends GameContainer<ISet> implements ISession,
 
 	/** The player games. */
 	private final Map<IPlayer, Integer> playerGames;
+	
+	/** The nb set to win. */
+	private final int nbSetToWin;
+
+	/** The game definition. */
+	private final IGameDefinition gameDefinition;
 
 	/**
 	 * Instantiates a new session.
 	 */
 	public Session() {
+		this(-1,null);
+	}
+	
+	/**
+	 * Instantiates a new session.
+	 *
+	 * @param nbSet the nb set
+	 */
+	public Session(int nbSet,IGameDefinition gameDefinition) {
 		super();
+		this.nbSetToWin= nbSet;
+		this.gameDefinition = gameDefinition;
 		this.listeners = new CopyOnWriteArraySet<ISessionListener>();
 		this.playerGames = new HashMap<IPlayer, Integer>();
 	}
-
+	
 	/**
 	 * Inits the.
 	 */
@@ -127,7 +145,8 @@ public class Session extends GameContainer<ISet> implements ISession,
 				case SET_FINISHED:
 					IPlayer win = set.getWinner();
 					int winningSet = this.getWinningSet(win);
-					this.playerGames.put(win, winningSet + 1);
+					winningSet++;
+					this.playerGames.put(win, winningSet);
 					break;
 				case SET_INITIALIZED:
 					this.setCurrentGame(set);
@@ -162,4 +181,23 @@ public class Session extends GameContainer<ISet> implements ISession,
 			}
 		}
 	}
+	
+	/**
+	 * Gets the nb set to win.
+	 *
+	 * @return the nb set to win
+	 */
+	public int getNbSetToWin() {
+		return this.nbSetToWin;
+	}
+	
+	/**
+	 * Gets the game definition.
+	 *
+	 * @return the game definition
+	 */
+	public IGameDefinition getGameDefinition() {
+		return this.gameDefinition;
+	}
+	
 }
