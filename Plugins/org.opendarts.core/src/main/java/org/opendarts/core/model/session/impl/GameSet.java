@@ -210,6 +210,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		// check if player win
 		if (this.getGameDefinition().isPlayerWin(this, player)) {
 			this.setWinner(player);
+			this.setEnd(Calendar.getInstance());
 		}
 
 		// check end
