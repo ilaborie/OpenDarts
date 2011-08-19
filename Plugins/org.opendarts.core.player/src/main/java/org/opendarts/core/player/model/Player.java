@@ -14,23 +14,22 @@ import org.opendarts.core.model.player.IPlayer;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Player.byUuid", query="Select p From Player p Where p.uuid = :uuid"),
-	@NamedQuery(name="Player.byName", query="Select p From Player p Where p.name = :name"),
-	@NamedQuery(name="Player.all", query="Select p From Player p"),
-	})
+		@NamedQuery(name = "Player.byUuid", query = "Select p From Player p Where p.uuid = :uuid"),
+		@NamedQuery(name = "Player.byName", query = "Select p From Player p Where p.name = :name"),
+		@NamedQuery(name = "Player.all", query = "Select p From Player p"), })
 public class Player implements IPlayer {
-	
+
 	/** The id. */
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	/** The uuid. */
-	@Column(nullable=false, unique=true)
+	@Column(nullable = false, unique = true)
 	private String uuid;
 
 	/** The name. */
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String name;
 
 	/**
@@ -47,7 +46,7 @@ public class Player implements IPlayer {
 		super();
 		this.name = name;
 	}
-	
+
 	/**
 	 * Gets the uuid.
 	 *

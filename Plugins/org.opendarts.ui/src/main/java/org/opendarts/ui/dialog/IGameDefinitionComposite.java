@@ -18,8 +18,8 @@ public interface IGameDefinitionComposite {
 	 * @param lastGameDefinition the last game definition
 	 * @return the composite
 	 */
-	Composite createSetConfiguration(INewContainerDialog dialog, Composite parent,
-			IGameDefinition lastGameDefinition);
+	Composite createSetConfiguration(INewContainerDialog dialog,
+			Composite parent, IGameDefinition lastGameDefinition);
 
 	/**
 	 * Gets the game definition.
@@ -48,7 +48,7 @@ public interface IGameDefinitionComposite {
 	 * @param parent the parent
 	 */
 	void createButtonsForButtonBar(Composite parent);
-	
+
 	/**
 	 * Sets the focus.
 	 */

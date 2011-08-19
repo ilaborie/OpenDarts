@@ -16,13 +16,13 @@ import org.opendarts.core.x01.service.IBestDart;
  * The Class BestDart.
  */
 public class BestDart implements IBestDart {
-	
+
 	/** The index. */
 	private final int index;
-	
+
 	/** The darts. */
-	private final Map<Integer,IDart> darts;
-	
+	private final Map<Integer, IDart> darts;
+
 	/** The default dart. */
 	private final IDart defaultDart;
 
@@ -32,11 +32,11 @@ public class BestDart implements IBestDart {
 	 * @param index the index
 	 * @param props the props
 	 */
-	public BestDart(int index,Properties props) {
+	public BestDart(int index, Properties props) {
 		super();
 		this.index = index;
 		IDartService dartService = OpenDartsX01Bundle.getDartService();
-		
+
 		this.darts = new HashMap<Integer, IDart>();
 		String sDart;
 		String key;
@@ -54,9 +54,9 @@ public class BestDart implements IBestDart {
 
 		// Default
 		sDart = props.getProperty("score.default");
-		this.defaultDart = dartService.getDart(sDart); 
+		this.defaultDart = dartService.getDart(sDart);
 	}
-	
+
 	/**
 	 * Gets the index.
 	 *
@@ -75,8 +75,8 @@ public class BestDart implements IBestDart {
 	@Override
 	public IDart getBestDart(IPlayer player, int score, IGame game) {
 		IDart dart = this.darts.get(score);
-		if (dart==null) {
-			dart = defaultDart;
+		if (dart == null) {
+			dart = this.defaultDart;
 		}
 		return dart;
 	}

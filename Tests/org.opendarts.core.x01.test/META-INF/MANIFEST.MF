@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.opendarts.core.x01.test;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.opendarts.core.ia.service,
+Import-Package: org.junit;version="4.8.2",
+ org.opendarts.core.ia.service,
  org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
@@ -20,5 +21,9 @@ Import-Package: org.opendarts.core.ia.service,
  org.opendarts.core.service.session,
  org.opendarts.core.stats.service,
  org.opendarts.core.x01.model,
+ org.opendarts.core.x01.service,
+ org.osgi.framework;version="1.6.0",
  org.slf4j;version="1.6.1"
 Service-Component: OSGI-INF/TestComputerPlayer.xml
+Bundle-Activator: org.opendarts.core.x01.test.CoreX01TestBundle
+Bundle-ActivationPolicy: lazy

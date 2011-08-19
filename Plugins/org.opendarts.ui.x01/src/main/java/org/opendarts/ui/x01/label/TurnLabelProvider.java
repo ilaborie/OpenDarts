@@ -22,6 +22,7 @@ import org.opendarts.ui.x01.pref.IX01Prefs;
 public class TurnLabelProvider extends ColumnLabelProvider {
 
 	private final String pattern;
+	private final boolean useFont;
 
 	/**
 	 * Instantiates a new score label provider.
@@ -29,7 +30,17 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	 * @param player the player
 	 */
 	public TurnLabelProvider() {
+		this(true);
+	}
+
+	/**
+	 * Instantiates a new turn label provider.
+	 *
+	 * @param useFont the use font
+	 */
+	public TurnLabelProvider(boolean useFont) {
 		super();
+		this.useFont = useFont;
 		IPreferenceStore store = X01UiPlugin.getX01Preferences();
 		if (store.getBoolean(IX01Prefs.SHOW_ROW_NUMBER)) {
 			this.pattern = "#{0}";
@@ -74,7 +85,11 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Font getFont(Object element) {
-		return OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
+		if (this.useFont) {
+			return OpenDartsFormsToolkit
+					.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
+		}
+		return super.getFont(element);
 	}
 
 }

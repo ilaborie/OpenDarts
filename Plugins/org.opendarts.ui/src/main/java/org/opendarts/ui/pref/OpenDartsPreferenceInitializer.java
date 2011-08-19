@@ -48,12 +48,12 @@ public class OpenDartsPreferenceInitializer extends
 		// Font
 		Font defaultFont = JFaceResources.getDefaultFont();
 
-		FontData[] scoreSheet = getFontData(defaultFont, 32, SWT.NORMAL);
-		FontData[] scoreSheetLeft = getFontData(defaultFont, 32, SWT.BOLD);
-		FontData[] stats = getFontData(defaultFont, 18, SWT.NORMAL);
-		FontData[] statsLabel = getFontData(defaultFont, 16, SWT.BOLD);
-		FontData[] scoreInput = getFontData(defaultFont, 64, SWT.BOLD);
-		FontData[] scoreLeft = getFontData(defaultFont, 96, SWT.BOLD);
+		FontData[] scoreSheet = this.getFontData(defaultFont, 32, SWT.NORMAL);
+		FontData[] scoreSheetLeft = this.getFontData(defaultFont, 32, SWT.BOLD);
+		FontData[] stats = this.getFontData(defaultFont, 18, SWT.NORMAL);
+		FontData[] statsLabel = this.getFontData(defaultFont, 16, SWT.BOLD);
+		FontData[] scoreInput = this.getFontData(defaultFont, 64, SWT.BOLD);
+		FontData[] scoreLeft = this.getFontData(defaultFont, 96, SWT.BOLD);
 
 		PreferenceConverter.setDefault(store, FONT_SCORE_SHEET, scoreSheet);
 		PreferenceConverter.setDefault(store, FONT_STATS, stats);

@@ -12,13 +12,12 @@ import org.opendarts.core.model.player.IComputerPlayer;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="ComputerPlayer.byLevel", query="Select cp From ComputerPlayer cp Where cp.level = :level"),
-	@NamedQuery(name="ComputerPlayer.all", query="Select cp From ComputerPlayer cp"),
-	})
+		@NamedQuery(name = "ComputerPlayer.byLevel", query = "Select cp From ComputerPlayer cp Where cp.level = :level"),
+		@NamedQuery(name = "ComputerPlayer.all", query = "Select cp From ComputerPlayer cp"), })
 public class ComputerPlayer extends Player implements IComputerPlayer {
-	
+
 	/** The level. */
-	@Column(unique=true)
+	@Column(unique = true)
 	private int level;
 
 	/**
@@ -54,7 +53,5 @@ public class ComputerPlayer extends Player implements IComputerPlayer {
 	public void setLevel(int level) {
 		this.level = level;
 	}
-	
-	
 
 }

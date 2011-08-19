@@ -14,13 +14,13 @@ public class ComputerThrow implements IComputerThrow {
 
 	/** The wished. */
 	private final List<IDart> wished;
-	
+
 	/** The done. */
 	private final List<IDart> done;
-	
+
 	/** The dart throw. */
 	private final IDartsThrow dartThrow;
-	
+
 	/**
 	 * Instantiates a new computer throw.
 	 *
@@ -28,13 +28,13 @@ public class ComputerThrow implements IComputerThrow {
 	 * @param wished the wished
 	 * @param done the done
 	 */
-	public ComputerThrow(IDartsThrow dartsThrow,List<IDart> wished, List<IDart> done) {
+	public ComputerThrow(IDartsThrow dartsThrow, List<IDart> wished,
+			List<IDart> done) {
 		super();
 		this.dartThrow = dartsThrow;
 		this.wished = new ArrayList<IDart>(wished);
 		this.done = new ArrayList<IDart>(done);
 	}
-	
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.dart.IComputerThrow#getDartsThrow()

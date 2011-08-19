@@ -77,7 +77,7 @@ public class StatsX01Service extends AbstractStatsService {
 	public static final String GAME_60 = "Game.60";
 	public static final String GAME_60_PLUS = "Game.60.plus";
 	public static final String GAME_TONS_PLUS = "Game.100.plus";
-	
+
 	public final List<String> keys;
 
 	/**
@@ -85,54 +85,24 @@ public class StatsX01Service extends AbstractStatsService {
 	 */
 	public StatsX01Service() {
 		super();
-		this.keys = Arrays.asList(
-				SESSION_SET_WIN,
-				SESSION_NB_SET,
-				SESSION_GAME_WIN,
-				SESSION_NB_GAME,
+		this.keys = Arrays.asList(SESSION_SET_WIN, SESSION_NB_SET,
+				SESSION_GAME_WIN, SESSION_NB_GAME,
 
-				SET_GAME_WIN,
-				SET_NB_GAME,
-				
-				SESSION_AVG_DART,
-				SESSION_AVG_3_DARTS,
-				SESSION_180s,
-				SESSION_140,
-				SESSION_TONS,
-				SESSION_60,
-				SESSION_60_PLUS,
-				SESSION_TONS_PLUS,
-				SESSION_BEST_LEG,
-				SESSION_AVG_LEG,
-				SESSION_BEST_OUT,
-				SESSION_OUT_OVER_100,
-				SESSION_COUNT_DARTS,
+				SET_GAME_WIN, SET_NB_GAME,
+
+				SESSION_AVG_DART, SESSION_AVG_3_DARTS, SESSION_180s,
+				SESSION_140, SESSION_TONS, SESSION_60, SESSION_60_PLUS,
+				SESSION_TONS_PLUS, SESSION_BEST_LEG, SESSION_AVG_LEG,
+				SESSION_BEST_OUT, SESSION_OUT_OVER_100, SESSION_COUNT_DARTS,
 				SESSION_TOTAL_SCORE,
 
-				SET_AVG_DART,
-				SET_AVG_3_DARTS,
-				SET_180s,
-				SET_140,
-				SET_TONS,
-				SET_60,
-				SET_60_PLUS ,
-				SET_TONS_PLUS,
-				SET_OUT_OVER_100,
-				SET_BEST_LEG,
-				SET_AVG_LEG,
-				SET_BEST_OUT,
-				SET_COUNT_DARTS,
+				SET_AVG_DART, SET_AVG_3_DARTS, SET_180s, SET_140, SET_TONS,
+				SET_60, SET_60_PLUS, SET_TONS_PLUS, SET_OUT_OVER_100,
+				SET_BEST_LEG, SET_AVG_LEG, SET_BEST_OUT, SET_COUNT_DARTS,
 				SET_TOTAL_SCORE,
 
-				GAME_AVG_DART,
-				GAME_AVG_3_DARTS,
-				GAME_180s,
-				GAME_140,
-				GAME_TONS,
-				GAME_60,
-				GAME_60_PLUS ,
-				GAME_TONS_PLUS
-				);
+				GAME_AVG_DART, GAME_AVG_3_DARTS, GAME_180s, GAME_140,
+				GAME_TONS, GAME_60, GAME_60_PLUS, GAME_TONS_PLUS);
 	}
 
 	/* (non-Javadoc)
@@ -334,10 +304,10 @@ public class StatsX01Service extends AbstractStatsService {
 
 		// Winning Games
 		stats.addEntry(new WinningGameStatsEntry(SET_GAME_WIN));
-		
+
 		// Played Game
 		stats.addEntry(new PlayedGameStatsEntry(SET_NB_GAME));
-		
+
 		return stats;
 	}
 
@@ -392,19 +362,19 @@ public class StatsX01Service extends AbstractStatsService {
 
 		// Games win
 		stats.addEntry(new WinningGameStatsEntry(SESSION_GAME_WIN));
-		
+
 		// Played Game
 		stats.addEntry(new PlayedGameStatsEntry(SESSION_NB_GAME));
 
 		// Set win
 		stats.addEntry(new WinningSetStatsEntry(SESSION_SET_WIN));
-		
+
 		// Played set
 		stats.addEntry(new PlayedSetStatsEntry(SESSION_NB_SET));
 
 		return stats;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.stats.service.IStatsService#contains(java.lang.String)
 	 */

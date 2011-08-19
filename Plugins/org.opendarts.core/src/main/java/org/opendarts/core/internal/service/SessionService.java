@@ -16,11 +16,12 @@ import org.opendarts.core.service.session.ISetService;
 /**
  * The Class SessionService.
  */
-public class SessionService implements ISessionService, ISetListener, ISessionListener {
+public class SessionService implements ISessionService, ISetListener,
+		ISessionListener {
 
 	/** The current session. */
 	private Session currentSession;
-	
+
 	/** The set service. */
 	private final AtomicReference<ISetService> setService;
 
@@ -55,19 +56,19 @@ public class SessionService implements ISessionService, ISetListener, ISessionLi
 			this.currentSession = null;
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.service.session.ISessionService#createNewSession(int)
 	 */
 	@Override
 	public ISession createNewSession(int nbSets, IGameDefinition gameDefinition) {
 		this.closeSession();
-		Session session = new Session(nbSets,gameDefinition);
+		Session session = new Session(nbSets, gameDefinition);
 		session.addListener(this);
 		session.init();
 		return session;
 	}
-	
+
 	/**
 	 * Notify session event.
 	 *
@@ -90,7 +91,7 @@ public class SessionService implements ISessionService, ISetListener, ISessionLi
 				break;
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.session.ISetListener#notifySetEvent(org.opendarts.core.model.session.SetEvent)
 	 */
@@ -102,9 +103,11 @@ public class SessionService implements ISessionService, ISetListener, ISessionLi
 				set.removeListener(this);
 				Session session = (Session) set.getParentSession();
 				int winningSet = session.getWinningSet(event.getPlayer());
-				if (session.getNbSetToWin()>0 && winningSet<session.getNbSetToWin()) {
+				if ((session.getNbSetToWin() > 0)
+						&& (winningSet < session.getNbSetToWin())) {
 					ISetService service = this.setService.get();
-					ISet newSet = service.createNewSet(session, session.getGameDefinition());
+					ISet newSet = service.createNewSet(session,
+							session.getGameDefinition());
 					newSet.addListener(this);
 					service.startSet(newSet);
 				}
@@ -126,7 +129,7 @@ public class SessionService implements ISessionService, ISetListener, ISessionLi
 		session.init();
 		return session;
 	}
-	
+
 	/**
 	 * Sets the sets the service.
 	 *
@@ -135,7 +138,7 @@ public class SessionService implements ISessionService, ISetListener, ISessionLi
 	public void setSetService(ISetService setService) {
 		this.setService.set(setService);
 	}
-	
+
 	/**
 	 * Unset set service.
 	 *
@@ -145,4 +148,3 @@ public class SessionService implements ISessionService, ISetListener, ISessionLi
 		this.setService.compareAndSet(setService, null);
 	}
 }
-

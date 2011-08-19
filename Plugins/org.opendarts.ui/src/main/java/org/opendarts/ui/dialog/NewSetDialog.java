@@ -139,7 +139,7 @@ public class NewSetDialog extends TitleAreaDialog implements
 
 		return comp;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
 	 */
@@ -148,7 +148,7 @@ public class NewSetDialog extends TitleAreaDialog implements
 		this.compGameDef.createButtonsForButtonBar(parent);
 		super.createButtonsForButtonBar(parent);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
 	 */

@@ -1,4 +1,3 @@
-
 package org.opendarts.ui.pref;
 
 import org.eclipse.jface.preference.ColorFieldEditor;
@@ -12,8 +11,8 @@ import org.opendarts.ui.OpenDartsUiPlugin;
 /**
  * The Class GeneralPreferencesPage.
  */
-public class GeneralColorPreferencesPage extends FieldEditorPreferencePage implements
-		IWorkbenchPreferencePage, IGeneralPrefs {
+public class GeneralColorPreferencesPage extends FieldEditorPreferencePage
+		implements IWorkbenchPreferencePage, IGeneralPrefs {
 
 	/**
 	 * Instantiates a new general preferences.

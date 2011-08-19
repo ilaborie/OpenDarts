@@ -9,7 +9,7 @@
 <booleanAttribute key="clearConfig" value="true"/>
 <booleanAttribute key="clearws" value="true"/>
 <booleanAttribute key="clearwslog" value="true"/>
-<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/org.opendarts.prototype.application-mac"/>
+<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/OpenDarts OSX"/>
 <booleanAttribute key="default" value="false"/>
 <booleanAttribute key="generateProfile" value="true"/>
 <booleanAttribute key="includeOptional" value="false"/>

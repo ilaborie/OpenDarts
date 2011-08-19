@@ -45,7 +45,7 @@ public class GeneralFontPreferencesPage extends FieldEditorPreferencePage
 
 		editor = new FontFieldEditor(FONT_SCORE_LEFT, "Score Left Font", parent);
 		this.addField(editor);
-		
+
 		editor = new FontFieldEditor(FONT_SCORE_SHEET, "Score Sheet Font",
 				parent);
 		this.addField(editor);
@@ -57,7 +57,8 @@ public class GeneralFontPreferencesPage extends FieldEditorPreferencePage
 		editor = new FontFieldEditor(FONT_STATS, "Stats Font", parent);
 		this.addField(editor);
 
-		editor = new FontFieldEditor(FONT_STATS_LABEL, "Stats Label Font", parent);
+		editor = new FontFieldEditor(FONT_STATS_LABEL, "Stats Label Font",
+				parent);
 		this.addField(editor);
 	}
 

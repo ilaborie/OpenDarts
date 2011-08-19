@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.opendarts.core.ia.service.IComputerPlayerDartService;
 import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.player.IComputerPlayer;
-import org.opendarts.core.service.player.IPlayerService;
 import org.opendarts.core.service.dart.IDartService;
+import org.opendarts.core.service.player.IPlayerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,8 +68,10 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 				LOG.error("Fail to load computer level stats", e);
 			}
 		}
-		
-		this.gaussianStats = new GaussianStats(this.dartService.get(), this.boardProps,this.playerService.get().getAllComputerPlayers().size());
+
+		this.gaussianStats = new GaussianStats(this.dartService.get(),
+				this.boardProps, this.playerService.get()
+						.getAllComputerPlayers().size());
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 	public void unsetDartService(IDartService dartService) {
 		this.dartService.compareAndSet(dartService, null);
 	}
-	
+
 	/**
 	 * Sets the player service.
 	 *
@@ -120,7 +122,7 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 	 * @param playerService the player service
 	 */
 	public void unsetPlayerService(IPlayerService playerService) {
-		this.playerService.compareAndSet(playerService,null);
+		this.playerService.compareAndSet(playerService, null);
 	}
 
 }

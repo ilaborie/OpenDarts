@@ -13,7 +13,7 @@ import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
  */
 public class StatsPreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage, IStatsPrefs {
-	
+
 	/**
 	 * Instantiates a new stats preference page.
 	 */
@@ -39,8 +39,8 @@ public class StatsPreferencePage extends FieldEditorPreferencePage implements
 		FieldEditor editor;
 
 		// Store
-		editor = new BooleanFieldEditor(STORE_STATISTICS,
-				"Store Statistics", parent);
+		editor = new BooleanFieldEditor(STORE_STATISTICS, "Store Statistics",
+				parent);
 		editor.setEnabled(false, parent);
 		this.addField(editor);
 

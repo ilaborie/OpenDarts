@@ -90,7 +90,7 @@ public class ComputerPlayerThrow {
 					score -= dart.getScore();
 					this.throwDart(score, 2);
 					if (this.dartsThrow == null) {
-						this.dartsThrow = new ThreeDartsThrow(darts);
+						this.dartsThrow = new ThreeDartsThrow(this.darts);
 					}
 				}
 			}
@@ -98,7 +98,7 @@ public class ComputerPlayerThrow {
 		} catch (InvalidDartThrowException e) {
 			LOG.error("WTF !", e);
 		}
-		return new ComputerThrow(dartsThrow, Arrays.asList(this.wished),
+		return new ComputerThrow(this.dartsThrow, Arrays.asList(this.wished),
 				Arrays.asList(this.darts));
 	}
 

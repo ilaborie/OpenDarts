@@ -30,12 +30,13 @@ public class OutsOver100StatsEntry extends AbstractStatsEntry<IntegerListEntry> 
 	@Override
 	protected IntegerListEntry getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		StatsValue<IntegerListEntry> val = (StatsValue<IntegerListEntry>) this.getValue();
+		StatsValue<IntegerListEntry> val = (StatsValue<IntegerListEntry>) this
+				.getValue();
 		if (val == null) {
 			val = new StatsValue<IntegerListEntry>();
 			this.setValue(val);
 		}
-		
+
 		IntegerListEntry lst = val.getValue();
 		if (lst == null) {
 			lst = new IntegerListEntry();
@@ -58,8 +59,8 @@ public class OutsOver100StatsEntry extends AbstractStatsEntry<IntegerListEntry> 
 	protected IntegerListEntry getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		IStatValue<IntegerListEntry> val = this.getValue();
-		IntegerListEntry  lst = val.getValue();
-		
+		IntegerListEntry lst = val.getValue();
+
 		if (dartsThrow != null) {
 			if (dartsThrow instanceof WinningX01DartsThrow) {
 				int out = dartsThrow.getScore();

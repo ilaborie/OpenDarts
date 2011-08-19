@@ -28,6 +28,6 @@ public interface ISessionService {
 	 * @param nbSets the nb sets
 	 * @return the i session
 	 */
-	ISession createNewSession(int nbSets,IGameDefinition gameDefinition);
+	ISession createNewSession(int nbSets, IGameDefinition gameDefinition);
 
 }

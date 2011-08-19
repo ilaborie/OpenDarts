@@ -131,7 +131,8 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 */
 	private void createButtons(Composite box) {
 		this.addButton = this.createPushButton(box, ISharedImages.IMG_ADD);
-		this.removeButton = this.createPushButton(box, ISharedImages.IMG_REMOVE);
+		this.removeButton = this
+				.createPushButton(box, ISharedImages.IMG_REMOVE);
 		this.upButton = this.createPushButton(box, ISharedImages.IMG_UP);
 		this.downButton = this.createPushButton(box, ISharedImages.IMG_DOWN);
 	}
@@ -207,7 +208,7 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 		gd = new GridData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		this.buttonBox.setLayoutData(gd);
-		
+
 		ColumnViewerToolTipSupport.enableFor(this.tableViewer);
 	}
 

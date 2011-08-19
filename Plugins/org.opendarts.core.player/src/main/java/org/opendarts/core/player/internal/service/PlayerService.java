@@ -35,7 +35,7 @@ public class PlayerService implements IPlayerService {
 	private final AtomicReference<IDartService> dartService;
 
 	/** The EntityManagerFactory. */
-	private AtomicReference<EntityManagerFactory> emf;
+	private final AtomicReference<EntityManagerFactory> emf;
 
 	/** The EntityManager. */
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class PlayerService implements IPlayerService {
 	 * Startup.
 	 */
 	public void startup() {
-		this.em = emf.get().createEntityManager();
+		this.em = this.emf.get().createEntityManager();
 		LOG.debug("Using Database: {}",
 				new File("OpenDartsPlayers").getAbsoluteFile());
 
@@ -63,14 +63,15 @@ public class PlayerService implements IPlayerService {
 			name = System.getenv("USERNAME");
 		}
 		try {
-		TypedQuery<IPlayer> query = this.em.createNamedQuery("Player.byName",IPlayer.class);
-		query.setParameter("name", name);
-		query.getSingleResult();
+			TypedQuery<IPlayer> query = this.em.createNamedQuery(
+					"Player.byName", IPlayer.class);
+			query.setParameter("name", name);
+			query.getSingleResult();
 		} catch (NoResultException nre) {
 			LOG.warn("Missing local user, gonna create it");
 			this.createPlayer(name);
 		}
-		
+
 		// Create computers (if needed)
 		if (this.getAllComputerPlayers().isEmpty()) {
 			LOG.warn("Missing comupters players, gonna create then");
@@ -103,7 +104,7 @@ public class PlayerService implements IPlayerService {
 		Player player = new Player();
 		player.setUuid(UUID.randomUUID().toString());
 
-		if (name == null || "".equals(name)) {
+		if ((name == null) || "".equals(name)) {
 			player.setName("The misterious player");
 		} else {
 			player.setName(name);

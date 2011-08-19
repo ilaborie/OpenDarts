@@ -67,7 +67,7 @@
             category="opendarts.pref.ui.stats"
             class="org.opendarts.ui.x01.pref.GameStatsPreferencePage"
             id="opendarts.pref.ui.x01.stats.game"
-            name="x01 Game Statistics">
+            name="x01 Leg Statistics">
       </page>
       <page
             category="opendarts.pref.ui.x01"

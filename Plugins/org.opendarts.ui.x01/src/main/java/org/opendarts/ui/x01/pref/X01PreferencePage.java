@@ -13,7 +13,7 @@ import org.opendarts.ui.x01.X01UiPlugin;
  */
 public class X01PreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage, IX01Prefs {
-	
+
 	/**
 	 * Instantiates a new stats preference page.
 	 */
@@ -49,8 +49,8 @@ public class X01PreferencePage extends FieldEditorPreferencePage implements
 		this.addField(editor);
 
 		// Show row number
-		editor = new BooleanFieldEditor(SHOW_ROW_NUMBER,
-				"Show row number", parent);
+		editor = new BooleanFieldEditor(SHOW_ROW_NUMBER, "Show row number",
+				parent);
 		this.addField(editor);
 	}
 

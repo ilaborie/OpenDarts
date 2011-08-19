@@ -72,7 +72,7 @@ public class LevelTest {
 	 */
 	public void startup() {
 		ISession session = sessionService.getSession();
-		this.player = (IComputerPlayer) this.playerService.getPlayer("COM_"+ lvl);
+		this.player = (IComputerPlayer) this.playerService.getComputerPlayer(lvl);
 		List<IPlayer> players = Collections.singletonList((IPlayer) this.player);
 
 		IGameDefinition gameDefinition = new GameX01Definition(501, players, nbGames, false);
@@ -91,6 +91,13 @@ public class LevelTest {
 		}
 		
 		this.display();
+	}
+	
+	/**
+	 * Shutdown.
+	 */
+	public void shutdown() {
+		// Nothing to do
 	}
 	
 	/**

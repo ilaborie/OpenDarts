@@ -25,6 +25,7 @@ import org.opendarts.ui.dialog.INewContainerDialog;
 import org.opendarts.ui.dialog.ValidationEntry;
 import org.opendarts.ui.player.composite.IPlayerSelectionListener;
 import org.opendarts.ui.player.composite.PlayerSelectionComposite;
+import org.opendarts.ui.service.IGameUiProvider;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.editor.SetX01Editor;
 import org.opendarts.ui.x01.pref.IX01Prefs;
@@ -35,6 +36,8 @@ import org.opendarts.ui.x01.pref.PreferencesConverterUtils;
  */
 public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		SelectionListener, IPlayerSelectionListener {
+
+	private final IGameUiProvider gameUiProvider;
 
 	/** The score start. */
 	private int startScore;
@@ -58,7 +61,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	private INewContainerDialog parentDialog;
 
 	/** The players. */
-	private ArrayList<IPlayer> players;
+	private final ArrayList<IPlayer> players;
 
 	/** The players composite. */
 	private PlayerSelectionComposite playersComposite;
@@ -71,6 +74,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 */
 	public SetX01ConfigurationDialog() {
 		super();
+		this.gameUiProvider = X01UiPlugin.getService(IGameUiProvider.class);
 		this.players = new ArrayList<IPlayer>();
 	}
 
@@ -212,7 +216,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 
 		return group;
 	}
-	
+
 	/**
 	 * Sets the focus.
 	 */
@@ -229,9 +233,12 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		if (this.playersComposite.getPlayers().isEmpty()) {
 			throw new IllegalArgumentException("Not enought players");
 		}
-		return new GameX01Definition(this.startScore,
+		GameX01Definition def = new GameX01Definition(this.startScore,
 				this.playersComposite.getPlayers(), this.nbGameToWin,
 				this.playAllGames);
+		this.gameUiProvider.registerGameUiService(def,
+				X01UiPlugin.getGameX01UiService());
+		return def;
 	}
 
 	/* (non-Javadoc)
@@ -271,7 +278,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		}
 		this.parentDialog.notifyUpdate();
 	}
-	
+
 	/**
 	 * Notify selection change.
 	 *

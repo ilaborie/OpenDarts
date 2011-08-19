@@ -16,19 +16,19 @@ public interface IComputerThrow {
 	 * @return the darts throw
 	 */
 	IDartsThrow getDartsThrow();
-	
+
 	/**
 	 * Gets the wished.
 	 *
 	 * @return the wished
 	 */
 	List<IDart> getWished();
-	
+
 	/**
 	 * Gets the done.
 	 *
 	 * @return the done
 	 */
 	List<IDart> getDone();
-	
+
 }

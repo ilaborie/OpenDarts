@@ -21,7 +21,8 @@ public class StatsSelectionDialog extends ElementListSelectionDialog {
 	 * @param allStats the all stats
 	 * @param labelProvider the label provider
 	 */
-	public StatsSelectionDialog(Shell parent, List<String> allStats, ILabelProvider labelProvider) {
+	public StatsSelectionDialog(Shell parent, List<String> allStats,
+			ILabelProvider labelProvider) {
 		super(parent, labelProvider);
 		this.setTitle("Select Statistics");
 

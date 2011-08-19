@@ -1,6 +1,5 @@
 package org.opendarts.core.stats.service;
 
-
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;

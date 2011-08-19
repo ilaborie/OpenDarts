@@ -56,7 +56,7 @@ public class StatsValue<T> implements IStatValue<T> {
 	 */
 	@Override
 	public String getValueAsString() {
-		return displayValue(this.value);
+		return this.displayValue(this.value);
 	}
 
 	/**

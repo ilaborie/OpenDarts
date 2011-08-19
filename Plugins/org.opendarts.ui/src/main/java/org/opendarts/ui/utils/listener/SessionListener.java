@@ -14,14 +14,14 @@ import org.slf4j.LoggerFactory;
  * Session listener
  */
 public class SessionListener implements ISessionListener {
-	
+
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(SessionListener.class);
-	
+
 	/** The page. */
 	private final IWorkbenchPage page;
-	
+
 	/** The editor id. */
 	private final String editorId;
 
@@ -63,11 +63,11 @@ public class SessionListener implements ISessionListener {
 	 *
 	 * @param set the set
 	 */
-	public void openEditor( ISet set) {
+	public void openEditor(ISet set) {
 		SetEditorInput input = new SetEditorInput(set);
 		try {
 			this.page.openEditor(input, this.editorId);
-//			this.setService.startSet(set);
+			//			this.setService.startSet(set);
 		} catch (PartInitException e) {
 			LOG.error("Could not open editor", e);
 		}

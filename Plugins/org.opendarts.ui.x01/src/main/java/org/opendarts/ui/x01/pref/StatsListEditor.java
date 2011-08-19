@@ -34,7 +34,7 @@ public class StatsListEditor extends ListViewerEditor<String> {
 	 */
 	public StatsListEditor(String key, String labelText, Composite parent,
 			List<String> availableStats) {
-			super(key, labelText, parent);
+		super(key, labelText, parent);
 		this.parentShell = parent.getShell();
 		this.availableStats = new ArrayList<String>(availableStats);
 	}

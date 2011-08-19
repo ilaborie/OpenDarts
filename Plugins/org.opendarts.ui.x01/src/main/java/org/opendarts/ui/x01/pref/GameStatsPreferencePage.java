@@ -42,16 +42,11 @@ public class GameStatsPreferencePage extends FieldEditorPreferencePage
 		FieldEditor editor;
 
 		// List of available stats
-		List<String> stats = Arrays.asList(
-				StatsX01Service.GAME_AVG_DART,
-				StatsX01Service.GAME_AVG_3_DARTS,
-				StatsX01Service.GAME_180s,
-				StatsX01Service.GAME_140,
-				StatsX01Service.GAME_TONS,
-				StatsX01Service.GAME_60,
-				StatsX01Service.GAME_60_PLUS,
-				StatsX01Service.GAME_TONS_PLUS
-				);
+		List<String> stats = Arrays.asList(StatsX01Service.GAME_AVG_DART,
+				StatsX01Service.GAME_AVG_3_DARTS, StatsX01Service.GAME_180s,
+				StatsX01Service.GAME_140, StatsX01Service.GAME_TONS,
+				StatsX01Service.GAME_60, StatsX01Service.GAME_60_PLUS,
+				StatsX01Service.GAME_TONS_PLUS);
 
 		// Editor
 		editor = new StatsListEditor(GAME_STATS, "Statistics entries", parent,

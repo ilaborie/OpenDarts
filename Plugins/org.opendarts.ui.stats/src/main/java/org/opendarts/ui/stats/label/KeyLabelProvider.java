@@ -75,6 +75,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getFont(java.lang.Object)
 	 */
+	@Override
 	public Font getFont(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getFont(key);
@@ -83,6 +84,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getBackground(java.lang.Object)
 	 */
+	@Override
 	public Color getBackground(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getBackground(key);
@@ -91,6 +93,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getForeground(java.lang.Object)
 	 */
+	@Override
 	public Color getForeground(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getForeground(key);
@@ -99,6 +102,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getImage(java.lang.Object)
 	 */
+	@Override
 	public Image getImage(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getImage(key);
@@ -107,6 +111,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipImage(java.lang.Object)
 	 */
+	@Override
 	public Image getToolTipImage(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipImage(key);
@@ -115,6 +120,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
 	 */
+	@Override
 	public String getToolTipText(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipText(key);
@@ -123,6 +129,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipBackgroundColor(java.lang.Object)
 	 */
+	@Override
 	public Color getToolTipBackgroundColor(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipBackgroundColor(key);
@@ -131,6 +138,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipForegroundColor(java.lang.Object)
 	 */
+	@Override
 	public Color getToolTipForegroundColor(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipForegroundColor(key);
@@ -139,6 +147,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipFont(java.lang.Object)
 	 */
+	@Override
 	public Font getToolTipFont(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipFont(key);
@@ -147,6 +156,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipShift(java.lang.Object)
 	 */
+	@Override
 	public Point getToolTipShift(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipShift(key);
@@ -155,6 +165,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipTimeDisplayed(java.lang.Object)
 	 */
+	@Override
 	public int getToolTipTimeDisplayed(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipTimeDisplayed(key);
@@ -163,6 +174,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipDisplayDelayTime(java.lang.Object)
 	 */
+	@Override
 	public int getToolTipDisplayDelayTime(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipDisplayDelayTime(key);
@@ -171,6 +183,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipStyle(java.lang.Object)
 	 */
+	@Override
 	public int getToolTipStyle(Object element) {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getToolTipStyle(key);

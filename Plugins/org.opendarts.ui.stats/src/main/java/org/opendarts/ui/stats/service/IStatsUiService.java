@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
  * The Interface IStatsUiService.
  */
 public interface IStatsUiService {
-	
+
 	/**
 	 * Gets the stats label provider.
 	 *

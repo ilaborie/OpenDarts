@@ -48,12 +48,13 @@ public class NewSessionHandler extends AbstractHandler implements IHandler {
 			IGameDefinition gameDef = dialog.getGameDefinition();
 			String editorId = dialog.getEditorId();
 			int nbSets = dialog.getNbSets();
-			
+
 			// New Session
 			ISession session = sessionService.createNewSession(nbSets, gameDef);
-			SessionListener sessionListener = new SessionListener(page,editorId);
+			SessionListener sessionListener = new SessionListener(page,
+					editorId);
 			session.addListener(sessionListener);
-			
+
 			// Create and start first set
 			ISetService setService = OpenDartsUiPlugin
 					.getService(ISetService.class);
@@ -64,6 +65,5 @@ public class NewSessionHandler extends AbstractHandler implements IHandler {
 		}
 		return null;
 	}
-
 
 }

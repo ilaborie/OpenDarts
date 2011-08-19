@@ -27,10 +27,10 @@ import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
-import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.service.StatsX01Service;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
+import org.opendarts.ui.utils.comp.SetDetailComposite;
 import org.opendarts.ui.utils.listener.GrabColumnsListener;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.label.SetStatsLabelProvider;
@@ -140,105 +140,15 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
-		Table table = this.toolkit.createTable(client, SWT.V_SCROLL
-				| SWT.BORDER | SWT.FULL_SELECTION);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		SetDetailComposite setDetailComp = new SetDetailComposite(client);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(setDetailComp);
 
-		TableViewer viewer = new TableViewer(table);
-		viewer.setContentProvider(new ArrayContentProvider());
-
-		List<ColumnDescriptor> columns = this.getLegsColumns(viewer);
-		viewer.getControl().addControlListener(
-				new GrabColumnsListener(viewer, columns));
-
-		viewer.setInput(this.set.getAllGame());
+		setDetailComp.setInput(this.set);
 
 		// End section
 		this.toolkit.paintBordersFor(client);
 		section.setClient(client);
 		return main;
-	}
-
-	/**
-	 * Adds the columns.
-	 *
-	 * @param viewer the viewer
-	 * @return the list
-	 */
-	private List<ColumnDescriptor> getLegsColumns(TableViewer viewer) {
-		List<ColumnDescriptor> result = new ArrayList<ColumnDescriptor>();
-
-		ColumnDescriptor colDescr;
-
-		// Column index
-		colDescr = new ColumnDescriptor("Leg");
-		colDescr.width(30);
-		colDescr.labelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof GameX01) {
-					GameX01 game = (GameX01) element;
-					int index = SetX01InfoDialog.this.set.getAllGame().indexOf(
-							game);
-					return MessageFormat.format("#{0}", index + 1);
-				}
-				return super.getText(element);
-			}
-		});
-		this.toolkit.createTableColumn(viewer, colDescr);
-		result.add(colDescr);
-
-		// Column players
-		colDescr = new ColumnDescriptor("Players");
-		colDescr.width(100);
-		colDescr.labelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof GameX01) {
-					GameX01 game = (GameX01) element;
-					return SetX01InfoDialog.this.getGamePlayers(game);
-				}
-				return super.getText(element);
-			}
-		});
-		this.toolkit.createTableColumn(viewer, colDescr);
-		result.add(colDescr);
-
-		// Column Winner
-		colDescr = new ColumnDescriptor("Winner");
-		colDescr.width(60);
-		colDescr.labelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof GameX01) {
-					GameX01 game = (GameX01) element;
-					return SetX01InfoDialog.this.getGameWinner(game);
-				}
-				return super.getText(element);
-			}
-		});
-		this.toolkit.createTableColumn(viewer, colDescr);
-		result.add(colDescr);
-
-		// Column nb darts
-		colDescr = new ColumnDescriptor("Darts");
-		colDescr.width(45);
-		colDescr.labelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof GameX01) {
-					GameX01 game = (GameX01) element;
-					return SetX01InfoDialog.this.getGameNbDarts(game);
-				}
-				return super.getText(element);
-			}
-		});
-		this.toolkit.createTableColumn(viewer, colDescr);
-		result.add(colDescr);
-
-		return result;
 	}
 
 	/**
@@ -338,54 +248,6 @@ public class SetX01InfoDialog extends FormDialog implements ControlListener {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Gets the game nb darts.
-	 *
-	 * @param game the game
-	 * @return the game nb darts
-	 */
-	private String getGameNbDarts(GameX01 game) {
-		Integer res = game.getNbDartToFinish();
-		return (res != null) ? String.valueOf(res) : "";
-	}
-
-	/**
-	 * Gets the game winner.
-	 *
-	 * @param game the game
-	 * @return the game winner
-	 */
-	private String getGameWinner(GameX01 game) {
-		String result;
-		IPlayer winner = game.getWinner();
-		if (winner != null) {
-			result = winner.getName();
-		} else {
-			result = "-";
-		}
-		return result;
-	}
-
-	/**
-	 * Gets the game players.
-	 *
-	 * @param game the game
-	 * @return the game players
-	 */
-	private String getGamePlayers(GameX01 game) {
-		StringBuilder sb = new StringBuilder();
-		boolean isFist = true;
-		for (IPlayer player : game.getPlayers()) {
-			if (isFist) {
-				isFist = false;
-			} else {
-				sb.append(", ");
-			}
-			sb.append(player.getName());
-		}
-		return sb.toString();
 	}
 
 	/* (non-Javadoc)

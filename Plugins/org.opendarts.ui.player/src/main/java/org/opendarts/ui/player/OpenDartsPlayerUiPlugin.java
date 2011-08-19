@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 public class OpenDartsPlayerUiPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = OpenDartsPlayerUiPlugin.class.getPackage()
-			.getName();
+	public static final String PLUGIN_ID = OpenDartsPlayerUiPlugin.class
+			.getPackage().getName();
 
 	// The shared instance
 	private static OpenDartsPlayerUiPlugin plugin;
@@ -65,7 +65,7 @@ public class OpenDartsPlayerUiPlugin extends AbstractUIPlugin {
 	public static OpenDartsPlayerUiPlugin getDefault() {
 		return plugin;
 	}
-	
+
 	/**
 	 * Gets the preference store.
 	 *

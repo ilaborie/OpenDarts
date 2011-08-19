@@ -57,7 +57,7 @@ public class DartService implements IDartService {
 							zone = DartZone.TRIPLE;
 							val = Integer.valueOf(dart.substring(1));
 							sector = DartSector.getSingle(val);
-							if (DartSector.BULL.equals(sector) ) {
+							if (DartSector.BULL.equals(sector)) {
 								sector = DartSector.NONE;
 							}
 							break;
@@ -75,7 +75,7 @@ public class DartService implements IDartService {
 					if (DartSector.NONE.equals(sector)) {
 						zone = DartZone.NONE;
 					}
-					
+
 				} catch (NumberFormatException e) {
 					LOG.warn("Invalid dart format: {}", sDart);
 					sector = DartSector.NONE;
@@ -84,7 +84,7 @@ public class DartService implements IDartService {
 			}
 		}
 		// check warn
-		if (sector == null || zone == null) {
+		if ((sector == null) || (zone == null)) {
 			LOG.warn("Invalid dart format: {}", sDart);
 			sector = DartSector.NONE;
 			zone = DartZone.NONE;

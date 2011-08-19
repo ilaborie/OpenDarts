@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.Form;
+import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.ui.utils.shortcut.IShortcut;
 import org.opendarts.ui.x01.utils.shortcut.ValueShortcut;
@@ -53,8 +54,7 @@ public class ShortcutsTooltip extends ToolTip {
 		for (IShortcut shortcut : X01Shortcuts.getX01Shortcuts().getShortcuts()) {
 			// Key
 			lbl = toolkit.createLabel(body, shortcut.getKeyLabel());
-			lbl.setFont(OpenDartsFormsToolkit
-					.getFont(OpenDartsFormsToolkit.FONT_BOLD));
+			lbl.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_BOLD));
 			keyData.copy().applyTo(lbl);
 
 			// label

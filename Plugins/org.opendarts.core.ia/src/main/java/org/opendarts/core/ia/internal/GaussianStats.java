@@ -82,7 +82,8 @@ public class GaussianStats {
 	 *
 	 * @param dartService the dart service
 	 */
-	public GaussianStats(IDartService dartService, Properties props,int maxComputerLvl) {
+	public GaussianStats(IDartService dartService, Properties props,
+			int maxComputerLvl) {
 		super();
 		this.dartService = dartService;
 		this.rand = new Random();
@@ -127,8 +128,9 @@ public class GaussianStats {
 
 		// Level Factor
 		this.lvlFactor = new double[maxComputerLvl];
-		for(int lvl=0;lvl <this.lvlFactor.length;lvl++) {
-			this.lvlFactor[lvl] = Double.valueOf(props.getProperty("level."+lvl));
+		for (int lvl = 0; lvl < this.lvlFactor.length; lvl++) {
+			this.lvlFactor[lvl] = Double.valueOf(props.getProperty("level."
+					+ lvl));
 		}
 	}
 
@@ -152,7 +154,7 @@ public class GaussianStats {
 			sector = dart.getSector();
 		} else {
 			// Unlucky
-			if (rand.nextInt(this.unLuckyOthers) == 0) {
+			if (this.rand.nextInt(this.unLuckyOthers) == 0) {
 				return this.dartService.createDart(DartSector.UNLUCKY_DART,
 						DartZone.NONE);
 			}
@@ -189,9 +191,9 @@ public class GaussianStats {
 	private DartSector getSector(int shift, DartSector sector) {
 		DartSector result = null;
 		if (shift > 0) {
-			result = getSector(shift - 1, sector.getNext());
+			result = this.getSector(shift - 1, sector.getNext());
 		} else if (shift < 0) {
-			result = getSector(shift + 1, sector.getPrevious());
+			result = this.getSector(shift + 1, sector.getPrevious());
 		} else {
 			result = sector;
 		}
@@ -209,7 +211,7 @@ public class GaussianStats {
 		int shift = 0;
 
 		double factor = this.getPlayerFactor(player);
-		double result = this.nextGaussian(factor ,0d);
+		double result = this.nextGaussian(factor, 0d);
 
 		switch (zone) {
 			case TRIPLE:
@@ -259,7 +261,7 @@ public class GaussianStats {
 	 */
 	private IDart getBull(DartZone zone, IComputerPlayer player) {
 		// Unlucky
-		if (rand.nextInt(unLuckyBull) == 0) {
+		if (this.rand.nextInt(this.unLuckyBull) == 0) {
 			return this.dartService.createDart(DartSector.UNLUCKY_DART,
 					DartZone.NONE);
 		}
@@ -269,11 +271,11 @@ public class GaussianStats {
 		if (DartZone.DOUBLE.equals(zone)) {
 			zoneWished = 0d;
 		} else {
-			zoneWished = ((double) this.doubleBullZone + this.simpleBullZone) / 2d;
+			zoneWished = (this.doubleBullZone + this.simpleBullZone) / 2d;
 		}
 
 		double factor = this.getPlayerFactor(player);
-		double result = this.nextGaussian(factor ,0d);
+		double result = this.nextGaussian(factor, 0d);
 		result += zoneWished;
 		result = Math.abs(result);
 
@@ -306,7 +308,7 @@ public class GaussianStats {
 		}
 		double factor = this.getPlayerFactor(player);
 
-		double result = this.nextGaussian(factor,zoneWished) ;
+		double result = this.nextGaussian(factor, zoneWished);
 		return result;
 	}
 

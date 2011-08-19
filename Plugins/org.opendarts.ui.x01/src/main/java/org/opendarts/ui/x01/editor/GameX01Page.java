@@ -409,7 +409,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		} else {
 			Section section;
 			Composite client;
-			for (IPlayer player : players) {
+			for (IPlayer player : this.players) {
 				// Section
 				section = this.toolkit.createSection(main,
 						ExpandableComposite.TITLE_BAR);
@@ -460,7 +460,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		this.toolkit.paintBordersFor(main);
 
 		// Score input
-		for (IPlayer player : players) {
+		for (IPlayer player : this.players) {
 			this.createInputScoreText(main, player);
 		}
 		return main;

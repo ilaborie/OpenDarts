@@ -32,8 +32,11 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	/** The player. */
 	private final IPlayer player;
 
+	/** The colors. */
 	private final Map<Integer, Color> colors;
 
+	/** The use font. */
+	private final boolean useFont;
 
 	/**
 	 * Instantiates a new score label provider.
@@ -41,7 +44,18 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 * @param player the player
 	 */
 	public ScoreLabelProvider(IPlayer player) {
+		this(player, true);
+	}
+
+	/**
+	 * Instantiates a new score label provider.
+	 *
+	 * @param player the player
+	 * @param useFont the use font
+	 */
+	public ScoreLabelProvider(IPlayer player, boolean useFont) {
 		super();
+		this.useFont = useFont;
 		this.player = player;
 		this.colors = new HashMap<Integer, Color>();
 		this.initColors();
@@ -53,15 +67,19 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	private void initColors() {
 		Display display = Display.getDefault();
 		IPreferenceStore store = X01UiPlugin.getX01Preferences();
-		
-		RGB rgbNormal = PreferenceConverter.getColor(store, IX01Prefs.COLOR_NORMAL);
+
+		RGB rgbNormal = PreferenceConverter.getColor(store,
+				IX01Prefs.COLOR_NORMAL);
 		RGB rgb60 = PreferenceConverter.getColor(store, IX01Prefs.COLOR_60);
 		RGB rgb100 = PreferenceConverter.getColor(store, IX01Prefs.COLOR_100);
 		RGB rgb180 = PreferenceConverter.getColor(store, IX01Prefs.COLOR_180);
-		
-		this.initColorRange(0, 60, rgbNormal, rgb60,store.getBoolean(IX01Prefs.COLOR_NORMAL_GRADIENT));
-		this.initColorRange(60,100, rgb60, rgb100,store.getBoolean(IX01Prefs.COLOR_60_GRADIENT));
-		this.initColorRange(100, 180, rgb100, rgb180,store.getBoolean(IX01Prefs.COLOR_100_GRADIENT));
+
+		this.initColorRange(0, 60, rgbNormal, rgb60,
+				store.getBoolean(IX01Prefs.COLOR_NORMAL_GRADIENT));
+		this.initColorRange(60, 100, rgb60, rgb100,
+				store.getBoolean(IX01Prefs.COLOR_60_GRADIENT));
+		this.initColorRange(100, 180, rgb100, rgb180,
+				store.getBoolean(IX01Prefs.COLOR_100_GRADIENT));
 		this.colors.put(180, new Color(display, rgb180));
 	}
 
@@ -72,9 +90,10 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 * @param to the to
 	 * @param rgbFrom the rgb from
 	 * @param rgbTo the rgb to
-	 * @param gradient 
+	 * @param gradient the gradient
 	 */
-	private void initColorRange(int from, int to, RGB rgbFrom, RGB rgbTo, boolean gradient) {
+	private void initColorRange(int from, int to, RGB rgbFrom, RGB rgbTo,
+			boolean gradient) {
 		double delta;
 		double redRatio;
 		double greenRatio;
@@ -112,7 +131,7 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 			} else {
 				rgb = rgbFrom;
 			}
-			 
+
 			this.colors.put(i, new Color(Display.getDefault(), rgb));
 		}
 	}
@@ -166,8 +185,11 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Font getFont(Object element) {
-		return OpenDartsFormsToolkit
-				.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
+		if (this.useFont) {
+			return OpenDartsFormsToolkit
+					.getFont(IGeneralPrefs.FONT_SCORE_SHEET);
+		}
+		return super.getFont(element);
 	}
 
 	/* (non-Javadoc)

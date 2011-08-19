@@ -15,7 +15,7 @@ public abstract class GameDefinition implements IGameDefinition {
 
 	/** The players. */
 	private final List<IPlayer> initialPlayers;
-	
+
 	/** The players. */
 	private final List<IPlayer> players;
 
@@ -86,7 +86,7 @@ public abstract class GameDefinition implements IGameDefinition {
 		Collections.rotate(this.players, -1);
 		return this.players;
 	}
-	
+
 	/**
 	 * Gets the initial players.
 	 *

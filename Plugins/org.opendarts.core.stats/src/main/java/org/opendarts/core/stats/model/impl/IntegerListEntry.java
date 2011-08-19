@@ -38,9 +38,8 @@ public class IntegerListEntry implements Serializable {
 	 * @param val the val
 	 */
 	public void removeValue(Integer val) {
-		this.list.remove((Integer) val);
+		this.list.remove(val);
 	}
-
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

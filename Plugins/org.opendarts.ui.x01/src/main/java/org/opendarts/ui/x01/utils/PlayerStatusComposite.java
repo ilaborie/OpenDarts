@@ -169,7 +169,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Session");
 		section.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
 
 		// Section body
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
@@ -186,7 +186,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
-			if (i % 2 == 0) {
+			if ((i % 2) == 0) {
 				col1Stats.add(key);
 			} else {
 				col2Stats.add(key);
@@ -213,7 +213,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		win = this.session.getWinningSet(this.player);
 		this.lblSets = this.toolkit.createLabel(col1, String.valueOf(win));
 		this.lblSets.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
 		valData.copy().applyTo(this.lblSets);
 
 		for (String col1Stat : col1Stats) {
@@ -232,7 +232,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		win = this.set.getWinningGames(this.player);
 		this.lblLegs = this.toolkit.createLabel(col2, String.valueOf(win));
 		this.lblLegs.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
 		valData.copy().applyTo(this.lblLegs);
 
 		for (String col2Stat : col2Stats) {
@@ -263,7 +263,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Set");
 		section.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
 
 		// Section body
 		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
@@ -280,7 +280,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
-			if (i % 2 == 0) {
+			if ((i % 2) == 0) {
 				col1Stats.add(key);
 			} else {
 				col2Stats.add(key);
@@ -331,7 +331,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Current Leg");
 		section.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
 
 		// Get stats
 		List<String> col1Stats = new ArrayList<String>();
@@ -344,7 +344,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		String key;
 		for (int i = 0; i < statsList.size(); i++) {
 			key = statsList.get(i);
-			if (i % 2 == 0) {
+			if ((i % 2) == 0) {
 				col1Stats.add(key);
 			} else {
 				col2Stats.add(key);
@@ -401,7 +401,8 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 			statsUiService = this.statsUiProvider
 					.getStatsUiService(statsService);
 			if (statsUiService != null) {
-				ColumnLabelProvider labelProvider = statsUiService.getStatsLabelProvider();
+				ColumnLabelProvider labelProvider = statsUiService
+						.getStatsLabelProvider();
 				description = labelProvider.getToolTipText(statsKey);
 				s = labelProvider.getText(statsKey);
 				label = s + ":";
@@ -420,7 +421,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		// Value
 		lbl = this.toolkit.createLabel(client, "");
 		lbl.setFont(OpenDartsFormsToolkit
-				.getFont(OpenDartsFormsToolkit.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
 		for (IStatsService statsService : this.statsServices) {
 			IStatsEntry entry = statsService.getStatsEntry(this.session,
 					this.set, this.game, this.player, statsKey);
@@ -449,7 +450,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 			switch (event.getType()) {
 				case NEW_CURRENT_GAME:
 					int win = this.set.getWinningGames(this.player);
-					if (this.lblLegs != null && !this.lblLegs.isDisposed()) {
+					if ((this.lblLegs != null) && !this.lblLegs.isDisposed()) {
 						this.lblLegs.setText(String.valueOf(win));
 					}
 					break;
@@ -469,7 +470,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 			switch (event.getType()) {
 				case NEW_CURRENT_SET:
 					int win = this.session.getWinningSet(this.player);
-					if (this.lblSets != null && !this.lblSets.isDisposed()) {
+					if ((this.lblSets != null) && !this.lblSets.isDisposed()) {
 						this.lblSets.setText(String.valueOf(win));
 					}
 					break;

@@ -46,18 +46,20 @@ public class OpenDartsX01Bundle implements BundleActivator {
 			statsProvider = context.getService(serviceRef);
 			statsX01Service = new StatsX01Service();
 		}
-		
+
 		// Computer player
-		 ServiceReference<IComputerPlayerDartService> ref = context.getServiceReference(IComputerPlayerDartService.class);
-		 if (ref !=null) {
-			 computerPlayerDartService = context.getService(ref);
-		 }
-		 
-		 // Dart Service
-		 ServiceReference<IDartService> dartServiceRef = context.getServiceReference(IDartService.class);
-		 if (dartServiceRef !=null) {
-			 dartService = context.getService(dartServiceRef);
-		 }
+		ServiceReference<IComputerPlayerDartService> ref = context
+				.getServiceReference(IComputerPlayerDartService.class);
+		if (ref != null) {
+			computerPlayerDartService = context.getService(ref);
+		}
+
+		// Dart Service
+		ServiceReference<IDartService> dartServiceRef = context
+				.getServiceReference(IDartService.class);
+		if (dartServiceRef != null) {
+			dartService = context.getService(dartServiceRef);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -68,7 +70,7 @@ public class OpenDartsX01Bundle implements BundleActivator {
 		statsProvider = null;
 		statsX01Service = null;
 	}
-	
+
 	/**
 	 * Gets the stats x01 service.
 	 *

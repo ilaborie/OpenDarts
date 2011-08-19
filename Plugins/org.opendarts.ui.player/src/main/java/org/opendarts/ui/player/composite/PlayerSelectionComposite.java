@@ -283,7 +283,7 @@ public class PlayerSelectionComposite extends Composite implements
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.keyCode == SWT.DEL && this.currentPlayer != null) {
+		if ((e.keyCode == SWT.DEL) && (this.currentPlayer != null)) {
 			this.removePlayer();
 		}
 	}

@@ -30,7 +30,7 @@ public class WinningSetStatsEntry extends IncrementStatsEntry {
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		ISet set = game.getParentSet();
 		int games = set.getWinningGames(player);
-		return (dartsThrow instanceof WinningX01DartsThrow && (games + 1 == set
+		return ((dartsThrow instanceof WinningX01DartsThrow) && ((games + 1) == set
 				.getGameDefinition().getNbGameToWin()));
 	}
 

@@ -25,8 +25,8 @@ public class PlayedSetStatsEntry extends IncrementStatsEntry {
 	@Override
 	protected boolean shouldIncrement(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
-		return (gameEntry.getRound() == 1 && game.getParentSet().getAllGame()
-				.size() == 1);
+		return ((gameEntry.getRound() == 1) && (game.getParentSet()
+				.getAllGame().size() == 1));
 	}
 
 }

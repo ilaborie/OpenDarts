@@ -4,7 +4,7 @@ import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.player.IComputerPlayer;
 
 public interface IComputerPlayerDartService {
-	
+
 	/**
 	 * Gets the computer dart.
 	 *

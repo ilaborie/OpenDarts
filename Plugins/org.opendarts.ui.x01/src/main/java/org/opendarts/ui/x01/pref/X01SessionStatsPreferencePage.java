@@ -54,7 +54,7 @@ public class X01SessionStatsPreferencePage extends FieldEditorPreferencePage
 				StatsX01Service.SESSION_COUNT_DARTS,
 				StatsX01Service.SESSION_TOTAL_SCORE,
 				StatsX01Service.SESSION_OUT_OVER_100);
-		
+
 		// Editor
 		editor = new StatsListEditor(SESSION_STATS, "Statistics entries",
 				parent, stats);

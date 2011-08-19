@@ -65,7 +65,7 @@ public class OpenDartsUiPlugin extends AbstractUIPlugin {
 	public static OpenDartsUiPlugin getDefault() {
 		return plugin;
 	}
-	
+
 	/**
 	 * Gets the preference store.
 	 *

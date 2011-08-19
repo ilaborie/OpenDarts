@@ -374,7 +374,7 @@ public enum DartSector {
 			case 17:
 				return SEVENTEEN;
 			case 18:
-				return EIGHT;
+				return EIGHTEEN;
 			case 19:
 				return NINETEEN;
 			case 20:

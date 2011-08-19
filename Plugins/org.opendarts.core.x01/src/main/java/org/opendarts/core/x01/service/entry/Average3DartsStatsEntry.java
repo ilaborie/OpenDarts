@@ -13,7 +13,7 @@ import org.opendarts.core.x01.model.WinningX01DartsThrow;
  * The Class Average3DartsStatsEntry.
  */
 public class Average3DartsStatsEntry extends AverageStatsEntry {
-	
+
 	/** The allow broken. */
 	private final boolean allowBroken;
 
@@ -24,8 +24,10 @@ public class Average3DartsStatsEntry extends AverageStatsEntry {
 	 */
 	public Average3DartsStatsEntry(String key) {
 		super(key);
-		this.allowBroken = Platform.getPreferencesService().getBoolean("org.opendarts.ui.stats", "OpenDarts.pref.stats.broken", true,null);
-		
+		this.allowBroken = Platform.getPreferencesService().getBoolean(
+				"org.opendarts.ui.stats", "OpenDarts.pref.stats.broken", true,
+				null);
+
 	}
 
 	/* (non-Javadoc)
@@ -36,7 +38,8 @@ public class Average3DartsStatsEntry extends AverageStatsEntry {
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		Number val = null;
 		if (dartsThrow != null) {
-			if (allowBroken  || !(dartsThrow instanceof BrokenX01DartsThrow)) {
+			if (this.allowBroken
+					|| !(dartsThrow instanceof BrokenX01DartsThrow)) {
 				val = dartsThrow.getScore();
 			} else {
 				val = 0;

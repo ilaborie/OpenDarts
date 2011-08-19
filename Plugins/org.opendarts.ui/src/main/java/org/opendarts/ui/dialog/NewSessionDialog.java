@@ -66,7 +66,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 
 	/** The spi nb sets. */
 	private Spinner spiNbSets;
-	
+
 	/** The nb set. */
 	private int nbSets = 5;
 
@@ -130,27 +130,29 @@ public class NewSessionDialog extends TitleAreaDialog implements
 		lbl.setText("Available(s) games: ");
 
 		this.cbGamesAvailable = new ComboViewer(this.main);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(this.cbGamesAvailable.getControl());
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(this.cbGamesAvailable.getControl());
 		this.cbGamesAvailable
 				.setLabelProvider(new GameDefinitionLabelProvider());
 
 		this.cbGamesAvailable.setContentProvider(new ArrayContentProvider());
 		this.cbGamesAvailable.addSelectionChangedListener(this);
 		this.cbGamesAvailable.setInput(allGameDefinition);
-		
+
 		// Nb Set
 		lbl = new Label(this.main, SWT.WRAP);
 		GridDataFactory.fillDefaults().applyTo(lbl);
 		lbl.setText("Nb set: ");
-		
+
 		this.spiNbSets = new Spinner(this.main, SWT.BORDER);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(this.spiNbSets);
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(this.spiNbSets);
 		this.spiNbSets.setMinimum(1);
 		this.spiNbSets.setIncrement(1);
 		this.spiNbSets.setPageIncrement(5);
 		this.spiNbSets.addSelectionListener(this);
 		this.spiNbSets.setSelection(this.nbSets);
-		
+
 		// Game Definition
 		this.body = new Composite(this.main, SWT.NONE);
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
@@ -164,7 +166,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 		this.spiNbSets.setFocus();
 		return comp;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
 	 */
@@ -173,7 +175,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 		this.compGameDef.createButtonsForButtonBar(parent);
 		super.createButtonsForButtonBar(parent);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
 	 */
@@ -255,7 +257,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 	public IGameDefinition getGameDefinition() {
 		return this.gameDefinition;
 	}
-	
+
 	/**
 	 * Gets the nb sets.
 	 *
@@ -264,7 +266,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 	public int getNbSets() {
 		return this.nbSets;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
 	 */
@@ -272,7 +274,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// Nothing to do
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 	 */

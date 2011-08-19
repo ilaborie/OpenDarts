@@ -4,7 +4,7 @@ package org.opendarts.ui.pref;
  * The Interface IGeneralPrefs.
  */
 public interface IGeneralPrefs {
-	
+
 	/** FullScreen mode */
 	String STARTING_FULLSCREN = "OpenDarts.pref.fullscreen";
 
@@ -33,14 +33,14 @@ public interface IGeneralPrefs {
 
 	/** The Constant FONT_STATS. */
 	String FONT_STATS = "OpenDarts.pref.StatsFont";
-	
+
 	// Bold Font
 	/** The Constant FONT_BOLD. */
 	String FONT_BOLD = "OpenDarts.pref.FontBold";
-	
+
 	/** The Constant FONT_SCORE_SHEET_BOLD. */
 	String FONT_SCORE_SHEET_LEFT = "OpenDarts.pref.ScoreSheetFontBold";
-	
+
 	/** The Constant FONT_STATS_BOLD. */
 	String FONT_STATS_LABEL = "OpenDarts.pref.StatsBoldFont";
 }

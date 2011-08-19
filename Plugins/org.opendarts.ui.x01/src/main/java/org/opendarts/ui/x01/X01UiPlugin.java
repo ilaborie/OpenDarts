@@ -5,7 +5,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.opendarts.core.x01.OpenDartsX01Bundle;
+import org.opendarts.ui.service.IGameUiService;
 import org.opendarts.ui.stats.service.IStatsUiProvider;
+import org.opendarts.ui.x01.service.GameX01UiService;
 import org.opendarts.ui.x01.service.StatsX01UiService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -26,6 +28,8 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	/** The plugin. */
 	private static X01UiPlugin plugin;
 
+	private static IGameUiService gameUiService;
+
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(X01UiPlugin.class);
@@ -45,6 +49,8 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		gameUiService = new GameX01UiService();
+
 		// Register the StatsUiService
 		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
 		if (uiProvider != null) {
@@ -61,6 +67,7 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		gameUiService = null;
 		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
 		if (uiProvider != null) {
 			uiProvider.unregisterStatsUiService(OpenDartsX01Bundle
@@ -146,5 +153,14 @@ public class X01UiPlugin extends AbstractUIPlugin {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Gets the game x01 ui service.
+	 *
+	 * @return the game x01 ui service
+	 */
+	public static IGameUiService getGameX01UiService() {
+		return gameUiService;
 	}
 }

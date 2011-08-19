@@ -22,14 +22,28 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 	/** The player. */
 	private final IPlayer player;
 
+	/** The use font. */
+	private final boolean useFont;
+
 	/**
 	 * Instantiates a new score label provider.
 	 *
 	 * @param player the player
 	 */
 	public ToGoLabelProvider(IPlayer player) {
+		this(player, true);
+	}
+
+	/**
+	 * Instantiates a new to go label provider.
+	 *
+	 * @param player the player
+	 * @param useFont the use font
+	 */
+	public ToGoLabelProvider(IPlayer player, boolean useFont) {
 		super();
 		this.player = player;
+		this.useFont = useFont;
 	}
 
 	/* (non-Javadoc)
@@ -58,8 +72,11 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Font getFont(Object element) {
-		return OpenDartsFormsToolkit
-				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT);
+		if (this.useFont) {
+			return OpenDartsFormsToolkit
+					.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT);
+		}
+		return super.getFont(this.player);
 	}
 
 	/* (non-Javadoc)

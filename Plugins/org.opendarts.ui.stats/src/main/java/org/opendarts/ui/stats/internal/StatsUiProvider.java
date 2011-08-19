@@ -11,11 +11,11 @@ import org.opendarts.ui.stats.service.IStatsUiService;
 /**
  * The Class StatsUiProvider.
  */
-public class StatsUiProvider implements IStatsUiProvider{
-	
+public class StatsUiProvider implements IStatsUiProvider {
+
 	/** The ui services. */
 	private final Map<IStatsService, IStatsUiService> uiServices;
-	
+
 	/**
 	 * Instantiates a new stats ui provider.
 	 */
@@ -40,7 +40,7 @@ public class StatsUiProvider implements IStatsUiProvider{
 	public IStatsUiService getStatsUiService(IStatsService statsService) {
 		return this.uiServices.get(statsService);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.stats.service.IStatsUiProvider#unregisterStatsUiService(org.opendarts.core.stats.service.IStatsService)
 	 */

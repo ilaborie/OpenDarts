@@ -28,53 +28,12 @@
       </category>
       <view
             category="opendarts.category.stats"
-            class="org.opendarts.ui.stats.view.StatsExplorerView"
+            class="org.opendarts.ui.stats.view.StatsView"
             icon="icons/view/stats.png"
-            id="opendarts.view.stats.explorer"
-            name="Stats Explorer"
+            id="opendarts.view.stats"
+            name="Statistics"
             restorable="true">
       </view>
-      <view
-            category="opendarts.category.stats"
-            class="org.opendarts.ui.stats.view.StatsDetailView"
-            icon="icons/view/stats.png"
-            id="opendarts.view.stats.detail"
-            name="Stats Detail"
-            restorable="true">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            id="opendarts.cmd.stats.refresh"
-            name="Refresh">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="org.opendarts.ui.stats.handler.RefreshStatsHandler"
-            commandId="opendarts.cmd.stats.refresh">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
-            commandId="opendarts.cmd.stats.refresh"
-            icon="icons/actions/refresh.png">
-      </image>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:openwis.stats.detail">
-         <command
-               commandId="opendarts.cmd.stats.refresh"
-               label="Refreh"
-               style="push">
-         </command>
-      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

@@ -32,7 +32,7 @@ public class Session extends GameContainer<ISet> implements ISession,
 
 	/** The player games. */
 	private final Map<IPlayer, Integer> playerGames;
-	
+
 	/** The nb set to win. */
 	private final int nbSetToWin;
 
@@ -43,22 +43,22 @@ public class Session extends GameContainer<ISet> implements ISession,
 	 * Instantiates a new session.
 	 */
 	public Session() {
-		this(-1,null);
+		this(-1, null);
 	}
-	
+
 	/**
 	 * Instantiates a new session.
 	 *
 	 * @param nbSet the nb set
 	 */
-	public Session(int nbSet,IGameDefinition gameDefinition) {
+	public Session(int nbSet, IGameDefinition gameDefinition) {
 		super();
-		this.nbSetToWin= nbSet;
+		this.nbSetToWin = nbSet;
 		this.gameDefinition = gameDefinition;
 		this.listeners = new CopyOnWriteArraySet<ISessionListener>();
 		this.playerGames = new HashMap<IPlayer, Integer>();
 	}
-	
+
 	/**
 	 * Inits the.
 	 */
@@ -181,7 +181,7 @@ public class Session extends GameContainer<ISet> implements ISession,
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the nb set to win.
 	 *
@@ -190,7 +190,7 @@ public class Session extends GameContainer<ISet> implements ISession,
 	public int getNbSetToWin() {
 		return this.nbSetToWin;
 	}
-	
+
 	/**
 	 * Gets the game definition.
 	 *
@@ -199,5 +199,5 @@ public class Session extends GameContainer<ISet> implements ISession,
 	public IGameDefinition getGameDefinition() {
 		return this.gameDefinition;
 	}
-	
+
 }

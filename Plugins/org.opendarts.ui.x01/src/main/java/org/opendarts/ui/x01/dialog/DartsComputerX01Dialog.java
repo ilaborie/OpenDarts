@@ -46,7 +46,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	private final IComputerPlayer player;
 
 	/** The score. */
-	private int score;
+	private final int score;
 
 	/** The game service. */
 	private final IGameService gameService;
@@ -153,7 +153,8 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 					public IStatus runInUIThread(IProgressMonitor monitor) {
 						if (DartsComputerX01Dialog.this.getDartThrow() == null) {
 							DartsComputerX01Dialog.this
-									.setDartThrow( (ThreeDartsThrow) dartsThrow.getDartsThrow());
+									.setDartThrow((ThreeDartsThrow) dartsThrow
+											.getDartsThrow());
 						}
 						LOG.info("Throw: {}",
 								DartsComputerX01Dialog.this.getDartThrow());
@@ -173,8 +174,8 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 
 		/** The index. */
 		private final int index;
-		private IDart wished;
-		private IDart done;
+		private final IDart wished;
+		private final IDart done;
 
 		/**
 		 * Instantiates a new throw darts job.
@@ -196,9 +197,9 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 		 */
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			DartsComputerX01Dialog.this.displayWished(this.wished, index);
-				DartsComputerX01Dialog.this.displayDart(this.done,
-						DartsComputerX01Dialog.this.score, this.index);
+			DartsComputerX01Dialog.this.displayWished(this.wished, this.index);
+			DartsComputerX01Dialog.this.displayDart(this.done,
+					DartsComputerX01Dialog.this.score, this.index);
 			return Status.OK_STATUS;
 		}
 
