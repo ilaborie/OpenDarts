@@ -218,6 +218,7 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 			LOG.info("Set win by {}", player);
 			this.fireSetEvent(SetEvent.Factory.newSetFinishedEvent(this,
 					this.getWinner(), game));
+			this.getParentSession().handleSetFinished(this);
 		} else {
 			// create a new game
 			IGame newGame = this.createNewGame(game.getFirstPlayer());

@@ -156,7 +156,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 									.setDartThrow((ThreeDartsThrow) dartsThrow
 											.getDartsThrow());
 						}
-						LOG.info("Throw: {}",
+						LOG.debug("Throw: {}",
 								DartsComputerX01Dialog.this.getDartThrow());
 						DartsComputerX01Dialog.this.close();
 						return Status.OK_STATUS;

@@ -42,7 +42,7 @@ public class NewSetHandler extends AbstractHandler implements IHandler {
 		// The session
 		ISessionService sessionService = OpenDartsUiPlugin
 				.getService(ISessionService.class);
-		ISession session = sessionService.getSession();
+		ISession session = sessionService.getCurrentSession();
 
 		// Dialog
 		NewSetDialog dialog = new NewSetDialog(

@@ -4,9 +4,9 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.opendarts.core.internal.service.SessionService;
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
@@ -39,20 +39,29 @@ public class Session extends GameContainer<ISet> implements ISession,
 	/** The game definition. */
 	private final IGameDefinition gameDefinition;
 
+	/** The session service. */
+	private final SessionService sessionService;
+
 	/**
 	 * Instantiates a new session.
+	 *
+	 * @param sessionService the session service
 	 */
-	public Session() {
-		this(-1, null);
+	public Session(SessionService sessionService) {
+		this(sessionService, -1, null);
 	}
 
 	/**
 	 * Instantiates a new session.
 	 *
+	 * @param sessionService the session service
 	 * @param nbSet the nb set
+	 * @param gameDefinition the game definition
 	 */
-	public Session(int nbSet, IGameDefinition gameDefinition) {
+	public Session(SessionService sessionService, int nbSet,
+			IGameDefinition gameDefinition) {
 		super();
+		this.sessionService = sessionService;
 		this.nbSetToWin = nbSet;
 		this.gameDefinition = gameDefinition;
 		this.listeners = new CopyOnWriteArraySet<ISessionListener>();
@@ -73,17 +82,11 @@ public class Session extends GameContainer<ISet> implements ISession,
 	 * @see org.opendarts.core.model.session.ISession#finish()
 	 */
 	@Override
-	public void finish() {
+	public void finish(IPlayer winner) {
 		this.setEnd(Calendar.getInstance());
-		IPlayer sessionWinner = null;
-		int max = 0;
-		for (Entry<IPlayer, Integer> entry : this.playerGames.entrySet()) {
-			if (entry.getValue() > max) {
-				sessionWinner = entry.getKey();
-			}
-		}
+		this.setWinner(winner);
 		this.fireSessionEvent(SessionEvent.Factory.newSessionFinishEvent(this,
-				sessionWinner, this.getCurrentGame()));
+				this.getWinner(), this.getCurrentGame()));
 	}
 
 	/* (non-Javadoc)
@@ -106,10 +109,12 @@ public class Session extends GameContainer<ISet> implements ISession,
 		String result;
 		if (this.isFinished()) {
 			result = MessageFormat.format(
-					"Session [{0,date,medium} - {1,date,medium}]", this
+					"Session [{0,time,medium} - {1,time,medium}]", this
 							.getStart().getTime(), this.getEnd().getTime());
 		} else {
-			result = "Current Session";
+			result = MessageFormat.format(
+					"Current Session [{0,time,medium} - ...]", this.getStart()
+							.getTime());
 		}
 		return result;
 	}
@@ -142,21 +147,29 @@ public class Session extends GameContainer<ISet> implements ISession,
 				case SET_CANCELED:
 					set.removeListener(this);
 					break;
-				case SET_FINISHED:
-					IPlayer win = set.getWinner();
-					int winningSet = this.getWinningSet(win);
-					winningSet++;
-					this.playerGames.put(win, winningSet);
-					break;
 				case SET_INITIALIZED:
 					this.setCurrentGame(set);
 					this.fireSessionEvent(SessionEvent.Factory
 							.newSessionSetEvent(this, set));
 					break;
+				case SET_FINISHED:
 				case NEW_CURRENT_GAME:
 					break;
 			}
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.session.ISession#handleSetFinished(org.opendarts.core.model.session.ISet)
+	 */
+	@Override
+	public void handleSetFinished(ISet set) {
+		set.removeListener(this);
+		IPlayer win = set.getWinner();
+		int winningSet = this.getWinningSet(win);
+		winningSet++;
+		this.playerGames.put(win, winningSet);
+		this.sessionService.handleFinishedSet(set);
 	}
 
 	/* (non-Javadoc)

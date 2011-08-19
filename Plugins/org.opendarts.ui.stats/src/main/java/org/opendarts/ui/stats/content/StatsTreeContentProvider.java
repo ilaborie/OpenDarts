@@ -25,9 +25,13 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 	/** The viewer. */
 	private final TreeViewer viewer;
 
+	/** The session service. */
+	private ISessionService sessionService;
+
 	/**
 	 * Instantiates a new stats tree content provider.
-	 * @param viewer 
+	 *
+	 * @param viewer the viewer
 	 */
 	public StatsTreeContentProvider(TreeViewer viewer) {
 		super();
@@ -39,8 +43,8 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 	 */
 	@Override
 	public Object[] getElements(Object inputElement) {
-		ISessionService sessionService = (ISessionService) inputElement;
-		return new ISession[] { sessionService.getSession() };
+		this.sessionService = (ISessionService) inputElement;
+		return sessionService.getAllSessions().toArray();
 	}
 
 	/* (non-Javadoc)
@@ -115,7 +119,7 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 			case SESSION_CANCELED:
 			case SESSION_FINISHED:
 			case SESSION_INITIALIZED:
-				this.viewer.refresh(event.getSession());
+				this.viewer.setInput(this.sessionService);
 				break;
 			case NEW_CURRENT_SET:
 				this.viewer.add(event.getSession(), event.getSet());

@@ -63,7 +63,7 @@ public class BugLastDartAt90 {
 	 */
 	@Before
 	public void initGame() {
-		ISession session = sessionService.getSession();
+		ISession session = sessionService.getCurrentSession();
 		this.player = (IComputerPlayer) playerService.getComputerPlayer(lvl);
 		List<IPlayer> players = Collections
 				.singletonList((IPlayer) this.player);

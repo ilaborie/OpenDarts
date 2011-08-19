@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
+import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IElementStats.IEntry;
@@ -157,8 +158,12 @@ public class SessionDetailsPage extends DetailsPage<ISession> implements
 			if (this.session.isFinished()) {
 				date = this.session.getEnd().getTime();
 				this.lblEnded.setText(this.dateFormat.format(date));
-
-				this.lblWinner.setText(this.session.getWinner().toString());
+				IPlayer winner = this.session.getWinner();
+				if (winner!=null) {
+					this.lblWinner.setText(winner.toString());
+				} else {
+					this.lblWinner.setText("<No Winner>");
+				}
 			} else {
 				this.lblEnded.setText("<In Progress>");
 				this.lblWinner.setText("<No Winner>");

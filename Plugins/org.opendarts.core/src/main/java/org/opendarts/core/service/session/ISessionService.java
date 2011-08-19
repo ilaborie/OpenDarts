@@ -1,5 +1,7 @@
 package org.opendarts.core.service.session;
 
+import java.util.List;
+
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.session.ISession;
 
@@ -20,7 +22,14 @@ public interface ISessionService {
 	 *
 	 * @return the session
 	 */
-	ISession getSession();
+	ISession getCurrentSession();
+
+	/**
+	 * Gets the all sessions.
+	 *
+	 * @return the all sessions
+	 */
+	List<ISession> getAllSessions();
 
 	/**
 	 * Creates the new session.

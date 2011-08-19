@@ -71,7 +71,7 @@ public class LevelTest {
 	 * Startup.
 	 */
 	public void startup() {
-		ISession session = sessionService.getSession();
+		ISession session = sessionService.getCurrentSession();
 		this.player = (IComputerPlayer) this.playerService.getComputerPlayer(lvl);
 		List<IPlayer> players = Collections.singletonList((IPlayer) this.player);
 

@@ -36,7 +36,16 @@ public interface ISession extends IGameContainer<ISet> {
 
 	/**
 	 * Finish the session.
+	 *
+	 * @param winner the winner
 	 */
-	void finish();
+	void finish(IPlayer winner);
+
+	/**
+	 * Handle set finished.
+	 *
+	 * @param gameSet the game set
+	 */
+	void handleSetFinished(ISet set);
 
 }

@@ -43,6 +43,9 @@ public class NewSessionDialog extends TitleAreaDialog implements
 	/** The last game definition. */
 	private static IGameDefinition lastGameDefinition;
 
+	/** The last nb set. */
+	private static Integer lastNbSet = 5;
+	
 	/** The players. */
 	private List<IPlayer> players;
 
@@ -68,7 +71,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 	private Spinner spiNbSets;
 
 	/** The nb set. */
-	private int nbSets = 5;
+	private int nbSets = lastNbSet;
 
 	/**
 	 * Instantiates a new new game dialog.
@@ -191,6 +194,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 					this.gameDefinition = this.compGameDef.getGameDefinition();
 					this.editorId = this.compGameDef.getEditorId();
 					lastGameDefinition = this.gameDefinition;
+					lastNbSet = this.nbSets;
 					super.okPressed();
 				default:
 					break;

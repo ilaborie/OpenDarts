@@ -128,7 +128,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 			protected IStatus run(IProgressMonitor monitor) {
 				final ComputerLevelUITester tester = ComputerLevelUITester.this;
 
-				ISession session = sessionService.getSession();
+				ISession session = sessionService.getCurrentSession();
 				List<IPlayer> players = new ArrayList<IPlayer>();
 				players.add(tester.player);
 				players.add(new IPlayer() {
