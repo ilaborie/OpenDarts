@@ -19,16 +19,20 @@ public class PlayerStatsLabelProvider extends ColumnLabelProvider {
 
 	/**
 	 * Instantiates a new player stats label provider.
-	 *
-	 * @param player the player
+	 * 
+	 * @param player
+	 *            the player
 	 */
 	public PlayerStatsLabelProvider(IPlayer player) {
 		super();
 		this.player = player;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -41,21 +45,56 @@ public class PlayerStatsLabelProvider extends ColumnLabelProvider {
 		}
 		return result;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getBackground(java.lang.Object)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ColumnLabelProvider#getBackground(java.lang
+	 * .Object)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Color getBackground(Object element) {
 		IEntry entry = (IEntry) element;
+
 		IStatValue bestValue = entry.getBestValue();
 		IStatValue playerValue = entry.getPlayerEntry(this.player).getValue();
-		if (bestValue!=null && bestValue.equals(playerValue)) {
+
+		if (this.equalsValue(bestValue, playerValue)) {
 			return OpenDartsFormsToolkit.getToolkit().getColors()
 					.getColor(IGeneralPrefs.COLOR_WINNING);
 		}
 		return super.getBackground(element);
+	}
+
+	/**
+	 * Equals value.
+	 * 
+	 * @param bestValue
+	 *            the best value
+	 * @param playerValue
+	 *            the player value
+	 * @return true, if successful
+	 */
+	@SuppressWarnings("rawtypes")
+	private boolean equalsValue(IStatValue bestValue, IStatValue playerValue) {
+		boolean result = false;
+		Object o1 = null;
+		if (bestValue != null) {
+			o1 = bestValue.getValue();
+		}
+
+		Object o2 = null;
+		if (playerValue != null) {
+			o2 = playerValue.getValue();
+		}
+
+		if (o1 != null) {
+			result = o1.equals(o2);
+		}
+
+		return result;
 	}
 
 }

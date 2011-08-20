@@ -21,7 +21,7 @@ public class NumberComparator implements Comparator<Number> {
 			result = 0;
 		} else {
 			double diff = o1.doubleValue() - o2.doubleValue();
-			if (diff < 0.005) {
+			if (Math.abs(diff) < 0.005) {
 				result = 0;
 			} else if (diff > 0) {
 				result = 1;
