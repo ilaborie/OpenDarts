@@ -46,11 +46,15 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Instantiates a new computer throw.
-	 *
-	 * @param parentShell the parent shell
-	 * @param player the player
-	 * @param game the game
-	 * @param entry the entry
+	 * 
+	 * @param parentShell
+	 *            the parent shell
+	 * @param player
+	 *            the player
+	 * @param game
+	 *            the game
+	 * @param entry
+	 *            the entry
 	 */
 	public ThreeDartsComputerDialog(Shell parentShell, IPlayer player,
 			IGame game, IGameEntry entry) {
@@ -63,6 +67,13 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 		this.txtWished = new Text[this.darts.length];
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
+	 * .Shell)
+	 */
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
@@ -71,7 +82,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the dart throw.
-	 *
+	 * 
 	 * @return the dart throw
 	 */
 	protected ThreeDartsThrow getDartThrow() {
@@ -80,8 +91,9 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Sets the dart throw.
-	 *
-	 * @param dartThrow the new dart throw
+	 * 
+	 * @param dartThrow
+	 *            the new dart throw
 	 */
 	protected void setDartThrow(ThreeDartsThrow dartThrow) {
 		this.dartThrow = dartThrow;
@@ -89,7 +101,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the darts.
-	 *
+	 * 
 	 * @return the darts
 	 */
 	protected IDart[] getDarts() {
@@ -98,7 +110,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the txt dart.
-	 *
+	 * 
 	 * @return the txt dart
 	 */
 	protected Text[] getTxtDart() {
@@ -107,7 +119,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the txt wished.
-	 *
+	 * 
 	 * @return the txt wished
 	 */
 	protected Text[] getTxtWished() {
@@ -116,15 +128,19 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the toolkit.
-	 *
+	 * 
 	 * @return the toolkit
 	 */
 	protected OpenDartsFormsToolkit getToolkit() {
 		return this.toolkit;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.forms.FormDialog#createFormContent(org.eclipse.ui.forms.IManagedForm)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.forms.FormDialog#createFormContent(org.eclipse.ui.forms
+	 * .IManagedForm)
 	 */
 	@Override
 	protected void createFormContent(IManagedForm mform) {
@@ -172,16 +188,18 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the form title.
-	 *
+	 * 
 	 * @return the form title
 	 */
 	protected abstract String getFormTitle();
 
 	/**
 	 * Builds the wished composite.
-	 *
-	 * @param parent the parent
-	 * @param i the i
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param i
+	 *            the i
 	 * @return the composite
 	 */
 	private Composite buildWishedComposite(Composite parent, int i) {
@@ -201,9 +219,11 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Builds the dart composite.
-	 *
-	 * @param parent the parent
-	 * @param i the i
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param i
+	 *            the i
 	 * @return the composite
 	 */
 	private Composite buildDartComposite(Composite parent, int i) {
@@ -224,8 +244,9 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Builds the text.
-	 *
-	 * @param parent the parent
+	 * 
+	 * @param parent
+	 *            the parent
 	 * @return the text
 	 */
 	private Text buildText(Composite parent) {
@@ -242,9 +263,11 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Display wished.
-	 *
-	 * @param wished the wished
-	 * @param index the index
+	 * 
+	 * @param wished
+	 *            the wished
+	 * @param index
+	 *            the index
 	 */
 	protected void displayWished(IDart wished, int index) {
 		Text text = this.txtWished[index];
@@ -255,10 +278,13 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Display dart.
-	 *
-	 * @param dart the dart
-	 * @param scoreLeft the score left
-	 * @param index the index
+	 * 
+	 * @param dart
+	 *            the dart
+	 * @param scoreLeft
+	 *            the score left
+	 * @param index
+	 *            the index
 	 */
 	protected void displayDart(IDart dart, int scoreLeft, int index) {
 		Text text = this.txtDart[index];
@@ -267,21 +293,26 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.forms.FormDialog#createButtonBar(org.eclipse.swt.widgets.Composite)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.forms.FormDialog#createButtonBar(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
 	/**
 	 * Creates the button bar.
-	 *
-	 * @param parent the parent
+	 * 
+	 * @param parent
+	 *            the parent
 	 * @return the control
 	 */
 	@Override
 	protected Control createButtonBar(Composite parent) {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		//Composite sep = new Composite(parent, SWT.NULL);
-		//sep.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
-		//gd.heightHint = 1;
+		// Composite sep = new Composite(parent, SWT.NULL);
+		// sep.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+		// gd.heightHint = 1;
 		Label sep = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
 		sep.setLayoutData(gd);
 		return sep;
@@ -289,7 +320,7 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 
 	/**
 	 * Gets the computer throw.
-	 *
+	 * 
 	 * @return the computer throw
 	 */
 	public IDartsThrow getComputerThrow() {

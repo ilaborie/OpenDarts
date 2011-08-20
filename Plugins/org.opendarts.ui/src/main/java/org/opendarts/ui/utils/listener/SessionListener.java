@@ -57,6 +57,14 @@ public class SessionListener implements ISessionListener {
 				break;
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.session.ISessionListener#sessionCreated(org.opendarts.core.model.session.ISession)
+	 */
+	@Override
+	public void sessionCreated(ISession session) {
+		// Nothing to do
+	}
 
 	/**
 	 * Open Game editor.

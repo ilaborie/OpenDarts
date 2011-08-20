@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -87,10 +88,13 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Instantiates a new player status composite.
-	 *
-	 * @param parent the parent
-	 * @param player the player
-	 * @param game the game
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param player
+	 *            the player
+	 * @param game
+	 *            the game
 	 */
 	@SuppressWarnings("unchecked")
 	public PlayerStatusComposite(Composite parent, IPlayer player, GameX01 game) {
@@ -122,7 +126,7 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Gets the control.
-	 *
+	 * 
 	 * @return the control
 	 */
 	public Composite getControl() {
@@ -131,8 +135,9 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Creates the contents.
-	 *
-	 * @param parent the parent
+	 * 
+	 * @param parent
+	 *            the parent
 	 */
 	private void createContents(Composite client) {
 		GridDataFactory childData = GridDataFactory.fillDefaults().grab(true,
@@ -154,9 +159,11 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Creates the session composite.
-	 *
-	 * @param parent the parent
-	 * @param player the player
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param player
+	 *            the player
 	 * @return the composite
 	 */
 	private Composite createSessionComposite(Composite parent) {
@@ -247,9 +254,11 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Creates the total composite.
-	 *
-	 * @param parent the parent
-	 * @param player the player
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param player
+	 *            the player
 	 * @return the composite
 	 */
 	private Composite createSetComposite(Composite parent) {
@@ -315,9 +324,11 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Creates the best composite.
-	 *
-	 * @param parent the parent
-	 * @param player the player
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param player
+	 *            the player
 	 * @return the composite
 	 */
 	private Composite createGameComposite(Composite parent) {
@@ -384,12 +395,17 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Creates the stat entry.
-	 *
-	 * @param client the client
-	 * @param statsKey the stats key
-	 * @param label the label
-	 * @param lblData the lbl data
-	 * @param valData the val data
+	 * 
+	 * @param client
+	 *            the client
+	 * @param statsKey
+	 *            the stats key
+	 * @param label
+	 *            the label
+	 * @param lblData
+	 *            the lbl data
+	 * @param valData
+	 *            the val data
 	 */
 	private void createStatEntry(Composite client, String statsKey,
 			GridDataFactory lblLayoutData, GridDataFactory valLayoutData) {
@@ -440,48 +456,73 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 		this.statsLabel.put(statsKey, lbl);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.model.session.ISetListener#notifySetEvent(org.opendarts.prototype.model.session.SetEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.prototype.model.session.ISetListener#notifySetEvent(org
+	 * .opendarts.prototype.model.session.SetEvent)
 	 */
 	@Override
 	public void notifySetEvent(SetEvent event) {
 		if (this.set.equals(event.getSet())) {
 			LOG.trace("New Set Event: {}", event);
 			switch (event.getType()) {
-				case NEW_CURRENT_GAME:
-					int win = this.set.getWinningGames(this.player);
-					if ((this.lblLegs != null) && !this.lblLegs.isDisposed()) {
-						this.lblLegs.setText(String.valueOf(win));
-					}
-					break;
-				default:
-					break;
+			case NEW_CURRENT_GAME:
+				int win = this.set.getWinningGames(this.player);
+				if ((this.lblLegs != null) && !this.lblLegs.isDisposed()) {
+					this.lblLegs.setText(String.valueOf(win));
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.model.session.ISessionListener#notifySessionEvent(org.opendarts.prototype.model.session.SessionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.prototype.model.session.ISessionListener#notifySessionEvent
+	 * (org.opendarts.prototype.model.session.SessionEvent)
 	 */
 	@Override
 	public void notifySessionEvent(SessionEvent event) {
 		if (this.session.equals(event.getSession())) {
 			LOG.trace("New Session Event: {}", event);
 			switch (event.getType()) {
-				case NEW_CURRENT_SET:
-					int win = this.session.getWinningSet(this.player);
-					if ((this.lblSets != null) && !this.lblSets.isDisposed()) {
-						this.lblSets.setText(String.valueOf(win));
-					}
-					break;
-				default:
-					break;
+			case NEW_CURRENT_SET:
+				int win = this.session.getWinningSet(this.player);
+				if ((this.lblSets != null) && !this.lblSets.isDisposed()) {
+					this.lblSets.setText(String.valueOf(win));
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.prototype.service.stats.IStatsListener#updatedEntry(org.opendarts.prototype.model.stats.IStats, org.opendarts.prototype.model.stats.IStatsEntry)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.model.session.ISessionListener#sessionCreated(org.
+	 * opendarts.core.model.session.ISession)
+	 */
+	@Override
+	public void sessionCreated(ISession session) {
+		// Nothing to do
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.prototype.service.stats.IStatsListener#updatedEntry(org
+	 * .opendarts.prototype.model.stats.IStats,
+	 * org.opendarts.prototype.model.stats.IStatsEntry)
 	 */
 	@Override
 	public void updatedEntry(IStats stats, IStatsEntry entry) {
@@ -507,19 +548,24 @@ public class PlayerStatusComposite implements ISetListener, ISessionListener,
 
 	/**
 	 * Update label.
-	 *
-	 * @param entry the entry
+	 * 
+	 * @param entry
+	 *            the entry
 	 */
 	private void updateLabel(IStatsEntry entry) {
-		Label label = this.statsLabel.get(entry.getKey());
+		final Label label = this.statsLabel.get(entry.getKey());
 		if (label != null) {
 			IStatValue value = entry.getValue();
 			if (value != null) {
-				String val = value.getValueAsString();
-				if (!label.isDisposed()) {
-					label.setText(val);
-					label.getParent().layout(new Control[] { label });
-				}
+				final String val = value.getValueAsString();
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						if (!label.isDisposed()) {
+							label.setText(val);
+							label.getParent().layout(new Control[] { label });
+						}
+					}
+				});
 			}
 		}
 	}

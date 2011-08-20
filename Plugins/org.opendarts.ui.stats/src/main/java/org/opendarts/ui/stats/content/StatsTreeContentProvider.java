@@ -30,25 +30,35 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 
 	/**
 	 * Instantiates a new stats tree content provider.
-	 *
-	 * @param viewer the viewer
+	 * 
+	 * @param viewer
+	 *            the viewer
 	 */
 	public StatsTreeContentProvider(TreeViewer viewer) {
 		super();
 		this.viewer = viewer;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.
+	 * Object)
 	 */
 	@Override
 	public Object[] getElements(Object inputElement) {
 		this.sessionService = (ISessionService) inputElement;
+		this.sessionService.addListener(this);
 		return sessionService.getAllSessions().toArray();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
+	 * Object)
 	 */
 	@Override
 	public Object[] getChildren(Object parentElement) {
@@ -70,8 +80,12 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 		return list.toArray();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object
+	 * )
 	 */
 	@Override
 	public Object getParent(Object element) {
@@ -86,23 +100,33 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
+	 * Object)
 	 */
 	@Override
 	public boolean hasChildren(Object element) {
 		return this.getChildren(element).length > 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
+	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		// Nothing to do
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
 	@Override
@@ -110,41 +134,62 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 		// Nothing to dispose
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.core.model.session.ISessionListener#notifySessionEvent(org.opendarts.core.model.session.SessionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.model.session.ISessionListener#notifySessionEvent(
+	 * org.opendarts.core.model.session.SessionEvent)
 	 */
 	@Override
 	public void notifySessionEvent(SessionEvent event) {
+		ISession session = event.getSession();
 		switch (event.getType()) {
-			case SESSION_CANCELED:
-			case SESSION_FINISHED:
-			case SESSION_INITIALIZED:
-				this.viewer.setInput(this.sessionService);
-				break;
-			case NEW_CURRENT_SET:
-				this.viewer.add(event.getSession(), event.getSet());
-				break;
-			default:
-				break;
+		case SESSION_CANCELED:
+		case SESSION_FINISHED:
+		case SESSION_INITIALIZED:
+			this.viewer.refresh(session);
+			break;
+		case NEW_CURRENT_SET:
+			this.viewer.add(session, event.getSet());
+			break;
+		default:
+			break;
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.core.model.session.ISetListener#notifySetEvent(org.opendarts.core.model.session.SetEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.model.session.ISessionListener#sessionCreated(org.
+	 * opendarts.core.model.session.ISession)
+	 */
+	@Override
+	public void sessionCreated(ISession session) {
+		this.viewer.add(this.sessionService, session);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.model.session.ISetListener#notifySetEvent(org.opendarts
+	 * .core.model.session.SetEvent)
 	 */
 	@Override
 	public void notifySetEvent(SetEvent event) {
 		switch (event.getType()) {
-			case SET_CANCELED:
-			case SET_FINISHED:
-			case SET_INITIALIZED:
-				this.viewer.refresh(event.getSet());
-				break;
-			case NEW_CURRENT_GAME:
-				this.viewer.add(event.getSet(), event.getGame());
-				break;
-			default:
-				break;
+		case SET_CANCELED:
+		case SET_FINISHED:
+		case SET_INITIALIZED:
+			this.viewer.refresh(event.getSet());
+			break;
+		case NEW_CURRENT_GAME:
+			this.viewer.add(event.getSet(), event.getGame());
+			break;
+		default:
+			break;
 		}
 	}
 }

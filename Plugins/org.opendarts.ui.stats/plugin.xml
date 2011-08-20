@@ -8,6 +8,9 @@
          <perspectiveShortcut
                id="opendarts.perspective.stats">
          </perspectiveShortcut>
+         <viewShortcut
+               id="opendarts.view.stats">
+         </viewShortcut>
       </perspectiveExtension>
    </extension>
    <extension

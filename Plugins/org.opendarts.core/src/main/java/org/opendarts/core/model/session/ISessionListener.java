@@ -19,5 +19,12 @@ public interface ISessionListener {
 	 * @param event the event
 	 */
 	void notifySessionEvent(SessionEvent event);
+	
+	/**
+	 * Invoked when session is created.
+	 *
+	 * @param session the session
+	 */
+	void sessionCreated(ISession session);
 
 }

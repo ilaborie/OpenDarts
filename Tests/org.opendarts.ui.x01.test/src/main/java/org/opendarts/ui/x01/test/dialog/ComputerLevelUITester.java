@@ -43,11 +43,11 @@ import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.player.label.PlayerLabelProvider;
 
 /**
- * The Class 
+ * The Class
  */
 public class ComputerLevelUITester implements ISelectionChangedListener,
 		SelectionListener {
-	
+
 	/** The Constant NUMBER_FORMAT. */
 	private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("0.##");
 
@@ -63,6 +63,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/** The count. */
 	private int count;
+
+	/** The start. */
+	private int start = 501;
 
 	/** The played. */
 	private int played;
@@ -117,6 +120,8 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	/** The job. */
 	private final Job job;
 
+	private Spinner spinnerStart;
+
 	/**
 	 * Instantiates a new computer level ui tester.
 	 */
@@ -153,8 +158,8 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 					}
 				});
 
-				IGameDefinition gameDefinition = new GameX01Definition(501,
-						players, tester.nbGames, false);
+				IGameDefinition gameDefinition = new GameX01Definition(
+						tester.start, players, tester.nbGames, false);
 				GameSet set = (GameSet) setService.createNewSet(session,
 						gameDefinition);
 				tester.gameService = set.getGameService();
@@ -171,6 +176,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 					public void run() {
 						tester.viewer.getControl().setEnabled(false);
 						tester.spinner.setEnabled(false);
+						tester.spinnerStart.setEnabled(false);
 						tester.btn.setEnabled(false);
 						tester.progress.setMaximum(tester.nbGames);
 						tester.progress.setSelection(tester.played);
@@ -199,7 +205,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 							tester.progress.setSelection(tester.played);
 							tester.txtBest.setText(String.valueOf(tester.min));
 							double avg = ((double) tester.count)
-							/ ((double) tester.played);
+									/ ((double) tester.played);
 							tester.txtAvg.setText(NUMBER_FORMAT.format(avg));
 							tester.txtWorst.setText(String.valueOf(tester.max));
 						}
@@ -212,6 +218,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 					public void run() {
 						tester.viewer.getControl().setEnabled(true);
 						tester.spinner.setEnabled(true);
+						tester.spinnerStart.setEnabled(true);
 						tester.btn.setEnabled(true);
 					}
 				});
@@ -220,8 +227,12 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 		};
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(
+	 * org.eclipse.jface.viewers.SelectionChangedEvent)
 	 */
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
@@ -235,16 +246,24 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 		this.btn.setEnabled(!sel.isEmpty());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse
+	 * .swt.events.SelectionEvent)
 	 */
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// Nothing to do
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt
+	 * .events.SelectionEvent)
 	 */
 	@Override
 	public void widgetSelected(SelectionEvent e) {
@@ -253,6 +272,8 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 			this.job.schedule();
 		} else if (this.spinner.equals(src)) {
 			this.nbGames = this.spinner.getSelection();
+		} else if (this.spinnerStart.equals(src)) {
+			this.start = this.spinnerStart.getSelection();
 		}
 	}
 
@@ -301,6 +322,19 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 		this.viewer.setContentProvider(new ArrayContentProvider());
 		this.viewer.addSelectionChangedListener(this);
 		this.viewer.setInput(this.getComputerPlayers());
+
+		// Start
+		lbl = new Label(this.shell, SWT.NONE);
+		GridDataFactory.fillDefaults().applyTo(lbl);
+		lbl.setText("Start at: ");
+		this.spinnerStart = new Spinner(this.shell, SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, true)
+				.applyTo(this.spinnerStart);
+		this.spinnerStart.setMaximum(Integer.MAX_VALUE);
+		this.spinnerStart.setMinimum(2);
+		this.spinnerStart.addSelectionListener(this);
+		this.spinnerStart.setSelection(this.start);
+
 		// Nb Games
 		lbl = new Label(this.shell, SWT.NONE);
 		GridDataFactory.fillDefaults().applyTo(lbl);
@@ -345,8 +379,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/**
 	 * Builds the stats.
-	 *
-	 * @param parent the parent
+	 * 
+	 * @param parent
+	 *            the parent
 	 * @return the composite
 	 */
 	private Composite buildStats(Composite parent) {
@@ -389,7 +424,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/**
 	 * Gets the computer players.
-	 *
+	 * 
 	 * @return the computer players
 	 */
 	private List<IComputerPlayer> getComputerPlayers() {
@@ -404,8 +439,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/**
 	 * Sets the player service.
-	 *
-	 * @param playerService the new player service
+	 * 
+	 * @param playerService
+	 *            the new player service
 	 */
 	public void setPlayerService(IPlayerService playerService) {
 		this.playerService = playerService;
@@ -413,8 +449,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/**
 	 * Sets the session service.
-	 *
-	 * @param sessionService the new session service
+	 * 
+	 * @param sessionService
+	 *            the new session service
 	 */
 	public void setSessionService(ISessionService sessionService) {
 		this.sessionService = sessionService;
@@ -422,8 +459,9 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 
 	/**
 	 * Sets the sets the service.
-	 *
-	 * @param setService the new sets the service
+	 * 
+	 * @param setService
+	 *            the new sets the service
 	 */
 	public void setSetService(ISetService setService) {
 		this.setService = setService;

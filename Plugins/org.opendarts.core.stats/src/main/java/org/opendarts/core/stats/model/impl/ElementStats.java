@@ -17,8 +17,9 @@ import org.opendarts.core.stats.model.IStatsEntry;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ElementStats.
- *
- * @param <E> the element type
+ * 
+ * @param <E>
+ *            the element type
  */
 public class ElementStats<E> implements IElementStats<E> {
 
@@ -33,8 +34,9 @@ public class ElementStats<E> implements IElementStats<E> {
 
 	/**
 	 * Instantiates a new element stats.
-	 *
-	 * @param element the element
+	 * 
+	 * @param element
+	 *            the element
 	 */
 	public ElementStats(E element) {
 		super();
@@ -45,7 +47,7 @@ public class ElementStats<E> implements IElementStats<E> {
 
 	/**
 	 * Gets the element.
-	 *
+	 * 
 	 * @return the element
 	 */
 	@Override
@@ -53,7 +55,9 @@ public class ElementStats<E> implements IElementStats<E> {
 		return this.element;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.core.stats.model.IElementStats#getStatsKeys()
 	 */
 	@Override
@@ -67,9 +71,11 @@ public class ElementStats<E> implements IElementStats<E> {
 
 	/**
 	 * Adds the player stats.
-	 *
-	 * @param player the player
-	 * @param stats the stats
+	 * 
+	 * @param player
+	 *            the player
+	 * @param stats
+	 *            the stats
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addPlayerStats(IPlayer player, IStats<E> stats) {
@@ -86,8 +92,12 @@ public class ElementStats<E> implements IElementStats<E> {
 		map.putAll((Map<String, ? extends IStatsEntry<E>>) allEntries);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.core.stats.model.IElementStats#getStatsEntry(org.opendarts.core.model.player.IPlayer, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.stats.model.IElementStats#getStatsEntry(org.opendarts
+	 * .core.model.player.IPlayer, java.lang.String)
 	 */
 	@Override
 	public IStatsEntry<E> getStatsEntry(IPlayer player, String key) {
@@ -99,15 +109,21 @@ public class ElementStats<E> implements IElementStats<E> {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.core.stats.model.IElementStats#getPlayerStats(org.opendarts.core.model.player.IPlayer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.stats.model.IElementStats#getPlayerStats(org.opendarts
+	 * .core.model.player.IPlayer)
 	 */
 	@Override
 	public IStats<E> getPlayerStats(IPlayer player) {
 		return this.playersStats.get(player);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.core.stats.model.IElementStats#getPlayers()
 	 */
 	@Override
@@ -115,7 +131,9 @@ public class ElementStats<E> implements IElementStats<E> {
 		return new ArrayList<IPlayer>(this.playersStats.keySet());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.core.stats.model.IElementStats#getStatsEntries()
 	 */
 	@Override
@@ -129,8 +147,9 @@ public class ElementStats<E> implements IElementStats<E> {
 
 	/**
 	 * Gets the best value.
-	 * @param key 
-	 *
+	 * 
+	 * @param key
+	 * 
 	 * @return the best value
 	 */
 	public IStatValue<E> getBestValue(String key) {
@@ -149,7 +168,8 @@ public class ElementStats<E> implements IElementStats<E> {
 				} else {
 					value = result.getValue();
 					pVal = statsEntry.getValue();
-					if (comparator.compare(value, pVal.getValue()) < 0) {
+					if (pVal != null
+							&& comparator.compare(value, pVal.getValue()) < 0) {
 						result = pVal;
 					}
 				}
@@ -169,8 +189,9 @@ public class ElementStats<E> implements IElementStats<E> {
 
 		/**
 		 * Instantiates a new entry.
-		 *
-		 * @param key the key
+		 * 
+		 * @param key
+		 *            the key
 		 */
 		private Entry(String key, ElementStats<E> eltStats) {
 			super();
@@ -178,7 +199,9 @@ public class ElementStats<E> implements IElementStats<E> {
 			this.eltStats = eltStats;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see org.opendarts.core.stats.model.IElementStats.IEntry#getKey()
 		 */
 		@Override
@@ -186,16 +209,23 @@ public class ElementStats<E> implements IElementStats<E> {
 			return this.key;
 		}
 
-		/* (non-Javadoc)
-		 * @see org.opendarts.core.stats.model.IElementStats.IEntry#getPlayerEntry(org.opendarts.core.model.player.IPlayer)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * org.opendarts.core.stats.model.IElementStats.IEntry#getPlayerEntry
+		 * (org.opendarts.core.model.player.IPlayer)
 		 */
 		@Override
 		public IStatsEntry<E> getPlayerEntry(IPlayer player) {
 			return this.eltStats.getStatsEntry(player, this.key);
 		}
 
-		/* (non-Javadoc)
-		 * @see org.opendarts.core.stats.model.IElementStats.IEntry#getBestValue()
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * org.opendarts.core.stats.model.IElementStats.IEntry#getBestValue()
 		 */
 		@Override
 		public IStatValue<E> getBestValue() {

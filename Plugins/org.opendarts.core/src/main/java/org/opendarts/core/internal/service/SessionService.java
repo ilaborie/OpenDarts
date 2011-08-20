@@ -3,6 +3,7 @@ package org.opendarts.core.internal.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.opendarts.core.model.game.IGameDefinition;
@@ -14,11 +15,17 @@ import org.opendarts.core.model.session.SessionEvent;
 import org.opendarts.core.model.session.impl.Session;
 import org.opendarts.core.service.session.ISessionService;
 import org.opendarts.core.service.session.ISetService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class SessionService.
  */
 public class SessionService implements ISessionService, ISessionListener {
+
+	/** The logger. */
+	private static final Logger LOG = LoggerFactory
+			.getLogger(SessionService.class);
 
 	/** The current session. */
 	private Session currentSession;
@@ -29,6 +36,9 @@ public class SessionService implements ISessionService, ISessionListener {
 	/** The set service. */
 	private final AtomicReference<ISetService> setService;
 
+	/** The listeners. */
+	private final CopyOnWriteArraySet<ISessionListener> listeners;
+
 	/**
 	 * Instantiates a new session service.
 	 */
@@ -36,9 +46,36 @@ public class SessionService implements ISessionService, ISessionListener {
 		super();
 		this.sessions = new ArrayList<ISession>();
 		this.setService = new AtomicReference<ISetService>();
+		this.listeners = new CopyOnWriteArraySet<ISessionListener>();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.prototype.model.session.ISession#addListener(org.opendarts
+	 * .prototype.model.session.ISessionListener)
+	 */
+	@Override
+	public void addListener(ISessionListener listener) {
+		this.listeners.add(listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.prototype.model.session.ISession#removeListener(org.opendarts
+	 * .prototype.model.session.ISessionListener)
+	 */
+	@Override
+	public void removeListener(ISessionListener listener) {
+		this.listeners.remove(listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.prototype.service.ISessionService#getSession()
 	 */
 	@Override
@@ -51,7 +88,9 @@ public class SessionService implements ISessionService, ISessionListener {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.core.service.session.ISessionService#getAllSessions()
 	 */
 	@Override
@@ -59,7 +98,9 @@ public class SessionService implements ISessionService, ISessionListener {
 		return Collections.unmodifiableList(this.sessions);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.prototype.service.ISessionService#closeSession()
 	 */
 	@Override
@@ -70,8 +111,11 @@ public class SessionService implements ISessionService, ISessionListener {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opendarts.core.service.session.ISessionService#createNewSession(int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.service.session.ISessionService#createNewSession(int)
 	 */
 	@Override
 	public ISession createNewSession(int nbSets, IGameDefinition gameDefinition) {
@@ -81,34 +125,38 @@ public class SessionService implements ISessionService, ISessionListener {
 		session.addListener(this);
 		this.currentSession = session;
 		session.init();
+		this.fireSessionCreated(session);
 		return session;
 	}
 
 	/**
 	 * Notify session event.
-	 *
-	 * @param event the event
+	 * 
+	 * @param event
+	 *            the event
 	 */
 	@Override
 	public void notifySessionEvent(SessionEvent event) {
 		ISession session = event.getSession();
 		switch (event.getType()) {
-			case SESSION_CANCELED:
-			case SESSION_FINISHED:
-				session.removeListener(this);
-				break;
-			case NEW_CURRENT_SET:
-			case SESSION_INITIALIZED:
-			default:
-				break;
+		case SESSION_CANCELED:
+		case SESSION_FINISHED:
+			session.removeListener(this);
+			break;
+		case NEW_CURRENT_SET:
+		case SESSION_INITIALIZED:
+		default:
+			break;
 		}
 	}
 
 	/**
 	 * Handle finished set.
-	 *
-	 * @param event the event
-	 * @param set the set
+	 * 
+	 * @param event
+	 *            the event
+	 * @param set
+	 *            the set
 	 */
 	public void handleFinishedSet(ISet set) {
 		Session session = (Session) set.getParentSession();
@@ -128,20 +176,39 @@ public class SessionService implements ISessionService, ISessionListener {
 
 	/**
 	 * Creates the session.
-	 *
+	 * 
 	 * @return the i session
 	 */
 	private Session createSession() {
 		Session session = new Session(this);
 		this.sessions.add(session);
 		session.init();
+		this.fireSessionCreated(session);
 		return session;
 	}
 
 	/**
+	 * Fire session created.
+	 * 
+	 * @param session
+	 *            the session
+	 */
+	private void fireSessionCreated(Session session) {
+		for (final ISessionListener listener : this.listeners) {
+			try {
+				listener.sessionCreated(session);
+			} catch (Throwable t) {
+				LOG.error("Error when sending session created event: "
+						+ session, t);
+			}
+		}
+	}
+
+	/**
 	 * Sets the sets the service.
-	 *
-	 * @param setService the new sets the service
+	 * 
+	 * @param setService
+	 *            the new sets the service
 	 */
 	public void setSetService(ISetService setService) {
 		this.setService.set(setService);
@@ -149,10 +216,23 @@ public class SessionService implements ISessionService, ISessionListener {
 
 	/**
 	 * Unset set service.
-	 *
-	 * @param setService the set service
+	 * 
+	 * @param setService
+	 *            the set service
 	 */
 	public void unsetSetService(ISetService setService) {
 		this.setService.compareAndSet(setService, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opendarts.core.model.session.ISessionListener#sessionCreated(org.
+	 * opendarts.core.model.session.ISession)
+	 */
+	@Override
+	public void sessionCreated(ISession session) {
+		// Nothing to do
 	}
 }

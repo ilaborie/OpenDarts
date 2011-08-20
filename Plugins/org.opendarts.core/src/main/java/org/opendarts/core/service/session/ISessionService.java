@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.session.ISession;
+import org.opendarts.core.model.session.ISessionListener;
 
 /**
  * The Interface SessionService.
@@ -38,5 +39,19 @@ public interface ISessionService {
 	 * @return the i session
 	 */
 	ISession createNewSession(int nbSets, IGameDefinition gameDefinition);
+
+	/**
+	 * Adds the listener.
+	 *
+	 * @param listener the listener
+	 */
+	void addListener(ISessionListener listener);
+
+	/**
+	 * Removes the listener.
+	 *
+	 * @param listener the listener
+	 */
+	void removeListener(ISessionListener listener);
 
 }
