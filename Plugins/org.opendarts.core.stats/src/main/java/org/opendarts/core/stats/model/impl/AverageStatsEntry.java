@@ -3,6 +3,8 @@
  */
 package org.opendarts.core.stats.model.impl;
 
+import java.util.Comparator;
+
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
@@ -22,6 +24,36 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 	 */
 	public AverageStatsEntry(String key) {
 		super(key);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IStatsEntry#getComparator()
+	 */
+	@Override
+	public Comparator<AvgEntry> getComparator() {
+		return new Comparator<AvgEntry>() {
+			@Override
+			public int compare(AvgEntry o1, AvgEntry o2) {
+				int result;
+				if (o1==null && o2!=null) {
+					result = -1;
+				} else if (o2!=null && o1==null) {
+					result = 1;
+				} else if (o1==null && o2==null) {
+					result = 0;
+				} else {
+					double diff = o1.getAvg() - o2.getAvg();
+					if (diff < 0.005) {
+						result = 0;
+					} else if (diff>0) {
+						result = 1;
+					} else {
+						result = -1;
+					}
+				}
+				return result;
+			}
+		};
 	}
 
 	/* (non-Javadoc)

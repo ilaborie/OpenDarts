@@ -11,10 +11,34 @@ import org.opendarts.core.model.player.IPlayer;
  */
 public interface IElementStats<E> {
 
+	/**
+	 * The Interface IEntry.
+	 *
+	 * @param <E> the element type
+	 */
 	public interface IEntry<E> {
+
+		/**
+		 * Gets the key.
+		 *
+		 * @return the key
+		 */
 		String getKey();
 
+		/**
+		 * Gets the player entry.
+		 *
+		 * @param player the player
+		 * @return the player entry
+		 */
 		IStatsEntry<E> getPlayerEntry(IPlayer player);
+
+		/**
+		 * Gets the best value.
+		 *
+		 * @return the best value
+		 */
+		IStatValue<E> getBestValue();
 	}
 
 	/**
@@ -35,6 +59,7 @@ public interface IElementStats<E> {
 	 * Gets the stats entry.
 	 *
 	 * @param player the player
+	 * @param key the key
 	 * @return the stats entry
 	 */
 	IStatsEntry<E> getStatsEntry(IPlayer player, String key);

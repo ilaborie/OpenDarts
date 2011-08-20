@@ -1,6 +1,7 @@
 package org.opendarts.core.stats.model.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.TreeSet;
 
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.stats.model.IElementStats;
+import org.opendarts.core.stats.model.IStatValue;
 import org.opendarts.core.stats.model.IStats;
 import org.opendarts.core.stats.model.IStatsEntry;
 
@@ -126,6 +128,37 @@ public class ElementStats<E> implements IElementStats<E> {
 	}
 
 	/**
+	 * Gets the best value.
+	 * @param key 
+	 *
+	 * @return the best value
+	 */
+	public IStatValue<E> getBestValue(String key) {
+		IStatValue<E> result = null;
+
+		IStatsEntry<E> statsEntry;
+		Comparator<E> comparator;
+		E value;
+		IStatValue<E> pVal;
+		for (Map<String, IStatsEntry<E>> map : this.playersEntries.values()) {
+			statsEntry = map.get(key);
+			comparator = statsEntry.getComparator();
+			if (comparator != null) {
+				if (result == null || result.getValue() == null) {
+					result = statsEntry.getValue();
+				} else {
+					value = result.getValue();
+					pVal = statsEntry.getValue();
+					if (comparator.compare(value, pVal.getValue()) < 0) {
+						result = pVal;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * The Class Entry.
 	 */
 	private final class Entry implements IEntry<E> {
@@ -161,6 +194,13 @@ public class ElementStats<E> implements IElementStats<E> {
 			return this.eltStats.getStatsEntry(player, this.key);
 		}
 
+		/* (non-Javadoc)
+		 * @see org.opendarts.core.stats.model.IElementStats.IEntry#getBestValue()
+		 */
+		@Override
+		public IStatValue<E> getBestValue() {
+			return this.eltStats.getBestValue(this.key);
+		}
 	}
 
 }

@@ -32,6 +32,11 @@ public abstract class BestStatsEntry<T> extends AbstractStatsEntry<T> {
 		this.comparator = comparator;
 		this.oldBest = new HashMap<T, T>();
 	}
+	
+	@Override
+	public Comparator<T> getComparator() {
+		return this.comparator;
+	}
 
 	/**
 	 * Adds the new input.

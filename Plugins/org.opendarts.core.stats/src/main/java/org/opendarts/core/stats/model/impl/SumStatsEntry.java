@@ -3,6 +3,8 @@
  */
 package org.opendarts.core.stats.model.impl;
 
+import java.util.Comparator;
+
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
@@ -22,6 +24,14 @@ public abstract class SumStatsEntry extends AbstractStatsEntry<Number> {
 	 */
 	public SumStatsEntry(String key) {
 		super(key);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IStatsEntry#getComparator()
+	 */
+	@Override
+	public Comparator<Number> getComparator() {
+		return new NumberComparator();
 	}
 
 	/* (non-Javadoc)

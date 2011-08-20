@@ -1,4 +1,9 @@
+/*
+ * 
+ */
 package org.opendarts.core.x01.service.entry;
+
+import java.util.Comparator;
 
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
@@ -22,6 +27,15 @@ public class OutsOver100StatsEntry extends AbstractStatsEntry<IntegerListEntry> 
 	 */
 	public OutsOver100StatsEntry(String key) {
 		super(key);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IStatsEntry#getComparator()
+	 */
+	@Override
+	public Comparator<IntegerListEntry> getComparator() {
+		// Not comparable
+		return null;
 	}
 
 	/* (non-Javadoc)

@@ -1,7 +1,5 @@
 package org.opendarts.ui.stats.view;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -20,7 +18,6 @@ import org.opendarts.core.service.session.ISessionService;
 import org.opendarts.ui.OpenDartsUiPlugin;
 import org.opendarts.ui.label.OpenDartsLabelProvider;
 import org.opendarts.ui.stats.content.StatsTreeContentProvider;
-import org.opendarts.ui.utils.ISharedImages;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 
 /**
@@ -113,34 +110,7 @@ public class StatsExplorer extends MasterDetailsBlock {
 	 */
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
-		final ScrolledForm form = managedForm.getForm();
-		// Horizontal
-		Action haction = new Action("hor", IAction.AS_RADIO_BUTTON) {
-			@Override
-			public void run() {
-				StatsExplorer.this.sashForm.setOrientation(SWT.HORIZONTAL);
-				form.reflow(true);
-			}
-		};
-		haction.setChecked(true);
-		haction.setToolTipText("Horizontal orientation");
-		haction.setImageDescriptor(OpenDartsUiPlugin
-				.getImageDescriptor(ISharedImages.IMG_SEP_H));
-
-		// Vertical
-		Action vaction = new Action("ver", IAction.AS_RADIO_BUTTON) {
-			@Override
-			public void run() {
-				StatsExplorer.this.sashForm.setOrientation(SWT.VERTICAL);
-				form.reflow(true);
-			}
-		};
-		vaction.setChecked(false);
-		vaction.setToolTipText("Vertical orientation");
-		vaction.setImageDescriptor(OpenDartsUiPlugin
-				.getImageDescriptor(ISharedImages.IMG_SEP_V));
-		form.getToolBarManager().add(haction);
-		form.getToolBarManager().add(vaction);
+		// No action yet
 	}
 
 }

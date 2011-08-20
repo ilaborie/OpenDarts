@@ -1,5 +1,6 @@
 package org.opendarts.core.stats.model.impl;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,14 @@ public abstract class BestNumberStatsEntry extends AbstractStatsEntry<Number> {
 	public BestNumberStatsEntry(String key) {
 		super(key);
 		this.oldBest = new HashMap<Number, Number>();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IStatsEntry#getComparator()
+	 */
+	@Override
+	public Comparator<Number> getComparator() {
+		return new NumberComparator();
 	}
 
 	/**

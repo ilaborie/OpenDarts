@@ -1,5 +1,7 @@
 package org.opendarts.core.stats.model.impl;
 
+import java.util.Comparator;
+
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
@@ -27,6 +29,15 @@ public class PlayedSetStatsEntry extends IncrementStatsEntry {
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		return ((gameEntry.getRound() == 1) && (game.getParentSet()
 				.getAllGame().size() == 1));
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IStatsEntry#getComparator()
+	 */
+	@Override
+	public Comparator<Number> getComparator() {
+		// No comparator
+		return null;
 	}
 
 }

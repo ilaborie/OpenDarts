@@ -1,5 +1,7 @@
 package org.opendarts.core.stats.model.impl;
 
+import java.util.Comparator;
+
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
@@ -10,6 +12,7 @@ import org.opendarts.core.model.player.IPlayer;
  *
  */
 public abstract class IncrementStatsEntry extends AbstractStatsEntry<Number> {
+
 
 	/** The count. */
 	public int count;
@@ -22,6 +25,11 @@ public abstract class IncrementStatsEntry extends AbstractStatsEntry<Number> {
 	public IncrementStatsEntry(String key) {
 		super(key);
 		this.count = 0;
+	}
+
+	@Override
+	public Comparator<Number> getComparator() {
+		return new NumberComparator();
 	}
 
 	/**
