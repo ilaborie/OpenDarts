@@ -80,12 +80,11 @@ public class SessionService implements ISessionService, ISessionListener {
 	 */
 	@Override
 	public ISession getCurrentSession() {
-		ISession result = this.currentSession;
-		if (result == null) {
-			this.currentSession = this.createSession();
-			result = this.currentSession;
+		if (this.currentSession == null) {
+			Session session = new Session(this);
+			this.initializeSession(session);
 		}
-		return result;
+		return this.currentSession;
 	}
 
 	/*
@@ -121,12 +120,21 @@ public class SessionService implements ISessionService, ISessionListener {
 	public ISession createNewSession(int nbSets, IGameDefinition gameDefinition) {
 		this.closeSession();
 		Session session = new Session(this, nbSets, gameDefinition);
-		this.sessions.add(session);
-		session.addListener(this);
-		this.currentSession = session;
-		session.init();
-		this.fireSessionCreated(session);
+		this.initializeSession(session);
 		return session;
+	}
+
+	/**
+	 * Initialize session.
+	 *
+	 * @param session the session
+	 */
+	private void initializeSession(Session session) {
+		this.sessions.add(session);
+		this.currentSession = session;
+		this.currentSession.addListener(this);
+		this.currentSession.init();
+		this.fireSessionCreated(this.currentSession);
 	}
 
 	/**
@@ -139,14 +147,14 @@ public class SessionService implements ISessionService, ISessionListener {
 	public void notifySessionEvent(SessionEvent event) {
 		ISession session = event.getSession();
 		switch (event.getType()) {
-		case SESSION_CANCELED:
-		case SESSION_FINISHED:
-			session.removeListener(this);
-			break;
-		case NEW_CURRENT_SET:
-		case SESSION_INITIALIZED:
-		default:
-			break;
+			case SESSION_CANCELED:
+			case SESSION_FINISHED:
+				session.removeListener(this);
+				break;
+			case NEW_CURRENT_SET:
+			case SESSION_INITIALIZED:
+			default:
+				break;
 		}
 	}
 
@@ -172,19 +180,6 @@ public class SessionService implements ISessionService, ISessionListener {
 		} else if (winningSet < session.getNbSetToWin()) {
 			session.finish(winner);
 		}
-	}
-
-	/**
-	 * Creates the session.
-	 * 
-	 * @return the i session
-	 */
-	private Session createSession() {
-		Session session = new Session(this);
-		this.sessions.add(session);
-		session.init();
-		this.fireSessionCreated(session);
-		return session;
 	}
 
 	/**

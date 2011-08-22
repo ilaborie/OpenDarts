@@ -8,6 +8,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.opendarts.core.service.session.ISessionService;
+import org.opendarts.ui.utils.listener.SessionListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -45,6 +47,8 @@ public class OpenDartsUiPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		ISessionService sessionService = getService(ISessionService.class);
+		sessionService.addListener(new SessionListener());
 	}
 
 	/*

@@ -1,12 +1,18 @@
 package org.opendarts.ui.utils.listener;
 
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISessionListener;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.model.session.SessionEvent;
+import org.opendarts.ui.OpenDartsUiPlugin;
 import org.opendarts.ui.editor.SetEditorInput;
+import org.opendarts.ui.service.IGameUiProvider;
+import org.opendarts.ui.service.IGameUiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +25,8 @@ public class SessionListener implements ISessionListener {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(SessionListener.class);
 
-	/** The page. */
-	private final IWorkbenchPage page;
-
-	/** The editor id. */
-	private final String editorId;
+	/** The game ui provider. */
+	private final IGameUiProvider gameUiProvider;
 
 	/**
 	 * Instantiates a new session listener.
@@ -31,10 +34,10 @@ public class SessionListener implements ISessionListener {
 	 * @param page the page
 	 * @param editorId the editor id
 	 */
-	public SessionListener(IWorkbenchPage page, String editorId) {
+	public SessionListener() {
 		super();
-		this.page = page;
-		this.editorId = editorId;
+		this.gameUiProvider = OpenDartsUiPlugin
+				.getService(IGameUiProvider.class);
 	}
 
 	/* (non-Javadoc)
@@ -57,13 +60,13 @@ public class SessionListener implements ISessionListener {
 				break;
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.session.ISessionListener#sessionCreated(org.opendarts.core.model.session.ISession)
 	 */
 	@Override
 	public void sessionCreated(ISession session) {
-		// Nothing to do
+		session.addListener(this);
 	}
 
 	/**
@@ -72,10 +75,16 @@ public class SessionListener implements ISessionListener {
 	 * @param set the set
 	 */
 	public void openEditor(ISet set) {
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
 		SetEditorInput input = new SetEditorInput(set);
 		try {
-			this.page.openEditor(input, this.editorId);
-			//			this.setService.startSet(set);
+			IGameDefinition definition = set.getGameDefinition();
+			IGameUiService gameUiService = this.gameUiProvider
+					.getGameUiService(definition);
+			String editorId = gameUiService.getGameEditor(definition);
+			page.openEditor(input, editorId);
 		} catch (PartInitException e) {
 			LOG.error("Could not open editor", e);
 		}

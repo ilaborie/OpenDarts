@@ -2,8 +2,10 @@ package org.opendarts.ui.x01.service;
 
 import org.eclipse.swt.widgets.Composite;
 import org.opendarts.core.model.game.IGame;
+import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.ui.service.IGameUiService;
+import org.opendarts.ui.x01.editor.SetX01Editor;
 import org.opendarts.ui.x01.utils.comp.GameDetailComposite;
 
 /**
@@ -44,6 +46,14 @@ public class GameX01UiService implements IGameUiService {
 	@Override
 	public Composite getGameDetail(Composite parent, IGame game) {
 		return new GameDetailComposite(parent, game);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.service.IGameUiService#getGameEditor(org.opendarts.core.model.game.IGameDefinition)
+	 */
+	@Override
+	public String getGameEditor(IGameDefinition gameDefinition) {
+		return SetX01Editor.ID;
 	}
 
 }
