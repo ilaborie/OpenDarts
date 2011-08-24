@@ -15,6 +15,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.ToolTip;
@@ -797,6 +798,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 		Text txt;
 		TableViewer scoreViewer = this.scoreViewers.get(player);
 		scoreViewer.update(entry, null);
+		scoreViewer.setSelection(StructuredSelection.EMPTY);
 		if (player != null) {
 			// Update score left
 			txt = this.playerScoreLeft.get(player);
