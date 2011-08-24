@@ -10,6 +10,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.model.session.ISetListener;
@@ -59,6 +60,19 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		super();
 		this.pages = new HashMap<GameX01, GameX01Page>();
 		this.setService = X01UiPlugin.getService(ISetService.class);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.MultiPageEditorPart#setFocus()
+	 */
+	@Override
+	public void setFocus() {
+		IFormPage activePage = this.getActivePageInstance();
+		if (activePage!=null) {
+			activePage.setFocus();
+		} else {
+			super.setFocus();
+		}
 	}
 
 	/* (non-Javadoc)
