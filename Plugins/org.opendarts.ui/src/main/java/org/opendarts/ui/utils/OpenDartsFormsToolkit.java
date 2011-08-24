@@ -7,11 +7,14 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
@@ -29,7 +32,8 @@ import org.opendarts.ui.pref.IGeneralPrefs;
 /**
  * The Class OpenDartsFormsToolkit.
  */
-public class OpenDartsFormsToolkit extends FormToolkit implements IGeneralPrefs {
+public class OpenDartsFormsToolkit extends FormToolkit implements
+		IGeneralPrefs, IPropertyChangeListener {
 
 	/** The form colors. */
 	private static FormColors formColors;
@@ -43,6 +47,13 @@ public class OpenDartsFormsToolkit extends FormToolkit implements IGeneralPrefs 
 	/** The display. */
 	private static Display display;
 
+	private List<String> fonts = Arrays.asList(FONT_SCORE_INPUT,
+			FONT_SCORE_LEFT, FONT_SCORE_SHEET, FONT_SCORE_SHEET_LEFT,
+			FONT_STATS, FONT_STATS_LABEL);
+
+	private List<String> colors = Arrays.asList(COLOR_ACTIVE, COLOR_INACTIVE,
+			COLOR_WINNING, COLOR_BROKEN);
+
 	/**
 	 * Instantiates a new open darts forms toolkit.
 	 *
@@ -54,14 +65,47 @@ public class OpenDartsFormsToolkit extends FormToolkit implements IGeneralPrefs 
 				.put(FONT_BOLD,
 						fontRegistry.getBold(JFaceResources.DEFAULT_FONT)
 								.getFontData());
-		List<String> fonts = Arrays.asList(FONT_SCORE_INPUT, FONT_SCORE_LEFT,
-				FONT_SCORE_SHEET, FONT_SCORE_SHEET_LEFT, FONT_STATS,
-				FONT_STATS_LABEL);
 
+		IPreferenceStore store = OpenDartsUiPlugin.getOpenDartsPreference();
+		store.addPropertyChangeListener(this);
+		this.initializeFromPref();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		String property = event.getProperty();
+		if (fonts.contains(property) || colors.contains(property)) {
+			this.initializeFromPref();
+		}
+	}
+
+	/**
+	 * Initialize font.
+	 */
+	private void initializeFromPref() {
+		IPreferenceStore store = OpenDartsUiPlugin.getOpenDartsPreference();
+//		Font font;
 		for (String key : fonts) {
 			FontData[] fontDataArray = PreferenceConverter.getFontDataArray(
-					OpenDartsUiPlugin.getOpenDartsPreference(), key);
+					store, key);
+//			font = fontRegistry.get(key);
+//			if (font != null) {
+//				font.dispose();
+//			}
 			fontRegistry.put(key, fontDataArray);
+		}
+
+//		Color color;
+		for (String key : colors) {
+//			color = formColors.getColor(key);
+//			if (color != null) {
+//				color.dispose();
+//			}
+			formColors.createColor(key,
+					PreferenceConverter.getColor(store, key));
 		}
 	}
 
@@ -73,19 +117,7 @@ public class OpenDartsFormsToolkit extends FormToolkit implements IGeneralPrefs 
 	 */
 	public static FormColors getFormColors(Display display) {
 		if (formColors == null) {
-			IPreferenceStore store = OpenDartsUiPlugin.getOpenDartsPreference();
-
-			formColors = new FormColors(display);
-
-			List<String> colors = Arrays.asList(COLOR_ACTIVE, COLOR_INACTIVE,
-					COLOR_WINNING, COLOR_BROKEN);
-
-			for (String key : colors) {
-				formColors.createColor(key,
-						PreferenceConverter.getColor(store, key));
-			}
-
-			formColors.markShared();
+			getToolkit();
 		}
 		return formColors;
 	}
@@ -108,6 +140,8 @@ public class OpenDartsFormsToolkit extends FormToolkit implements IGeneralPrefs 
 	public static OpenDartsFormsToolkit getToolkit() {
 		if (toolkit == null) {
 			display = Display.getDefault();
+			formColors = new FormColors(display);
+			formColors.markShared();
 			toolkit = new OpenDartsFormsToolkit(getFormColors(display));
 		}
 		return toolkit;
