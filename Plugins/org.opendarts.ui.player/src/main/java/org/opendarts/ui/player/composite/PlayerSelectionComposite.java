@@ -48,7 +48,7 @@ public class PlayerSelectionComposite extends Composite implements
 	private final List<IPlayer> players;
 
 	/** The current player. */
-	private IPlayer currentPlayer;
+	private final List<IPlayer> currentPlayers;
 
 	/** The btn user add. */
 	private Button btnUserAdd;
@@ -81,6 +81,7 @@ public class PlayerSelectionComposite extends Composite implements
 		super(parent, SWT.NONE);
 
 		this.players = new ArrayList<IPlayer>(players);
+		this.currentPlayers = new ArrayList<IPlayer>();
 		this.playerService = OpenDartsPlayerUiPlugin
 				.getService(IPlayerService.class);
 		this.listeners = new CopyOnWriteArraySet<IPlayerSelectionListener>();
@@ -144,7 +145,7 @@ public class PlayerSelectionComposite extends Composite implements
 	 * @param parent the parent
 	 */
 	protected void createContents(Composite parent) {
-		this.tablePlayers = new TableViewer(parent, SWT.V_SCROLL);
+		this.tablePlayers = new TableViewer(parent, SWT.V_SCROLL | SWT.MULTI);
 		GridDataFactory.fillDefaults().hint(100, 60).grab(true, true)
 				.applyTo(this.tablePlayers.getTable());
 		this.tablePlayers.setLabelProvider(new PlayerLabelProvider());
@@ -171,7 +172,6 @@ public class PlayerSelectionComposite extends Composite implements
 		this.btnUserDel.setImage(OpenDartsPlayerUiPlugin
 				.getImage(ISharedImages.IMG_USER_DELETE));
 		GridDataFactory.fillDefaults().applyTo(this.btnUserDel);
-		this.btnUserDel.setEnabled(this.currentPlayer != null);
 		this.btnUserDel.addSelectionListener(this);
 
 		new Label(cmpBtn, SWT.HORIZONTAL);
@@ -190,15 +190,15 @@ public class PlayerSelectionComposite extends Composite implements
 		this.btnUp.setImage(OpenDartsUiPlugin
 				.getImage(org.opendarts.ui.utils.ISharedImages.IMG_UP));
 		GridDataFactory.fillDefaults().applyTo(this.btnUp);
-		this.btnUp.setEnabled(this.currentPlayer != null);
 		this.btnUp.addSelectionListener(this);
 
 		this.btnDown = new Button(cmpBtn, SWT.PUSH);
 		this.btnDown.setImage(OpenDartsUiPlugin
 				.getImage(org.opendarts.ui.utils.ISharedImages.IMG_DOWN));
 		GridDataFactory.fillDefaults().applyTo(this.btnDown);
-		this.btnDown.setEnabled(this.currentPlayer != null);
 		this.btnDown.addSelectionListener(this);
+
+		this.updateButtonsState();
 	}
 
 	/**
@@ -217,10 +217,11 @@ public class PlayerSelectionComposite extends Composite implements
 	public void selectionChanged(SelectionChangedEvent event) {
 		IStructuredSelection sel = (IStructuredSelection) this.tablePlayers
 				.getSelection();
+		this.currentPlayers.clear();
 		if (!sel.isEmpty()) {
-			this.currentPlayer = (IPlayer) sel.getFirstElement();
-		} else {
-			this.currentPlayer = null;
+			for (Object obj : sel.toArray()) {
+				this.currentPlayers.add((IPlayer) obj);
+			}
 		}
 		this.updateButtonsState();
 	}
@@ -246,12 +247,12 @@ public class PlayerSelectionComposite extends Composite implements
 		} else if (obj.equals(this.btnUserNew)) {
 			this.newPlayer();
 		} else if (obj.equals(this.btnUp)) {
-			int index = this.players.indexOf(this.currentPlayer);
+			int index = this.players.indexOf(this.currentPlayers.get(0));
 			Collections.swap(this.players, index, index - 1);
 			this.tablePlayers.setInput(this.players);
 			this.updateButtonsState();
 		} else if (obj.equals(this.btnDown)) {
-			int index = this.players.indexOf(this.currentPlayer);
+			int index = this.players.indexOf(this.currentPlayers.get(0));
 			Collections.swap(this.players, index, index + 1);
 			this.tablePlayers.setInput(this.players);
 			this.updateButtonsState();
@@ -263,9 +264,9 @@ public class PlayerSelectionComposite extends Composite implements
 	 * Removes the player.
 	 */
 	private void removePlayer() {
-		boolean remove = this.players.remove(this.currentPlayer);
+		boolean remove = this.players.removeAll(this.currentPlayers);
 		if (remove) {
-			this.tablePlayers.remove(this.currentPlayer);
+			this.tablePlayers.remove(this.currentPlayers.toArray());
 			this.tablePlayers.setSelection(StructuredSelection.EMPTY);
 		}
 	}
@@ -283,7 +284,7 @@ public class PlayerSelectionComposite extends Composite implements
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if ((e.keyCode == SWT.DEL) && (this.currentPlayer != null)) {
+		if ((e.keyCode == SWT.DEL) && (!this.currentPlayers.isEmpty())) {
 			this.removePlayer();
 		}
 	}
@@ -318,12 +319,16 @@ public class PlayerSelectionComposite extends Composite implements
 	 * Update buttons state.
 	 */
 	private void updateButtonsState() {
-		this.btnUserDel.setEnabled(this.currentPlayer != null);
+		this.btnUserDel.setEnabled(!this.currentPlayers.isEmpty());
 
-		int index = this.players.indexOf(this.currentPlayer);
-		this.btnUp.setEnabled((this.currentPlayer != null) && (index > 0));
-		this.btnDown.setEnabled((this.currentPlayer != null)
-				&& (index < (this.players.size() - 1)));
+		if (this.currentPlayers.size() == 1) {
+			int index = this.players.indexOf(this.currentPlayers.get(0));
+			this.btnUp.setEnabled(index > 0);
+			this.btnDown.setEnabled(index < (this.players.size() - 1));
+		} else {
+			this.btnDown.setEnabled(false);
+			this.btnUp.setEnabled(false);
+		}
 	}
 
 	/**

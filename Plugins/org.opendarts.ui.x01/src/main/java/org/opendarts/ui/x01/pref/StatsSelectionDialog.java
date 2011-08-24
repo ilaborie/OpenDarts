@@ -1,5 +1,7 @@
 package org.opendarts.ui.x01.pref;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -12,7 +14,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 public class StatsSelectionDialog extends ElementListSelectionDialog {
 
 	/** The stats. */
-	private String stats;
+	private List<String> stats;
 
 	/**
 	 * Instantiates a new player selection dialog.
@@ -30,7 +32,7 @@ public class StatsSelectionDialog extends ElementListSelectionDialog {
 		this.setEmptyListMessage("Please select at least one statistics");
 		this.setHelpAvailable(false);
 		this.setMessage("Choose statistics");
-		this.setMultipleSelection(false);
+		this.setMultipleSelection(true);
 	}
 
 	/* (non-Javadoc)
@@ -38,10 +40,14 @@ public class StatsSelectionDialog extends ElementListSelectionDialog {
 	 */
 	@Override
 	protected void okPressed() {
-		if (this.getSelectedElements().length > 0) {
-			this.stats = (String) this.getSelectedElements()[0];
+		Object[] elements = this.getSelectedElements();
+		if (elements.length > 0) {
+			this.stats = new ArrayList<String>();
+			for (Object obj : elements) {
+				this.stats.add((String) obj);
+			}
 		} else {
-			this.stats = null;
+			this.stats = Collections.emptyList();
 		}
 		super.okPressed();
 	}
@@ -51,7 +57,7 @@ public class StatsSelectionDialog extends ElementListSelectionDialog {
 	 *
 	 * @return the stats
 	 */
-	public String getStats() {
+	public List<String> getStats() {
 		return this.stats;
 	}
 

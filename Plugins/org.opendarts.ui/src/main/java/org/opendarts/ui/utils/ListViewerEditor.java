@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -17,15 +18,17 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Widget;
 import org.opendarts.ui.OpenDartsUiPlugin;
 
@@ -35,7 +38,7 @@ import org.opendarts.ui.OpenDartsUiPlugin;
  * @param <T> the generic type
  */
 public abstract class ListViewerEditor<T> extends FieldEditor implements
-		ISelectionChangedListener {
+		ISelectionChangedListener, KeyListener {
 
 	/**
 	 * The list widget; <code>null</code> if none
@@ -75,7 +78,7 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	private SelectionListener selectionListener;
 
 	/** The selected. */
-	private T selected;
+	private List<T> selected;
 
 	/** The list. */
 	private List<T> list;
@@ -104,12 +107,12 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 */
 	private void addPressed() {
 		this.setPresentsDefaultValue(false);
-		T elt = this.getNewInputObject();
+		List<T> elts = this.getNewInputObject();
 
-		if (elt != null) {
-			this.list.add(elt);
+		if (elts != null && !elts.isEmpty()) {
+			this.list.addAll(elts);
 			this.tableViewer.refresh();
-			this.tableViewer.setSelection(new StructuredSelection(elt));
+			this.tableViewer.setSelection(new StructuredSelection(elts));
 			this.selectionChanged();
 		}
 	}
@@ -193,21 +196,17 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	@Override
 	protected void doFillIntoGrid(Composite parent, int numColumns) {
 		Control control = this.getLabelControl(parent);
-		GridData gd = new GridData();
-		gd.horizontalSpan = numColumns;
-		control.setLayoutData(gd);
+		GridDataFactory.fillDefaults().span(numColumns, 1).applyTo(control);
 
 		this.tableViewer = this.getListControl(parent);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.verticalAlignment = GridData.FILL;
-		gd.horizontalSpan = numColumns - 1;
-		gd.grabExcessHorizontalSpace = true;
-		this.tableViewer.getControl().setLayoutData(gd);
+		Table table = this.tableViewer.getTable();
+		GridDataFactory.fillDefaults().grab(true, true).span(numColumns - 1, 1)
+				.applyTo(table);
+		table.addKeyListener(this);
 
 		this.buttonBox = this.getButtonBoxControl(parent);
-		gd = new GridData();
-		gd.verticalAlignment = GridData.BEGINNING;
-		this.buttonBox.setLayoutData(gd);
+		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BEGINNING)
+				.applyTo(this.buttonBox);
 
 		ColumnViewerToolTipSupport.enableFor(this.tableViewer);
 	}
@@ -271,9 +270,8 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	public Composite getButtonBoxControl(Composite parent) {
 		if (this.buttonBox == null) {
 			this.buttonBox = new Composite(parent, SWT.NULL);
-			GridLayout layout = new GridLayout();
-			layout.marginWidth = 0;
-			this.buttonBox.setLayout(layout);
+			GridLayoutFactory.fillDefaults().applyTo(buttonBox);
+
 			this.createButtons(this.buttonBox);
 			this.buttonBox.addDisposeListener(new DisposeListener() {
 				@Override
@@ -302,7 +300,7 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 */
 	public TableViewer getListControl(Composite parent) {
 		if (this.tableViewer == null) {
-			this.tableViewer = new TableViewer(parent, SWT.BORDER | SWT.SINGLE
+			this.tableViewer = new TableViewer(parent, SWT.BORDER | SWT.MULTI
 					| SWT.V_SCROLL | SWT.H_SCROLL);
 			this.tableViewer.setContentProvider(new ArrayContentProvider());
 			this.tableViewer.setLabelProvider(this.getLabelProvider());
@@ -331,7 +329,7 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 *
 	 * @return a new item
 	 */
-	protected abstract T getNewInputObject();
+	protected abstract List<T> getNewInputObject();
 
 	/* (non-Javadoc)
 	 * Method declared on FieldEditor.
@@ -389,10 +387,28 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	private void removePressed() {
 		this.setPresentsDefaultValue(false);
 
-		boolean remove = this.list.remove(this.selected);
+		boolean remove = this.list.removeAll(this.selected);
 		if (remove) {
-			this.tableViewer.remove(this.selected);
+			this.tableViewer.remove(this.selected.toArray());
 			this.tableViewer.setSelection(StructuredSelection.EMPTY);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.KeyListener#keyPressed(org.eclipse.swt.events.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// Nothing to do
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.KeyListener#keyReleased(org.eclipse.swt.events.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if ((e.keyCode == SWT.DEL) && !(this.selected.isEmpty())) {
+			this.removePressed();
 		}
 	}
 
@@ -402,7 +418,7 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 * <p>
 	 * The default implementation of this method utilizes the selection index
 	 * and the size of the list to toggle the enablement of the up, down and
-	 * remove buttons.
+	 * remove			 buttons.
 	 * </p>
 	 * 
 	 * <p>
@@ -412,19 +428,28 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 * @since 3.5
 	 */
 	protected void selectionChanged() {
-		if (this.list == null) {
+		if (this.selected == null || this.selected.isEmpty()) {
 			this.removeButton.setEnabled(false);
 			this.upButton.setEnabled(false);
 			this.downButton.setEnabled(false);
 		} else {
-			this.removeButton.setEnabled(this.selected != null);
+			this.removeButton.setEnabled(true);
 
-			int index = this.list.indexOf(this.selected);
 			int size = this.list.size();
+			int minIndex = size;
+			int maxIndex = -1;
+			int index;
+			for (T elt : this.selected) {
+				index = this.list.indexOf(elt);
+				minIndex = Math.min(minIndex, index);
+				maxIndex = Math.max(maxIndex, index);
+			}
 
-			this.upButton.setEnabled((size > 1) && (index > 0));
-			this.downButton.setEnabled((size > 1) && (index >= 0)
-					&& (index < (size - 1)));
+			this.upButton.setEnabled((size > 1) && (this.selected.size() == 1)
+					&& (minIndex > 0));
+			this.downButton.setEnabled((size > 1)
+					&& (this.selected.size() == 1) && (maxIndex >= 0)
+					&& (maxIndex < (size - 1)));
 		}
 	}
 
@@ -436,9 +461,12 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	public void selectionChanged(SelectionChangedEvent event) {
 		IStructuredSelection sel = (IStructuredSelection) event.getSelection();
 		if (sel.isEmpty()) {
-			this.selected = null;
+			this.selected = Collections.emptyList();
 		} else {
-			this.selected = (T) sel.getFirstElement();
+			this.selected = new ArrayList<T>();
+			for (Object obj : sel.toArray()) {
+				this.selected.add((T) obj);
+			}
 		}
 		this.selectionChanged();
 	}
@@ -461,9 +489,13 @@ public abstract class ListViewerEditor<T> extends FieldEditor implements
 	 */
 	private void swap(boolean up) {
 		this.setPresentsDefaultValue(false);
+		int index = this.list.indexOf(this.selected.get(0));
+		if (up) {
+			Collections.swap(this.list, index, index - 1);
+		} else {
+			Collections.swap(this.list, index, index +1);
+		}
 
-		int index = this.list.indexOf(this.selected);
-		Collections.swap(this.list, index, index - 1);
 		this.tableViewer.setInput(this.list);
 		this.selectionChanged();
 	}

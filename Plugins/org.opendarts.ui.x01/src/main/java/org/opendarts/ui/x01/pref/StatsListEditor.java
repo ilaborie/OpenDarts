@@ -62,8 +62,8 @@ public class StatsListEditor extends ListViewerEditor<String> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	protected String getNewInputObject() {
-		String result = null;
+	protected List<String> getNewInputObject() {
+		List<String> result = null;
 
 		List<String> sel = (List<String>) this.getTable().getInput();
 
