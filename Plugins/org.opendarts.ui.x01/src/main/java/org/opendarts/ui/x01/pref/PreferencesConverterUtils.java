@@ -72,24 +72,28 @@ public final class PreferencesConverterUtils {
 	 * @return the game definition as string
 	 */
 	public static String getGameDefinitionAsString(GameX01Definition gameDef) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(gameDef.getStartScore());
-		sb.append(SEPARATOR);
-		sb.append(gameDef.getNbGameToWin());
-		sb.append(SEPARATOR);
-		sb.append(gameDef.isPlayAllGames());
-		sb.append(SEPARATOR);
-		boolean isFirst = true;
-		for (IPlayer player : gameDef.getInitialPlayers()) {
-			if (isFirst) {
-				isFirst = false;
-			} else {
-				sb.append(SEPARATOR);
+		String result = null;
+		if (gameDef != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(gameDef.getStartScore());
+			sb.append(SEPARATOR);
+			sb.append(gameDef.getNbGameToWin());
+			sb.append(SEPARATOR);
+			sb.append(gameDef.isPlayAllGames());
+			sb.append(SEPARATOR);
+			boolean isFirst = true;
+			for (IPlayer player : gameDef.getInitialPlayers()) {
+				if (isFirst) {
+					isFirst = false;
+				} else {
+					sb.append(SEPARATOR);
+				}
+				sb.append(player.getUuid());
 			}
-			sb.append(player.getUuid());
-		}
 
-		return sb.toString();
+			result = sb.toString();
+		}
+		return result;
 	}
 
 	/**
@@ -99,21 +103,23 @@ public final class PreferencesConverterUtils {
 	 * @return the string as game definition
 	 */
 	public static GameX01Definition getStringAsGameDefinition(String s) {
-		String[] strings = s.split("" + SEPARATOR);
-		if (strings.length > 3) {
-			int startScore = Integer.valueOf(strings[0]);
-			int nbGameToWin = Integer.valueOf(strings[1]);
-			boolean playAllGames = Boolean.valueOf(strings[2]);
+		if (s != null) {
+			String[] strings = s.split("" + SEPARATOR);
+			if (strings.length > 3) {
+				int startScore = Integer.valueOf(strings[0]);
+				int nbGameToWin = Integer.valueOf(strings[1]);
+				boolean playAllGames = Boolean.valueOf(strings[2]);
 
-			List<IPlayer> players = new ArrayList<IPlayer>();
-			if (strings.length > 4) {
-				for (int i = 3; i < strings.length; i++) {
-					players.add(PLAYER_SERVICE.getPlayer(strings[i]));
+				List<IPlayer> players = new ArrayList<IPlayer>();
+				if (strings.length > 4) {
+					for (int i = 3; i < strings.length; i++) {
+						players.add(PLAYER_SERVICE.getPlayer(strings[i]));
+					}
 				}
-			}
 
-			return new GameX01Definition(startScore, players, nbGameToWin,
-					playAllGames);
+				return new GameX01Definition(startScore, players, nbGameToWin,
+						playAllGames);
+			}
 		}
 		return null;
 	}

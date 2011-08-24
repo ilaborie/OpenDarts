@@ -7,11 +7,9 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -27,9 +25,6 @@ import org.opendarts.ui.player.composite.IPlayerSelectionListener;
 import org.opendarts.ui.player.composite.PlayerSelectionComposite;
 import org.opendarts.ui.service.IGameUiProvider;
 import org.opendarts.ui.x01.X01UiPlugin;
-import org.opendarts.ui.x01.editor.SetX01Editor;
-import org.opendarts.ui.x01.pref.IX01Prefs;
-import org.opendarts.ui.x01.pref.PreferencesConverterUtils;
 
 /**
  * The Class SetX01ConfigurationDialog.
@@ -66,9 +61,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	/** The players composite. */
 	private PlayerSelectionComposite playersComposite;
 
-	/** The btn store default. */
-	private Button btnStoreDefault;
-
 	/**
 	 * Instantiates a new sets the x01 configuration dialog.
 	 */
@@ -95,12 +87,8 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		GameX01Definition gameDef = null;
 		boolean rotate = false;
 		if (lastGameDefinition == null) {
-			IPreferenceStore store = X01UiPlugin.getX01Preferences();
-			String s = store.getString(IX01Prefs.DEFAUlT_GAME_DEFINITION);
-			if (s != null) {
-				gameDef = PreferencesConverterUtils
-						.getStringAsGameDefinition(s);
-			}
+			gameDef = new GameX01Definition(501, new ArrayList<IPlayer>(), 3,
+					false);
 		} else if ((lastGameDefinition != null)
 				&& (lastGameDefinition instanceof GameX01Definition)) {
 			gameDef = (GameX01Definition) lastGameDefinition;
@@ -132,17 +120,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		GridDataFactory.fillDefaults().applyTo(grpPlayers);
 
 		return main;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.opendarts.ui.dialog.IGameDefinitionComposite#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
-	 */
-	@Override
-	public void createButtonsForButtonBar(Composite parent) {
-		((GridLayout) parent.getLayout()).numColumns++;
-		this.btnStoreDefault = new Button(parent, SWT.PUSH);
-		this.btnStoreDefault.setText("Set as default");
-		this.btnStoreDefault.addSelectionListener(this);
 	}
 
 	/**
@@ -242,14 +219,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.dialog.IGameDefinitionComposite#getEditorId()
-	 */
-	@Override
-	public String getEditorId() {
-		return SetX01Editor.ID;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
 	 */
 	@Override
@@ -269,12 +238,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			this.nbGameToWin = this.spiNbGame.getSelection();
 		} else if (obj.equals(this.btnPlayAll)) {
 			this.playAllGames = this.btnPlayAll.getSelection();
-		} else if (obj.equals(this.btnStoreDefault)) {
-			IPreferenceStore store = X01UiPlugin.getX01Preferences();
-			store.setValue(IX01Prefs.DEFAUlT_GAME_DEFINITION,
-					PreferencesConverterUtils
-							.getGameDefinitionAsString((GameX01Definition) this
-									.getGameDefinition()));
 		}
 		this.parentDialog.notifyUpdate();
 	}

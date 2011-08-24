@@ -67,6 +67,14 @@ public abstract class ThreeDartsComputerDialog extends FormDialog {
 		this.txtWished = new Text[this.darts.length];
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.window.Window#getShellStyle()
+	 */
+	@Override
+	protected int getShellStyle() {
+		return SWT.TITLE | SWT.BORDER | SWT.SHEET;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

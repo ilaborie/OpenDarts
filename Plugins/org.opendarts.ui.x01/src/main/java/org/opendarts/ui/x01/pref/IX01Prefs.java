@@ -5,9 +5,6 @@ package org.opendarts.ui.x01.pref;
  */
 public interface IX01Prefs {
 
-	/** The DEFA ul t_ gam e_ definition. */
-	String DEFAUlT_GAME_DEFINITION = "OpenDarts.pref.x01.defaultGameDefinition";
-
 	/** The SWITC h_ use r_ position. */
 	String SWITCH_USER_POSITION = "OpenDarts.pref.x01.switchUserPosition";
 

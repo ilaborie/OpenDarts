@@ -36,21 +36,8 @@ public interface IGameDefinitionComposite {
 	List<ValidationEntry> validate();
 
 	/**
-	 * Gets the editor id.
-	 *
-	 * @return the editor id
-	 */
-	String getEditorId();
-
-	/**
-	 * Creates the buttons for button bar.
-	 *
-	 * @param parent the parent
-	 */
-	void createButtonsForButtonBar(Composite parent);
-
-	/**
 	 * Sets the focus.
 	 */
 	void setFocus();
+
 }

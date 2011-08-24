@@ -7,6 +7,15 @@ public interface IGeneralPrefs {
 
 	/** FullScreen mode */
 	String STARTING_FULLSCREN = "OpenDarts.pref.fullscreen";
+	
+	/** Set Number */
+	String SESSION_SET_NUMBER = "OpenDarts.session.nbSet";
+	
+	/** The DefaultGame Definition. */
+	String DEFAUlT_GAME_DEFINITION = "OpenDarts.pref.defaultGameDefinition";
+	
+	/** The DefaultGame Definition. */
+	String DEFAUlT_GAME_DEFINITION_NAME = "OpenDarts.pref.defaultGameDefinition.name";
 
 	// Color
 	/** The Constant COLOR_BROKEN. */
@@ -43,4 +52,5 @@ public interface IGeneralPrefs {
 
 	/** The Constant FONT_STATS_BOLD. */
 	String FONT_STATS_LABEL = "OpenDarts.pref.StatsBoldFont";
+
 }
