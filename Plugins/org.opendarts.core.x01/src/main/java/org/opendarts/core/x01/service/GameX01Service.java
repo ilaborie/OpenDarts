@@ -35,6 +35,7 @@ public class GameX01Service implements IGameService {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(GameX01Service.class);
 
+	/** The best darts. */
 	private final Map<Integer, BestDart> bestDarts;
 
 	/**
@@ -62,10 +63,13 @@ public class GameX01Service implements IGameService {
 	@Override
 	public void startGame(IGame igame) {
 		GameX01 game = (GameX01) igame;
-		game.initGame();
 		LOG.info("Game {} started", igame);
+		game.initGame();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.service.game.IGameService#cancelGame(org.opendarts.core.model.game.IGame)
+	 */
 	@Override
 	public void cancelGame(IGame igame) {
 		GameX01 game = (GameX01) igame;
