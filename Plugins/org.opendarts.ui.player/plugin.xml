@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <perspectiveShortcut
+               id="opendarts.perspective.player">
+         </perspectiveShortcut>
+         <viewShortcut
+               id="opendarts.view.player">
+         </viewShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.opendarts.ui.player.perspective.PlayerPerspective"
+            fixed="true"
+            icon="icons/view/player.png"
+            id="opendarts.perspective.player"
+            name="Players">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="opendarts.category.player"
+            name="Players">
+      </category>
+      <view
+            category="opendarts.category.player"
+            class="org.opendarts.ui.player.view.PlayerView"
+            icon="icons/view/player.png"
+            id="opendarts.view.player"
+            name="Players"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>
