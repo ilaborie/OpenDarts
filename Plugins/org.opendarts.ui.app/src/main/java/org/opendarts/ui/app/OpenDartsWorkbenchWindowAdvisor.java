@@ -56,4 +56,5 @@ public class OpenDartsWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			configurer.getWindow().getShell().setMaximized(true);
 		}
 	}
+	
 }
