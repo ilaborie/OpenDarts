@@ -52,6 +52,9 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	/** The btn play all. */
 	private Button btnPlayAll;
 
+	/** The lbl nb set. */
+	private Label lblNbSet;
+
 	/** The parent dialog. */
 	private INewContainerDialog parentDialog;
 
@@ -130,7 +133,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 	 */
 	protected Group createGameDescriptionArea(Composite parent) {
 		Group group = new Group(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(2)
+		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(3)
 				.applyTo(group);
 		group.setText("X01 Description");
 
@@ -142,7 +145,7 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		// Starting score
 		lbl = new Label(group, SWT.WRAP);
 		lbl.setText("Start with:");
-		lblData.copy().applyTo(lbl);
+		lblData.copy().span(2, 1).applyTo(lbl);
 
 		this.spiStartingScore = new Spinner(group, SWT.NONE);
 		fieldData.copy().applyTo(this.spiStartingScore);
@@ -153,10 +156,20 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.spiStartingScore.addSelectionListener(this);
 		this.spiStartingScore.setSelection(this.startScore);
 
+		// Play all games
+		this.btnPlayAll = new Button(group, SWT.CHECK);
+		GridDataFactory.fillDefaults().applyTo(this.btnPlayAll);
+		this.btnPlayAll.addSelectionListener(this);
+		this.btnPlayAll.setSelection(this.playAllGames);
+
 		// Nb games to win
-		lbl = new Label(group, SWT.WRAP);
-		lbl.setText("Legs:");
-		lblData.copy().applyTo(lbl);
+		this.lblNbSet = new Label(group, SWT.WRAP);
+		if (this.playAllGames) {
+			this.lblNbSet.setText("Best of: ");
+		} else {
+			this.lblNbSet.setText("First at: ");
+		}
+		lblData.copy().applyTo(this.lblNbSet);
 
 		this.spiNbGame = new Spinner(group, SWT.NONE);
 		fieldData.copy().applyTo(this.spiNbGame);
@@ -164,13 +177,6 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.spiNbGame.setIncrement(1);
 		this.spiNbGame.addSelectionListener(this);
 		this.spiNbGame.setSelection(this.nbGameToWin);
-
-		// Play all games
-		this.btnPlayAll = new Button(group, SWT.CHECK);
-		GridDataFactory.fillDefaults().span(2, 1).applyTo(this.btnPlayAll);
-		this.btnPlayAll.setText("Play all games");
-		this.btnPlayAll.addSelectionListener(this);
-		this.btnPlayAll.setSelection(this.playAllGames);
 
 		return group;
 	}
@@ -238,6 +244,11 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 			this.nbGameToWin = this.spiNbGame.getSelection();
 		} else if (obj.equals(this.btnPlayAll)) {
 			this.playAllGames = this.btnPlayAll.getSelection();
+			if (this.playAllGames) {
+				this.lblNbSet.setText("Best of: ");
+			} else {
+				this.lblNbSet.setText("First at: ");
+			}
 		}
 		this.parentDialog.notifyUpdate();
 	}
@@ -252,6 +263,15 @@ public class SetX01ConfigurationDialog implements IGameDefinitionComposite,
 		this.players.clear();
 		this.players.addAll(players);
 		this.parentDialog.notifyUpdate();
+
+		if (players.size() != 2) {
+			this.btnPlayAll.setSelection(false);
+			this.btnPlayAll.setEnabled(false);
+			this.playAllGames = false;
+			this.lblNbSet.setText("First at: ");
+		} else {
+			this.btnPlayAll.setEnabled(true);
+		}
 	}
 
 	/* (non-Javadoc)
