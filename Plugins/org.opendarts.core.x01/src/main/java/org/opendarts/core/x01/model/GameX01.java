@@ -82,6 +82,23 @@ public class GameX01 extends AbstractGame implements IGame {
 		// Set first player
 		this.setCurrentPlayer(this.getFirstPlayer());
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.game.IGame#updatePlayers(java.util.List)
+	 */
+	@Override
+	public void updatePlayers(List<IPlayer> players) {
+		this.entries.clear();
+		super.updatePlayers(players);
+		// Create first entry
+		this.newGameEntry();
+
+		// Set first player
+		this.setCurrentPlayer(this.getFirstPlayer());
+		
+		// Notify
+		this.fireGameEvent(GameEvent.Factory.newGameReinitializedEvent(this));
+	}
 
 	/**
 	 * New game entry.

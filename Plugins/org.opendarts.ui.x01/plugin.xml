@@ -17,12 +17,20 @@
             class="org.opendarts.ui.x01.handler.SetInfoHandler"
             commandId="opendarts.cmd.setInfo">
       </handler>
+      <handler
+            class="org.opendarts.ui.x01.handler.SwitchPlayerHandler"
+            commandId="opendarts.cmd.switchPlayer">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
       <image
             commandId="opendarts.cmd.setInfo"
             icon="icons/actions/info.png">
+      </image>
+      <image
+            commandId="opendarts.cmd.switchPlayer"
+            icon="icons/actions/switch.gif">
       </image>
    </extension>
    <extension
@@ -35,6 +43,11 @@
                label="Set Info"
                style="push">
          </command>
+         <command
+               commandId="opendarts.cmd.switchPlayer"
+               label="Switch Players"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -42,6 +55,10 @@
       <command
             id="opendarts.cmd.setInfo"
             name="Set Info">
+      </command>
+      <command
+            id="opendarts.cmd.switchPlayer"
+            name="Switch Player">
       </command>
    </extension>
    <extension

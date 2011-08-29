@@ -121,6 +121,14 @@ public abstract class AbstractGame implements IGame {
 	public List<IPlayer> getPlayers() {
 		return Collections.unmodifiableList(this.players);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.game.IGame#updatePlayers(java.util.List)
+	 */
+	public void updatePlayers(List<IPlayer> players) {
+		this.players.clear();
+		this.players.addAll(players);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.model.game.IGame#getFirstPlayer()

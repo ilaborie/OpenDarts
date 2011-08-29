@@ -74,4 +74,11 @@ public interface IGame extends IAbstractGame {
 	 */
 	IPlayer getFirstPlayer();
 
+	/**
+	 * Update players.
+	 *
+	 * @param players the players
+	 */
+	void updatePlayers(List<IPlayer> players);
+
 }

@@ -163,7 +163,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		// get new page
 		GameX01Page page;
 		page = this.pages.get(game);
-		if (page == null) {
+		if ((page == null)) {
 			int nb = this.pages.size() + 1;
 			page = new GameX01Page(this, game, nb);
 			this.pages.put(game, page);
@@ -177,6 +177,19 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 		}
 		// auto start Game
 		this.gameService.startGame(game);
+	}
+	
+
+	/**
+	 * Handle game reinitialized.
+	 *
+	 * @param gameX01Page the game x01 page
+	 * @param game the game
+	 */
+	public void handleGameReinitialized(GameX01Page gameX01Page, GameX01 game) {
+		this.pages.remove(game);
+		this.removePage(gameX01Page.getIndex());
+		this.handleGameActive(game);
 	}
 
 	/**
@@ -254,4 +267,5 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	public int promptToSaveOnClose() {
 		return ISaveablePart2.YES;
 	}
+
 }

@@ -18,6 +18,9 @@ public class GameEvent {
 
 		/** The GAM e_ initialized. */
 		GAME_INITIALIZED,
+		
+		/** The GAM e_ reinitialized. */
+		GAME_REINITIALIZED,
 
 		/** The GAM e_ canceled. */
 		GAME_CANCELED,
@@ -249,6 +252,18 @@ public class GameEvent {
 					game);
 			result.player = player;
 			result.entry = entry;
+			return result;
+		}
+
+		/**
+		 * New game reinitialized event.
+		 *
+		 * @param game the game
+		 * @return the game event
+		 */
+		public static GameEvent newGameReinitializedEvent(IGame game) {
+			GameEvent result = new GameEvent(GameEventType.GAME_REINITIALIZED,
+					game);
 			return result;
 		}
 

@@ -123,6 +123,9 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 
 	private final List<IPlayer> players;
 
+	/** The game editor. */
+	private final SetX01Editor gameEditor;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -133,6 +136,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	public GameX01Page(SetX01Editor gameEditor, GameX01 game, int index) {
 		super(gameEditor, String.valueOf(index), "Game #" + index);
 		this.game = game;
+		this.gameEditor = gameEditor;
 		this.playerLabelProvider = new PlayerLabelProvider();
 		this.gameDefinition = (GameX01Definition) this.game.getParentSet()
 				.getGameDefinition();
@@ -416,7 +420,12 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 						ExpandableComposite.TITLE_BAR);
 				GridDataFactory.fillDefaults().grab(true, true)
 						.applyTo(section);
-				section.setText(player.getName());
+				if (this.game.getFirstPlayer().equals(player)) {
+					section.setText("* "
+							+ this.playerLabelProvider.getText(player));
+				} else {
+					section.setText(player.getName());
+				}
 				section.setFont(OpenDartsFormsToolkit
 						.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
 
@@ -700,24 +709,30 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 	public void notifyGameEvent(final GameEvent event) {
 		if (event.getGame().equals(this.game)) {
 			LOG.trace("New Game Event: {}", event);
+			IGameEntry entry = event.getEntry();
+			IPlayer player = event.getPlayer();
 			switch (event.getType()) {
 				case GAME_INITIALIZED:
 					this.handleGameInitialized();
 					break;
+				case GAME_REINITIALIZED:
+					this.game.removeListener(this);
+					this.gameEditor.handleGameReinitialized(this, this.game);
+					break;
 				case GAME_ENTRY_CREATED:
-					this.handleNewEntry(event.getEntry());
+					this.handleNewEntry(entry);
 					break;
 				case GAME_ENTRY_REMOVED:
-					this.handleRemoveEntry(event.getEntry());
+					this.handleRemoveEntry(entry);
 					break;
 				case GAME_ENTRY_UPDATED:
-					this.handleEntryUpdated(event.getPlayer(), event.getEntry());
+					this.handleEntryUpdated(player, entry);
 					break;
 				case NEW_CURRENT_PLAYER:
-					this.handlePlayer(event.getPlayer(), event.getEntry());
+					this.handlePlayer(player, entry);
 					break;
 				case GAME_FINISHED:
-					this.handleGameFinished(event.getPlayer());
+					this.handleGameFinished(player);
 					break;
 				case GAME_CANCELED:
 					this.dirty = false;
