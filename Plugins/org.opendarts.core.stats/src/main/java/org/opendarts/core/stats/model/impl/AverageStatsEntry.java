@@ -43,7 +43,7 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 					result = 0;
 				} else {
 					double diff = o1.getAvg() - o2.getAvg();
-					if (diff < 0.005) {
+					if (Math.abs(diff) < 0.005) {
 						result = 0;
 					} else if (diff>0) {
 						result = 1;
