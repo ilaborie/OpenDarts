@@ -6,6 +6,7 @@ import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.stats.model.comparator.NumberComparator;
 
 /**
  * The Class MaxStatsEntry.

@@ -1,10 +1,14 @@
 package org.opendarts.core.x01.service.entry;
 
+import java.util.Comparator;
+
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.stats.model.comparator.ReverseComparator;
 import org.opendarts.core.stats.model.impl.AverageStatsEntry;
+import org.opendarts.core.stats.model.impl.AvgEntry;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
 
@@ -20,6 +24,14 @@ public class AverageLegStatsEntry extends AverageStatsEntry {
 	 */
 	public AverageLegStatsEntry(String key) {
 		super(key);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.impl.AverageStatsEntry#getComparator()
+	 */
+	@Override
+	public Comparator<AvgEntry> getComparator() {
+		return new ReverseComparator<AvgEntry>(super.getComparator());
 	}
 
 	/* (non-Javadoc)

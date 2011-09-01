@@ -9,6 +9,7 @@ import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.stats.model.comparator.AvgEntryComparator;
 
 /**
  * The Class MaxStatsEntry.
@@ -16,6 +17,8 @@ import org.opendarts.core.model.player.IPlayer;
  * @param <T> the generic type
  */
 public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
+
+	
 
 	/**
 	 * Instantiates a new best stats entry.
@@ -31,29 +34,7 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 	 */
 	@Override
 	public Comparator<AvgEntry> getComparator() {
-		return new Comparator<AvgEntry>() {
-			@Override
-			public int compare(AvgEntry o1, AvgEntry o2) {
-				int result;
-				if (o1==null && o2!=null) {
-					result = -1;
-				} else if (o2!=null && o1==null) {
-					result = 1;
-				} else if (o1==null && o2==null) {
-					result = 0;
-				} else {
-					double diff = o1.getAvg() - o2.getAvg();
-					if (Math.abs(diff) < 0.005) {
-						result = 0;
-					} else if (diff>0) {
-						result = 1;
-					} else {
-						result = -1;
-					}
-				}
-				return result;
-			}
-		};
+		return new AvgEntryComparator();
 	}
 
 	/* (non-Javadoc)

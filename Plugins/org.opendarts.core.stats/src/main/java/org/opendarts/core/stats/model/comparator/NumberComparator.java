@@ -1,4 +1,4 @@
-package org.opendarts.core.stats.model.impl;
+package org.opendarts.core.stats.model.comparator;
 
 import java.util.Comparator;
 
