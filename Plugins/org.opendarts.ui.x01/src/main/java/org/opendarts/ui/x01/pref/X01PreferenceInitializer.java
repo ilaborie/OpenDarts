@@ -61,7 +61,7 @@ public class X01PreferenceInitializer extends AbstractPreferenceInitializer
 				StatsX01Service.SESSION_AVG_3_DARTS,
 				StatsX01Service.SESSION_AVG_LEG,
 				StatsX01Service.SESSION_BEST_LEG,
-				StatsX01Service.SESSION_OUT_OVER_100);
+				StatsX01Service.SESSION_BEST_OUT);
 		store.setDefault(SESSION_STATS,
 				PreferencesConverterUtils.getListAsString(stats));
 
