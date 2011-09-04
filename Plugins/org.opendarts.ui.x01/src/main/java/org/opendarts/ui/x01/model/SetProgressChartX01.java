@@ -15,7 +15,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.Layer;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.TextAnchor;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
@@ -220,11 +219,7 @@ public abstract class SetProgressChartX01<T> implements IChart {
 
 			marker.setDrawAsLine(false);
 			marker.setAlpha(1.0F);
-
-			// Label
-			marker.setLabel(category);
 			marker.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-			marker.setLabelOffset(new RectangleInsets(2.0D, 5.0D, 2.0D, 5.0D));
 
 			plot.addDomainMarker(marker, Layer.BACKGROUND);
 			i++;
