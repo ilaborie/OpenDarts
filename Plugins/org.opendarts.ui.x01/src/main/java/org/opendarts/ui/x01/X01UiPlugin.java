@@ -34,6 +34,8 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(X01UiPlugin.class);
 
+	private static StatsX01UiService statsUiService;
+
 	/**
 	 * The constructor.
 	 */
@@ -52,11 +54,11 @@ public class X01UiPlugin extends AbstractUIPlugin {
 		gameUiService = new GameX01UiService();
 
 		// Register the StatsUiService
+		statsUiService = new StatsX01UiService();
 		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
 		if (uiProvider != null) {
 			uiProvider.registerStatsUiService(
-					OpenDartsX01Bundle.getStatsX01Service(),
-					new StatsX01UiService());
+					OpenDartsX01Bundle.getStatsX01Service(), statsUiService);
 		}
 	}
 
@@ -68,6 +70,7 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		gameUiService = null;
+		statsUiService = null;
 		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
 		if (uiProvider != null) {
 			uiProvider.unregisterStatsUiService(OpenDartsX01Bundle
@@ -162,5 +165,14 @@ public class X01UiPlugin extends AbstractUIPlugin {
 	 */
 	public static IGameUiService getGameX01UiService() {
 		return gameUiService;
+	}
+
+	/**
+	 * Gets the stats ui service.
+	 *
+	 * @return the stats ui service
+	 */
+	public static StatsX01UiService getStatsUiService() {
+		return statsUiService;
 	}
 }

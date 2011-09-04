@@ -71,6 +71,7 @@ public class KeyLabelProvider extends ColumnLabelProvider {
 		String key = this.getStatsKey(element);
 		return this.getLabelProvider(key).getText(key);
 	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getFont(java.lang.Object)

@@ -1,6 +1,7 @@
 package org.opendarts.core.stats.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.opendarts.core.model.player.IPlayer;
 
@@ -14,9 +15,9 @@ public interface IElementStats<E> {
 	/**
 	 * The Interface IEntry.
 	 *
-	 * @param <E> the element type
+	 * @param <V> the value type
 	 */
-	public interface IEntry<E> {
+	public interface IEntry<V> {
 
 		/**
 		 * Gets the key.
@@ -31,14 +32,14 @@ public interface IElementStats<E> {
 		 * @param player the player
 		 * @return the player entry
 		 */
-		IStatsEntry<E> getPlayerEntry(IPlayer player);
+		IStatsEntry<V> getPlayerEntry(IPlayer player);
 
 		/**
 		 * Gets the best value.
 		 *
 		 * @return the best value
 		 */
-		IStatValue<E> getBestValue();
+		IStatValue<V> getBestValue();
 	}
 
 	/**
@@ -62,7 +63,15 @@ public interface IElementStats<E> {
 	 * @param key the key
 	 * @return the stats entry
 	 */
-	IStatsEntry<E> getStatsEntry(IPlayer player, String key);
+	<V> IStatsEntry<V> getStatsEntry(IPlayer player, String key);
+	
+	/**
+	 * Gets the stats entries.
+	 *
+	 * @param key the key
+	 * @return the stats entries
+	 */
+	<V> Map<IPlayer,IStatsEntry<V>> getStatsEntries(String key);
 
 	/**
 	 * Gets the player stats.

@@ -51,7 +51,7 @@ import org.opendarts.ui.dialog.ThreeDartsComputerDialog;
 import org.opendarts.ui.player.label.PlayerLabelProvider;
 import org.opendarts.ui.pref.IGeneralPrefs;
 import org.opendarts.ui.utils.ColumnDescriptor;
-import org.opendarts.ui.utils.ISharedImages;
+import org.opendarts.ui.x01.ISharedImages;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.ui.utils.listener.CancelTraverseListener;
 import org.opendarts.ui.utils.listener.FixHeightListener;
@@ -256,8 +256,7 @@ public class GameX01Page extends FormPage implements IFormPage, IGameListener,
 			@Override
 			protected Control createControl(Composite parent) {
 				Label helpLabel = new Label(parent, SWT.NONE);
-				helpLabel.setImage(X01UiPlugin
-						.getImage("/icons/actions/help.png"));
+				helpLabel.setImage(X01UiPlugin.getImage(ISharedImages.IMG_HELP));
 				ToolTip toolTip = new ShortcutsTooltip(helpLabel);
 				toolTip.setPopupDelay(0);
 				return helpLabel;

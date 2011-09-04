@@ -60,6 +60,22 @@ public class SessionDetailsPage extends DetailsPage<ISession> implements
 		this.dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
 				DateFormat.MEDIUM);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.stats.view.DetailsPage#getElement()
+	 */
+	@Override
+	protected ISession getElement() {
+		return this.session;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.stats.view.DetailsPage#getStatsViewer()
+	 */
+	@Override
+	protected TableViewer getStatsViewer() {
+		return this.viewer;
+	}
 
 	/**
 	 * Creates the internal status.

@@ -14,7 +14,6 @@ import org.opendarts.core.stats.model.IStatValue;
 import org.opendarts.core.stats.model.IStats;
 import org.opendarts.core.stats.model.IStatsEntry;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ElementStats.
  * 
@@ -27,7 +26,7 @@ public class ElementStats<E> implements IElementStats<E> {
 	private final E element;
 
 	/** The players stats. */
-	private final Map<IPlayer, Map<String, IStatsEntry<E>>> playersEntries;
+	private final Map<IPlayer, Map<String, IStatsEntry<?>>> playersEntries;
 
 	/** The players stats. */
 	private final Map<IPlayer, IStats<E>> playersStats;
@@ -41,7 +40,7 @@ public class ElementStats<E> implements IElementStats<E> {
 	public ElementStats(E element) {
 		super();
 		this.element = element;
-		this.playersEntries = new HashMap<IPlayer, Map<String, IStatsEntry<E>>>();
+		this.playersEntries = new HashMap<IPlayer, Map<String, IStatsEntry<?>>>();
 		this.playersStats = new HashMap<IPlayer, IStats<E>>();
 	}
 
@@ -63,7 +62,7 @@ public class ElementStats<E> implements IElementStats<E> {
 	@Override
 	public List<String> getStatsKeys() {
 		Set<String> result = new TreeSet<String>();
-		for (Map<String, IStatsEntry<E>> entry : this.playersEntries.values()) {
+		for (Map<String, IStatsEntry<?>> entry : this.playersEntries.values()) {
 			result.addAll(entry.keySet());
 		}
 		return new ArrayList<String>(result);
@@ -83,9 +82,9 @@ public class ElementStats<E> implements IElementStats<E> {
 		this.playersStats.put(player, stats);
 
 		// Entries
-		Map<String, IStatsEntry<E>> map = this.playersEntries.get(player);
+		Map<String, IStatsEntry<?>> map = this.playersEntries.get(player);
 		if (map == null) {
-			map = new HashMap<String, IStatsEntry<E>>();
+			map = new HashMap<String, IStatsEntry<?>>();
 			this.playersEntries.put(player, map);
 		}
 		Map<String, IStatsEntry> allEntries = stats.getAllEntries();
@@ -99,12 +98,30 @@ public class ElementStats<E> implements IElementStats<E> {
 	 * org.opendarts.core.stats.model.IElementStats#getStatsEntry(org.opendarts
 	 * .core.model.player.IPlayer, java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IStatsEntry<E> getStatsEntry(IPlayer player, String key) {
-		IStatsEntry<E> result = null;
-		Map<String, IStatsEntry<E>> map = this.playersEntries.get(player);
+	public <V> IStatsEntry<V> getStatsEntry(IPlayer player, String key) {
+		IStatsEntry<V> result = null;
+		Map<String, IStatsEntry<?>> map = this.playersEntries.get(player);
 		if (map != null) {
-			result = map.get(key);
+			result = (IStatsEntry<V>) map.get(key);
+		}
+		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IElementStats#getStatsEntries(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <V> Map<IPlayer, IStatsEntry<V>> getStatsEntries(String key) {
+		Map<IPlayer,IStatsEntry<V>> result = new HashMap<IPlayer, IStatsEntry<V>>();
+		IStatsEntry<?> stEntry;
+		for (java.util.Map.Entry<IPlayer, Map<String, IStatsEntry<?>>> entry : this.playersEntries.entrySet()) {
+			stEntry =entry.getValue().get(key);
+			if (stEntry!=null) {
+				result.put(entry.getKey(), (IStatsEntry<V>) stEntry);
+			}
 		}
 		return result;
 	}
@@ -152,15 +169,16 @@ public class ElementStats<E> implements IElementStats<E> {
 	 * 
 	 * @return the best value
 	 */
-	public IStatValue<E> getBestValue(String key) {
-		IStatValue<E> result = null;
+	@SuppressWarnings("unchecked")
+	public <V> IStatValue<V> getBestValue(String key) {
+		IStatValue<V> result = null;
 
-		IStatsEntry<E> statsEntry;
-		Comparator<E> comparator;
-		E value;
-		IStatValue<E> pVal;
-		for (Map<String, IStatsEntry<E>> map : this.playersEntries.values()) {
-			statsEntry = map.get(key);
+		IStatsEntry<V> statsEntry;
+		Comparator<V> comparator;
+		V value;
+		IStatValue<V> pVal;
+		for (Map<String, IStatsEntry<?>> map : this.playersEntries.values()) {
+			statsEntry = (IStatsEntry<V>) map.get(key);
 			comparator = statsEntry.getComparator();
 			if (comparator != null) {
 				if (result == null || result.getValue() == null) {

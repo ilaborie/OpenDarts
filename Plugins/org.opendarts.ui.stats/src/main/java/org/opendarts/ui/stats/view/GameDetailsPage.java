@@ -63,6 +63,14 @@ public class GameDetailsPage extends DetailsPage<IGame> implements IDetailsPage 
 				DateFormat.MEDIUM);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.stats.view.DetailsPage#getElement()
+	 */
+	@Override
+	protected IGame getElement() {
+		return this.game;
+	}
+
 	/**
 	 * Creates the internal status.
 	 *
@@ -127,6 +135,14 @@ public class GameDetailsPage extends DetailsPage<IGame> implements IDetailsPage 
 
 		this.getToolkit().paintBordersFor(client);
 		section.setClient(client);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.stats.view.DetailsPage#getStatsViewer()
+	 */
+	@Override
+	protected TableViewer getStatsViewer() {
+		return this.viewer;
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package org.opendarts.core.stats.model.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class AvgEntry.
@@ -13,6 +15,8 @@ public class AvgEntry implements Serializable {
 	/** The count. */
 	private double count;
 
+	private final List<Number> distrib;
+
 	/** The sum. */
 	private double sum;
 
@@ -23,6 +27,7 @@ public class AvgEntry implements Serializable {
 		super();
 		this.count = 0;
 		this.sum = 0.0D;
+		this.distrib = new ArrayList<Number>();
 	}
 
 	/**
@@ -52,6 +57,7 @@ public class AvgEntry implements Serializable {
 	public void addValue(Number incr, Number val) {
 		this.count += incr.doubleValue();
 		this.sum += val.doubleValue();
+		this.distrib.add(val);
 	}
 
 	/**
@@ -71,6 +77,7 @@ public class AvgEntry implements Serializable {
 	public void removeValue(Number incr, Number val) {
 		this.count -= incr.doubleValue();
 		this.sum -= val.doubleValue();
+		this.distrib.remove(val);
 	}
 
 	/* (non-Javadoc)
@@ -94,5 +101,21 @@ public class AvgEntry implements Serializable {
 	 */
 	public double getAvg() {
 		return this.sum / this.count;
+	}
+
+	/**
+	 * Gets the distribution.
+	 *
+	 * @return the distribution
+	 */
+	public double[] getDistribution() {
+		double[] result = null; 
+		synchronized (this.distrib) {
+			result = new double[this.distrib.size()];
+			for (int i = 0; i < this.distrib.size(); i++) {
+				result[i] = this.distrib.get(i).doubleValue();
+			}
+		}
+		return result;
 	}
 }

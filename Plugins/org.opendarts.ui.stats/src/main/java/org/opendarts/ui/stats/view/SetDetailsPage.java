@@ -57,6 +57,14 @@ public class SetDetailsPage extends DetailsPage<ISet> implements IDetailsPage {
 		this.dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
 				DateFormat.MEDIUM);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.stats.view.DetailsPage#getElement()
+	 */
+	@Override
+	protected ISet getElement() {
+		return this.set;
+	}
 
 	/**
 	 * Creates the internal status.
@@ -122,6 +130,14 @@ public class SetDetailsPage extends DetailsPage<ISet> implements IDetailsPage {
 
 		this.getToolkit().paintBordersFor(client);
 		section.setClient(client);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.stats.view.DetailsPage#getStatsViewer()
+	 */
+	@Override
+	protected TableViewer getStatsViewer() {
+		return this.viewer;
 	}
 
 	/**

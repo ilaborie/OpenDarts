@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -20,6 +22,9 @@ public class OpenDartsStatsUiPlugin extends AbstractUIPlugin {
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(OpenDartsStatsUiPlugin.class);
+	
+	/** The Constant PLUGIN_ID. */
+	private static final String PLUGIN_ID = "org.opendarts.ui.stats";
 
 	/** The plugin. */
 	private static OpenDartsStatsUiPlugin plugin;
@@ -57,6 +62,28 @@ public class OpenDartsStatsUiPlugin extends AbstractUIPlugin {
 	public static IPreferenceStore getOpenDartsStats() {
 		return plugin.getPreferenceStore();
 	}
+
+	/**
+	 * Gets the image.
+	 *
+	 * @param path the path
+	 * @return the image
+	 */
+	public static Image getImage(String path) {
+		Image image = plugin.getImageRegistry().get(path);
+		if (image == null) {
+			ImageDescriptor imageDescriptor = imageDescriptorFromPlugin(
+					PLUGIN_ID, path);
+			if (imageDescriptor == null) {
+				LOG.error("Missing image: {}#{}", PLUGIN_ID, path);
+			} else {
+				plugin.getImageRegistry().put(path, imageDescriptor);
+				image = imageDescriptor.createImage();
+			}
+		}
+		return image;
+	}
+
 
 	/**
 	 * Gets the service.

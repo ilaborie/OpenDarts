@@ -129,6 +129,20 @@ public abstract class DetailsPage<E> implements IDetailsPage {
 	protected abstract void createInternalStatus(Composite client);
 
 	/**
+	 * Gets the element.
+	 *
+	 * @return the element
+	 */
+	protected abstract E getElement();
+	
+	/**
+	 * Gets the stats viewer.
+	 *
+	 * @return the stats viewer
+	 */
+	protected abstract TableViewer getStatsViewer(); 
+
+	/**
 	 * Creates the stats.
 	 *
 	 * @param player the player

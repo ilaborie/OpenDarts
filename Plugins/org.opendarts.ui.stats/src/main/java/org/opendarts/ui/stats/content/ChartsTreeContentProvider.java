@@ -1,6 +1,7 @@
 package org.opendarts.ui.stats.content;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -14,12 +15,19 @@ import org.opendarts.core.model.session.ISetListener;
 import org.opendarts.core.model.session.SessionEvent;
 import org.opendarts.core.model.session.SetEvent;
 import org.opendarts.core.service.session.ISessionService;
+import org.opendarts.core.stats.model.IElementStats;
+import org.opendarts.core.stats.service.IStatsProvider;
+import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.OpenDartsUiPlugin;
+import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
+import org.opendarts.ui.stats.model.IChart;
+import org.opendarts.ui.stats.service.IStatsUiProvider;
+import org.opendarts.ui.stats.service.IStatsUiService;
 
 /**
  * The Class StatsTreeContentProvider.
  */
-public class StatsTreeContentProvider implements ITreeContentProvider,
+public class ChartsTreeContentProvider implements ITreeContentProvider,
 		ISetListener, ISessionListener {
 
 	/** The viewer. */
@@ -28,15 +36,26 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 	/** The session service. */
 	private ISessionService sessionService;
 
+	/** The provider. */
+	private final IStatsUiProvider provider;
+
+	/** The stats provider. */
+	private final IStatsProvider statsProvider;
+
 	/**
 	 * Instantiates a new stats tree content provider.
 	 * 
 	 * @param viewer
 	 *            the viewer
 	 */
-	public StatsTreeContentProvider(TreeViewer viewer) {
+	public ChartsTreeContentProvider(TreeViewer viewer) {
 		super();
 		this.viewer = viewer;
+
+		this.provider = OpenDartsStatsUiPlugin
+				.getService(IStatsUiProvider.class);
+		this.statsProvider = OpenDartsStatsUiPlugin
+				.getService(IStatsProvider.class);
 	}
 
 	/*
@@ -71,13 +90,90 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 				set.addListener(this);
 				list.add(set);
 			}
+			// Add all charts
+			list.addAll(this.getSessionChart(session));
 		} else if (parentElement instanceof ISet) {
 			ISet set = (ISet) parentElement;
 			// Add game
 			list.addAll(set.getAllGame());
+			// Add all charts
+			list.addAll(this.getSetChart(set));
+		} else if (parentElement instanceof IGame) {
+			IGame game = (IGame) parentElement;
+			list.addAll(this.getGameChart(game));
 		}
 
 		return list.toArray();
+	}
+
+	/**
+	 * Gets the session chart.
+	 *
+	 * @param session the session
+	 * @return the session chart
+	 */
+	private List<IChart> getSessionChart(ISession session) {
+		List<IChart> result = new ArrayList<IChart>();
+
+		IElementStats<ISession> sesStats;
+		IStatsUiService stUiService;
+		for (IStatsService stService : statsProvider.getAllStatsService()) {
+			sesStats = stService.getSessionStats(session);
+			stUiService = this.provider.getStatsUiService(stService);
+			for (String key : sesStats.getStatsKeys()) {
+				result.addAll(stUiService.getCharts(session, key));
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Gets the sets the chart.
+	 *
+	 * @param set the set
+	 * @return the sets the chart
+	 */
+	private Collection<IChart> getSetChart(ISet set) {
+		List<IChart> result = new ArrayList<IChart>();
+
+		IElementStats<ISet> setStats;
+		IStatsUiService stUiService;
+		List<IChart> charts;
+		for (IStatsService stService : statsProvider.getAllStatsService()) {
+			setStats = stService.getSetStats(set);
+			stUiService = this.provider.getStatsUiService(stService);
+			for (String key : setStats.getStatsKeys()) {
+				charts = stUiService.getCharts(set, key);
+				if (charts != null) {
+					result.addAll(charts);
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Gets the game chart.
+	 *
+	 * @param game the game
+	 * @return the game chart
+	 */
+	private List<IChart> getGameChart(IGame game) {
+		List<IChart> result = new ArrayList<IChart>();
+
+		IElementStats<IGame> gameStats;
+		IStatsUiService stUiService;
+		for (IStatsService stService : statsProvider.getAllStatsService()) {
+			gameStats = stService.getGameStats(game);
+			stUiService = this.provider.getStatsUiService(stService);
+			for (String key : gameStats.getStatsKeys()) {
+				result.addAll(stUiService.getCharts(game, key));
+			}
+		}
+
+		return result;
 	}
 
 	/*
@@ -96,6 +192,8 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 			result = ((ISet) element).getParentSession();
 		} else if (element instanceof IGame) {
 			result = ((IGame) element).getParentSet();
+		} else if (element instanceof IChart) {
+			return ((IChart) element).getElement();
 		}
 		return result;
 	}
@@ -145,16 +243,16 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 	public void notifySessionEvent(SessionEvent event) {
 		ISession session = event.getSession();
 		switch (event.getType()) {
-		case SESSION_CANCELED:
-		case SESSION_FINISHED:
-		case SESSION_INITIALIZED:
-			this.viewer.refresh(session);
-			break;
-		case NEW_CURRENT_SET:
-			this.viewer.add(session, event.getSet());
-			break;
-		default:
-			break;
+			case SESSION_CANCELED:
+			case SESSION_FINISHED:
+			case SESSION_INITIALIZED:
+				this.viewer.refresh(session);
+				break;
+			case NEW_CURRENT_SET:
+				this.viewer.add(session, event.getSet());
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -180,16 +278,16 @@ public class StatsTreeContentProvider implements ITreeContentProvider,
 	@Override
 	public void notifySetEvent(SetEvent event) {
 		switch (event.getType()) {
-		case SET_CANCELED:
-		case SET_FINISHED:
-		case SET_INITIALIZED:
-			this.viewer.refresh(event.getSet());
-			break;
-		case NEW_CURRENT_GAME:
-			this.viewer.add(event.getSet(), event.getGame());
-			break;
-		default:
-			break;
+			case SET_CANCELED:
+			case SET_FINISHED:
+			case SET_INITIALIZED:
+				this.viewer.refresh(event.getSet());
+				break;
+			case NEW_CURRENT_GAME:
+				this.viewer.add(event.getSet(), event.getGame());
+				break;
+			default:
+				break;
 		}
 	}
 }

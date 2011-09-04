@@ -5,6 +5,7 @@ import org.eclipse.ui.forms.IDetailsPageProvider;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
+import org.opendarts.ui.stats.model.IChart;
 
 /**
  * The Class ElementDetailProvider.
@@ -13,8 +14,9 @@ public class ElementDetailProvider implements IDetailsPageProvider {
 
 	/** The session page. */
 	private final IDetailsPage sessionPage;
-	private final SetDetailsPage setPage;
-	private final GameDetailsPage gamePage;
+	private final IDetailsPage setPage;
+	private final IDetailsPage gamePage;
+	private final IDetailsPage chartPage;
 
 	/**
 	 * Instantiates a new element detail provider.
@@ -24,6 +26,7 @@ public class ElementDetailProvider implements IDetailsPageProvider {
 		this.sessionPage = new SessionDetailsPage();
 		this.setPage = new SetDetailsPage();
 		this.gamePage = new GameDetailsPage();
+		this.chartPage = new ChartDetailsPage();
 	}
 
 	/* (non-Javadoc)
@@ -38,6 +41,8 @@ public class ElementDetailProvider implements IDetailsPageProvider {
 			result = ISet.class;
 		} else if (object instanceof IGame) {
 			result = IGame.class;
+		} else if (object instanceof IChart) {
+			result = IChart.class;
 		} else {
 			result = object.getClass();
 		}
@@ -56,6 +61,8 @@ public class ElementDetailProvider implements IDetailsPageProvider {
 			result = this.setPage;
 		} else if (IGame.class.equals(key)) {
 			result = this.gamePage;
+		} else if (IChart.class.equals(key)) {
+			result = this.chartPage;
 		} else {
 			result = null;
 		}
