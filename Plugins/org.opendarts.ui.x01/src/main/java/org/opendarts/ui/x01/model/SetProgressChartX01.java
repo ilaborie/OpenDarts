@@ -189,6 +189,7 @@ public abstract class SetProgressChartX01<T> implements IChart {
 				this.getName(), dataset, PlotOrientation.VERTICAL, true, true,
 				false);
 		CategoryPlot plot = (CategoryPlot) result.getPlot();
+		plot.setBackgroundPaint(Color.white);
 
 		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
 		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

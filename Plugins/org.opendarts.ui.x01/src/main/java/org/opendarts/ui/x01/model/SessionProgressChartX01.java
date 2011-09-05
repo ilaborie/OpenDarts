@@ -17,6 +17,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.Layer;
 import org.jfree.ui.TextAnchor;
+import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
@@ -98,10 +99,24 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 	 * @param result the result
 	 */
 	private void addSetStats(ISet set, DefaultCategoryDataset result) {
-		IElementStats<ISet> eltStats = service.getSetStats(set);
-		String setStatKey = this.statKey.replace("Session", "Set");
+		for (IGame game : set.getAllGame()) {
+			this.addGameStats(set, game, result);
+		}
+	}
+
+	/**
+	 * Adds the game stats.
+	 *
+	 * @param set the set
+	 * @param game the game
+	 * @param result the result
+	 */
+	private void addGameStats(ISet set, IGame game,
+			DefaultCategoryDataset result) {
+		IElementStats<IGame> eltStats = service.getGameStats(game);
+		String gameStatKey = this.statKey.replace("Session", "Game");
 		Map<IPlayer, IStatsEntry<T>> entries = eltStats
-				.getStatsEntries(setStatKey);
+				.getStatsEntries(gameStatKey);
 
 		IStatsEntry<T> stEntry;
 		IPlayer player;
@@ -190,6 +205,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 				this.getName(), dataset, PlotOrientation.VERTICAL, true, true,
 				false);
 		CategoryPlot plot = (CategoryPlot) result.getPlot();
+		plot.setBackgroundPaint(Color.white);
 
 		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
 		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

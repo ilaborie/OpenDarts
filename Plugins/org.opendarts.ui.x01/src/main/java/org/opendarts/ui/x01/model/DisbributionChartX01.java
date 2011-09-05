@@ -1,5 +1,6 @@
 package org.opendarts.ui.x01.model;
 
+import java.awt.Color;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -77,20 +78,20 @@ public abstract class DisbributionChartX01<T> extends ChartX01<T> {
 	private JFreeChart buildChart(HistogramDataset dataset) {
 		JFreeChart result = ChartFactory.createHistogram(this.getName(), null,
 				null, dataset, PlotOrientation.VERTICAL, true, true, false);
-		XYPlot localXYPlot = (XYPlot) result.getPlot();
-		localXYPlot.setDomainPannable(true);
-		localXYPlot.setRangePannable(true);
-		localXYPlot.setForegroundAlpha(0.85F);
 
-		NumberAxis localNumberAxis = (NumberAxis) localXYPlot.getRangeAxis();
-		localNumberAxis.setStandardTickUnits(NumberAxis
-				.createIntegerTickUnits());
+		XYPlot plot = (XYPlot) result.getPlot();
+		plot.setDomainPannable(true);
+		plot.setRangePannable(true);
+		plot.setForegroundAlpha(0.6F);
+		plot.setBackgroundPaint(Color.white);
 
-		XYBarRenderer localXYBarRenderer = (XYBarRenderer) localXYPlot
-				.getRenderer();
-		localXYBarRenderer.setDrawBarOutline(false);
-		localXYBarRenderer.setBarPainter(new StandardXYBarPainter());
-		localXYBarRenderer.setShadowVisible(false);
+		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
+		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+		XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
+		renderer.setDrawBarOutline(false);
+		renderer.setBarPainter(new StandardXYBarPainter());
+		renderer.setShadowVisible(false);
 		return result;
 	}
 

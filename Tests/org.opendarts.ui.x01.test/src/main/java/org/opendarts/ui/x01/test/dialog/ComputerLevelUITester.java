@@ -275,20 +275,19 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 	private JFreeChart buildChart(HistogramDataset dataset) {
 		JFreeChart result = ChartFactory.createHistogram("Darts", null, null,
 				dataset, PlotOrientation.VERTICAL, true, true, false);
-		XYPlot localXYPlot = (XYPlot) result.getPlot();
-		localXYPlot.setDomainPannable(true);
-		localXYPlot.setRangePannable(true);
-		localXYPlot.setForegroundAlpha(0.85F);
 
-		NumberAxis localNumberAxis = (NumberAxis) localXYPlot.getRangeAxis();
-		localNumberAxis.setStandardTickUnits(NumberAxis
-				.createIntegerTickUnits());
+		XYPlot plot = (XYPlot) result.getPlot();
+		plot.setDomainPannable(true);
+		plot.setRangePannable(true);
+		plot.setForegroundAlpha(0.85F);
 
-		XYBarRenderer localXYBarRenderer = (XYBarRenderer) localXYPlot
-				.getRenderer();
-		localXYBarRenderer.setDrawBarOutline(false);
-		localXYBarRenderer.setBarPainter(new StandardXYBarPainter());
-		localXYBarRenderer.setShadowVisible(false);
+		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
+		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+		XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
+		renderer.setDrawBarOutline(false);
+		renderer.setBarPainter(new StandardXYBarPainter());
+		renderer.setShadowVisible(false);
 		return result;
 	}
 
@@ -404,7 +403,7 @@ public class ComputerLevelUITester implements ISelectionChangedListener,
 		lbl = new Label(main, SWT.NONE);
 		GridDataFactory.fillDefaults().applyTo(lbl);
 		lbl.setText("Computer: ");
-		this.viewer = new TableViewer(main, SWT.BORDER| SWT.MULTI);
+		this.viewer = new TableViewer(main, SWT.BORDER | SWT.MULTI);
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(this.viewer.getControl());
 		this.viewer.setLabelProvider(new PlayerLabelProvider());

@@ -195,7 +195,7 @@ public class SetDetailComposite extends Composite {
 	 */
 	protected String getGameWinner(IGame game) {
 		String result;
-		IPlayer winner = this.set.getWinner();
+		IPlayer winner = game.getWinner();
 		if (winner != null) {
 			result = winner.getName();
 		} else {
