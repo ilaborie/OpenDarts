@@ -44,7 +44,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(SessionProgressChartX01.class);
-	
+
 	/** The session. */
 	private final ISession session;
 
@@ -79,11 +79,15 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Instantiates a new avg leg chart x01.
-	 *
-	 * @param name the name
-	 * @param statKey the stat key
-	 * @param session the session
-	 * @param service the service
+	 * 
+	 * @param name
+	 *            the name
+	 * @param statKey
+	 *            the stat key
+	 * @param session
+	 *            the session
+	 * @param service
+	 *            the service
 	 */
 	public SessionProgressChartX01(String name, String statKey,
 			ISession session, IStatsService service) {
@@ -102,7 +106,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Creates the chart.
-	 *
+	 * 
 	 * @return the j free chart
 	 */
 	protected JFreeChart createChart() {
@@ -113,10 +117,11 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Creates the dataset.
-	 *
+	 * 
 	 * @return the dataset
 	 */
 	private XYSeriesCollection createDataset() {
+		this.playerSeries.clear();
 		XYSeriesCollection dataset = new XYSeriesCollection();
 
 		// Set
@@ -132,9 +137,11 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Adds the set data.
-	 *
-	 * @param set the set
-	 * @param dataset the dataset
+	 * 
+	 * @param set
+	 *            the set
+	 * @param dataset
+	 *            the dataset
 	 */
 	private void addSetData(ISet set, XYSeriesCollection dataset) {
 		String gameStatKey = this.statKey.replace("Session", "Game");
@@ -152,10 +159,13 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Adds the game data.
-	 *
-	 * @param dataset the dataset
-	 * @param gameStatKey the game stat key
-	 * @param game the game
+	 * 
+	 * @param dataset
+	 *            the dataset
+	 * @param gameStatKey
+	 *            the game stat key
+	 * @param game
+	 *            the game
 	 */
 	protected void addGameData(XYSeriesCollection dataset, String gameStatKey,
 			IGame game) {
@@ -180,11 +190,12 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the game index.
-	 *
-	 * @param game the game
+	 * 
+	 * @param game
+	 *            the game
 	 * @return the game index
 	 */
 	protected int getGameIndex(IGame game) {
@@ -193,9 +204,11 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Gets the game value.
-	 *
-	 * @param game the game
-	 * @param player the player
+	 * 
+	 * @param game
+	 *            the game
+	 * @param player
+	 *            the player
 	 * @return the game value
 	 */
 	private Double getGameValue(IGame game, IPlayer player) {
@@ -208,32 +221,37 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Gets the series.
-	 * @param dataset 
-	 *
-	 * @param player the player
+	 * 
+	 * @param dataset
+	 * 
+	 * @param player
+	 *            the player
 	 * @return the series
 	 */
 	protected XYSeries getSeries(XYSeriesCollection dataset, IPlayer player) {
 		XYSeries series = this.playerSeries.get(player);
 		if (series == null) {
 			series = new XYSeries(this.getSerieName(player));
-			this.playerSeries.put(player, series);
 			dataset.addSeries(series);
+			this.playerSeries.put(player, series);
 		}
 		return series;
 	}
 
 	/**
 	 * Gets the serie name.
-	 *
-	 * @param player the player
+	 * 
+	 * @param player
+	 *            the player
 	 * @return the serie name
 	 */
 	private Comparable<String> getSerieName(IPlayer player) {
 		return player.getName();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.ui.stats.model.IChart#getName()
 	 */
 	@Override
@@ -241,7 +259,9 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 		return this.name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.ui.stats.model.IChart#getStatKey()
 	 */
 	@Override
@@ -249,7 +269,9 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 		return this.statKey;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.ui.stats.model.IChart#getElement()
 	 */
 	@Override
@@ -259,8 +281,9 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Gets the category.
-	 *
-	 * @param set the set
+	 * 
+	 * @param set
+	 *            the set
 	 * @return the category
 	 */
 	protected String getCategory(ISet set) {
@@ -270,24 +293,29 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Gets the value.
-	 *
-	 * @param stEntry the st entry
+	 * 
+	 * @param stEntry
+	 *            the st entry
 	 * @return the value
 	 */
 	protected abstract Double getValue(IStatsEntry<T> stEntry);
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.ui.stats.model.IChart#buildChart()
 	 */
 	@Override
 	public JFreeChart getChart() {
-//		if (this.chart == null) {
+		if (this.chart == null) {
 			this.chart = this.createChart();
-//		}
+		}
 		return this.chart;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opendarts.ui.stats.model.IChart#getService()
 	 */
 	@Override
@@ -297,8 +325,9 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Builds the chart.
-	 *
-	 * @param dataset the dataset
+	 * 
+	 * @param dataset
+	 *            the dataset
 	 * @return the j free chart
 	 */
 	private JFreeChart buildChart(XYSeriesCollection dataset) {
@@ -325,7 +354,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 		int serieIndex;
 		for (Entry<IPlayer, XYSeries> entry : this.playerSeries.entrySet()) {
 			serieIndex = dataset.getSeries().indexOf(entry.getValue());
-			if (dataset.getSeries(serieIndex) != null) {
+			if (serieIndex >= 0 && dataset.getSeries(serieIndex) != null) {
 				renderer.setSeriesShapesVisible(serieIndex, true);
 				renderer.setSeriesPaint(serieIndex,
 						this.playerColors.get(entry.getKey()));
@@ -400,9 +429,11 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Display session avg.
-	 *
-	 * @param plot the plot
-	 * @param colors the colors
+	 * 
+	 * @param plot
+	 *            the plot
+	 * @param colors
+	 *            the colors
 	 */
 	private void displaySessionAvg(XYPlot plot) {
 		IElementStats<ISession> eltStats = this.service
@@ -424,8 +455,9 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 
 	/**
 	 * Display winning.
-	 *
-	 * @param plot the plot
+	 * 
+	 * @param plot
+	 *            the plot
 	 */
 	private void displayWinning(XYPlot plot) {
 		Drawable drawable;

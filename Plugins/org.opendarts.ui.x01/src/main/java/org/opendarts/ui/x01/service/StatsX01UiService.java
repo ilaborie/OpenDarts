@@ -17,7 +17,6 @@ import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.label.ChartLabelProvider;
 import org.opendarts.ui.x01.label.StatsX01LabelProvider;
 import org.opendarts.ui.x01.model.AvgSessionProgressChartX01;
-import org.opendarts.ui.x01.model.AvgSetProgressChartX01;
 import org.opendarts.ui.x01.model.SessionLegProgressChartX01;
 import org.opendarts.ui.x01.model.SessionThrowDistributionChartX01;
 
@@ -83,19 +82,8 @@ public class StatsX01UiService implements IStatsUiService {
 	 */
 	@Override
 	public List<IChart> getCharts(ISet set, String statKey) {
-		List<IChart> result = new ArrayList<IChart>();
-
-		List<String> keys = Arrays.asList(StatsX01Service.SET_AVG_DART,
-				StatsX01Service.SET_AVG_3_DARTS);
-
-		String statName = this.getStatsLabelProvider().getToolTipText(statKey);
-		if (keys.contains(statKey)) {
-			// Evol
-			result.add(new AvgSetProgressChartX01(statName, statKey, set,
-					OpenDartsX01Bundle.getStatsX01Service()));
-		}
-
-		return result;
+		// No stats
+		return Collections.emptyList();
 	}
 
 	/* (non-Javadoc)
