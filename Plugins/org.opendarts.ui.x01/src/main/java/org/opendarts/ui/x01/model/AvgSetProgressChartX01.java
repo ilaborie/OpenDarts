@@ -9,8 +9,7 @@ import org.opendarts.core.stats.service.IStatsService;
 /**
  * The Class AvgSessionProgressChartX01.
  */
-public class AvgSetProgressChartX01 extends
-		SetProgressChartX01<AvgEntry> {
+public class AvgSetProgressChartX01 extends SetProgressChartX01<AvgEntry> {
 
 	/**
 	 * Instantiates a new avg session progress chart x01.
@@ -20,8 +19,8 @@ public class AvgSetProgressChartX01 extends
 	 * @param set the set
 	 * @param service the service
 	 */
-	public AvgSetProgressChartX01(String name, String statKey,
-			ISet set, IStatsService service) {
+	public AvgSetProgressChartX01(String name, String statKey, ISet set,
+			IStatsService service) {
 		super(name, statKey, set, service);
 	}
 
@@ -32,7 +31,7 @@ public class AvgSetProgressChartX01 extends
 	protected Double getValue(IStatsEntry<AvgEntry> stEntry) {
 		Double result = null;
 		IStatValue<AvgEntry> value = stEntry.getValue();
-		if (value != null && value.getValue() != null) {
+		if ((value != null) && (value.getValue() != null)) {
 			result = value.getValue().getAvg();
 		}
 

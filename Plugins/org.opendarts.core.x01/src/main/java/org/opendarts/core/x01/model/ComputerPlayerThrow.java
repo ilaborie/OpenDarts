@@ -1,4 +1,4 @@
-package org.opendarts.core.x01.service;
+package org.opendarts.core.x01.model;
 
 import java.util.Arrays;
 
@@ -13,9 +13,6 @@ import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.service.game.IGameService;
 import org.opendarts.core.x01.OpenDartsX01Bundle;
-import org.opendarts.core.x01.model.BrokenX01DartsThrow;
-import org.opendarts.core.x01.model.GameX01;
-import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

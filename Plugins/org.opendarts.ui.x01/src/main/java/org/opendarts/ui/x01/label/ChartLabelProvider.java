@@ -5,7 +5,7 @@ import org.eclipse.swt.graphics.Image;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.x01.ISharedImages;
 import org.opendarts.ui.x01.X01UiPlugin;
-import org.opendarts.ui.x01.model.DisbributionChartX01;
+import org.opendarts.ui.x01.model.SessionCategoryChartX01;
 import org.opendarts.ui.x01.model.SessionProgressChartX01;
 import org.opendarts.ui.x01.model.SetProgressChartX01;
 
@@ -41,7 +41,7 @@ public class ChartLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		Image result;
-		if (element instanceof DisbributionChartX01) {
+		if (element instanceof SessionCategoryChartX01) {
 			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_BAR);
 		} else if (element instanceof SessionProgressChartX01) {
 			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);

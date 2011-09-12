@@ -32,7 +32,7 @@ public class AvgSessionProgressChartX01 extends
 	protected Double getValue(IStatsEntry<AvgEntry> stEntry) {
 		Double result = null;
 		IStatValue<AvgEntry> value = stEntry.getValue();
-		if (value != null && value.getValue() != null) {
+		if ((value != null) && (value.getValue() != null)) {
 			result = value.getValue().getAvg();
 		}
 

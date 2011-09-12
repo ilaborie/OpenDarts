@@ -19,6 +19,7 @@ import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.model.session.impl.GameSet;
 import org.opendarts.core.service.game.IGameService;
+import org.opendarts.core.x01.model.ComputerPlayerThrow;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;

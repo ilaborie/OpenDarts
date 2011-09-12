@@ -2,20 +2,24 @@ package org.opendarts.ui.x01.model;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.annotations.XYDrawableAnnotation;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryMarker;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.Drawable;
 import org.jfree.ui.Layer;
-import org.jfree.ui.TextAnchor;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISet;
@@ -46,21 +50,38 @@ public abstract class SetProgressChartX01<T> implements IChart {
 	/** The service. */
 	private final IStatsService service;
 
+	/** The player colors. */
+	private final Map<IPlayer, Color> playerColors;
+
+	/** The player series. */
+	private final Map<IPlayer, XYSeries> playerSeries;
+
+	/** The game index. */
+	private final Map<IGame, Integer> gameIndex;
+
+	// TODO prefs
+	private final Color win = Color.green;
+
 	/**
 	 * Instantiates a new avg leg chart x01.
 	 *
 	 * @param name the name
 	 * @param statKey the stat key
-	 * @param set the set
+	 * @param session the session
 	 * @param service the service
 	 */
-	public SetProgressChartX01(String name, String statKey,
-			ISet set, IStatsService service) {
+	public SetProgressChartX01(String name, String statKey, ISet set,
+			IStatsService service) {
 		super();
 		this.name = name;
 		this.statKey = statKey;
-		this.set= set;
+		this.set = set;
 		this.service = service;
+
+		this.playerColors = new HashMap<IPlayer, Color>();
+		this.playerSeries = new HashMap<IPlayer, XYSeries>();
+
+		this.gameIndex = new HashMap<IGame, Integer>();
 	}
 
 	/**
@@ -69,7 +90,7 @@ public abstract class SetProgressChartX01<T> implements IChart {
 	 * @return the j free chart
 	 */
 	protected JFreeChart createChart() {
-		CategoryDataset dataset = this.createCategoryDataset();
+		XYSeriesCollection dataset = this.createDataset();
 		JFreeChart chart = this.buildChart(dataset);
 		return chart;
 	}
@@ -79,41 +100,80 @@ public abstract class SetProgressChartX01<T> implements IChart {
 	 *
 	 * @return the dataset
 	 */
-	private CategoryDataset createCategoryDataset() {
-		DefaultCategoryDataset result = new DefaultCategoryDataset();
+	private XYSeriesCollection createDataset() {
+		XYSeriesCollection dataset = new XYSeriesCollection();
 
-		// Game
-		for (IGame game : this.set.getAllGame()) {
-			this.addGameStats(game, result);
-		}
-
-		return result;
-	}
-
-	/**
-	 * Adds the set stats.
-	 *
-	 * @param set the set
-	 * @param result the result
-	 */
-	private void addGameStats(IGame game, DefaultCategoryDataset result) {
-		IElementStats<IGame> eltStats = service.getGameStats(game);
+		IElementStats<IGame> eltStats;
 		String gameStatKey = this.statKey.replace("Set", "Game");
-		Map<IPlayer, IStatsEntry<T>> entries = eltStats
-				.getStatsEntries(gameStatKey);
 
+		// Game 
+		Map<IPlayer, IStatsEntry<T>> entries;
 		IStatsEntry<T> stEntry;
 		IPlayer player;
 		Double val;
-		for (Entry<IPlayer, IStatsEntry<T>> entry : entries.entrySet()) {
-			stEntry = entry.getValue();
-			player = entry.getKey();
 
-			val = this.getValue(stEntry);
-			if (val != null) {
-				result.addValue(val, player.getName(), this.getCategory(game));
+		List<IGame> games = this.set.getAllGame();
+		XYSeries series;
+		IGame game;
+		for (int i = 0; i < games.size(); i++) {
+			game = games.get(i);
+			eltStats = this.service.getGameStats(game);
+			entries = eltStats.getStatsEntries(gameStatKey);
+			this.gameIndex.put(game, i + 1);
+			for (Entry<IPlayer, IStatsEntry<T>> entry : entries.entrySet()) {
+				stEntry = entry.getValue();
+				player = entry.getKey();
+
+				series = this.getSeries(player);
+
+				val = this.getValue(stEntry);
+
+				if (val != null) {
+					series.add((double) this.gameIndex.get(game), val);
+				}
 			}
 		}
+		return dataset;
+	}
+
+	/**
+	 * Gets the game value.
+	 *
+	 * @param game the game
+	 * @param player the player
+	 * @return the game value
+	 */
+	private Double getGameValue(IGame game, IPlayer player) {
+		IElementStats<IGame> eltStats = this.service.getGameStats(game);
+		String gameStatKey = this.statKey.replace("Set", "Game");
+		Map<IPlayer, IStatsEntry<T>> entries = eltStats
+				.getStatsEntries(gameStatKey);
+		return this.getValue(entries.get(player));
+	}
+
+	/**
+	 * Gets the series.
+	 *
+	 * @param player the player
+	 * @return the series
+	 */
+	private XYSeries getSeries(IPlayer player) {
+		XYSeries series = this.playerSeries.get(player);
+		if (series == null) {
+			series = new XYSeries(this.getSerieName(player));
+			this.playerSeries.put(player, series);
+		}
+		return series;
+	}
+
+	/**
+	 * Gets the serie name.
+	 *
+	 * @param player the player
+	 * @return the serie name
+	 */
+	private Comparable<String> getSerieName(IPlayer player) {
+		return player.getName();
 	}
 
 	/* (non-Javadoc)
@@ -138,17 +198,6 @@ public abstract class SetProgressChartX01<T> implements IChart {
 	@Override
 	public Object getElement() {
 		return this.set;
-	}
-
-	/**
-	 * Gets the category.
-	 *
-	 * @param set the set
-	 * @return the category
-	 */
-	protected String getCategory(IGame game) {
-		int index = this.set.getAllGame().indexOf(game);
-		return "Game #" + index;
 	}
 
 	/**
@@ -184,48 +233,112 @@ public abstract class SetProgressChartX01<T> implements IChart {
 	 * @param dataset the dataset
 	 * @return the j free chart
 	 */
-	private JFreeChart buildChart(CategoryDataset dataset) {
-		JFreeChart result = ChartFactory.createLineChart(this.getName(), null,
-				this.getName(), dataset, PlotOrientation.VERTICAL, true, true,
+	private JFreeChart buildChart(XYSeriesCollection dataset) {
+		// Create chart
+		JFreeChart chart = ChartFactory.createXYLineChart(this.getName(),
+				"Legs", null, dataset, PlotOrientation.VERTICAL, true, true,
 				false);
-		CategoryPlot plot = (CategoryPlot) result.getPlot();
+
+		// Configure plot
+		XYPlot plot = (XYPlot) chart.getPlot();
+		plot.setForegroundAlpha(0.66F);
 		plot.setBackgroundPaint(Color.white);
 
-		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
+		// clear x axis
+		NumberAxis axis = (NumberAxis) plot.getDomainAxis();
 		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot
+		// Create players colors
+		this.initializePlayerColors();
+
+		// Better renderer
+		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
 				.getRenderer();
-		renderer.setSeriesShapesVisible(0, true);
+		int serieIndex;
+		for (Entry<IPlayer, XYSeries> entry : this.playerSeries.entrySet()) {
+			serieIndex = dataset.getSeries().indexOf(entry.getValue());
+
+			renderer.setSeriesShapesVisible(serieIndex, true);
+			renderer.setSeriesPaint(serieIndex,
+					this.playerColors.get(entry.getKey()));
+		}
 		renderer.setDrawOutlines(true);
-		renderer.setUseFillPaint(true);
-		renderer.setBaseFillPaint(Color.white);
 
-		// Set Marker
-		Color colorEven = new Color(0, 0, 255, 25);
-		Color colorOdd = new Color(0, 255, 0, 25);
-		Color color;
-		CategoryMarker marker;
+		// Player avg during set
+		this.displaySessionAvg(plot);
+
+		// highlight the winning
+		this.displayWinning(plot);
+
+		return chart;
+	}
+
+	/**
+	 * Initialize player colors.
+	 */
+	private void initializePlayerColors() {
+		List<Color> colors = Arrays.asList(Color.cyan, Color.magenta,
+				Color.orange, Color.blue, Color.red, Color.yellow, Color.pink);
 		int i = 0;
-		for (IGame game : this.set.getAllGame()) {
-			if (i % 2 == 0) {
-				color = colorOdd;
+		Color color;
+		for (IPlayer player : this.playerSeries.keySet()) {
+			if ((i + 1) < colors.size()) {
+				color = colors.get(i);
 			} else {
-				color = colorEven;
+				color = Color.lightGray;
 			}
-
-			String category = this.getCategory(game);
-			marker = new CategoryMarker(category, color,
-					new BasicStroke(1.0F));
-
-			marker.setDrawAsLine(false);
-			marker.setAlpha(1.0F);
-			marker.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-
-			plot.addDomainMarker(marker, Layer.BACKGROUND);
+			this.playerColors.put(player, color);
 			i++;
 		}
 
-		return result;
+	}
+
+	/**
+	 * Display session avg.
+	 *
+	 * @param plot the plot
+	 * @param colors the colors
+	 */
+	private void displaySessionAvg(XYPlot plot) {
+
+		IElementStats<ISet> eltStats = this.service.getSetStats(this.set);
+		Map<IPlayer, IStatsEntry<T>> entries = eltStats.getStatsEntries(this
+				.getStatKey());
+		ValueMarker marker;
+		Double value;
+		for (Entry<IPlayer, IStatsEntry<T>> entry : entries.entrySet()) {
+			value = this.getValue(entry.getValue());
+			if (value != null) {
+				marker = new ValueMarker(value);
+				marker.setAlpha(0.25F);
+				marker.setPaint(this.playerColors.get(entry.getKey()));
+				plot.addRangeMarker(marker, Layer.BACKGROUND);
+			}
+		}
+	}
+
+	/**
+	 * Display winning.
+	 *
+	 * @param plot the plot
+	 */
+	private void displayWinning(XYPlot plot) {
+		Drawable drawable;
+		XYDrawableAnnotation annotation;
+		IPlayer winner;
+		Double val;
+		for (IGame game : this.set.getAllGame()) {
+			winner = game.getWinner();
+			if (winner != null) {
+				val = this.getGameValue(game, winner);
+				if (val != null) {
+					drawable = new CircleDrawer(this.win,
+							new BasicStroke(2.0F), null);
+					annotation = new XYDrawableAnnotation(
+							this.gameIndex.get(game), val, 8, 8, drawable);
+					plot.addAnnotation(annotation);
+				}
+			}
+		}
 	}
 }
