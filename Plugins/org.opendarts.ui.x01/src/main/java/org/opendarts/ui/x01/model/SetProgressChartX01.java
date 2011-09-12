@@ -29,11 +29,17 @@ import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class ProgressChartX01.
  */
 public abstract class SetProgressChartX01<T> implements IChart {
+
+	/** The logger. */
+	private static final Logger LOG = LoggerFactory
+			.getLogger(SetProgressChartX01.class);
 
 	/** The session. */
 	private final ISet set;
@@ -257,10 +263,14 @@ public abstract class SetProgressChartX01<T> implements IChart {
 		int serieIndex;
 		for (Entry<IPlayer, XYSeries> entry : this.playerSeries.entrySet()) {
 			serieIndex = dataset.getSeries().indexOf(entry.getValue());
-
-			renderer.setSeriesShapesVisible(serieIndex, true);
-			renderer.setSeriesPaint(serieIndex,
-					this.playerColors.get(entry.getKey()));
+			if (dataset.getSeries(serieIndex) != null) {
+				renderer.setSeriesShapesVisible(serieIndex, true);
+				renderer.setSeriesPaint(serieIndex,
+						this.playerColors.get(entry.getKey()));
+			} else {
+				LOG.warn("Could not retrive series for Player: {}",
+						entry.getValue());
+			}
 		}
 		renderer.setDrawOutlines(true);
 
