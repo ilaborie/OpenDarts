@@ -19,9 +19,6 @@ public abstract class GameDefinition implements IGameDefinition {
 	/** The players. */
 	private final List<IPlayer> players;
 
-	/** The players. */
-	private List<IPlayer> lastPlayers;
-
 	/** The play all games. */
 	private final boolean playAllGames;
 
@@ -40,7 +37,6 @@ public abstract class GameDefinition implements IGameDefinition {
 		super();
 		this.initialPlayers = new ArrayList<IPlayer>(players);
 		this.players = new ArrayList<IPlayer>(players);
-		this.lastPlayers = new ArrayList<IPlayer>(players);
 		this.nbGameToWin = nbGameToWin;
 		this.playAllGames = playAllGames;
 	}
@@ -76,13 +72,21 @@ public abstract class GameDefinition implements IGameDefinition {
 	public List<IPlayer> getPlayers() {
 		return this.players;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.game.IGameDefinition#updatePlayers(java.util.List)
+	 */
+	@Override
+	public void updatePlayers(List<IPlayer> players) {
+		this.players.clear();
+		this.players.addAll(players);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.prototype.model.game.IGameDefinition#getNextPlayers(org.opendarts.prototype.model.session.ISet)
 	 */
 	@Override
 	public List<IPlayer> getNextPlayers(ISet set) {
-		this.lastPlayers = new ArrayList<IPlayer>(this.lastPlayers);
 		Collections.rotate(this.players, -1);
 		return this.players;
 	}

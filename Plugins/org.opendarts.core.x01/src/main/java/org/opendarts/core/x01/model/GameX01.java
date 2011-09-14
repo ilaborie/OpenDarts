@@ -88,16 +88,23 @@ public class GameX01 extends AbstractGame implements IGame {
 	 */
 	@Override
 	public void updatePlayers(List<IPlayer> players) {
-		this.entries.clear();
 		super.updatePlayers(players);
-		// Create first entry
-		this.newGameEntry();
 
-		// Set first player
-		this.setCurrentPlayer(this.getFirstPlayer());
+		// Create first entry
+		this.entries.clear();
+		GameX01Entry entry = new GameX01Entry(this, this.entries.size() + 1);
+		this.entries.add(entry);
+		this.setCurrentEntry(entry);
+		
+		for (IPlayer player : this.score.keySet()) {
+			this.score.put(player, this.scoreToDo);
+		}
 		
 		// Notify
 		this.fireGameEvent(GameEvent.Factory.newGameReinitializedEvent(this));
+		
+		// Set first player
+		this.setCurrentPlayer(this.getFirstPlayer());
 	}
 
 	/**
@@ -108,6 +115,8 @@ public class GameX01 extends AbstractGame implements IGame {
 		GameX01Entry entry = new GameX01Entry(this, this.entries.size() + 1);
 		this.entries.add(entry);
 		this.setCurrentEntry(entry);
+		this.fireGameEvent(GameEvent.Factory.newGameEntryCreatedEvent(this,
+				entry));
 		return entry;
 	}
 

@@ -128,6 +128,7 @@ public abstract class AbstractGame implements IGame {
 	public void updatePlayers(List<IPlayer> players) {
 		this.players.clear();
 		this.players.addAll(players);
+		this.getParentSet().getGameDefinition().updatePlayers(players);
 	}
 
 	/* (non-Javadoc)
@@ -182,8 +183,6 @@ public abstract class AbstractGame implements IGame {
 	 */
 	protected void setCurrentEntry(IGameEntry entry) {
 		this.currentEntry = entry;
-		this.fireGameEvent(GameEvent.Factory.newGameEntryCreatedEvent(this,
-				entry));
 	}
 
 	/**

@@ -189,7 +189,21 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	public void handleGameReinitialized(GameX01Page gameX01Page, GameX01 game) {
 		this.pages.remove(game);
 		this.removePage(gameX01Page.getIndex());
-		this.handleGameActive(game);
+		// get the page
+		GameX01Page page;
+		page = this.pages.get(game);
+		if ((page == null)) {
+			int nb = this.pages.size() + 1;
+			page = new GameX01Page(this, game, nb);
+			this.pages.put(game, page);
+			try {
+				this.addPage(page);
+				this.setActivePage(String.valueOf(nb));
+				this.setPartName(this.getSet().toString());
+			} catch (PartInitException e) {
+				LOG.error("Could not add page", e);
+			}
+		}
 	}
 
 	/**

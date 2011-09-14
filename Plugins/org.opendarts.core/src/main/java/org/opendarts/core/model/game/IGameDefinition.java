@@ -70,4 +70,11 @@ public interface IGameDefinition {
 	 * @return the nb game to win
 	 */
 	int getNbGameToWin();
+
+	/**
+	 * Update players.
+	 *
+	 * @param players the players
+	 */
+	void updatePlayers(List<IPlayer> players);
 }
