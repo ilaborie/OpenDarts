@@ -18,5 +18,6 @@ public interface ISharedImages {
 	
 	String IMG_CHART_BAR = "icons/obj/chart_bar.png";
 	String IMG_CHART_CURVE = "icons/obj/chart_curve.png";
+	String IMG_CHART_PIE = "icons/obj/chart_pie.png";
 
 }

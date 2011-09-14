@@ -19,6 +19,7 @@ import org.opendarts.ui.x01.label.StatsX01LabelProvider;
 import org.opendarts.ui.x01.model.AvgSessionProgressChartX01;
 import org.opendarts.ui.x01.model.SessionLegProgressChartX01;
 import org.opendarts.ui.x01.model.SessionThrowDistributionChartX01;
+import org.opendarts.ui.x01.model.SessionThrowPieChartX01;
 
 /**
  * The Class StatsX01UiService.
@@ -72,6 +73,8 @@ public class StatsX01UiService implements IStatsUiService {
 		if (StatsX01Service.SESSION_AVG_DART.equals(statKey)) {
 			result.add(new SessionThrowDistributionChartX01<AvgEntry>(
 					"Throw distribution (Session)", statKey, session));
+			result.add(new SessionThrowPieChartX01<AvgEntry>(
+					"Throw pie distribution (Session)", statKey, session));
 		}
 
 		return result;

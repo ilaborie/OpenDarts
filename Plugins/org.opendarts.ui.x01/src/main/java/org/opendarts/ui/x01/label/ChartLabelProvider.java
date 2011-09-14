@@ -7,6 +7,7 @@ import org.opendarts.ui.x01.ISharedImages;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.model.SessionCategoryChartX01;
 import org.opendarts.ui.x01.model.SessionProgressChartX01;
+import org.opendarts.ui.x01.model.SessionThrowPieChartX01;
 import org.opendarts.ui.x01.model.SetProgressChartX01;
 
 /**
@@ -47,6 +48,8 @@ public class ChartLabelProvider extends ColumnLabelProvider {
 			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
 		} else if (element instanceof SetProgressChartX01) {
 			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
+		} else if (element instanceof SessionThrowPieChartX01) {
+			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
 		} else {
 			result = super.getImage(element);
 		}
