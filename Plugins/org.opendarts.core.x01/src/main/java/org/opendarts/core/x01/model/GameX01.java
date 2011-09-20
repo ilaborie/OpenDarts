@@ -215,6 +215,7 @@ public class GameX01 extends AbstractGame implements IGame {
 			// Add darts
 			GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
 			entry.addPlayerThrow(player, dThrow);
+			entry.getPlayerScoreLeft().put(player, score);
 
 			// Notify update
 			this.fireGameEvent(GameEvent.Factory.newGameEntryUpdatedEvent(this,
@@ -271,6 +272,7 @@ public class GameX01 extends AbstractGame implements IGame {
 						score -= playerThrow.getScore();
 					}
 					this.score.put(player, score);
+					e.getPlayerScoreLeft().put(player, score);
 				}
 				if (update) {
 					if (win) {
@@ -337,6 +339,7 @@ public class GameX01 extends AbstractGame implements IGame {
 		GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
 
 		entry.addPlayerThrow(player, dartThrow);
+		entry.getPlayerScoreLeft().put(player, 0);
 		this.nbDartToFinish = ((entry.getRound() - 1) * 3)
 				+ dartThrow.getNbDartToFinish();
 		entry.setNbPlayedDart(this.nbDartToFinish);

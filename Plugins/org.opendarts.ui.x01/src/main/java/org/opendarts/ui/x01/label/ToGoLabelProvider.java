@@ -1,14 +1,16 @@
+
 /*
  * 
  */
 package org.opendarts.ui.x01.label;
+
+import java.text.NumberFormat;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.player.IPlayer;
-import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.model.WinningX01DartsThrow;
 import org.opendarts.ui.pref.IGeneralPrefs;
@@ -24,6 +26,9 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 
 	/** The use font. */
 	private final boolean useFont;
+	
+	/** The format. */
+	private final NumberFormat format;
 
 	/**
 	 * Instantiates a new score label provider.
@@ -44,6 +49,7 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 		super();
 		this.player = player;
 		this.useFont = useFont;
+		this.format = NumberFormat.getIntegerInstance();
 	}
 
 	/* (non-Javadoc)
@@ -59,8 +65,8 @@ public class ToGoLabelProvider extends ColumnLabelProvider {
 			if (dartThrow == null) {
 				result = "";
 			} else {
-				GameX01 game = gameEntry.getGame();
-				result = String.valueOf(game.getScore(this.player));
+				Integer integer = gameEntry.getPlayerScoreLeft().get(this.player);
+				result = format.format(integer);
 			}
 			return result;
 		}

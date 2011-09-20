@@ -21,6 +21,7 @@ public class GameX01Entry implements IGameEntry {
 
 	/** The player throw. */
 	private final Map<IPlayer, ThreeDartsThrow> playerThrow;
+	private final Map<IPlayer, Integer> playerScoreLeft;
 
 	/** The round. */
 	private final int round;
@@ -39,6 +40,7 @@ public class GameX01Entry implements IGameEntry {
 		this.gameX01 = game;
 		this.round = round;
 		this.playerThrow = new HashMap<IPlayer, ThreeDartsThrow>();
+		this.playerScoreLeft = new HashMap<IPlayer, Integer>();
 	}
 
 	/* (non-Javadoc)
@@ -89,6 +91,15 @@ public class GameX01Entry implements IGameEntry {
 	 */
 	public Map<IPlayer, ThreeDartsThrow> getPlayerThrow() {
 		return this.playerThrow;
+	}
+	
+	/**
+	 * Gets the player score left.
+	 *
+	 * @return the player score left
+	 */
+	public Map<IPlayer, Integer> getPlayerScoreLeft() {
+		return this.playerScoreLeft;
 	}
 
 	/**
