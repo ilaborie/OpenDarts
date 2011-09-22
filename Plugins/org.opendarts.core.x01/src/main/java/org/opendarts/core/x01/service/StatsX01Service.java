@@ -1,5 +1,6 @@
 package org.opendarts.core.x01.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,7 +86,17 @@ public class StatsX01Service extends AbstractStatsService {
 	 */
 	public StatsX01Service() {
 		super();
-		this.keys = Arrays.asList(SESSION_SET_WIN, SESSION_NB_SET,
+		this.keys =new ArrayList<String>();
+		this.keys.addAll(this.getStatsKeys());
+	}
+
+	/**
+	 * Gets the stats keys.
+	 *
+	 * @return the stats keys
+	 */
+	protected List<String> getStatsKeys() {
+		return Arrays.asList(SESSION_SET_WIN, SESSION_NB_SET,
 				SESSION_GAME_WIN, SESSION_NB_GAME,
 
 				SET_GAME_WIN, SET_NB_GAME,
@@ -227,7 +238,7 @@ public class StatsX01Service extends AbstractStatsService {
 	 * @param player the player
 	 * @return the game stats
 	 */
-	private IStats<IGame> createGameStats(GameX01 game, IPlayer player) {
+	protected IStats<IGame> createGameStats(GameX01 game, IPlayer player) {
 		GameStats stats = new GameStats(game, player);
 		// Average darts
 		stats.addEntry(new Average3DartsStatsEntry(GAME_AVG_3_DARTS));
@@ -260,7 +271,7 @@ public class StatsX01Service extends AbstractStatsService {
 	 * @param player the player
 	 * @return the game stats
 	 */
-	private IStats<ISet> createSetStats(GameSet set, IPlayer player) {
+	protected IStats<ISet> createSetStats(GameSet set, IPlayer player) {
 		SetStats stats = new SetStats(set, player);
 		// Average darts
 		stats.addEntry(new Average3DartsStatsEntry(SET_AVG_3_DARTS));
@@ -318,7 +329,7 @@ public class StatsX01Service extends AbstractStatsService {
 	 * @param player the player
 	 * @return the game stats
 	 */
-	private IStats<ISession> createSessionStats(ISession session, IPlayer player) {
+	protected IStats<ISession> createSessionStats(ISession session, IPlayer player) {
 		SessionStats stats = new SessionStats(session, player);
 		// Average darts
 		stats.addEntry(new Average3DartsStatsEntry(SESSION_AVG_3_DARTS));

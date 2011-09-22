@@ -82,6 +82,15 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	public SetEditorInput getSetInput() {
 		return this.setInput;
 	}
+	
+	/**
+	 * Gets the game service.
+	 *
+	 * @return the game service
+	 */
+	public IGameService getGameService() {
+		return this.gameService;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#setInput(org.eclipse.ui.IEditorInput)
@@ -145,7 +154,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	/**
 	* Start.
 	*/
-	private void handleSetInitialize() {
+	protected void handleSetInitialize() {
 		IGame game = this.getSet().getCurrentGame();
 		if ((game != null) && !game.isFinished()) {
 			this.handleGameActive((GameX01) game);
@@ -158,7 +167,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	 *
 	 * @param game the game
 	 */
-	private void handleGameActive(GameX01 game) {
+	protected void handleGameActive(GameX01 game) {
 		LOG.info("Starting new game: {}", game);
 		// get new page
 		GameX01Page page;
@@ -186,7 +195,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	 * @param gameX01Page the game x01 page
 	 * @param game the game
 	 */
-	public void handleGameReinitialized(GameX01Page gameX01Page, GameX01 game) {
+	protected void handleGameReinitialized(GameX01Page gameX01Page, GameX01 game) {
 		this.pages.remove(game);
 		this.removePage(gameX01Page.getIndex());
 		// get the page
@@ -209,7 +218,7 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	/**
 	 * Handle set finished.
 	 */
-	private void handleSetFinished() {
+	protected void handleSetFinished() {
 		this.dirty = false;
 		// End Game dialog
 		SetX01InfoDialog dialog = new SetX01InfoDialog(this.getSite()
@@ -272,6 +281,15 @@ public class SetX01Editor extends FormEditor implements ISetEditor,
 	@Override
 	public boolean isDirty() {
 		return this.dirty;
+	}
+	
+	/**
+	 * Sets the dirty.
+	 *
+	 * @param dirty the new dirty
+	 */
+	protected void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 
 	/* (non-Javadoc)

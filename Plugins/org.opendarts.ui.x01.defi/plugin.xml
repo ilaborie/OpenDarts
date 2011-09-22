@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.opendarts.ui.x01.defi.editor.DefiX01Editor"
+            default="false"
+            id="opendarts.editor.defi.x01"
+            name="Defi 100 001">
+      </editor>
+   </extension>
+</plugin>

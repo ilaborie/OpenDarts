@@ -13,6 +13,13 @@ public interface IDartsThrow {
 	 * @return the score
 	 */
 	int getScore();
+	
+	/**
+	 * Gets the timestamp.
+	 *
+	 * @return the timestamp
+	 */
+	long getTimestamp();
 
 	/**
 	 * Gets the list.

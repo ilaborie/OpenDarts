@@ -20,6 +20,9 @@ public class ThreeDartsThrow implements IDartsThrow {
 
 	/** The darts. */
 	private final List<IDart> darts;
+	
+	/** The timestamp. */
+	private final long timestamp;
 
 	/**
 	 * Instantiates a new three dart throw.
@@ -29,6 +32,7 @@ public class ThreeDartsThrow implements IDartsThrow {
 	 */
 	public ThreeDartsThrow(int score) throws InvalidDartThrowException {
 		super();
+		this.timestamp = System.currentTimeMillis();
 		this.score = score;
 		this.darts = new ArrayList<IDart>();
 		this.check();
@@ -59,6 +63,14 @@ public class ThreeDartsThrow implements IDartsThrow {
 	public ThreeDartsThrow(IDart[] darts) throws InvalidDartThrowException {
 		this(getScore(darts));
 		this.darts.addAll(Arrays.asList(darts));
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.dart.IDartsThrow#getTimestamp()
+	 */
+	@Override
+	public long getTimestamp() {
+		return this.timestamp;
 	}
 
 	/**

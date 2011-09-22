@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenDarts Core X01
-Bundle-SymbolicName: org.opendarts.core.x01
+Bundle-Name: OpenDarts x01 Defi (100 001)
+Bundle-SymbolicName: org.opendarts.core.x01.defi
 Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.opendarts.core.x01.defi.OpenDartsX01DefiBundle
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.swt.graphics,
- org.opendarts.core.ia.service,
+Import-Package: org.opendarts.core.ia.service,
  org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
@@ -17,16 +17,15 @@ Import-Package: org.eclipse.swt.graphics,
  org.opendarts.core.service.dart,
  org.opendarts.core.service.game,
  org.opendarts.core.stats.model,
- org.opendarts.core.stats.model.comparator,
  org.opendarts.core.stats.model.impl,
  org.opendarts.core.stats.service,
  org.opendarts.core.stats.service.impl,
- org.osgi.framework;version="1.6.0",
- org.slf4j;version="1.6.1"
-Export-Package: org.opendarts.core.x01,
  org.opendarts.core.x01.model,
  org.opendarts.core.x01.service,
- org.opendarts.core.x01.service.entry
+ org.opendarts.core.x01.service.entry,
+ org.osgi.framework;version="1.3.0",
+ org.slf4j;version="1.6.1"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.opendarts.core.x01.OpenDartsX01Bundle
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0"
+Export-Package: org.opendarts.core.x01.defi,
+ org.opendarts.core.x01.defi.model,
+ org.opendarts.core.x01.defi.service

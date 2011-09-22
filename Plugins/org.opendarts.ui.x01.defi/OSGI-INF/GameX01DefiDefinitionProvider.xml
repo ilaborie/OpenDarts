@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.opendarts.ui.x01.defi.GameX01DefiDefinitionProvider">
+   <implementation class="org.opendarts.ui.x01.defi.service.GameX01DefiDefinitionProvider"/>
+   <service>
+      <provide interface="org.opendarts.ui.service.IGameDefinitionProvider"/>
+   </service>
+</scr:component>
