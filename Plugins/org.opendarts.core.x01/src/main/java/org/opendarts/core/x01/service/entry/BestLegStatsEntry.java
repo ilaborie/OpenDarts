@@ -27,7 +27,7 @@ public class BestLegStatsEntry extends BestStatsEntry<Integer> {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Integer getInput(IGame game, IPlayer player,
+	public Integer getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		Integer result = null;
 		if ((dartsThrow != null)

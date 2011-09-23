@@ -62,7 +62,7 @@ public abstract class IncrementStatsEntry extends AbstractStatsEntry<Number> {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
+	public Number getInput(IGame game, IPlayer player, IGameEntry gameEntry,
 			IDartsThrow dartsThrow) {
 		if (this.shouldIncrement(game, player, gameEntry, dartsThrow)) {
 			this.increment();
@@ -74,7 +74,7 @@ public abstract class IncrementStatsEntry extends AbstractStatsEntry<Number> {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected Number getUndoInput(IGame game, IPlayer player,
+	public Number getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		if (this.shouldIncrement(game, player, gameEntry, dartsThrow)) {
 			this.decrement();

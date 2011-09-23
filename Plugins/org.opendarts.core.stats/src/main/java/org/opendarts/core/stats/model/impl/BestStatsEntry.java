@@ -95,7 +95,7 @@ public abstract class BestStatsEntry<T> extends AbstractStatsEntry<T> {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected T getUndoInput(IGame game, IPlayer player, IGameEntry gameEntry,
+	public T getUndoInput(IGame game, IPlayer player, IGameEntry gameEntry,
 			IDartsThrow dartsThrow) {
 		return this.getInput(game, player, gameEntry, dartsThrow);
 	}

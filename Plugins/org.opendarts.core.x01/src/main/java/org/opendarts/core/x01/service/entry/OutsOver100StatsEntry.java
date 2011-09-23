@@ -42,7 +42,7 @@ public class OutsOver100StatsEntry extends AbstractStatsEntry<IntegerListEntry> 
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected IntegerListEntry getInput(IGame game, IPlayer player,
+	public IntegerListEntry getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		StatsValue<IntegerListEntry> val = (StatsValue<IntegerListEntry>) this
 				.getValue();
@@ -70,7 +70,7 @@ public class OutsOver100StatsEntry extends AbstractStatsEntry<IntegerListEntry> 
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected IntegerListEntry getUndoInput(IGame game, IPlayer player,
+	public IntegerListEntry getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		IStatValue<IntegerListEntry> val = this.getValue();
 		IntegerListEntry lst = val.getValue();

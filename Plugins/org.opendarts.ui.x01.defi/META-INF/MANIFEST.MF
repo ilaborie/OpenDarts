@@ -8,11 +8,13 @@ Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.opendarts.core.model.game,
  org.opendarts.core.model.session,
+ org.opendarts.core.stats.model,
  org.opendarts.core.stats.model.impl,
  org.opendarts.core.stats.service,
  org.opendarts.core.x01.defi,
  org.opendarts.core.x01.defi.model,
  org.opendarts.core.x01.defi.service,
+ org.opendarts.core.x01.defi.service.entry,
  org.opendarts.core.x01.model,
  org.opendarts.core.x01.service,
  org.opendarts.core.x01.service.entry,

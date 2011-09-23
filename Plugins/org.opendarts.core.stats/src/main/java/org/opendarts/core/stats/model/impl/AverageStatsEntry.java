@@ -102,7 +102,7 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected AvgEntry getInput(IGame game, IPlayer player,
+	public AvgEntry getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		// not called
 		return null;
@@ -112,7 +112,7 @@ public abstract class AverageStatsEntry extends AbstractStatsEntry<AvgEntry> {
 	 * @see org.opendarts.prototype.internal.model.stats.AbstractStatsEntry#getUndoInput(org.opendarts.prototype.model.game.IGame, org.opendarts.prototype.model.player.IPlayer, org.opendarts.prototype.model.game.IGameEntry, org.opendarts.prototype.model.dart.IDartsThrow)
 	 */
 	@Override
-	protected AvgEntry getUndoInput(IGame game, IPlayer player,
+	public AvgEntry getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		return this.getInput(game, player, gameEntry, dartsThrow);
 	}

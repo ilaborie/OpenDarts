@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.opendarts.core.x01.defi.OpenDartsX01DefiBundle
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.opendarts.core.ia.service,
+Import-Package: org.eclipse.core.runtime;version="3.4.0",
+ org.opendarts.core.ia.service,
  org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
@@ -28,4 +29,6 @@ Import-Package: org.opendarts.core.ia.service,
 Bundle-ActivationPolicy: lazy
 Export-Package: org.opendarts.core.x01.defi,
  org.opendarts.core.x01.defi.model,
- org.opendarts.core.x01.defi.service
+ org.opendarts.core.x01.defi.service,
+ org.opendarts.core.x01.defi.service.entry
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)"

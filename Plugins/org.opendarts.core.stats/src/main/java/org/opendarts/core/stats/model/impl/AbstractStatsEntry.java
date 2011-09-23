@@ -101,7 +101,7 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 	 * @param dartsThrow the darts throw
 	 * @return the input
 	 */
-	protected abstract T getInput(IGame game, IPlayer player,
+	public abstract T getInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow);
 
 	/**
@@ -113,7 +113,7 @@ public abstract class AbstractStatsEntry<T> implements IStatsEntry<T> {
 	 * @param dartsThrow the darts throw
 	 * @return the undo input
 	 */
-	protected abstract T getUndoInput(IGame game, IPlayer player,
+	public abstract T getUndoInput(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow);
 
 	/**

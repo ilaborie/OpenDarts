@@ -12,6 +12,8 @@ import org.opendarts.core.stats.model.IStats;
 import org.opendarts.core.stats.model.impl.GameStats;
 import org.opendarts.core.stats.model.impl.SessionStats;
 import org.opendarts.core.stats.model.impl.SetStats;
+import org.opendarts.core.x01.defi.service.entry.AverageHistoryStatsEntry;
+import org.opendarts.core.x01.defi.service.entry.AverageTimeStatsEntry;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.service.StatsX01Service;
 import org.opendarts.core.x01.service.entry.Average3DartsStatsEntry;
@@ -64,8 +66,13 @@ public class StatsX01DefiService extends StatsX01Service {
 	protected IStats<IGame> createGameStats(GameX01 game, IPlayer player) {
 		GameStats stats = new GameStats(game, player);
 		// Average darts
-		stats.addEntry(new Average3DartsStatsEntry(GAME_AVG_3_DARTS));
-		stats.addEntry(new AverageDartStatsEntry(GAME_AVG_DART));
+		Average3DartsStatsEntry avg3Darts = new Average3DartsStatsEntry(GAME_AVG_3_DARTS);
+		AverageDartStatsEntry avgDart = new AverageDartStatsEntry(GAME_AVG_DART);
+		stats.addEntry(avg3Darts);
+		stats.addEntry(avgDart);
+		// Average History
+		stats.addEntry(new AverageHistoryStatsEntry(GAME_AVG_DART_HISTORY,avgDart));
+		stats.addEntry(new AverageHistoryStatsEntry(GAME_AVG_3_DARTS_HISTORY,avg3Darts));
 
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(GAME_180s, 180));
@@ -84,7 +91,11 @@ public class StatsX01DefiService extends StatsX01Service {
 
 		// 60+
 		stats.addEntry(new DartRangeStatsEntry(GAME_60_PLUS, 61, 99));
-		// TODO GAME_AVG_DART_HISTORY, GAME_AVG_3_DARTS_HISTORY, GAME_AVG_TIME, GAME_AVG_TIME_HISTORY
+		
+		// Time
+		AverageTimeStatsEntry avgTime = new AverageTimeStatsEntry(GAME_AVG_TIME);
+		stats.addEntry(avgTime);
+		stats.addEntry(new AverageHistoryStatsEntry(GAME_AVG_TIME_HISTORY,avgTime));
 		return stats;
 	}
 	
