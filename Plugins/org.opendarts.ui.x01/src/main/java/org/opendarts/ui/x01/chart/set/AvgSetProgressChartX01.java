@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.set;
 
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.model.IStatValue;
@@ -25,7 +25,7 @@ public class AvgSetProgressChartX01 extends SetProgressChartX01<AvgEntry> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionProgressChartX01#getValue(org.opendarts.core.stats.model.IStatsEntry)
+	 * @see org.opendarts.ui.x01.chart.SessionProgressChartX01#getValue(org.opendarts.core.stats.model.IStatsEntry)
 	 */
 	@Override
 	protected Double getValue(IStatsEntry<AvgEntry> stEntry) {

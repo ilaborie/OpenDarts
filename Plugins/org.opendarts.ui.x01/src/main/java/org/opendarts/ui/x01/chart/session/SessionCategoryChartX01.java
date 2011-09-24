@@ -1,8 +1,7 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.session;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,25 +9,35 @@ import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.MultiplePiePlot;
-import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryMarker;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.util.TableOrder;
+import org.jfree.ui.Layer;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
+import org.opendarts.ui.x01.chart.Category;
 
 /**
  * The Class CategoryChartX01.
  *
  * @param <T> the generic type
  */
-public abstract class SessionPieChartX01<T> implements IChart {
+public abstract class SessionCategoryChartX01<T> implements IChart {
+
+	// TODO prefs
+	/** The color even. */
+	private final Color colorEven = new Color(0, 0, 127, 25);
+
+	/** The color odd. */
+	private final Color colorOdd = new Color(0, 127, 0, 25);
 
 	/** The name. */
 	private final String name;
@@ -49,7 +58,7 @@ public abstract class SessionPieChartX01<T> implements IChart {
 	 * @param statKey the stat key
 	 * @param session the session
 	 */
-	public SessionPieChartX01(String name, String statKey, ISession session) {
+	public SessionCategoryChartX01(String name, String statKey, ISession session) {
 		super();
 		this.name = name;
 		this.statKey = statKey;
@@ -85,9 +94,9 @@ public abstract class SessionPieChartX01<T> implements IChart {
 	 */
 	@Override
 	public JFreeChart getChart() {
-//		if (this.chart == null) {
+		if (this.chart == null) {
 			this.chart = this.createChart();
-//		}
+		}
 		return this.chart;
 	}
 
@@ -100,7 +109,7 @@ public abstract class SessionPieChartX01<T> implements IChart {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.ChartX01#createChart()
+	 * @see org.opendarts.ui.x01.chart.ChartX01#createChart()
 	 */
 	/**
 	 * Creates the chart.
@@ -127,12 +136,11 @@ public abstract class SessionPieChartX01<T> implements IChart {
 			for (Category c : this.getCategories()) {
 				value = this.getValue(c, player);
 				if (value != null) {
-					dataset.addValue(value, c, this.getRow(player));
+					dataset.addValue(value, this.getRow(player), c);
 				}
 			}
 
 		}
-
 		return dataset;
 	}
 
@@ -182,24 +190,40 @@ public abstract class SessionPieChartX01<T> implements IChart {
 	 * @return the j free chart
 	 */
 	private JFreeChart buildChart(CategoryDataset dataset) {
-		JFreeChart chart1 = ChartFactory.createMultiplePieChart(this.getName(),
-				dataset, TableOrder.BY_COLUMN, true, true, false);
+		JFreeChart chart = ChartFactory.createBarChart(this.getName(),
+				"Player", "Count", dataset, PlotOrientation.VERTICAL, true,
+				true, false);
 
-		MultiplePiePlot mplot = (MultiplePiePlot) chart1.getPlot();
-		mplot.setBackgroundPaint(Color.white);
-		mplot.setOutlineStroke(new BasicStroke(1.0F));
+		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		plot.setRangePannable(true);
+		plot.setForegroundAlpha(0.66F);
+		plot.setBackgroundPaint(Color.white);
 
-		JFreeChart chart2 = mplot.getPieChart();
+		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
+		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		PiePlot plot = (PiePlot) chart2.getPlot();
-		plot.setBackgroundPaint(null);
-		plot.setOutlineStroke(null);
+		BarRenderer renderer = (BarRenderer) plot.getRenderer();
+		renderer.setDrawBarOutline(false);
+		renderer.setShadowVisible(false);
 
-		plot.setLabelGenerator(new StandardPieSectionLabelGenerator(
-				"{0} ({2})", NumberFormat.getNumberInstance(), NumberFormat
-						.getPercentInstance()));
+		Comparable<?> category;
+		CategoryMarker marker;
+		Color color;
+		for (int i = 0; i < dataset.getColumnCount(); i++) {
+			category = dataset.getColumnKey(i);
+			if ((i % 2) == 0) {
+				color = this.colorEven;
+			} else {
+				color = this.colorOdd;
+			}
+			marker = new CategoryMarker(category, color, new BasicStroke(1.0F));
+			marker.setDrawAsLine(false);
+			marker.setAlpha(0.50F);
 
-		return chart1;
+			plot.addDomainMarker(marker, Layer.BACKGROUND);
+		}
+
+		return chart;
 	}
 
 }

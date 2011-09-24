@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.x01.model.GameX01Entry;
+import org.opendarts.ui.x01.chart.Category;
 
 /**
  * The Class SessionThrowPieChartX01.
@@ -81,7 +82,7 @@ public class GameThrowPieChartX01<T> extends GamePieChartX01<T> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionPieChartX01#getCategories()
+	 * @see org.opendarts.ui.x01.chart.SessionPieChartX01#getCategories()
 	 */
 	@Override
 	protected List<Category> getCategories() {
@@ -98,7 +99,7 @@ public class GameThrowPieChartX01<T> extends GamePieChartX01<T> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionPieChartX01#getValue(org.opendarts.ui.x01.model.Category, org.opendarts.core.model.player.IPlayer)
+	 * @see org.opendarts.ui.x01.chart.SessionPieChartX01#getValue(org.opendarts.ui.x01.chart.Category, org.opendarts.core.model.player.IPlayer)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")

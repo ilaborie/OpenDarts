@@ -22,7 +22,7 @@ public class ThreeDartsThrow implements IDartsThrow {
 	private final List<IDart> darts;
 	
 	/** The timestamp. */
-	private final long timestamp;
+	private long timestamp;
 
 	/**
 	 * Instantiates a new three dart throw.
@@ -154,6 +154,15 @@ public class ThreeDartsThrow implements IDartsThrow {
 	 */
 	protected List<IDart> getInternalDarts() {
 		return this.darts;
+	}
+
+	/**
+	 * Sets the timestamp.
+	 *
+	 * @param timestamp the new timestamp
+	 */
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }

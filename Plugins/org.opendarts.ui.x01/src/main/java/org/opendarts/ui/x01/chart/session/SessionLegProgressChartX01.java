@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.session;
 
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -31,7 +31,7 @@ public class SessionLegProgressChartX01 extends
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionProgressChartX01#addGameData(org.jfree.data.xy.XYSeriesCollection, java.lang.String, org.opendarts.core.model.game.IGame)
+	 * @see org.opendarts.ui.x01.chart.SessionProgressChartX01#addGameData(org.jfree.data.xy.XYSeriesCollection, java.lang.String, org.opendarts.core.model.game.IGame)
 	 */
 	@Override
 	protected void addGameData(XYSeriesCollection dataset, String gameStatKey,
@@ -43,7 +43,7 @@ public class SessionLegProgressChartX01 extends
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionProgressChartX01#getValue(org.opendarts.core.stats.model.IStatsEntry)
+	 * @see org.opendarts.ui.x01.chart.SessionProgressChartX01#getValue(org.opendarts.core.stats.model.IStatsEntry)
 	 */
 	@Override
 	protected Double getValue(IStatsEntry<AvgEntry> stEntry) {

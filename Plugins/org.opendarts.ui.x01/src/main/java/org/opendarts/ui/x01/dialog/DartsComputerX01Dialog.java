@@ -36,9 +36,6 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(DartsComputerX01Dialog.class);
 
-	/** The Constant DELAY. */
-	private static final int DELAY = 1 * 1000; // 1s 
-
 	/** The entry. */
 	private final IGameEntry entry;
 
@@ -97,14 +94,18 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 	protected Control createButtonBar(Composite parent) {
 		return new Label(parent, SWT.NONE);
 	}
+	
+	/**
+	 * Gets the delay.
+	 *
+	 * @return the delay
+	 */
+	protected int getDelay() {
+		 return 1 * 1000; // 1s 
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.window.Window#getShellListener()
-	 */
-	/**
-	 * Gets the shell listener.
-	 *
-	 * @return the shell listener
 	 */
 	@Override
 	protected ShellListener getShellListener() {
@@ -143,7 +144,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 					done = doneList.get(i);
 					if (wished != null) {
 						job = new ThrowDartsJob(i, wished, done);
-						job.schedule(DELAY * (i + 1));
+						job.schedule(getDelay()* (i + 1));
 					}
 				}
 
@@ -162,7 +163,7 @@ public class DartsComputerX01Dialog extends ThreeDartsComputerDialog {
 						return Status.OK_STATUS;
 					}
 				};
-				closeJob.schedule((i + 1) * DELAY);
+				closeJob.schedule((i + 1) * getDelay());
 			}
 		};
 	}

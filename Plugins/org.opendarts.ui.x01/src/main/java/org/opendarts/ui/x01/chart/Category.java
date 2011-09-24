@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart;
 
 /**
  * The Class Category.

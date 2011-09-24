@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.set;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,14 +10,16 @@ import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.x01.model.GameX01Entry;
+import org.opendarts.ui.x01.chart.Category;
 
 /**
- * The Class SessionThrowDistributionChartX01.
+ * The Class SetThrowDistributionChartX01.
  *
  * @param <T> the generic type
  */
-public class GameThrowDistributionChartX01<T> extends GameCategoryChartX01<T> {
+public class SetThrowDistributionChartX01<T> extends SetCategoryChartX01<T> {
 
 	/** The distribution. */
 	private final Map<IPlayer, int[]> distribution;
@@ -25,8 +27,8 @@ public class GameThrowDistributionChartX01<T> extends GameCategoryChartX01<T> {
 	/** The categories. */
 	private List<Category> categories;
 
-	/** The game. */
-	private final IGame game;
+	/** The session. */
+	private final ISet set;
 
 	/**
 	 * Instantiates a new session throw distribution chart x01.
@@ -35,14 +37,15 @@ public class GameThrowDistributionChartX01<T> extends GameCategoryChartX01<T> {
 	 * @param statKey the stat key
 	 * @param session the session
 	 */
-	public GameThrowDistributionChartX01(String name, String statKey, IGame game) {
-		super(name, statKey, game);
+	public SetThrowDistributionChartX01(String name, String statKey,
+			ISet set) {
+		super(name, statKey, set);
 		this.distribution = new HashMap<IPlayer, int[]>();
-		this.game = game;
+		this.set = set;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionCategoryChartX01#getCategories()
+	 * @see org.opendarts.ui.x01.chart.SessionCategoryChartX01#getCategories()
 	 */
 	@Override
 	protected List<Category> getCategories() {
@@ -58,7 +61,7 @@ public class GameThrowDistributionChartX01<T> extends GameCategoryChartX01<T> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionCategoryChartX01#getValue(org.opendarts.ui.x01.model.Category, org.opendarts.core.model.player.IPlayer)
+	 * @see org.opendarts.ui.x01.chart.SessionCategoryChartX01#getValue(org.opendarts.ui.x01.chart.Category, org.opendarts.core.model.player.IPlayer)
 	 */
 	@Override
 	protected Double getValue(Category c, IPlayer player) {
@@ -71,17 +74,19 @@ public class GameThrowDistributionChartX01<T> extends GameCategoryChartX01<T> {
 			ThreeDartsThrow dThrow;
 			int val;
 			int i;
-			for (IGameEntry ientry : game.getGameEntries()) {
-				entry = (GameX01Entry) ientry;
-				dThrow = entry.getPlayerThrow().get(player);
-				if (dThrow != null) {
-					val = dThrow.getScore();
-					if (val == 180) {
-						i = 17;
-					} else {
-						i = val / 10;
+			for (IGame game : set.getAllGame()) {
+				for (IGameEntry ientry : game.getGameEntries()) {
+					entry = (GameX01Entry) ientry;
+					dThrow = entry.getPlayerThrow().get(player);
+					if (dThrow != null) {
+						val = dThrow.getScore();
+						if (val == 180) {
+							i = 17;
+						} else {
+							i = val / 10;
+						}
+						values[i] = values[i] + 1;
 					}
-					values[i] = values[i] + 1;
 				}
 			}
 		}

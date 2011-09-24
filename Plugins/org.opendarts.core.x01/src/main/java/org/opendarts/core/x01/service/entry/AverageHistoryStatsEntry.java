@@ -1,4 +1,4 @@
-package org.opendarts.core.x01.defi.service.entry;
+package org.opendarts.core.x01.service.entry;
 
 import java.util.Comparator;
 

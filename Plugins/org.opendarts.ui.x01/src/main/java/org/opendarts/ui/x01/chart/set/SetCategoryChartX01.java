@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.set;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,18 +17,19 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.Layer;
-import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.model.session.ISet;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
+import org.opendarts.ui.x01.chart.Category;
 
 /**
  * The Class CategoryChartX01.
  *
  * @param <T> the generic type
  */
-public abstract class GameCategoryChartX01<T> implements IChart {
+public abstract class SetCategoryChartX01<T> implements IChart {
 
 	// TODO prefs
 	/** The color even. */
@@ -40,8 +41,8 @@ public abstract class GameCategoryChartX01<T> implements IChart {
 	/** The name. */
 	private final String name;
 
-	/** The game. */
-	private final IGame game;
+	/** The session. */
+	private final ISet set;
 
 	/** The stat key. */
 	private final String statKey;
@@ -56,11 +57,11 @@ public abstract class GameCategoryChartX01<T> implements IChart {
 	 * @param statKey the stat key
 	 * @param session the session
 	 */
-	public GameCategoryChartX01(String name, String statKey, IGame game) {
+	public SetCategoryChartX01(String name, String statKey, ISet set) {
 		super();
 		this.name = name;
 		this.statKey = statKey;
-		this.game = game;
+		this.set = set;
 	}
 
 	/* (non-Javadoc)
@@ -68,7 +69,7 @@ public abstract class GameCategoryChartX01<T> implements IChart {
 	 */
 	@Override
 	public Object getElement() {
-		return this.game;
+		return this.set;
 	}
 
 	/* (non-Javadoc)
@@ -107,7 +108,7 @@ public abstract class GameCategoryChartX01<T> implements IChart {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.ChartX01#createChart()
+	 * @see org.opendarts.ui.x01.chart.ChartX01#createChart()
 	 */
 	/**
 	 * Creates the chart.
@@ -159,8 +160,7 @@ public abstract class GameCategoryChartX01<T> implements IChart {
 	 */
 	protected List<IPlayer> getAllPlayers() {
 		Set<IPlayer> players = new HashSet<IPlayer>();
-		players.addAll(this.game.getParentSet().getGameDefinition()
-				.getInitialPlayers());
+		players.addAll(set.getGameDefinition().getInitialPlayers());
 		return new ArrayList<IPlayer>(players);
 	}
 

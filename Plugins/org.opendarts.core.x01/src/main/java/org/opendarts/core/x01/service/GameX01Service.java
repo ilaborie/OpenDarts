@@ -86,6 +86,8 @@ public class GameX01Service implements IGameService {
 			IDartsThrow idartThrow) {
 		GameX01 game = (GameX01) igame;
 		ThreeDartsThrow dartThrow = (ThreeDartsThrow) idartThrow;
+		dartThrow.setTimestamp(System.currentTimeMillis());
+		
 		game.addPlayerThrow(player, dartThrow);
 	}
 
@@ -97,6 +99,7 @@ public class GameX01Service implements IGameService {
 			IDartsThrow idartThrow) {
 		GameX01 game = (GameX01) igame;
 		WinningX01DartsThrow dartThrow = (WinningX01DartsThrow) idartThrow;
+		dartThrow.setTimestamp(System.currentTimeMillis());
 		game.addWinningPlayerThrow(player, dartThrow);
 	}
 

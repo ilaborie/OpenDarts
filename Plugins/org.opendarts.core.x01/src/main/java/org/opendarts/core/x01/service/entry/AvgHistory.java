@@ -1,8 +1,9 @@
-package org.opendarts.core.x01.defi.service.entry;
+package org.opendarts.core.x01.service.entry;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 /**
@@ -50,6 +51,20 @@ public class AvgHistory implements Serializable {
 	 */
 	public void addHistory(long timestamp, double avg) {
 		this.values.put(timestamp, avg);
+	}
+
+	/**
+	 * Gets the last value.
+	 *
+	 * @return the last value
+	 */
+	public Double getLastValue() {
+		Double result = null;
+		Entry<Long, Double> entry = this.values.lastEntry();
+		if (entry!=null) {
+			result = entry.getValue();
+		}
+		return result;
 	}
 
 }

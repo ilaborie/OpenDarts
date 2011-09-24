@@ -1,21 +1,32 @@
-package org.opendarts.ui.x01.defi.chart;
+package org.opendarts.ui.x01.chart.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.time.FixedMillisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.ui.Layer;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
-import org.opendarts.core.x01.defi.service.entry.AvgHistory;
+import org.opendarts.core.stats.model.IElementStats;
+import org.opendarts.core.stats.model.IStatValue;
+import org.opendarts.core.stats.model.IStats;
+import org.opendarts.core.stats.model.IStatsEntry;
+import org.opendarts.core.stats.service.IStatsService;
+import org.opendarts.core.x01.service.entry.AvgHistory;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
@@ -25,7 +36,7 @@ import org.opendarts.ui.x01.X01UiPlugin;
  *
  * @param <T> the generic type
  */
-public abstract class HistoryCategoryChartX01 implements IChart {
+public class GameHistoryChartX01 implements IChart {
 
 	/** The name. */
 	private final String name;
@@ -39,6 +50,18 @@ public abstract class HistoryCategoryChartX01 implements IChart {
 	/** The chart. */
 	private JFreeChart chart;
 
+	/** The service. */
+	private final IStatsService service;
+
+	/** The game stats. */
+	private final  IElementStats<IGame> gameStats;
+
+	/** The player colors. */
+	private final Map<IPlayer, Color> playerColors;
+
+	/** The player series. */
+	private final Map<IPlayer, TimeSeries> playerSeries;
+
 	/**
 	 * Instantiates a new avg leg chart x01.
 	 *
@@ -46,11 +69,16 @@ public abstract class HistoryCategoryChartX01 implements IChart {
 	 * @param statKey the stat key
 	 * @param session the session
 	 */
-	public HistoryCategoryChartX01(String name, String statKey, IGame game) {
+	public GameHistoryChartX01(String name, String statKey, IGame game,IStatsService service) {
 		super();
 		this.name = name;
 		this.statKey = statKey;
 		this.game = game;
+		this.service = service;
+
+		this.gameStats = this.service.getGameStats(game);
+		this.playerColors = new HashMap<IPlayer, Color>();
+		this.playerSeries = new HashMap<IPlayer, TimeSeries>();
 	}
 
 	/* (non-Javadoc)
@@ -97,7 +125,7 @@ public abstract class HistoryCategoryChartX01 implements IChart {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.ChartX01#createChart()
+	 * @see org.opendarts.ui.x01.chart.ChartX01#createChart()
 	 */
 	/**
 	 * Creates the chart.
@@ -126,6 +154,7 @@ public abstract class HistoryCategoryChartX01 implements IChart {
 				ts.add(new FixedMillisecond(entry.getKey()), entry.getValue());
 			}
 			result.addSeries(ts);
+			this.playerSeries.put(player, ts);
 		}
 		return result;
 	}
@@ -136,7 +165,16 @@ public abstract class HistoryCategoryChartX01 implements IChart {
 	 * @param player the player
 	 * @return the history
 	 */
-	protected abstract AvgHistory getHistory(IPlayer player);
+	protected AvgHistory getHistory(IPlayer player) {
+		AvgHistory result = null;
+		IStats<IGame> stats = this.gameStats.getPlayerStats(player);
+		IStatsEntry<AvgHistory> entry = stats.getEntry(getStatKey());
+		IStatValue<AvgHistory> value = entry.getValue();
+		if (value != null) {
+			result = value.getValue();
+		}
+		return result;
+	}
 
 	/**
 	 * Gets the all players.
@@ -164,14 +202,72 @@ public abstract class HistoryCategoryChartX01 implements IChart {
 		plot.setForegroundAlpha(0.66F);
 		plot.setBackgroundPaint(Color.white);
 
-		//		NumberAxis axis = (NumberAxis) plot.getRangeAxis();
-		//		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		//		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-		//		renderer.setDrawBarOutline(false);
-		//		renderer.setShadowVisible(false);
+		// Create players colors
+		this.initializePlayerColors();
+		
+		XYItemRenderer renderer = plot.getRenderer();
+		int serieIndex;
+		for (Entry<IPlayer, TimeSeries> entry : this.playerSeries.entrySet()) {
+			serieIndex = dataset.getSeries().indexOf(entry.getValue());
+			if (serieIndex >= 0 && dataset.getSeries(serieIndex) != null) {
+				renderer.setSeriesPaint(serieIndex,
+						this.playerColors.get(entry.getKey()));
+			}
+		}
 
+ 		// Average
+		this.displayAvg(plot);
 		return chart;
+	}
+
+	/**
+	 * Display avg.
+	 *
+	 * @param plot the plot
+	 */
+	private void displayAvg(XYPlot plot) {
+		IElementStats<IGame> eltStats = this.service
+				.getGameStats(this.game);
+		Map<IPlayer, IStatsEntry<AvgHistory>> entries = eltStats
+				.getStatsEntries(this.getStatKey());
+		ValueMarker marker;
+		IStatsEntry<AvgHistory> v;
+		IStatValue<AvgHistory> value;
+		AvgHistory hist;
+		for (Entry<IPlayer, IStatsEntry<AvgHistory>> entry : entries.entrySet()) {
+			v = entry.getValue();
+			if (v != null) {
+				 value = v.getValue();
+				if (value != null) {
+					hist = value.getValue();
+					if (hist!=null) {
+					marker = new ValueMarker(hist.getLastValue());
+					marker.setAlpha(0.25F);
+					marker.setPaint(this.playerColors.get(entry.getKey()));
+					plot.addRangeMarker(marker, Layer.BACKGROUND);
+				}}
+			}
+		}
+	}
+
+	/**
+	 * Initialize player colors.
+	 */
+	private void initializePlayerColors() {
+		List<Color> colors = Arrays.asList(Color.cyan, Color.magenta,
+				Color.orange, Color.blue, Color.red, Color.yellow, Color.pink);
+		int i = 0;
+		Color color;
+		for (IPlayer player : this.playerSeries.keySet()) {
+			if ((i + 1) < colors.size()) {
+				color = colors.get(i);
+			} else {
+				color = Color.lightGray;
+			}
+			this.playerColors.put(player, color);
+			i++;
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.set;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,16 +7,16 @@ import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
-import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.x01.model.GameX01Entry;
+import org.opendarts.ui.x01.chart.Category;
 
 /**
  * The Class SessionThrowPieChartX01.
  *
  * @param <T> the generic type
  */
-public class SessionThrowPieChartX01<T> extends SessionPieChartX01<T> {
+public class SetThrowPieChartX01<T> extends SetPieChartX01<T> {
 
 	/**
 	 * The Class ThrowCategory.
@@ -65,7 +65,7 @@ public class SessionThrowPieChartX01<T> extends SessionPieChartX01<T> {
 	}
 
 	/** The session. */
-	private final ISession session;
+	private final ISet set;
 
 	/** The categories. */
 	private List<Category> categories;
@@ -77,13 +77,13 @@ public class SessionThrowPieChartX01<T> extends SessionPieChartX01<T> {
 	 * @param statKey the stat key
 	 * @param session the session
 	 */
-	public SessionThrowPieChartX01(String name, String statKey, ISession session) {
-		super(name, statKey, session);
-		this.session = session;
+	public SetThrowPieChartX01(String name, String statKey, ISet set) {
+		super(name, statKey, set);
+		this.set = set;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionPieChartX01#getCategories()
+	 * @see org.opendarts.ui.x01.chart.SessionPieChartX01#getCategories()
 	 */
 	@Override
 	protected List<Category> getCategories() {
@@ -100,7 +100,7 @@ public class SessionThrowPieChartX01<T> extends SessionPieChartX01<T> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.x01.model.SessionPieChartX01#getValue(org.opendarts.ui.x01.model.Category, org.opendarts.core.model.player.IPlayer)
+	 * @see org.opendarts.ui.x01.chart.SessionPieChartX01#getValue(org.opendarts.ui.x01.chart.Category, org.opendarts.core.model.player.IPlayer)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -111,16 +111,14 @@ public class SessionThrowPieChartX01<T> extends SessionPieChartX01<T> {
 		ThreeDartsThrow dThrow;
 		int val;
 		ThrowCategory cat = (ThrowCategory) c;
-		for (ISet set : this.session.getAllGame()) {
-			for (IGame game : set.getAllGame()) {
-				for (IGameEntry ientry : game.getGameEntries()) {
-					entry = (GameX01Entry) ientry;
-					dThrow = entry.getPlayerThrow().get(player);
-					if (dThrow != null) {
-						val = dThrow.getScore();
-						if (cat.isInCategory(val)) {
-							result++;
-						}
+		for (IGame game : this.set.getAllGame()) {
+			for (IGameEntry ientry : game.getGameEntries()) {
+				entry = (GameX01Entry) ientry;
+				dThrow = entry.getPlayerThrow().get(player);
+				if (dThrow != null) {
+					val = dThrow.getScore();
+					if (cat.isInCategory(val)) {
+						result++;
 					}
 				}
 			}

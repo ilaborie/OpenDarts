@@ -56,7 +56,7 @@ import org.opendarts.ui.utils.listener.FixHeightListener;
 import org.opendarts.ui.utils.listener.GrabColumnsListener;
 import org.opendarts.ui.x01.ISharedImages;
 import org.opendarts.ui.x01.X01UiPlugin;
-import org.opendarts.ui.x01.dialog.DartsComputerX01Dialog;
+import org.opendarts.ui.x01.defi.dialog.DartsComputerX01DefiDialog;
 import org.opendarts.ui.x01.dialog.ShortcutsTooltip;
 import org.opendarts.ui.x01.editor.GameX01ContentProvider;
 import org.opendarts.ui.x01.editor.ScoreX01EditingSupport;
@@ -822,8 +822,8 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 
 			// IA playing
 			if (player.isComputer()) {
-				ThreeDartsComputerDialog computerThrow = new DartsComputerX01Dialog(
-						this.getSite().getShell(), (IComputerPlayer) player,
+				ThreeDartsComputerDialog computerThrow = new DartsComputerX01DefiDialog(
+						this.getSite().getShell(),this.gameDefinition.getDelay(), (IComputerPlayer) player,
 						this.game, (GameX01Entry) entry);
 				computerThrow.open();
 

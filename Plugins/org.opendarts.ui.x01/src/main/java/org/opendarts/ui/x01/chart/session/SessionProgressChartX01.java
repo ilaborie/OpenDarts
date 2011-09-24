@@ -1,4 +1,4 @@
-package org.opendarts.ui.x01.model;
+package org.opendarts.ui.x01.chart.session;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -33,6 +33,7 @@ import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
+import org.opendarts.ui.x01.chart.CircleDrawer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

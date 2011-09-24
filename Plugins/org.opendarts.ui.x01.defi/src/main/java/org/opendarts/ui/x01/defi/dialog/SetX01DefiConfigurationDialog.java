@@ -35,9 +35,15 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 
 	/** The score start. */
 	private int startScore;
+	
+	/** The delay. */
+	private int delay;
 
 	/** The starting score spinner. */
 	private Spinner spiStartingScore;
+
+	/** The starting score spinner. */
+	private Spinner spiDelay;
 
 	/** The parent dialog. */
 	private INewContainerDialog parentDialog;
@@ -66,13 +72,14 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		// init
 		this.parentDialog = dialog;
 		this.startScore = 100001;
+		this.delay = 5000;
 		this.players.clear();
 
 		// Get last configuration
 		GameX01DefiDefinition gameDef = null;
 		boolean rotate = false;
 		if (lastGameDefinition == null) {
-			gameDef = new GameX01DefiDefinition(100001, new ArrayList<IPlayer>());
+			gameDef = new GameX01DefiDefinition(100001, this.delay, new ArrayList<IPlayer>());
 		} else if ((lastGameDefinition != null)
 				&& (lastGameDefinition instanceof GameX01DefiDefinition)) {
 			gameDef = (GameX01DefiDefinition) lastGameDefinition;
@@ -135,6 +142,20 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		this.spiStartingScore.addSelectionListener(this);
 		this.spiStartingScore.setSelection(this.startScore);
 
+		// Delay
+		lbl = new Label(group, SWT.WRAP);
+		lbl.setText("Computer delay (ms):");
+		lblData.copy().span(2, 1).applyTo(lbl);
+
+		this.spiDelay = new Spinner(group, SWT.NONE);
+		fieldData.copy().applyTo(this.spiDelay);
+		this.spiDelay.setMinimum(1000);
+		this.spiDelay.setIncrement(100);
+		this.spiDelay.setMaximum(10000);
+		this.spiDelay.setPageIncrement(1000);
+		this.spiDelay.addSelectionListener(this);
+		this.spiDelay.setSelection(this.delay);
+
 		return group;
 	}
 
@@ -173,7 +194,7 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		if (this.playersComposite.getPlayers().isEmpty()) {
 			throw new IllegalArgumentException("Not enought players");
 		}
-		GameX01DefiDefinition def = new GameX01DefiDefinition(this.startScore,
+		GameX01DefiDefinition def = new GameX01DefiDefinition(this.startScore, this.delay,
 				this.playersComposite.getPlayers());
 		this.gameUiProvider.registerGameUiService(def,
 				OpenDartsUiX01DefiPlugin.getGameX01UiService());
@@ -196,6 +217,8 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		Object obj = e.getSource();
 		if (obj.equals(this.spiStartingScore)) {
 			this.startScore = this.spiStartingScore.getSelection();
+		} else if (obj.equals(this.spiDelay)) {
+				this.delay = this.spiDelay.getSelection();
 		}
 		this.parentDialog.notifyUpdate();
 	}

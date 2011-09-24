@@ -24,6 +24,7 @@ import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.core.x01.service.entry.Average3DartsStatsEntry;
 import org.opendarts.core.x01.service.entry.AverageDartStatsEntry;
+import org.opendarts.core.x01.service.entry.AverageHistoryStatsEntry;
 import org.opendarts.core.x01.service.entry.AverageLegStatsEntry;
 import org.opendarts.core.x01.service.entry.BestLegStatsEntry;
 import org.opendarts.core.x01.service.entry.BestOutStatsEntry;
@@ -42,6 +43,8 @@ public class StatsX01Service extends AbstractStatsService {
 
 	public static final String SESSION_AVG_DART = "Session.avg.dart";
 	public static final String SESSION_AVG_3_DARTS = "Session.avg.3darts";
+	public static final String SESSION_AVG_DART_HISTORY = "Session.avg.dart.hist";
+	public static final String SESSION_AVG_3_DARTS_HISTORY = "Session.avg.3darts.hist";
 	public static final String SESSION_180s = "Session.180";
 	public static final String SESSION_140 = "Session.140";
 	public static final String SESSION_TONS = "Session.100";
@@ -57,6 +60,8 @@ public class StatsX01Service extends AbstractStatsService {
 
 	public static final String SET_AVG_DART = "Set.avg.dart";
 	public static final String SET_AVG_3_DARTS = "Set.avg.3darts";
+	public static final String SET_AVG_DART_HISTORY = "Set.avg.dart.hist";
+	public static final String SET_AVG_3_DARTS_HISTORY = "Set.avg.3darts.hist";
 	public static final String SET_180s = "Set.180";
 	public static final String SET_140 = "Set.140";
 	public static final String SET_TONS = "Set.100";
@@ -72,6 +77,8 @@ public class StatsX01Service extends AbstractStatsService {
 
 	public static final String GAME_AVG_DART = "Game.avg.dart";
 	public static final String GAME_AVG_3_DARTS = "Game.avg.3darts";
+	public static final String GAME_AVG_DART_HISTORY = "Game.avg.dart.hist";
+	public static final String GAME_AVG_3_DARTS_HISTORY = "Game.avg.3darts.hist";
 	public static final String GAME_180s = "Game.180";
 	public static final String GAME_140 = "Game.140";
 	public static final String GAME_TONS = "Game.100";
@@ -96,7 +103,7 @@ public class StatsX01Service extends AbstractStatsService {
 	 * @return the stats keys
 	 */
 	protected List<String> getStatsKeys() {
-		return Arrays.asList(SESSION_SET_WIN, SESSION_NB_SET,
+		 List<String> list = Arrays.asList(SESSION_SET_WIN, SESSION_NB_SET,
 				SESSION_GAME_WIN, SESSION_NB_GAME,
 
 				SET_GAME_WIN, SET_NB_GAME,
@@ -114,6 +121,7 @@ public class StatsX01Service extends AbstractStatsService {
 
 				GAME_AVG_DART, GAME_AVG_3_DARTS, GAME_180s, GAME_140,
 				GAME_TONS, GAME_60, GAME_60_PLUS, GAME_TONS_PLUS);
+		 return new ArrayList<String>(list);
 	}
 
 	/* (non-Javadoc)
@@ -241,8 +249,13 @@ public class StatsX01Service extends AbstractStatsService {
 	protected IStats<IGame> createGameStats(GameX01 game, IPlayer player) {
 		GameStats stats = new GameStats(game, player);
 		// Average darts
-		stats.addEntry(new Average3DartsStatsEntry(GAME_AVG_3_DARTS));
-		stats.addEntry(new AverageDartStatsEntry(GAME_AVG_DART));
+		Average3DartsStatsEntry avg3Darts = new Average3DartsStatsEntry(GAME_AVG_3_DARTS);
+		AverageDartStatsEntry avgDart = new AverageDartStatsEntry(GAME_AVG_DART);
+		stats.addEntry(avg3Darts);
+		stats.addEntry(avgDart);
+		// Average History
+		stats.addEntry(new AverageHistoryStatsEntry(GAME_AVG_DART_HISTORY,avgDart));
+		stats.addEntry(new AverageHistoryStatsEntry(GAME_AVG_3_DARTS_HISTORY,avg3Darts));
 
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(GAME_180s, 180));
@@ -273,9 +286,15 @@ public class StatsX01Service extends AbstractStatsService {
 	 */
 	protected IStats<ISet> createSetStats(GameSet set, IPlayer player) {
 		SetStats stats = new SetStats(set, player);
+
 		// Average darts
-		stats.addEntry(new Average3DartsStatsEntry(SET_AVG_3_DARTS));
-		stats.addEntry(new AverageDartStatsEntry(SET_AVG_DART));
+		Average3DartsStatsEntry avg3Darts = new Average3DartsStatsEntry(SET_AVG_3_DARTS);
+		AverageDartStatsEntry avgDart = new AverageDartStatsEntry(SET_AVG_DART);
+		stats.addEntry(avg3Darts);
+		stats.addEntry(avgDart);
+		// Average History
+		stats.addEntry(new AverageHistoryStatsEntry(SET_AVG_DART_HISTORY,avgDart));
+		stats.addEntry(new AverageHistoryStatsEntry(SET_AVG_3_DARTS_HISTORY,avg3Darts));
 
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(SET_180s, 180));
@@ -332,8 +351,13 @@ public class StatsX01Service extends AbstractStatsService {
 	protected IStats<ISession> createSessionStats(ISession session, IPlayer player) {
 		SessionStats stats = new SessionStats(session, player);
 		// Average darts
-		stats.addEntry(new Average3DartsStatsEntry(SESSION_AVG_3_DARTS));
-		stats.addEntry(new AverageDartStatsEntry(SESSION_AVG_DART));
+		Average3DartsStatsEntry avg3Darts = new Average3DartsStatsEntry(SESSION_AVG_3_DARTS);
+		AverageDartStatsEntry avgDart = new AverageDartStatsEntry(SESSION_AVG_DART);
+		stats.addEntry(avg3Darts);
+		stats.addEntry(avgDart);
+		// Average History
+		stats.addEntry(new AverageHistoryStatsEntry(SESSION_AVG_DART_HISTORY,avgDart));
+		stats.addEntry(new AverageHistoryStatsEntry(SESSION_AVG_3_DARTS_HISTORY,avg3Darts));
 
 		// 180
 		stats.addEntry(new DartScoreStatsEntry(SESSION_180s, 180));

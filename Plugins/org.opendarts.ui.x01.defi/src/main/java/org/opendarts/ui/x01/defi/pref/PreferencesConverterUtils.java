@@ -77,6 +77,8 @@ public final class PreferencesConverterUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append(gameDef.getStartScore());
 			sb.append(SEPARATOR);
+			sb.append(gameDef.getDelay());
+			sb.append(SEPARATOR);
 			boolean isFirst = true;
 			for (IPlayer player : gameDef.getInitialPlayers()) {
 				if (isFirst) {
@@ -101,17 +103,18 @@ public final class PreferencesConverterUtils {
 	public static GameX01DefiDefinition getStringAsGameDefinition(String s) {
 		if (s != null) {
 			String[] strings = s.split("" + SEPARATOR);
-			if (strings.length > 1) {
+			if (strings.length > 2) {
 				int startScore = Integer.valueOf(strings[0]);
-
+				int delay = Integer.valueOf(strings[1]);
+				
 				List<IPlayer> players = new ArrayList<IPlayer>();
-				if (strings.length > 2) {
-					for (int i = 1; i < strings.length; i++) {
+				if (strings.length > 3) {
+					for (int i = 2; i < strings.length; i++) {
 						players.add(PLAYER_SERVICE.getPlayer(strings[i]));
 					}
 				}
 
-				return new GameX01DefiDefinition(startScore, players);
+				return new GameX01DefiDefinition(startScore,delay, players);
 			}
 		}
 		return null;

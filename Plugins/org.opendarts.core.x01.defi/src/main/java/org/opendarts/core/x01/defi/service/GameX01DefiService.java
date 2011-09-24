@@ -46,6 +46,7 @@ public class GameX01DefiService extends GameX01Service {
 			IDartsThrow idartThrow) {
 		GameX01Defi game = (GameX01Defi) igame;
 		ThreeDartsThrow dartThrow = (ThreeDartsThrow) idartThrow;
+		dartThrow.setTimestamp(System.currentTimeMillis());
 		game.addPlayerThrow(player, dartThrow);
 	}
 
@@ -57,6 +58,7 @@ public class GameX01DefiService extends GameX01Service {
 			IDartsThrow idartThrow) {
 		GameX01Defi game = (GameX01Defi) igame;
 		WinningX01DartsThrow dartThrow = (WinningX01DartsThrow) idartThrow;
+		dartThrow.setTimestamp(System.currentTimeMillis());
 		game.addWinningPlayerThrow(player, dartThrow);
 	}
 
