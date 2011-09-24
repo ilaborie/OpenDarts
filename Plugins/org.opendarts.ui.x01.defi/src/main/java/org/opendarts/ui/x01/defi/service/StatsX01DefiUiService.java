@@ -16,8 +16,8 @@ import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.defi.chart.AvgDartHistoryCategoryChartX01;
 import org.opendarts.ui.x01.defi.chart.AvgTimeHistoryCategoryChartX01;
+import org.opendarts.ui.x01.defi.label.ChartDefiLabelProvider;
 import org.opendarts.ui.x01.defi.label.StatsX01DefiLabelProvider;
-import org.opendarts.ui.x01.label.ChartLabelProvider;
 import org.opendarts.ui.x01.model.GameThrowDistributionChartX01;
 import org.opendarts.ui.x01.model.GameThrowPieChartX01;
 
@@ -48,7 +48,7 @@ public class StatsX01DefiUiService implements IStatsUiService {
 	 */
 	@Override
 	public ColumnLabelProvider getChartLabelProvider() {
-		return new ChartLabelProvider();
+		return new ChartDefiLabelProvider();
 	}
 
 	/* (non-Javadoc)

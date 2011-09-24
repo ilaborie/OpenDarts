@@ -72,7 +72,7 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		GameX01DefiDefinition gameDef = null;
 		boolean rotate = false;
 		if (lastGameDefinition == null) {
-			gameDef = new GameX01DefiDefinition(501, new ArrayList<IPlayer>());
+			gameDef = new GameX01DefiDefinition(100001, new ArrayList<IPlayer>());
 		} else if ((lastGameDefinition != null)
 				&& (lastGameDefinition instanceof GameX01DefiDefinition)) {
 			gameDef = (GameX01DefiDefinition) lastGameDefinition;
@@ -114,7 +114,7 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		Group group = new Group(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(3)
 				.applyTo(group);
-		group.setText("X01 Description");
+		group.setText("x01 Defi configuration");
 
 		Label lbl;
 		GridDataFactory lblData = GridDataFactory.fillDefaults().align(SWT.END,

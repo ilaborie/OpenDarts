@@ -95,18 +95,18 @@ public final class PreferencesConverterUtils {
 	/**
 	 * Gets the string as game definition.
 	 *
-	 * @param s the s
+	 * @param s the s 
 	 * @return the string as game definition
 	 */
 	public static GameX01DefiDefinition getStringAsGameDefinition(String s) {
 		if (s != null) {
 			String[] strings = s.split("" + SEPARATOR);
-			if (strings.length > 3) {
+			if (strings.length > 1) {
 				int startScore = Integer.valueOf(strings[0]);
 
 				List<IPlayer> players = new ArrayList<IPlayer>();
-				if (strings.length > 4) {
-					for (int i = 3; i < strings.length; i++) {
+				if (strings.length > 2) {
+					for (int i = 1; i < strings.length; i++) {
 						players.add(PLAYER_SERVICE.getPlayer(strings[i]));
 					}
 				}
