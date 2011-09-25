@@ -48,33 +48,40 @@ public class ChartLabelProvider extends ColumnLabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		Image result;
-		if (element instanceof SessionCategoryChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_BAR);
-		} else if (element instanceof SetCategoryChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_BAR);
-		} else if (element instanceof GameCategoryChartX01) {
+		Image result = null;
+
+		if (element instanceof IChart) {
+			IChart chart = (IChart) element;
+			if (chart.getStatKey().contains(".time")) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_TIME);
+			} else if (element instanceof SessionCategoryChartX01) {
 				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_BAR);
-		
-		} else if (element instanceof SessionProgressChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
-		} else if (element instanceof SetProgressChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
-			
-		} else if (element instanceof SessionPieChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
-		} else if (element instanceof SetPieChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
-		} else if (element instanceof GamePieChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
-			
-		} else if (element instanceof SessionHistoryChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
-		} else if (element instanceof SetHistoryChartX01) {
-			result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
-		} else if (element instanceof GameHistoryChartX01) {
+			} else if (element instanceof SetCategoryChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_BAR);
+			} else if (element instanceof GameCategoryChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_BAR);
+
+			} else if (element instanceof SessionProgressChartX01) {
 				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
-		} else {
+			} else if (element instanceof SetProgressChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
+
+			} else if (element instanceof SessionPieChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
+			} else if (element instanceof SetPieChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
+			} else if (element instanceof GamePieChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_PIE);
+
+			} else if (element instanceof SessionHistoryChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
+			} else if (element instanceof SetHistoryChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
+			} else if (element instanceof GameHistoryChartX01) {
+				result = X01UiPlugin.getImage(ISharedImages.IMG_CHART_CURVE);
+			}
+		}
+		if (result == null) {
 			result = super.getImage(element);
 		}
 		return result;

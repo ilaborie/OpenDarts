@@ -194,7 +194,7 @@ public class GameHistoryChartX01 implements IChart {
 	 * @return the j free chart
 	 */
 	private JFreeChart buildChart(TimeSeriesCollection dataset) {
-		JFreeChart chart = ChartFactory.createTimeSeriesChart(this.getName(),
+		final JFreeChart chart = ChartFactory.createTimeSeriesChart(this.getName(),
 				"Player", "Average", dataset, true, true, false);
 
 		XYPlot plot = (XYPlot) chart.getPlot();
@@ -218,6 +218,8 @@ public class GameHistoryChartX01 implements IChart {
 
  		// Average
 		this.displayAvg(plot);
+		
+	
 		return chart;
 	}
 

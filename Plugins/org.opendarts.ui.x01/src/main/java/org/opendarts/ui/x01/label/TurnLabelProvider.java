@@ -41,12 +41,23 @@ public class TurnLabelProvider extends ColumnLabelProvider {
 	public TurnLabelProvider(boolean useFont) {
 		super();
 		this.useFont = useFont;
+		this.pattern = this.getPattern();
+	}
+
+	/**
+	 * Gets the pattern.
+	 *
+	 * @return the pattern
+	 */
+	protected String getPattern() {
+		String result;
 		IPreferenceStore store = X01UiPlugin.getX01Preferences();
 		if (store.getBoolean(IX01Prefs.SHOW_ROW_NUMBER)) {
-			this.pattern = "#{0}";
+			result = "#{0}";
 		} else {
-			this.pattern = "{1,number,00}";
+			result = "{1,number,00}";
 		}
+		return result;
 	}
 
 	/* (non-Javadoc)

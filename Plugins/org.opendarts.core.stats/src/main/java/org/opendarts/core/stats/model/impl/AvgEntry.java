@@ -1,6 +1,7 @@
 package org.opendarts.core.stats.model.impl;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class AvgEntry implements Serializable {
 		if (this.count < 1) {
 			result = "-";
 		} else {
-			result = StatsValue.DOUBLE_FORMATTER.format(this.getAvg());
+			result = NumberFormat.getNumberInstance().format(this.getAvg());
 		}
 		return result;
 	}

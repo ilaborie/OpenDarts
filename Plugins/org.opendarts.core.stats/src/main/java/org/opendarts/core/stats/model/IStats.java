@@ -1,5 +1,6 @@
 package org.opendarts.core.stats.model;
 
+import java.util.List;
 import java.util.Map;
 
 import org.opendarts.core.model.player.IPlayer;
@@ -49,4 +50,11 @@ public interface IStats<T> {
 	 * @param entry the entry
 	 */
 	<U> void addEntry(IStatsEntry<U> entry);
+
+	/**
+	 * Clean stats.
+	 * Remove all stats not in list
+	 * @param keys the keys
+	 */
+	void cleanStats(List<String> keys);
 }

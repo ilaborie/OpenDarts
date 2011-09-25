@@ -1,6 +1,7 @@
 package org.opendarts.core.x01.service.entry;
 
 import org.opendarts.core.model.dart.IDartsThrow;
+import org.opendarts.core.model.dart.impl.SkipedDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
@@ -29,10 +30,11 @@ public class CountDartsStatsEntry extends SumStatsEntry {
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		int nbDarts = 0;
 		if (dartsThrow != null) {
-			nbDarts = 3;
 			if (dartsThrow instanceof WinningX01DartsThrow) {
 				WinningX01DartsThrow wdt = (WinningX01DartsThrow) dartsThrow;
 				nbDarts = wdt.getNbDartToFinish();
+			} else if (!(dartsThrow instanceof SkipedDartsThrow)) {
+				nbDarts = 3;
 			}
 		}
 		return nbDarts;

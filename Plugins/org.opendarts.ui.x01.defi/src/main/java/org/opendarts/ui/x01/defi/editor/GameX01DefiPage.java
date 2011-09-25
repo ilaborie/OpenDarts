@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.opendarts.ui.x01.defi.editor;
 
 import java.text.DecimalFormat;
@@ -57,13 +60,12 @@ import org.opendarts.ui.utils.listener.GrabColumnsListener;
 import org.opendarts.ui.x01.ISharedImages;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.defi.dialog.DartsComputerX01DefiDialog;
+import org.opendarts.ui.x01.defi.label.DefiTurnLabelProvider;
 import org.opendarts.ui.x01.dialog.ShortcutsTooltip;
 import org.opendarts.ui.x01.editor.GameX01ContentProvider;
 import org.opendarts.ui.x01.editor.ScoreX01EditingSupport;
 import org.opendarts.ui.x01.label.ScoreLabelProvider;
-import org.opendarts.ui.x01.label.TurnLabelProvider;
 import org.opendarts.ui.x01.pref.IX01Prefs;
-import org.opendarts.ui.x01.utils.PlayerStatusComposite;
 import org.opendarts.ui.x01.utils.TextInputListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +73,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class GameX01Page.
  */
-public class GameX01DefiPage extends FormPage implements IFormPage, IGameListener,
-		IExpansionListener {
+public class GameX01DefiPage extends FormPage implements IFormPage,
+		IGameListener, IExpansionListener {
 
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
@@ -246,7 +248,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 		IMenuService menuService = (IMenuService) this.getSite().getService(
 				IMenuService.class);
 		menuService.populateContributionManager(manager,
-				"toolbar:openwis.editor.game.toolbar");
+				"toolbar:openwis.editor.game.defi.toolbar");
 		manager.add(new ControlContribution("openwis.editor.game.toolbar.help") {
 			@Override
 			protected Control createControl(Composite parent) {
@@ -285,26 +287,27 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 				IX01Prefs.SHOW_SCORE_LEFT)) {
 			style = ExpandableComposite.EXPANDED;
 		}
-		
 
 		ExpandableComposite leftScoreMain = this.toolkit
 				.createExpandableComposite(this.body,
 						ExpandableComposite.TWISTIE | style
 								| ExpandableComposite.NO_TITLE);
 		GridLayoutFactory.fillDefaults().applyTo(leftScoreMain);
-		GridDataFactory.fillDefaults().span(nbCol,1).grab(true, true).applyTo(leftScoreMain);
+		GridDataFactory.fillDefaults().span(nbCol, 1).grab(true, true)
+				.applyTo(leftScoreMain);
 
 		Composite leftScoreBody = this.toolkit.createComposite(leftScoreMain);
 		GridLayoutFactory.fillDefaults().extendedMargins(0, 0, 6, 0)
 				.applyTo(leftScoreBody);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(leftScoreBody);
 
-		this.txtScoreLeft  = this.toolkit.createText(leftScoreBody,
-				this.getCurrentScore(), SWT.READ_ONLY | SWT.CENTER
-						| SWT.BORDER);
+		this.txtScoreLeft = this.toolkit
+				.createText(leftScoreBody, this.getCurrentScore(),
+						SWT.READ_ONLY | SWT.CENTER | SWT.BORDER);
 		this.txtScoreLeft.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_SCORE_LEFT));
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.txtScoreLeft);
+		GridDataFactory.fillDefaults().grab(true, true)
+				.applyTo(this.txtScoreLeft);
 
 		this.toolkit.paintBordersFor(leftScoreBody);
 		leftScoreMain.setClient(leftScoreBody);
@@ -472,7 +475,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 	private void addPlayerStatSection(Composite parent, IPlayer player) {
 		// Section
 		Section section = this.toolkit.createSection(parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
+				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(section);
 		section.setText("Statistics");
 
@@ -481,8 +484,8 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Player Status
-		PlayerStatusComposite cmpStatus = new PlayerStatusComposite(client,
-				player, this.game);
+		PlayerDefiStatusComposite cmpStatus = new PlayerDefiStatusComposite(
+				client, player, this.game);
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(cmpStatus.getControl());
 
@@ -534,7 +537,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 
 		ColumnDescriptor colDescr = new ColumnDescriptor("");
 		colDescr.width(60);
-		colDescr.labelProvider(new TurnLabelProvider());
+		colDescr.labelProvider(new DefiTurnLabelProvider());
 
 		if (player == null) {
 			// Two player
@@ -578,14 +581,6 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 		result.add(colDescr);
 		this.playerColumn.put(player, column);
 
-//		// Scored
-//		colDescr = new ColumnDescriptor(
-//				String.valueOf(this.game.getScoreToDo()));
-//		colDescr.width(width);
-//		colDescr.labelProvider(new ToGoLabelProvider(player));
-//		this.toolkit.createTableColumn(viewer, colDescr);
-//		result.add(colDescr);
-
 		return result;
 	}
 
@@ -615,8 +610,8 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 		GridLayoutFactory.fillDefaults().applyTo(client);
 
 		// Status
-		PlayerStatusComposite cmpStatus = new PlayerStatusComposite(client,
-				player, this.game);
+		PlayerDefiStatusComposite cmpStatus = new PlayerDefiStatusComposite(
+				client, player, this.game);
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(cmpStatus.getControl());
 
@@ -625,7 +620,6 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 		main.layout(true);
 		return main;
 	}
-
 
 	/**
 	 * Gets the player current score.
@@ -823,8 +817,10 @@ public class GameX01DefiPage extends FormPage implements IFormPage, IGameListene
 			// IA playing
 			if (player.isComputer()) {
 				ThreeDartsComputerDialog computerThrow = new DartsComputerX01DefiDialog(
-						this.getSite().getShell(),this.gameDefinition.getDelay(), (IComputerPlayer) player,
-						this.game, (GameX01Entry) entry);
+						this.getSite().getShell(),
+						this.gameDefinition.getDelay(),
+						(IComputerPlayer) player, this.game,
+						(GameX01Entry) entry);
 				computerThrow.open();
 
 				IDartsThrow dartThrow = computerThrow.getComputerThrow();

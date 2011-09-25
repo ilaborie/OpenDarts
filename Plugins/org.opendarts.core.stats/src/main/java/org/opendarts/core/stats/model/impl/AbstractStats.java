@@ -2,7 +2,10 @@ package org.opendarts.core.stats.model.impl;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.stats.model.IStats;
@@ -33,6 +36,19 @@ public class AbstractStats<T> implements IStats<T> {
 		this.element = element;
 		this.player = player;
 		this.entriesMap = new HashMap<String, IStatsEntry>();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.stats.model.IStats#cleanStats(java.util.List)
+	 */
+	@Override
+	public void cleanStats(List<String> keys) {
+		Set<String> entries = new HashSet<String>(this.entriesMap.keySet());
+		for (String key : entries) {
+			if (!keys.contains(key)) {
+				this.entriesMap.remove(key);
+			}
+		}
 	}
 
 	/* (non-Javadoc)

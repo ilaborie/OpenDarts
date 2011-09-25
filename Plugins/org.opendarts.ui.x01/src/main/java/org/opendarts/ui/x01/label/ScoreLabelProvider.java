@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.opendarts.core.model.dart.impl.SkipedDartsThrow;
 import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.x01.model.BrokenX01DartsThrow;
@@ -148,6 +149,8 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 					this.player);
 			if (dartThrow == null) {
 				result = "";
+			} else if (dartThrow instanceof SkipedDartsThrow) {
+				result = "-";
 			} else if (dartThrow instanceof WinningX01DartsThrow) {
 				WinningX01DartsThrow winThrow = (WinningX01DartsThrow) dartThrow;
 				result = MessageFormat.format("+{0} ({1})",
@@ -202,8 +205,10 @@ public class ScoreLabelProvider extends ColumnLabelProvider {
 			GameX01Entry entry = (GameX01Entry) element;
 			ThreeDartsThrow dartThrow = entry.getPlayerThrow().get(this.player);
 			if (dartThrow != null) {
-				int score = dartThrow.getScore();
-				result = this.colors.get(score);
+				if (!(dartThrow instanceof SkipedDartsThrow)) {
+					int score = dartThrow.getScore();
+					result = this.colors.get(score);
+				}
 			}
 		}
 		if (result == null) {
