@@ -206,9 +206,10 @@ public class GameX01 extends AbstractGame implements IGame {
 	 */
 	public void addPlayerThrow(IPlayer player, ThreeDartsThrow dartThrow) {
 		ThreeDartsThrow dThrow = dartThrow;
+		int score;
 		if (dartThrow != null) {
 			// update player score
-			int score = this.getScore(player);
+			 score = this.getScore(player);
 			score -= dartThrow.getScore();
 			if (score < 2) {
 				// broken
