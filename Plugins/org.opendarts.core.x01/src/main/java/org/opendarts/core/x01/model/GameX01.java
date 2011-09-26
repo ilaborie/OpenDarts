@@ -213,6 +213,7 @@ public class GameX01 extends AbstractGame implements IGame {
 			score -= dartThrow.getScore();
 			if (score < 2) {
 				// broken
+				score = this.getScore(player);
 				try {
 					dThrow = new BrokenX01DartsThrow(dartThrow);
 				} catch (InvalidDartThrowException e) {
