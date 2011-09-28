@@ -17,12 +17,15 @@
 		<module>org.opendarts.core.player</module>
 		<module>org.opendarts.core.stats</module>
 		<module>org.opendarts.core.x01</module>
+		<module>org.opendarts.core.x01.defi</module>
 		<module>org.opendarts.ui</module>
 		<module>org.opendarts.ui.app</module>
 		<module>org.opendarts.ui.player</module>
 		<module>org.opendarts.ui.stats</module>
 		<module>org.opendarts.ui.x01</module>
+		<module>org.opendarts.ui.x01.defi</module>
 		<module>org.opendarts.derby</module>
+		<module> org.opendarts.jfreechart</module>
 	</modules>
 
 </project>

@@ -9,7 +9,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.opendarts</groupId>
-	<artifactId>org.opendarts.x01.feature</artifactId>
+	<artifactId>org.opendarts.x01.defi.feature</artifactId>
 	<version>1.0.0.qualifier</version>
 	<packaging>eclipse-feature</packaging>
 </project>

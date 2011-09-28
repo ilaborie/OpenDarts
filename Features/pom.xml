@@ -14,6 +14,7 @@
 	<modules>
 		<module>org.opendarts.feature</module>
 		<module>org.opendarts.x01.feature</module>
+		<module>org.opendarts.x01.defi.feature</module>
 		<module>org.opendarts.eclipse.feature</module>
 		<module>org.slf4j.feature</module>
 	</modules>
