@@ -34,6 +34,35 @@ public class GameX01Defi extends GameX01 implements IGame {
 		this.statsService = OpenDartsX01DefiBundle.getStatsService(this);
 	}
 
+	/**
+	 * Gets the duration.
+	 *
+	 * @return the duration
+	 */
+	public long getDuration() {
+		return System.currentTimeMillis() - this.getStart().getTimeInMillis();
+	}
+
+	/**
+	 * Gets the forecast.
+	 *
+	 * @return the forecast
+	 */
+	public long getForecast() {
+		long result;
+		if (this.score == 0) {
+			result = 0;
+		} else {
+
+			int startScore = ((GameX01DefiDefinition) this.getParentSet()
+					.getGameDefinition()).getStartScore();
+			double delta = ((double) this.getDuration())
+					/ ((double) this.score);
+			result = (long) (delta * startScore);
+		}
+		return result;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.x01.model.GameX01#getNbDartToFinish()
 	 */
@@ -76,4 +105,5 @@ public class GameX01Defi extends GameX01 implements IGame {
 	public int getScore() {
 		return this.score;
 	}
+
 }

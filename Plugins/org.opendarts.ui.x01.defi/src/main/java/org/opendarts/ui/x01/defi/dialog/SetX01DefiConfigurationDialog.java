@@ -1,19 +1,25 @@
 package org.opendarts.ui.x01.defi.dialog;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.x01.defi.model.GameX01DefiDefinition;
@@ -29,15 +35,21 @@ import org.opendarts.ui.x01.defi.OpenDartsUiX01DefiPlugin;
  * The Class SetX01DefiConfigurationDialog.
  */
 public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
-		SelectionListener, IPlayerSelectionListener {
+		SelectionListener, IPlayerSelectionListener, ModifyListener {
 
 	private final IGameUiProvider gameUiProvider;
 
 	/** The score start. */
 	private int startScore;
-	
+
 	/** The delay. */
 	private int delay;
+
+	/** The time. */
+	private long time;
+
+	/** The txt time. */
+	private Text txtTime;
 
 	/** The starting score spinner. */
 	private Spinner spiStartingScore;
@@ -54,12 +66,16 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 	/** The players composite. */
 	private PlayerSelectionComposite playersComposite;
 
+	/** The formatter. */
+	private DateFormat formatter = GameX01DefiDefinition.TIME_FORMATTER;
+
 	/**
 	 * Instantiates a new sets the x01 configuration dialog.
 	 */
 	public SetX01DefiConfigurationDialog() {
 		super();
-		this.gameUiProvider = OpenDartsUiX01DefiPlugin.getService(IGameUiProvider.class);
+		this.gameUiProvider = OpenDartsUiX01DefiPlugin
+				.getService(IGameUiProvider.class);
 		this.players = new ArrayList<IPlayer>();
 	}
 
@@ -73,13 +89,15 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		this.parentDialog = dialog;
 		this.startScore = 100001;
 		this.delay = 5000;
+		this.time = ((2 * 60 + 23) * 60 + 33) * 1000; // 2h 23min 33s
 		this.players.clear();
 
 		// Get last configuration
 		GameX01DefiDefinition gameDef = null;
 		boolean rotate = false;
 		if (lastGameDefinition == null) {
-			gameDef = new GameX01DefiDefinition(100001, this.delay, new ArrayList<IPlayer>());
+			gameDef = new GameX01DefiDefinition(100001, this.delay, this.time,
+					new ArrayList<IPlayer>());
 		} else if ((lastGameDefinition != null)
 				&& (lastGameDefinition instanceof GameX01DefiDefinition)) {
 			gameDef = (GameX01DefiDefinition) lastGameDefinition;
@@ -89,6 +107,8 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		// Initial game definition
 		if (gameDef != null) {
 			this.startScore = gameDef.getStartScore();
+			this.delay = gameDef.getDelay();
+			this.time = gameDef.getTimeTarget();
 			this.players.addAll(gameDef.getPlayers());
 			if (rotate) {
 				Collections.rotate(this.players, 1);
@@ -127,7 +147,8 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		GridDataFactory lblData = GridDataFactory.fillDefaults().align(SWT.END,
 				SWT.CENTER);
 		GridDataFactory fieldData = GridDataFactory.fillDefaults()
-				.align(SWT.BEGINNING, SWT.CENTER).grab(true, false);
+				.hint(300, SWT.DEFAULT).align(SWT.BEGINNING, SWT.CENTER)
+				.grab(true, false);
 		// Starting score
 		lbl = new Label(group, SWT.WRAP);
 		lbl.setText("Start with:");
@@ -155,6 +176,18 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		this.spiDelay.setPageIncrement(1000);
 		this.spiDelay.addSelectionListener(this);
 		this.spiDelay.setSelection(this.delay);
+
+		// Time target
+		lbl = new Label(group, SWT.WRAP);
+		lbl.setText("Target time (ms):");
+		lblData.copy().span(2, 1).applyTo(lbl);
+
+		this.txtTime = new Text(group, SWT.BORDER);
+
+		Date date = new Date(this.time);
+		String format = formatter.format(date);
+		this.txtTime.setText(format);
+		this.txtTime.addModifyListener(this);
 
 		return group;
 	}
@@ -194,8 +227,8 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		if (this.playersComposite.getPlayers().isEmpty()) {
 			throw new IllegalArgumentException("Not enought players");
 		}
-		GameX01DefiDefinition def = new GameX01DefiDefinition(this.startScore, this.delay,
-				this.playersComposite.getPlayers());
+		GameX01DefiDefinition def = new GameX01DefiDefinition(this.startScore,
+				this.delay, this.time, this.playersComposite.getPlayers());
 		this.gameUiProvider.registerGameUiService(def,
 				OpenDartsUiX01DefiPlugin.getGameX01UiService());
 		return def;
@@ -218,7 +251,21 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 		if (obj.equals(this.spiStartingScore)) {
 			this.startScore = this.spiStartingScore.getSelection();
 		} else if (obj.equals(this.spiDelay)) {
-				this.delay = this.spiDelay.getSelection();
+			this.delay = this.spiDelay.getSelection();
+		}
+		this.parentDialog.notifyUpdate();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
+	 */
+	@Override
+	public void modifyText(ModifyEvent e) {
+		try {
+			Date d = this.formatter.parse(this.txtTime.getText());
+			this.time = d.getTime();
+		} catch (ParseException e1) {
+			// let's error
 		}
 		this.parentDialog.notifyUpdate();
 	}
@@ -249,6 +296,13 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 			result.add(new ValidationEntry(IMessageProvider.WARNING,
 					"Playing alone is boring !"));
 		}
+		try {
+			this.formatter.parse(this.txtTime.getText());
+		} catch (ParseException e1) {
+			result.add(new ValidationEntry(IMessageProvider.ERROR,
+					"Invalid time format"));
+		}
+
 		return result;
 	}
 

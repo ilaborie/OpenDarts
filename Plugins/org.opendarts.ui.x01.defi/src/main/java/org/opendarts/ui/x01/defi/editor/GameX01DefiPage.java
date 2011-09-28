@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -125,6 +127,12 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 	/** The game editor. */
 	private final DefiX01Editor gameEditor;
 
+	/** The txt during. */
+	private Text txtDuration;
+
+	/** The txt forecast. */
+	private Text txtForecast;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -181,8 +189,6 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		ScrolledForm form = managedForm.getForm();
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		form.setText(this.game.getName());
-		form.setFont(OpenDartsFormsToolkit
-				.getFont(IGeneralPrefs.FONT_SCORE_SHEET_LEFT));
 
 		this.toolkit.decorateFormHeading(form.getForm());
 
@@ -297,10 +303,11 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 				.applyTo(leftScoreMain);
 
 		Composite leftScoreBody = this.toolkit.createComposite(leftScoreMain);
-		GridLayoutFactory.fillDefaults().extendedMargins(0, 0, 6, 0)
-				.applyTo(leftScoreBody);
+		GridLayoutFactory.fillDefaults().numColumns(2)
+				.extendedMargins(0, 0, 6, 0).applyTo(leftScoreBody);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(leftScoreBody);
 
+		// Score left
 		this.txtScoreLeft = this.toolkit
 				.createText(leftScoreBody, this.getCurrentScore(),
 						SWT.READ_ONLY | SWT.CENTER | SWT.BORDER);
@@ -309,10 +316,48 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		GridDataFactory.fillDefaults().grab(true, true)
 				.applyTo(this.txtScoreLeft);
 
-		this.toolkit.paintBordersFor(leftScoreBody);
+		// Clock
+		Composite cmpClock = this.toolkit.createComposite(leftScoreBody);
+		GridDataFactory.fillDefaults().grab(false, true).applyTo(cmpClock);
+		this.createClockComposite(cmpClock);
+
+		this.toolkit.paintBordersFor(cmpClock);
 		leftScoreMain.setClient(leftScoreBody);
 		leftScoreMain.addExpansionListener(this);
 		return leftScoreMain;
+	}
+
+	/**
+	 * Creates the clock composite.
+	 *
+	 * @param parent the left score body
+	 * @return the composite
+	 */
+	private void createClockComposite(Composite parent) {
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(parent);
+
+		Label label;
+		// Duration 
+		label = this.toolkit.createLabel(parent, "Time spend: ");
+		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
+
+		this.txtDuration = this.toolkit.createText(parent, "--:--:--",
+				SWT.BORDER | SWT.READ_ONLY);
+		this.txtDuration.setFont(OpenDartsFormsToolkit
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(this.txtDuration);
+
+		// Forecast 
+		label = this.toolkit.createLabel(parent, "Forecast: ");
+		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
+
+		this.txtForecast = this.toolkit.createText(parent, "--:--:--",
+				SWT.BORDER | SWT.READ_ONLY);
+		this.txtForecast.setFont(OpenDartsFormsToolkit
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(this.txtForecast);
 	}
 
 	/* (non-Javadoc)
@@ -756,6 +801,54 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 			}
 			this.setInputFocus(this.game.getCurrentPlayer());
 		}
+
+		// Update clock
+		long duration = this.game.getDuration();
+		this.txtDuration.setText(this.getTimeText(duration));
+
+		int score = this.game.getScore();
+		if (score > 0) {
+			int startScore = this.gameDefinition.getStartScore();
+			int done = (startScore - score);
+			long forecast = (long) (((double) score * duration) / ((double) done));
+			this.gameDefinition.getStartScore();
+			this.txtForecast.setText(this.getTimeText(forecast));
+
+			double delta = ((double) this.gameDefinition.getTimeTarget() - forecast)
+					/ this.gameDefinition.getTimeTarget();
+
+			if (forecast > this.gameDefinition.getTimeTarget()) {
+				this.txtForecast.setForeground(Display.getDefault()
+						.getSystemColor(SWT.COLOR_DARK_RED));
+			} else if (delta < 0.15) { // 
+				this.txtForecast.setForeground(Display.getDefault()
+						.getSystemColor(SWT.COLOR_DARK_GRAY));
+			} else {
+				this.txtForecast.setForeground(Display.getDefault()
+						.getSystemColor(SWT.COLOR_DARK_GREEN));
+			}
+
+		} else {
+			this.txtForecast.setText("--:--:--");
+			if (duration > this.gameDefinition.getTimeTarget()) {
+				this.txtDuration.setForeground(this.toolkit.getColors()
+						.getColor(IGeneralPrefs.COLOR_BROKEN));
+			} else {
+				this.txtDuration.setForeground(this.toolkit.getColors()
+						.getColor(IGeneralPrefs.COLOR_WINNING));
+			}
+		}
+	}
+
+	/**
+	 * Gets the time text.
+	 *
+	 * @param duration the duration
+	 * @return the time text
+	 */
+	private String getTimeText(long duration) {
+		Date date = new Date(duration);
+		return this.gameDefinition.getTimeFormatter().format(date);
 	}
 
 	/**
