@@ -133,6 +133,9 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 	/** The txt forecast. */
 	private Text txtForecast;
 
+	/** The txt forecast. */
+	private Text txtTimeLeft;
+
 	/**
 	 * Instantiates a new game page.
 	 *
@@ -348,6 +351,18 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(this.txtDuration);
 
+		// Time left
+		label = this.toolkit.createLabel(parent, "Time left: ");
+		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
+
+		this.txtTimeLeft = this.toolkit.createText(parent, "--:--:--",
+				SWT.BORDER | SWT.READ_ONLY);
+		this.txtTimeLeft.setFont(OpenDartsFormsToolkit
+				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(this.txtTimeLeft);
+
+		
 		// Forecast 
 		label = this.toolkit.createLabel(parent, "Forecast: ");
 		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
@@ -805,14 +820,18 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		// Update clock
 		long duration = this.game.getDuration();
 		this.txtDuration.setText(this.getTimeText(duration));
+		
 
 		int score = this.game.getScore();
 		if (score > 0) {
 			int startScore = this.gameDefinition.getStartScore();
 			int done = (startScore - score);
-			long forecast = (long) (((double) score * duration) / ((double) done));
+			long left = (long) (
+					+ (((double) score * duration) / ((double) done)));
+			long forecast = duration + left;
 			this.gameDefinition.getStartScore();
 			this.txtForecast.setText(this.getTimeText(forecast));
+			this.txtTimeLeft.setText(this.getTimeText(left));
 
 			double delta = ((double) this.gameDefinition.getTimeTarget() - forecast)
 					/ this.gameDefinition.getTimeTarget();
@@ -820,7 +839,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 			if (forecast > this.gameDefinition.getTimeTarget()) {
 				this.txtForecast.setForeground(Display.getDefault()
 						.getSystemColor(SWT.COLOR_DARK_RED));
-			} else if (delta < 0.15) { // 
+			} else if (delta < 0.10) { // 
 				this.txtForecast.setForeground(Display.getDefault()
 						.getSystemColor(SWT.COLOR_DARK_GRAY));
 			} else {
