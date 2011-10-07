@@ -344,7 +344,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		label = this.toolkit.createLabel(parent, "Time spend: ");
 		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
 
-		this.txtDuration = this.toolkit.createText(parent, "--:--:--",
+		this.txtDuration = this.toolkit.createText(parent, "00:00:00",
 				SWT.BORDER | SWT.READ_ONLY);
 		this.txtDuration.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_STATS_LABEL));

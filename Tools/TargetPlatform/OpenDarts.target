@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="OpenDarts" sequenceNumber="5">
+<target name="OpenDarts" sequenceNumber="8">
 <locations>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="3.7.0.I20110613-1736"/>
-<unit id="org.eclipse.pde.api.tools.ee.javase16.group" version="1.0.100.v20110123-7C-FGBF9JgLWWM0LWAWLrL"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
-</location>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="3.7.0.I20110613-1736"/>
-<unit id="org.eclipse.sdk.ide" version="3.7.0.I20110613-1736"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
-</location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.derby" version="10.5.1.1_201105231903"/>
 <unit id="org.apache.derby.source" version="10.5.1.1_201105231903"/>
@@ -25,6 +15,16 @@
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.persistence.sdk.feature.group" version="2.3.0.v20110604-r9504"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.ide" version="3.7.1.M20110909-1335"/>
+<unit id="org.eclipse.platform.sdk" version="3.7.1.M20110909-1335"/>
+<unit id="org.eclipse.rcp.feature.group" version="3.7.1.r37x_v20110729-9DB5FmNFnFLSFCtLxnRfMqt15A4A"/>
+<unit id="org.eclipse.rcp.source.feature.group" version="3.7.1.r37x_v20110729-9DB5FmNFnFLSFCtLxnRfMqt15A4A"/>
+<unit id="org.eclipse.sdk.ide" version="3.7.1.M20110909-1335"/>
+<unit id="org.eclipse.pde.api.tools.ee.javase16.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.javase17.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
 </location>
 </locations>
 </target>
