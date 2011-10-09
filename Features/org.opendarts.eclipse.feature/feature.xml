@@ -29,6 +29,16 @@
       <import plugin="org.eclipse.jface" version="3.6.0" match="compatible"/>
       <import plugin="com.ibm.icu"/>
       <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.persistence.core" version="2.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.persistence.jpa" version="2.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.persistence.asm"/>
+      <import plugin="org.eclipse.persistence.antlr"/>
+      <import plugin="javax.xml.stream"/>
+      <import plugin="javax.mail"/>
+      <import plugin="org.eclipse.net4j.jms.api"/>
+      <import plugin="javax.activation"/>
+      <import plugin="org.apache.ant"/>
+      <import plugin="org.eclipse.persistence.jpa.osgi" version="2.3.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -54,6 +64,42 @@
 
    <plugin
          id="org.eclipse.persistence.jpa.osgi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="javax.persistence"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.persistence.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.persistence.jpa"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.persistence.jpa.equinox"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.persistence.jpa.jpql"
          download-size="0"
          install-size="0"
          version="0.0.0"

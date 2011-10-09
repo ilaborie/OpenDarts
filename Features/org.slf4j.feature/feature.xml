@@ -20,6 +20,8 @@
       <import plugin="org.eclipse.osgi"/>
       <import plugin="javax.servlet"/>
       <import plugin="org.slf4j.api" version="1.6.1" match="equivalent"/>
+      <import plugin="javax.mail"/>
+      <import plugin="org.eclipse.net4j.jms.api"/>
    </requires>
 
    <plugin

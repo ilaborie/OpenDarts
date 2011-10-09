@@ -44,6 +44,12 @@
       <import plugin="org.opendarts.core.player"/>
       <import plugin="org.opendarts.ui"/>
       <import plugin="org.opendarts.ui.player"/>
+      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.opendarts.core.ia"/>
+      <import plugin="org.opendarts.jfreechart" version="1.0.13" match="greaterOrEqual"/>
+      <import plugin="org.opendarts.ui.stats"/>
+      <import plugin="org.eclipse.swt" version="3.7.0" match="compatible"/>
    </requires>
 
    <plugin

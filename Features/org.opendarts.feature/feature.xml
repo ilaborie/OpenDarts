@@ -33,12 +33,20 @@
          id="org.opendarts.eclipse.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.persistence.jpa"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.slf4j.api"/>
+      <import plugin="javax.persistence"/>
+      <import plugin="org.apache.derby"/>
       <import plugin="org.eclipse.ui" version="3.7.0" match="compatible"/>
       <import plugin="org.eclipse.core.runtime" version="3.7.0" match="compatible"/>
       <import plugin="org.eclipse.ui.forms" version="3.5.100" match="compatible"/>
       <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.opendarts.jfreechart" version="1.0.13" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt" version="3.7.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -59,8 +67,7 @@
          id="org.opendarts.core.player"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.opendarts.core.stats"

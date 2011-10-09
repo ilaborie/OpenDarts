@@ -33,6 +33,25 @@
          id="org.slf4j.feature"
          version="0.0.0"/>
 
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.opendarts.core.ia"/>
+      <import plugin="org.opendarts.core"/>
+      <import plugin="org.opendarts.core.stats"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.slf4j.api"/>
+      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="compatible"/>
+      <import plugin="org.eclipse.swt" version="3.7.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.7.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.forms" version="3.5.100" match="compatible"/>
+      <import plugin="org.opendarts.jfreechart" version="1.0.13" match="greaterOrEqual"/>
+      <import plugin="org.opendarts.core.player"/>
+      <import plugin="org.opendarts.ui"/>
+      <import plugin="org.opendarts.ui.player"/>
+      <import plugin="org.opendarts.ui.stats"/>
+   </requires>
+
    <plugin
          id="org.opendarts.core.x01"
          download-size="0"
