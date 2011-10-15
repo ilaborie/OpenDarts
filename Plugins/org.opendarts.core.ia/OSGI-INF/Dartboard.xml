@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="startup" name="org.opendarts.core.ia.Dartboard">
+   <implementation class="org.opendarts.core.ia.internal.Dartboard"/>
+   <service>
+      <provide interface="org.opendarts.core.ia.service.IDartboard"/>
+   </service>
+   <reference bind="setDartService" cardinality="1..1" interface="org.opendarts.core.service.dart.IDartService" name="IDartService" policy="static" unbind="unsetDartService"/>
+</scr:component>

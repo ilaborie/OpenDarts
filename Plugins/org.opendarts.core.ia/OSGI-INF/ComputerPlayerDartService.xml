@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="startup" immediate="true" name="org.opendarts.core.ia.ComputerPlayerDartService">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.opendarts.core.ia.ComputerPlayerDartService">
    <implementation class="org.opendarts.core.ia.internal.ComputerPlayerDartService"/>
    <reference bind="setDartService" cardinality="1..1" interface="org.opendarts.core.service.dart.IDartService" name="IDartService" policy="static"/>
    <service>
       <provide interface="org.opendarts.core.ia.service.IComputerPlayerDartService"/>
    </service>
    <reference bind="setPlayerService" cardinality="1..1" interface="org.opendarts.core.service.player.IPlayerService" name="IPlayerService" policy="static" unbind="unsetPlayerService"/>
+   <reference bind="setDartboard" cardinality="1..1" interface="org.opendarts.core.ia.service.IDartboard" name="IDartboard" policy="static" unbind="unsetDartboard"/>
 </scr:component>

@@ -77,6 +77,8 @@ public class SessionListener implements ISessionListener {
 	public void openEditor(ISet set) {
 		IWorkbenchWindow window = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
+		if (window!=null) {
+			
 		IWorkbenchPage page = window.getActivePage();
 		SetEditorInput input = new SetEditorInput(set);
 		try {
@@ -87,6 +89,7 @@ public class SessionListener implements ISessionListener {
 			page.openEditor(input, editorId);
 		} catch (PartInitException e) {
 			LOG.error("Could not open editor", e);
+		}
 		}
 	}
 

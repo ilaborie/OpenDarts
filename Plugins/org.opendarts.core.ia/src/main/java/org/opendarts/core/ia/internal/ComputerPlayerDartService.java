@@ -1,12 +1,13 @@
 package org.opendarts.core.ia.internal;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.opendarts.core.ia.model.DartboardProperties;
 import org.opendarts.core.ia.service.IComputerPlayerDartService;
+import org.opendarts.core.ia.service.IDartboard;
+import org.opendarts.core.model.dart.DartSector;
+import org.opendarts.core.model.dart.DartZone;
 import org.opendarts.core.model.dart.IDart;
 import org.opendarts.core.model.player.IComputerPlayer;
 import org.opendarts.core.service.dart.IDartService;
@@ -29,56 +30,21 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 	/** The player service. */
 	private final AtomicReference<IPlayerService> playerService;
 
-	/** The gaussian props. */
-	private final Properties boardProps;
+	/** The dartboard. */
+	private final AtomicReference<IDartboard> dartboard;
 
-	/** The gaussian stats. */
-	private GaussianStats gaussianStats;
+	/** The rand. */
+	private final Random rand;
 
 	/**
 	 * Instantiates a new computer player throw service.
 	 */
 	public ComputerPlayerDartService() {
 		super();
-		this.boardProps = new Properties();
 		this.dartService = new AtomicReference<IDartService>();
 		this.playerService = new AtomicReference<IPlayerService>();
-	}
-
-	/**
-	 * Startup.
-	 */
-	public void startup() {
-		// load player stats
-		URL resource;
-		InputStream in = null;
-		resource = this.getClass().getClassLoader()
-				.getResource("DartBoard.properties");
-		try {
-			in = resource.openStream();
-			this.boardProps.load(in);
-		} catch (IOException e) {
-			LOG.error("Fail to load computer level stats", e);
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-			} catch (IOException e) {
-				LOG.error("Fail to load computer level stats", e);
-			}
-		}
-
-		this.gaussianStats = new GaussianStats(this.dartService.get(),
-				this.boardProps, this.playerService.get()
-						.getAllComputerPlayers().size());
-	}
-
-	/**
-	 * Shutdown.
-	 */
-	public void shutdown() {
-		this.gaussianStats = null;
+		this.dartboard = new AtomicReference<IDartboard>();
+		this.rand = new Random();
 	}
 
 	/* (non-Javadoc)
@@ -86,7 +52,53 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 	 */
 	@Override
 	public IDart getComputerDart(IComputerPlayer player, IDart wished) {
-		return this.gaussianStats.getDart(player, wished);
+		LOG.trace("Wished: {}", wished);
+
+		IDart dart;
+		IDartboard db = this.dartboard.get();
+		DartboardProperties prop = db.getDartboard();
+
+		// unlucky factor
+		int unlucky;
+		if (DartSector.BULL.equals(wished.getSector())) {
+			unlucky = prop.getUnLuckyBull();
+		} else {
+			unlucky = prop.getUnLuckyOthers();
+		}
+
+		// If unlucky
+		if (this.rand.nextInt(unlucky) == 0) {
+			dart = this.dartService.get().createDart(DartSector.UNLUCKY_DART,
+					DartZone.NONE);
+		} else {
+			// Normal throw
+			double wishedX = db.getX(wished);
+			double wishedY = db.getY(wished);
+
+			// Player factor;
+			double factor = db.getPlayerFactor(player);
+
+			// Gaussian
+			double x = nextGaussian(factor, wishedX);
+			double y = nextGaussian(factor, wishedY);
+
+			dart = db.getDart(x, y);
+		}
+		LOG.trace("Wished: {}\tDone: {}", wished,dart);
+		return dart;
+	}
+
+	/**
+	 * Nex gaussian.
+	 *
+	 * @param factor the factor
+	 * @param offset the offset
+	 * @return the double
+	 */
+	private double nextGaussian(double factor, double offset) {
+		double result = factor * this.rand.nextGaussian();
+		result += offset;
+		return result;
 	}
 
 	/**
@@ -125,4 +137,21 @@ public class ComputerPlayerDartService implements IComputerPlayerDartService {
 		this.playerService.compareAndSet(playerService, null);
 	}
 
+	/**
+	 * Sets the dartboard.
+	 *
+	 * @param dartboard the new dartboard
+	 */
+	public void setDartboard(IDartboard dartboard) {
+		this.dartboard.set(dartboard);
+	}
+
+	/**
+	 * Unset dartboard.
+	 *
+	 * @param dartboard the dartboard
+	 */
+	public void unsetDartboard(IDartboard dartboard) {
+		this.dartboard.compareAndSet(dartboard, null);
+	}
 }
