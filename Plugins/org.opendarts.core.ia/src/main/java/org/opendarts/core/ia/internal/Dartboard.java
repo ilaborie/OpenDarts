@@ -78,12 +78,18 @@ public class Dartboard implements IDartboard {
 		Pattern p = Pattern.compile("level\\.(.*)");
 		Matcher matcher;
 		String lvl;
+		String value;
 		for (Object prop : this.boardProps.keySet()) {
 			matcher = p.matcher((String) prop);
 			if (matcher.matches()) {
 				lvl = matcher.group(1);
-				this.lvlFactor.put(Integer.valueOf(lvl), Double
-						.valueOf(this.boardProps.getProperty((String) prop)));
+				value = this.boardProps.getProperty((String) prop);
+				try {
+					this.lvlFactor.put(Integer.valueOf(lvl),
+							Double.valueOf(value));
+				} catch (NumberFormatException e) {
+					// Omit player
+				}
 			}
 		}
 	}
@@ -245,7 +251,7 @@ public class Dartboard implements IDartboard {
 				break;
 			case SINGLE:
 				dist = (this.dartboard.getTripleZone() + this.dartboard
-						.getBigZone())/2;
+						.getBigZone()) / 2;
 				break;
 			case DOUBLE:
 				dist = (this.dartboard.getBigZone() + this.dartboard
