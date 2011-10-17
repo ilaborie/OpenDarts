@@ -6,7 +6,7 @@ import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.x01.defi.model.GameX01Defi;
 import org.opendarts.ui.service.IGameUiService;
 import org.opendarts.ui.x01.defi.editor.DefiX01Editor;
-import org.opendarts.ui.x01.utils.comp.GameDetailComposite;
+import org.opendarts.ui.x01.defi.service.comp.GameDefiDetailComposite;
 
 /**
  * The Class GameX01DefiUiService.
@@ -45,7 +45,7 @@ public class GameX01DefiUiService implements IGameUiService {
 	 */
 	@Override
 	public Composite getGameDetail(Composite parent, IGame game) {
-		return new GameDetailComposite(parent, game);
+		return new GameDefiDetailComposite(parent, game);
 	}
 
 	/* (non-Javadoc)

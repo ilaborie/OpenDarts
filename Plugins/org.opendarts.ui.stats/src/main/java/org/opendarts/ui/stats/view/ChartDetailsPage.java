@@ -30,6 +30,7 @@ public class ChartDetailsPage implements IDetailsPage {
 	/** The section. */
 	private Section section;
 
+	/** The chart. */
 	private IChart chart;
 
 	/**

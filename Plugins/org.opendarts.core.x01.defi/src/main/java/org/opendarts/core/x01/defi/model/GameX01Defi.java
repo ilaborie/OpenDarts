@@ -1,13 +1,17 @@
 package org.opendarts.core.x01.defi.model;
 
+import java.util.Calendar;
 import java.util.List;
 
+import org.opendarts.core.model.dart.impl.ThreeDartsThrow;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.impl.GameSet;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.defi.OpenDartsX01DefiBundle;
 import org.opendarts.core.x01.model.GameX01;
+import org.opendarts.core.x01.model.GameX01Entry;
+import org.opendarts.core.x01.model.WinningX01DartsThrow;
 
 /**
  * The Class Game X01.
@@ -40,7 +44,16 @@ public class GameX01Defi extends GameX01 implements IGame {
 	 * @return the duration
 	 */
 	public long getDuration() {
-		return System.currentTimeMillis() - this.getStart().getTimeInMillis();
+		long duration;
+		Calendar cal = this.getEnd();
+		if (cal == null) {
+			duration = System.currentTimeMillis()
+					- this.getStart().getTimeInMillis();
+		} else {
+			duration = cal.getTimeInMillis()
+					- this.getStart().getTimeInMillis();
+		}
+		return duration;
 	}
 
 	/**
@@ -53,7 +66,6 @@ public class GameX01Defi extends GameX01 implements IGame {
 		if (this.score == 0) {
 			result = 0;
 		} else {
-
 			int startScore = ((GameX01DefiDefinition) this.getParentSet()
 					.getGameDefinition()).getStartScore();
 			double delta = ((double) this.getDuration())
@@ -68,7 +80,20 @@ public class GameX01Defi extends GameX01 implements IGame {
 	 */
 	@Override
 	public Integer getNbDartToFinish() {
-		return super.getNbDartToFinish();
+		int nbDartsToFinish = 0;
+		if (this.isFinished()) {
+			GameX01Entry entry = (GameX01Entry) this.getCurrentEntry();
+			nbDartsToFinish = ((entry.getRound() - 1) * 3)* this.getPlayers().size();
+			for (ThreeDartsThrow dartThrow : entry.getPlayerThrow().values()) {
+				if (dartThrow instanceof WinningX01DartsThrow) {
+					nbDartsToFinish += ((WinningX01DartsThrow) dartThrow)
+							.getNbDartToFinish();
+				} else {
+					nbDartsToFinish += 3;
+				}
+			}
+		}
+		return nbDartsToFinish;
 	}
 
 	/* (non-Javadoc)

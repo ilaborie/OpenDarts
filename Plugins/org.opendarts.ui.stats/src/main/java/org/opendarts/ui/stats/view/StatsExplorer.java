@@ -11,6 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.DetailsPart;
+import org.eclipse.ui.forms.IDetailsPageProvider;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.SectionPart;
@@ -104,7 +105,8 @@ public class StatsExplorer extends MasterDetailsBlock {
 	 */
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
-		detailsPart.setPageProvider(new ElementDetailProvider());
+		IDetailsPageProvider detailsPageProvider = new ElementDetailProvider();
+		detailsPart.setPageProvider(detailsPageProvider);
 	}
 
 	/* (non-Javadoc)
