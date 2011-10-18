@@ -32,9 +32,11 @@ public class GrabColumnsListener extends ControlAdapter {
 
 	/**
 	 * Instantiates a new grab columns listener.
-	 *
-	 * @param viewer the viewer
-	 * @param columns the columns
+	 * 
+	 * @param viewer
+	 *            the viewer
+	 * @param columns
+	 *            the columns
 	 */
 	public GrabColumnsListener(ColumnViewer viewer,
 			List<ColumnDescriptor> columns) {
@@ -76,8 +78,9 @@ public class GrabColumnsListener extends ControlAdapter {
 
 	/**
 	 * Grab table.
-	 *
-	 * @param tableViewer the table viewer
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
 	 */
 	private void grabTable(TableViewer tableViewer) {
 		Table table = tableViewer.getTable();
@@ -111,8 +114,9 @@ public class GrabColumnsListener extends ControlAdapter {
 
 	/**
 	 * Sets the columns width.
-	 *
-	 * @param width the new columns width
+	 * 
+	 * @param width
+	 *            the new columns width
 	 */
 	private void setColumnsWidth(int width) {
 		int totalDefaultWidth = this.getTotalDefaultWidth();
@@ -134,8 +138,9 @@ public class GrabColumnsListener extends ControlAdapter {
 
 	/**
 	 * Grab tree.
-	 *
-	 * @param TreeViewer the tree viewer
+	 * 
+	 * @param TreeViewer
+	 *            the tree viewer
 	 */
 	private void grabTree(TreeViewer TreeViewer) {
 		Tree tree = TreeViewer.getTree();
@@ -163,25 +168,31 @@ public class GrabColumnsListener extends ControlAdapter {
 
 	/**
 	 * Sets the width.
-	 *
-	 * @param colDescr the column description
-	 * @param width the width
+	 * 
+	 * @param colDescr
+	 *            the column description
+	 * @param width
+	 *            the width
 	 */
 	private void setWidth(ViewerColumn column, int width) {
 		if (column != null) {
 			if (column instanceof TableViewerColumn) {
 				TableViewerColumn tableColumn = (TableViewerColumn) column;
-				tableColumn.getColumn().setWidth(width);
+				if (!tableColumn.getColumn().isDisposed()) {
+					tableColumn.getColumn().setWidth(width);
+				}
 			} else if (column instanceof TreeViewerColumn) {
 				TreeViewerColumn treeColumn = (TreeViewerColumn) column;
-				treeColumn.getColumn().setWidth(width);
+				if (!treeColumn.getColumn().isDisposed()) {
+					treeColumn.getColumn().setWidth(width);
+				}
 			}
 		}
 	}
 
 	/**
 	 * Gets the total default width.
-	 *
+	 * 
 	 * @return the total default width
 	 */
 	private int getTotalDefaultWidth() {
@@ -192,8 +203,12 @@ public class GrabColumnsListener extends ControlAdapter {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.ControlListener#controlResized(org.eclipse.swt.events.ControlEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.swt.events.ControlListener#controlResized(org.eclipse.swt
+	 * .events.ControlEvent)
 	 */
 	@Override
 	public synchronized void controlResized(ControlEvent e) {
