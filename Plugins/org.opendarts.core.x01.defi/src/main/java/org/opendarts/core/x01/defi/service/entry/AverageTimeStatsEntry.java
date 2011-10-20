@@ -1,6 +1,8 @@
 package org.opendarts.core.x01.defi.service.entry;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.opendarts.core.model.dart.IDartsThrow;
 import org.opendarts.core.model.game.IGame;
@@ -16,10 +18,10 @@ import org.opendarts.core.stats.model.impl.AvgEntry;
 public class AverageTimeStatsEntry extends AverageStatsEntry {
 
 	/** The timestamp. */
-	private static Long timestamp;
+	private static Map<IGame,Long> timestamp= new HashMap<IGame, Long>();
 
 	/** The last time. */
-	private static Double lastTime;
+	private static Map<IGame,Double> lastTime = new HashMap<IGame, Double>();
 
 	/** The last throw. */
 	private static IDartsThrow lastThrow;
@@ -51,16 +53,18 @@ public class AverageTimeStatsEntry extends AverageStatsEntry {
 
 		long ts = dartsThrow.getTimestamp();
 		if (dartsThrow.equals(lastThrow)) {
-			time = lastTime;
+			time = lastTime.get(game);
 		} else {
-			if (timestamp != null) {
-				time = ((double) ts - timestamp) / 1000d;
+			Long lastTs = timestamp.get(game);
+			if (lastTs == null) {
+				lastTs = game.getStart().getTimeInMillis();
 			}
+			time = ((double) ts - lastTs) / 1000d;
 		}
 
-		timestamp = ts;
+		timestamp.put(game, ts);
 		lastThrow = dartsThrow;
-		lastTime = time;
+		lastTime.put(game, time);
 		return time;
 	}
 
