@@ -4,6 +4,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 import org.opendarts.core.model.game.IGameDefinition;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISessionListener;
@@ -77,19 +78,25 @@ public class SessionListener implements ISessionListener {
 	public void openEditor(ISet set) {
 		IWorkbenchWindow window = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
-		if (window!=null) {
-			
-		IWorkbenchPage page = window.getActivePage();
-		SetEditorInput input = new SetEditorInput(set);
-		try {
-			IGameDefinition definition = set.getGameDefinition();
-			IGameUiService gameUiService = this.gameUiProvider
-					.getGameUiService(definition);
-			String editorId = gameUiService.getGameEditor(definition);
-			page.openEditor(input, editorId);
-		} catch (PartInitException e) {
-			LOG.error("Could not open editor", e);
-		}
+		if (window != null) {
+			try {
+				window.getWorkbench().showPerspective(
+						"opendarts.perspective.main", window);
+			} catch (WorkbenchException e1) {
+				LOG.error("Could not switch to main perspective", e1);
+			}
+
+			IWorkbenchPage page = window.getActivePage();
+			SetEditorInput input = new SetEditorInput(set);
+			try {
+				IGameDefinition definition = set.getGameDefinition();
+				IGameUiService gameUiService = this.gameUiProvider
+						.getGameUiService(definition);
+				String editorId = gameUiService.getGameEditor(definition);
+				page.openEditor(input, editorId);
+			} catch (PartInitException e) {
+				LOG.error("Could not open editor", e);
+			}
 		}
 	}
 
