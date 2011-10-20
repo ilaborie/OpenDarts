@@ -342,6 +342,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		Label label;
 		// Duration 
 		label = this.toolkit.createLabel(parent, "Time spend: ");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).applyTo(label);
 		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
 
 		this.txtDuration = this.toolkit.createText(parent, "00:00:00",
@@ -353,6 +354,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 
 		// Time left
 		label = this.toolkit.createLabel(parent, "Time left: ");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).applyTo(label);
 		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
 
 		this.txtTimeLeft = this.toolkit.createText(parent, "--:--:--",
@@ -365,12 +367,12 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		
 		// Forecast 
 		label = this.toolkit.createLabel(parent, "Forecast: ");
-		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
+		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_SCORE_INPUT));
 
 		this.txtForecast = this.toolkit.createText(parent, "--:--:--",
 				SWT.BORDER | SWT.READ_ONLY);
 		this.txtForecast.setFont(OpenDartsFormsToolkit
-				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
+				.getFont(IGeneralPrefs.FONT_SCORE_INPUT));
 		GridDataFactory.fillDefaults().grab(true, false)
 				.applyTo(this.txtForecast);
 	}
