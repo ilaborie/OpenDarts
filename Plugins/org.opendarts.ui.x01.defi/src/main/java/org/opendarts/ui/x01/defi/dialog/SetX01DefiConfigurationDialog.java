@@ -1,5 +1,6 @@
 package org.opendarts.ui.x01.defi.dialog;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -249,9 +250,26 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 	public void widgetSelected(SelectionEvent e) {
 		Object obj = e.getSource();
 		if (obj.equals(this.spiStartingScore)) {
+			int oldScore = this.startScore;
 			this.startScore = this.spiStartingScore.getSelection();
+			// Scale the time
+			BigDecimal newTime = BigDecimal
+					.valueOf(this.startScore)
+					.multiply(BigDecimal.valueOf(this.time))
+					.divide(BigDecimal.valueOf(oldScore),
+							BigDecimal.ROUND_HALF_EVEN);
+			this.time = newTime.longValue();
+			Date date = new Date(this.time);
+			String format = formatter.format(date);
+			this.txtTime.setText(format);
 		} else if (obj.equals(this.spiDelay)) {
 			this.delay = this.spiDelay.getSelection();
+		} else if (obj.equals(this.txtTime)) {
+			try {
+				Date date = formatter.parse(this.txtTime.getText());
+				this.time = date.getTime();
+			} catch (ParseException e1) {
+			}
 		}
 		this.parentDialog.notifyUpdate();
 	}
