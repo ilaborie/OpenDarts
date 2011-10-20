@@ -10,6 +10,7 @@ import org.opendarts.core.model.session.impl.GameSet;
 import org.opendarts.core.stats.model.IStats;
 import org.opendarts.core.x01.defi.service.entry.AverageTimeStatsEntry;
 import org.opendarts.core.x01.defi.service.entry.PlaysThrowsStatsEntry;
+import org.opendarts.core.x01.defi.service.entry.TimeTotalStatsEntry;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.service.StatsX01Service;
 import org.opendarts.core.x01.service.entry.AverageHistoryStatsEntry;
@@ -19,17 +20,18 @@ import org.opendarts.core.x01.service.entry.AverageHistoryStatsEntry;
  */
 public class StatsX01DefiService extends StatsX01Service {
 	public static final String SESSION_AVG_TIME = "Session.avg.time";
+	public static final String SESSION_TOTAL_TIME = "Session.total.time";
 	public static final String SESSION_AVG_TIME_HISTORY = "Session.avg.time.hist";
 	
 	public static final String SET_AVG_TIME = "Set.avg.time";
+	public static final String SET_TOTAL_TIME = "Set.total.time";
 	public static final String SET_AVG_TIME_HISTORY = "Set.avg.time.hist";
 	
 	public static final String GAME_AVG_TIME = "Game.avg.time";
+	public static final String GAME_TOTAL_TIME = "Game.total.time";
 	public static final String GAME_AVG_TIME_HISTORY = "Game.avg.time.hist";
 	
 	public static final String GAME_COUNT_THROWS = "Game.throws.count";
-	
-	// TODO nb Throw
 	
 	/**
 	 * Instantiates a new stats x01 defi service.
@@ -66,13 +68,16 @@ public class StatsX01DefiService extends StatsX01Service {
 		// Add Time stats
 		result.add(SESSION_AVG_TIME);
 		result.add(SESSION_AVG_TIME_HISTORY);
+		result.add(SESSION_TOTAL_TIME);
 
 		result.add(SET_AVG_TIME);
 		result.add(SET_AVG_TIME_HISTORY);
+		result.add(SET_TOTAL_TIME);
 
 		result.add(GAME_AVG_TIME);
 		result.add(GAME_AVG_TIME_HISTORY);
 		result.add(GAME_COUNT_THROWS);
+		result.add(GAME_TOTAL_TIME);
 		return result;
 	}
 	
@@ -87,6 +92,7 @@ public class StatsX01DefiService extends StatsX01Service {
 		AverageTimeStatsEntry avgTime = new AverageTimeStatsEntry(GAME_AVG_TIME);
 		stats.addEntry(avgTime);
 		stats.addEntry(new AverageHistoryStatsEntry(GAME_AVG_TIME_HISTORY,avgTime));
+		stats.addEntry(new TimeTotalStatsEntry(GAME_TOTAL_TIME));
 		
 		// Nb Throw
 		stats.addEntry(new PlaysThrowsStatsEntry(GAME_COUNT_THROWS));
@@ -105,6 +111,7 @@ public class StatsX01DefiService extends StatsX01Service {
 		AverageTimeStatsEntry avgTime = new AverageTimeStatsEntry(SET_AVG_TIME);
 		stats.addEntry(avgTime);
 		stats.addEntry(new AverageHistoryStatsEntry(SET_AVG_TIME_HISTORY,avgTime));
+		stats.addEntry(new TimeTotalStatsEntry(SET_TOTAL_TIME));
 		return stats;
 	}
 	
@@ -120,6 +127,7 @@ public class StatsX01DefiService extends StatsX01Service {
 		AverageTimeStatsEntry avgTime = new AverageTimeStatsEntry(SESSION_AVG_TIME);
 		stats.addEntry(avgTime);
 		stats.addEntry(new AverageHistoryStatsEntry(SESSION_AVG_TIME_HISTORY,avgTime));
+		stats.addEntry(new TimeTotalStatsEntry(SESSION_TOTAL_TIME));
 		return stats;
 	}
 	
