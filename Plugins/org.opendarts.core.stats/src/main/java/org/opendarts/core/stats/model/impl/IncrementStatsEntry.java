@@ -89,7 +89,7 @@ public abstract class IncrementStatsEntry extends AbstractStatsEntry<Number> {
 	public boolean undoDartsThrow(IGame game, IPlayer player,
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		if (this.shouldIncrement(game, player, gameEntry, dartsThrow)) {
-			this.increment();
+			this.decrement();
 		}
 		return false;
 	}
