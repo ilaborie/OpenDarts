@@ -166,7 +166,7 @@ public class SetX01DefiConfigurationDialog implements IGameDefinitionComposite,
 
 		// Delay
 		lbl = new Label(group, SWT.WRAP);
-		lbl.setText("Computer delay (ms):");
+		lbl.setText("Comp. time (ms):");
 		lblData.copy().span(2, 1).applyTo(lbl);
 
 		this.spiDelay = new Spinner(group, SWT.NONE);

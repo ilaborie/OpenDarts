@@ -357,7 +357,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).applyTo(label);
 		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_STATS));
 
-		this.txtTimeLeft = this.toolkit.createText(parent, "--:--:--",
+		this.txtTimeLeft = this.toolkit.createText(parent, "00:00:00",
 				SWT.BORDER | SWT.READ_ONLY);
 		this.txtTimeLeft.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_STATS_LABEL));
@@ -369,7 +369,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		label = this.toolkit.createLabel(parent, "Forecast: ");
 		label.setFont(OpenDartsFormsToolkit.getFont(IGeneralPrefs.FONT_SCORE_INPUT));
 
-		this.txtForecast = this.toolkit.createText(parent, "--:--:--",
+		this.txtForecast = this.toolkit.createText(parent, "00:00:00",
 				SWT.BORDER | SWT.READ_ONLY);
 		this.txtForecast.setFont(OpenDartsFormsToolkit
 				.getFont(IGeneralPrefs.FONT_SCORE_INPUT));
@@ -424,8 +424,6 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
-			table.setFont(OpenDartsFormsToolkit
-					.getFont(IGeneralPrefs.FONT_SCORE_SHEET));
 
 			// resize the row height using a MeasureItem listener
 			table.addListener(SWT.MeasureItem, new FixHeightListener());
@@ -450,8 +448,6 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
-			table.setFont(OpenDartsFormsToolkit
-					.getFont(IGeneralPrefs.FONT_SCORE_SHEET));
 
 			// resize the row height using a MeasureItem listener
 			table.addListener(SWT.MeasureItem, new FixHeightListener());
@@ -499,8 +495,6 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 				GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
-				table.setFont(OpenDartsFormsToolkit
-						.getFont(IGeneralPrefs.FONT_SCORE_SHEET));
 
 				// resize the row height using a MeasureItem listener
 				table.addListener(SWT.MeasureItem, new FixHeightListener());
