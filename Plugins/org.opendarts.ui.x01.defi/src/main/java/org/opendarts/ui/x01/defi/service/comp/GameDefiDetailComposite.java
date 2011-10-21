@@ -3,7 +3,8 @@
  */
 package org.opendarts.ui.x01.defi.service.comp;
 
-import java.text.MessageFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -12,9 +13,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.Section;
 import org.opendarts.core.model.game.IGame;
+import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.stats.model.IElementStats;
+import org.opendarts.core.stats.model.IStatValue;
+import org.opendarts.core.stats.model.IStats;
+import org.opendarts.core.stats.model.IStatsEntry;
+import org.opendarts.core.stats.service.IStatsService;
+import org.opendarts.core.x01.defi.OpenDartsX01DefiBundle;
 import org.opendarts.core.x01.defi.model.GameX01Defi;
 import org.opendarts.core.x01.defi.model.GameX01DefiDefinition;
+import org.opendarts.core.x01.defi.service.StatsX01DefiService;
 import org.opendarts.ui.utils.OpenDartsFormsToolkit;
 import org.opendarts.ui.x01.utils.comp.GameDetailComposite;
 
@@ -24,12 +34,7 @@ import org.opendarts.ui.x01.utils.comp.GameDetailComposite;
 public class GameDefiDetailComposite extends Composite {
 	private final GameX01Defi game;
 	private final OpenDartsFormsToolkit toolkit;
-
-	private Text txtTotalTime;
-	private Text txtNbThrow;
-	private Text txtNbDarts;
-	private Text txtSecondsByThrow;
-	private Text txtPointsBySeconds;
+	private final IStatsService statsService;
 
 	/**
 	 * Instantiates a new session detail composite.
@@ -41,7 +46,9 @@ public class GameDefiDetailComposite extends Composite {
 		super(parent, SWT.NONE);
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		this.game = (GameX01Defi) game;
+		this.statsService = OpenDartsX01DefiBundle.getStatsService(this.game);
 		GridLayoutFactory.fillDefaults().applyTo(this);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(this);
 		this.createContents();
 	}
 
@@ -52,61 +59,249 @@ public class GameDefiDetailComposite extends Composite {
 		// Defi info
 		Composite cmpDetail = this.toolkit.createComposite(this);
 		GridDataFactory.fillDefaults().grab(true, false);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(cmpDetail);
+		GridLayoutFactory.fillDefaults().applyTo(cmpDetail);
+
+		// Defi Detail
+		this.createDefiStats(cmpDetail, null);
+
+		// Players Detail
+		for (IPlayer player : this.game.getPlayers()) {
+			this.createPlayerDetail(cmpDetail,player);	
+		}
+
+		// Classic Detail
+		this.createClassicDetail(cmpDetail);
+	}
+
+	/**
+	 * Creates the player detail.
+	 *
+	 * @param parent the parent
+	 * @param player the player
+	 */
+	private void createPlayerDetail(Composite parent, IPlayer player) {
+		Section section = this.toolkit.createSection(parent,
+				Section.DESCRIPTION);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
+		if (player!=null) {
+			section.setText(player.getName());
+		} else {
+
+			section.setText("Defi Statistics");
+		}
+		section.marginWidth = 10;
+
+		this.toolkit.createCompositeSeparator(section);
+
+		Composite client = this.toolkit.createComposite(section, SWT.WRAP);
+		GridLayoutFactory.fillDefaults().applyTo(client);
+
+		// Create client
+		this.createDefiStats(client, player);
+
+		// End Section
+		this.toolkit.paintBordersFor(client);
+		section.setClient(client);}
+
+	/**
+	 * Creates the classic detail.
+	 *
+	 * @param parent the parent
+	 */
+	private void createClassicDetail(Composite parent) {
+		// Classic detail
+		Label label = toolkit.createSeparator(this, SWT.HORIZONTAL);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
+
+		Composite cmpTable = this.toolkit.createComposite(parent);
+		GridLayoutFactory.fillDefaults().applyTo(cmpTable);
+		GridDataFactory.fillDefaults().applyTo(cmpTable);
+		new GameDetailComposite(cmpTable, this.game);
+	}
+
+	/**
+	 * Creates the defi stats.
+	 *
+	 * @param client the client
+	 */
+	private void createDefiStats(Composite client, IPlayer player) {
+		IStats<IGame> stats = null;
+		if (player !=null) {
+			IElementStats<IGame> gameStats = statsService.getGameStats(this.game);
+			stats = gameStats.getPlayerStats(player);
+		}
+		
+		int scoreDone = this.getScore(stats);
+		int nbDarts = this.getNbDarts(stats);
+		double duration = this.getDuration(stats);
+		double nbThrows = this.getNbThrow(stats);
+
+		Composite cmpDetail = this.toolkit.createComposite(client);
+		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(cmpDetail);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(cmpDetail);
 
 		Label label;
 
-		// Total time
-		label = this.toolkit.createLabel(cmpDetail, "Total time:");
-		GridDataFactory.fillDefaults().applyTo(label);
+		// Average
+		label = this.toolkit.createLabel(cmpDetail, "Average score:");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER)
+				.applyTo(label);
 
-		this.txtTotalTime = this.toolkit.createText(cmpDetail,
-				this.getTotalTime());
-		GridDataFactory.fillDefaults().grab(true, false)
-				.applyTo(this.txtTotalTime);
-
-		// nb throw
-		label = this.toolkit.createLabel(cmpDetail, "Nb Throws:");
-		GridDataFactory.fillDefaults().applyTo(label);
-
-		this.txtNbThrow = this.toolkit.createText(cmpDetail, this.getNbThrow());
-		GridDataFactory.fillDefaults().grab(true, false)
-				.applyTo(this.txtNbThrow);
-
-		// nb Darts
-		label = this.toolkit.createLabel(cmpDetail, "Nb Darts:");
-		GridDataFactory.fillDefaults().applyTo(label);
-
-		this.txtNbDarts = this.toolkit.createText(cmpDetail, this.getNbDarts());
-		GridDataFactory.fillDefaults().grab(true, false)
-				.applyTo(this.txtNbDarts);
-
-		// seconds by throw
-		label = this.toolkit.createLabel(cmpDetail, "Seconds by Throw:");
-		GridDataFactory.fillDefaults().applyTo(label);
-
-		this.txtSecondsByThrow = this.toolkit.createText(cmpDetail,
-				this.getSecondsByThrow());
-		GridDataFactory.fillDefaults().grab(true, false)
-				.applyTo(this.txtSecondsByThrow);
+		Text txtAverage = this.toolkit.createText(cmpDetail,
+				this.getAverage(scoreDone, nbDarts));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtAverage);
 
 		// point by Seconds
 		label = this.toolkit.createLabel(cmpDetail, "Point by Seconds:");
-		GridDataFactory.fillDefaults().applyTo(label);
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER)
+				.applyTo(label);
 
-		this.txtPointsBySeconds = this.toolkit.createText(cmpDetail,
-				this.getPointsBySecond());
+		Text txtPointsBySeconds = this.toolkit.createText(cmpDetail,
+				this.getPointsBySecond(scoreDone, duration));
 		GridDataFactory.fillDefaults().grab(true, false)
-				.applyTo(this.txtPointsBySeconds);
+				.applyTo(txtPointsBySeconds);
 
-		// Classic detail
-		label = toolkit.createSeparator(this, SWT.HORIZONTAL);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
+		// nb throw
+		label = this.toolkit.createLabel(cmpDetail, "Nb Throws:");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER)
+				.applyTo(label);
 
-		Composite cmpTable = this.toolkit.createComposite(cmpDetail);
-		GridLayoutFactory.fillDefaults().applyTo(cmpTable);
-		GridDataFactory.fillDefaults().span(2, 1).applyTo(cmpTable);
-		new GameDetailComposite(cmpTable, this.game);
+		Text txtNbThrow = this.toolkit.createText(cmpDetail,
+				this.getNbThrow(nbThrows));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtNbThrow);
+
+		// seconds by throw
+		label = this.toolkit.createLabel(cmpDetail, "Seconds by Throw:");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER)
+				.applyTo(label);
+
+		Text txtSecondsByThrow = this.toolkit.createText(cmpDetail,
+				this.getSecondsByThrow(nbThrows, duration));
+		GridDataFactory.fillDefaults().grab(true, false)
+				.applyTo(txtSecondsByThrow);
+
+		// Total time
+		label = this.toolkit.createLabel(cmpDetail, "Total time:");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER)
+				.applyTo(label);
+
+		Text txtTotalTime = this.toolkit.createText(cmpDetail,
+				this.getTotalTime(duration));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtTotalTime);
+
+		// nb Darts
+		label = this.toolkit.createLabel(cmpDetail, "Nb Darts:");
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER)
+				.applyTo(label);
+
+		Text txtNbDarts = this.toolkit.createText(cmpDetail,
+				this.getNbDarts(nbDarts));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtNbDarts);
+	}
+
+	/**
+	 * Gets the nb throw.
+	 *
+	 * @param player the player
+	 * @return the nb throw
+	 */
+	private double getNbThrow(IStats<IGame> stats) {
+		double result;
+		if (stats == null) {
+			result = (double) this.game.getNbDartToFinish()
+					/ (double) (this.game.getPlayers().size() * 3);
+		} else {
+			result = 0;
+			IStatsEntry<Object> entry = stats.getEntry(StatsX01DefiService.GAME_COUNT_DARTS);
+			if (entry!=null) {
+				IStatValue<Object> value = entry.getValue();
+				if (value!=null) {
+					Object v = value.getValue();
+					if (v instanceof Number) {
+						result = ((Number) v).doubleValue() /3;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the duration.
+	 *
+	 * @param player the player
+	 * @return the duration
+	 */
+	private double getDuration(IStats<IGame> stats) {
+		double result;
+		if (stats == null) {
+			result = Long.valueOf(this.game.getDuration()).doubleValue();
+		} else {
+			result = 0;
+			IStatsEntry<Object> entry = stats.getEntry(StatsX01DefiService.GAME_TOTAL_TIME);
+			if (entry!=null) {
+				IStatValue<Object> value = entry.getValue();
+				if (value!=null) {
+					Object v = value.getValue();
+					if (v instanceof Number) {
+						result = ((Number) v).doubleValue()*1000;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the score.
+	 *
+	 * @param player the player
+	 * @return the score
+	 */
+	private int getScore(IStats<IGame> stats) {
+		int result;
+		if (stats == null) {
+			result = this.game.getScoreToDo();
+		} else {
+			result = 0;
+			IStatsEntry<Object> entry = stats.getEntry(StatsX01DefiService.GAME_TOTAL_SCORE);
+			if (entry!=null) {
+				IStatValue<Object> value = entry.getValue();
+				if (value!=null) {
+					Object v = value.getValue();
+					if (v instanceof Number) {
+						result = ((Number) v).intValue();
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets the nb darts.
+	 *
+	 * @param player the player
+	 * @return the nb darts
+	 */
+	private int getNbDarts(IStats<IGame> stats) {
+		int result;
+		if (stats == null) {
+			result = this.game.getNbDartToFinish();
+		} else {
+			result = 0;
+			IStatsEntry<Object> entry = stats.getEntry(StatsX01DefiService.GAME_COUNT_DARTS);
+			if (entry!=null) {
+				IStatValue<Object> value = entry.getValue();
+				if (value!=null) {
+					Object v = value.getValue();
+					if (v instanceof Number) {
+						result = ((Number) v).intValue();
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -114,12 +309,9 @@ public class GameDefiDetailComposite extends Composite {
 	 *
 	 * @return the points by second
 	 */
-	private String getPointsBySecond() {
-		int points = this.game.getScoreToDo();
-		double duration = (double) this.game.getDuration() / (double) 1000;
-
-		double pointBySec = ((double) points) / (duration);
-		return MessageFormat.format("{0}", pointBySec);
+	private String getPointsBySecond(int score, double duration) {
+		double pointBySec = ((double) score * 1000) / (duration);
+		return DecimalFormat.getNumberInstance().format(pointBySec);
 	}
 
 	/**
@@ -127,14 +319,9 @@ public class GameDefiDetailComposite extends Composite {
 	 *
 	 * @return the seconds by throw
 	 */
-	private String getSecondsByThrow() {
-		double duration = (double) this.game.getDuration() / (double) 1000;
-		double nbThrows = (double) this.game.getNbDartToFinish()
-				/ (double) (this.game.getPlayers().size()*3);
-
-		double secByThrow = duration / nbThrows ;
-
-		return MessageFormat.format("{0}", secByThrow);
+	private String getSecondsByThrow(double nbThrows, double duration) {
+		double secByThrow = ((double) duration) / (1000 * nbThrows);
+		return DecimalFormat.getNumberInstance().format(secByThrow);
 	}
 
 	/**
@@ -142,9 +329,18 @@ public class GameDefiDetailComposite extends Composite {
 	 *
 	 * @return the nb darts
 	 */
-	private String getNbDarts() {
-		Integer nbDarts = this.game.getNbDartToFinish();
-		return MessageFormat.format("{0}", nbDarts);
+	private String getNbDarts(int nbDarts) {
+		return DecimalFormat.getIntegerInstance().format(nbDarts);
+	}
+
+	/**
+	 * Gets the average.
+	 *
+	 * @return the average
+	 */
+	private String getAverage(int score, int nbDarts) {
+		double avg = ((double) score * 3) / nbDarts;
+		return NumberFormat.getNumberInstance().format(avg);
 	}
 
 	/**
@@ -152,9 +348,8 @@ public class GameDefiDetailComposite extends Composite {
 	 *
 	 * @return the nb throw
 	 */
-	private String getNbThrow() {
-		int size = this.game.getGameEntries().size();
-		return String.valueOf(size);
+	private String getNbThrow(double nbThrows) {
+		return DecimalFormat.getIntegerInstance().format(Math.ceil(nbThrows));
 	}
 
 	/**
@@ -162,9 +357,8 @@ public class GameDefiDetailComposite extends Composite {
 	 *
 	 * @return the total time
 	 */
-	private String getTotalTime() {
-		long duration = this.game.getDuration();
-		Date date = new Date(duration);
+	private String getTotalTime(double duration) {
+		Date date = new Date(Double.valueOf(duration).longValue());
 		return ((GameX01DefiDefinition) this.game.getParentSet()
 				.getGameDefinition()).getTimeFormatter().format(date);
 	}

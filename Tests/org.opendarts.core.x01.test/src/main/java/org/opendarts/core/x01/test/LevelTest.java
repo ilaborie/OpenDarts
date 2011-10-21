@@ -35,7 +35,7 @@ public class LevelTest {
 	private final int nbGames = 2000;
 
 	/** The LEVEL. */
-	private final int lvl = 1;
+	private final int lvl = 0;
 
 	/** The played games. */
 	private final List<GameX01> playedGames;
