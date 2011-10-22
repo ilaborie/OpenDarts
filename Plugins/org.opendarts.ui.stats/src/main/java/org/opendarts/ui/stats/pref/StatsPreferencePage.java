@@ -1,6 +1,7 @@
 package org.opendarts.ui.stats.pref;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.widgets.Composite;
@@ -47,6 +48,14 @@ public class StatsPreferencePage extends FieldEditorPreferencePage implements
 		// Broken Dart
 		editor = new BooleanFieldEditor(STATS_BROKEN,
 				"Use broken darts for statistics", parent);
+		this.addField(editor);
+		
+		// Color even
+		editor = new ColorFieldEditor(STATS_COLOR_EVEN, "Color Even", parent);
+		this.addField(editor);
+
+		// Color odd
+		editor = new ColorFieldEditor(STATS_COLOR_ODD, "Color Odd", parent);
 		this.addField(editor);
 	}
 

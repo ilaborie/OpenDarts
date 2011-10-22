@@ -7,7 +7,6 @@ import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.stats.service.IStatsUiProvider;
 import org.opendarts.ui.stats.service.IStatsUiService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class StatsUiProvider.
  */

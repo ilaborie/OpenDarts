@@ -2,12 +2,13 @@ package org.opendarts.ui.x01.chart.session;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.graphics.RGB;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
@@ -30,10 +31,13 @@ import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IStatsEntry;
 import org.opendarts.core.stats.service.IStatsService;
+import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.stats.model.IChart;
+import org.opendarts.ui.stats.pref.IStatsPrefs;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.chart.CircleDrawer;
+import org.opendarts.ui.x01.chart.PlayerColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,9 +65,6 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 	/** The service. */
 	private final IStatsService service;
 
-	/** The player colors. */
-	private final Map<IPlayer, Color> playerColors;
-
 	/** The player series. */
 	private final Map<IPlayer, XYSeries> playerSeries;
 
@@ -73,9 +74,8 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 	/** The set index. */
 	private final Map<ISet, Integer> setIndex;
 
-	// TODO prefs
-	private final Color colorEven = new Color(0, 0, 127, 25);
-	private final Color colorOdd = new Color(0, 127, 0, 25);
+	private final Color colorEven;
+	private final Color colorOdd;
 	private final Color win = Color.green;
 
 	/**
@@ -98,11 +98,15 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 		this.session = session;
 		this.service = service;
 
-		this.playerColors = new HashMap<IPlayer, Color>();
 		this.playerSeries = new HashMap<IPlayer, XYSeries>();
 
 		this.gameIndex = new HashMap<IGame, Integer>();
 		this.setIndex = new HashMap<ISet, Integer>();
+
+		RGB rgb = PreferenceConverter.getColor(OpenDartsStatsUiPlugin.getOpenDartsStats(), IStatsPrefs.STATS_COLOR_EVEN);
+		this.colorEven = new Color(rgb.red, rgb.green, rgb.blue,25);
+		rgb = PreferenceConverter.getColor(OpenDartsStatsUiPlugin.getOpenDartsStats(), IStatsPrefs.STATS_COLOR_ODD);
+		this.colorOdd = new Color(rgb.red, rgb.green, rgb.blue,25);
 	}
 
 	/**
@@ -346,9 +350,6 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 		NumberAxis axis = (NumberAxis) plot.getDomainAxis();
 		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		// Create players colors
-		this.initializePlayerColors();
-
 		// Better renderer
 		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
 				.getRenderer();
@@ -358,7 +359,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 			if (serieIndex >= 0 && dataset.getSeries(serieIndex) != null) {
 				renderer.setSeriesShapesVisible(serieIndex, true);
 				renderer.setSeriesPaint(serieIndex,
-						this.playerColors.get(entry.getKey()));
+						PlayerColor.getColor(entry.getKey()));
 			} else {
 				LOG.warn("Could not retrive series for Player: {}",
 						entry.getValue());
@@ -395,7 +396,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 			marker = new IntervalMarker(from - offset, offset + to);
 			marker.setLabel("Set #" + (i + 1));
 
-			marker.setLabelPaint(this.playerColors.get(set.getWinner()));
+			marker.setLabelPaint(PlayerColor.getColor(set.getWinner()));
 
 			marker.setLabelAnchor(RectangleAnchor.BOTTOM);
 			marker.setLabelTextAnchor(TextAnchor.BOTTOM_CENTER);
@@ -407,25 +408,6 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 		}
 
 		return chart;
-	}
-
-	/**
-	 * Initialize player colors.
-	 */
-	private void initializePlayerColors() {
-		List<Color> colors = Arrays.asList(Color.cyan, Color.magenta,
-				Color.orange, Color.blue, Color.red, Color.yellow, Color.pink);
-		int i = 0;
-		Color color;
-		for (IPlayer player : this.playerSeries.keySet()) {
-			if ((i + 1) < colors.size()) {
-				color = colors.get(i);
-			} else {
-				color = Color.lightGray;
-			}
-			this.playerColors.put(player, color);
-			i++;
-		}
 	}
 
 	/**
@@ -448,7 +430,7 @@ public abstract class SessionProgressChartX01<T> implements IChart {
 			if (value != null) {
 				marker = new ValueMarker(value);
 				marker.setAlpha(0.25F);
-				marker.setPaint(this.playerColors.get(entry.getKey()));
+				marker.setPaint(PlayerColor.getColor(entry.getKey()));
 				plot.addRangeMarker(marker, Layer.BACKGROUND);
 			}
 		}

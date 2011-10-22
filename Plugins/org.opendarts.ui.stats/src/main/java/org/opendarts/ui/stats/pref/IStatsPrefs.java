@@ -10,5 +10,8 @@ public interface IStatsPrefs {
 
 	/** The STAT s_ broken. */
 	String STATS_BROKEN = "OpenDarts.pref.stats.broken";
+	
+	String STATS_COLOR_EVEN = "OpenDarts.pref.stats.color.even";
+	String STATS_COLOR_ODD = "OpenDarts.pref.stats.color.odd";
 
 }

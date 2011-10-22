@@ -3,7 +3,6 @@ package org.opendarts.ui.x01.chart.set;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.chart.CircleDrawer;
+import org.opendarts.ui.x01.chart.PlayerColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,9 +57,6 @@ public abstract class SetProgressChartX01<T> implements IChart {
 
 	/** The service. */
 	private final IStatsService service;
-
-	/** The player colors. */
-	private final Map<IPlayer, Color> playerColors;
 
 	/** The player series. */
 	private final Map<IPlayer, XYSeries> playerSeries;
@@ -92,7 +89,6 @@ public abstract class SetProgressChartX01<T> implements IChart {
 		this.set = set;
 		this.service = service;
 
-		this.playerColors = new HashMap<IPlayer, Color>();
 		this.playerSeries = new HashMap<IPlayer, XYSeries>();
 
 		this.gameIndex = new HashMap<IGame, Integer>();
@@ -337,9 +333,6 @@ public abstract class SetProgressChartX01<T> implements IChart {
 		NumberAxis axis = (NumberAxis) plot.getDomainAxis();
 		axis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		// Create players colors
-		this.initializePlayerColors();
-
 		// Better renderer
 		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot
 				.getRenderer();
@@ -349,7 +342,7 @@ public abstract class SetProgressChartX01<T> implements IChart {
 			if (serieIndex >= 0 && dataset.getSeries(serieIndex) != null) {
 				renderer.setSeriesShapesVisible(serieIndex, true);
 				renderer.setSeriesPaint(serieIndex,
-						this.playerColors.get(entry.getKey()));
+						PlayerColor.getColor(entry.getKey()));
 			} else {
 				LOG.warn("Could not retrive series for Player: {}",
 						entry.getValue());
@@ -364,25 +357,6 @@ public abstract class SetProgressChartX01<T> implements IChart {
 		this.displayWinning(plot);
 
 		return chart;
-	}
-
-	/**
-	 * Initialize player colors.
-	 */
-	private void initializePlayerColors() {
-		List<Color> colors = Arrays.asList(Color.cyan, Color.magenta,
-				Color.orange, Color.blue, Color.red, Color.yellow, Color.pink);
-		int i = 0;
-		Color color;
-		for (IPlayer player : this.playerSeries.keySet()) {
-			if ((i + 1) < colors.size()) {
-				color = colors.get(i);
-			} else {
-				color = Color.lightGray;
-			}
-			this.playerColors.put(player, color);
-			i++;
-		}
 	}
 
 	/**
@@ -405,7 +379,7 @@ public abstract class SetProgressChartX01<T> implements IChart {
 			if (value != null) {
 				marker = new ValueMarker(value);
 				marker.setAlpha(0.25F);
-				marker.setPaint(this.playerColors.get(entry.getKey()));
+				marker.setPaint(PlayerColor.getColor(entry.getKey()));
 				plot.addRangeMarker(marker, Layer.BACKGROUND);
 			}
 		}

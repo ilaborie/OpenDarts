@@ -2,6 +2,8 @@ package org.opendarts.ui.stats.pref;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.graphics.RGB;
 import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 
 /**
@@ -26,6 +28,11 @@ public class StatsPreferenceInitializer extends AbstractPreferenceInitializer
 
 		store.setDefault(STORE_STATISTICS, true);
 		store.setDefault(STATS_BROKEN, true);
+
+		PreferenceConverter.setDefault(store, STATS_COLOR_EVEN, new RGB(0, 0,
+				127));
+		PreferenceConverter.setDefault(store, STATS_COLOR_ODD, new RGB(0, 127,
+				0));
 	}
 
 }

@@ -2,7 +2,6 @@ package org.opendarts.ui.x01.chart.set;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +29,7 @@ import org.opendarts.core.x01.service.entry.AvgHistory;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
+import org.opendarts.ui.x01.chart.PlayerColor;
 
 /**
  * The Class CategoryChartX01.
@@ -56,9 +56,6 @@ public class SetHistoryChartX01 implements IChart {
 	/** The game stats. */
 	private final  IElementStats<ISet> setStats;
 
-	/** The player colors. */
-	private final Map<IPlayer, Color> playerColors;
-
 	/** The player series. */
 	private final Map<IPlayer, TimeSeries> playerSeries;
 
@@ -77,7 +74,6 @@ public class SetHistoryChartX01 implements IChart {
 		this.service = service;
 
 		this.setStats = this.service.getSetStats(set);
-		this.playerColors = new HashMap<IPlayer, Color>();
 		this.playerSeries = new HashMap<IPlayer, TimeSeries>();
 	}
 
@@ -201,10 +197,6 @@ public class SetHistoryChartX01 implements IChart {
 		plot.setRangePannable(true);
 		plot.setForegroundAlpha(0.66F);
 		plot.setBackgroundPaint(Color.white);
-
-
-		// Create players colors
-		this.initializePlayerColors();
 		
 		XYItemRenderer renderer = plot.getRenderer();
 		int serieIndex;
@@ -212,7 +204,7 @@ public class SetHistoryChartX01 implements IChart {
 			serieIndex = dataset.getSeries().indexOf(entry.getValue());
 			if (serieIndex >= 0 && dataset.getSeries(serieIndex) != null) {
 				renderer.setSeriesPaint(serieIndex,
-						this.playerColors.get(entry.getKey()));
+						PlayerColor.getColor(entry.getKey()));
 			}
 		}
 
@@ -244,30 +236,10 @@ public class SetHistoryChartX01 implements IChart {
 					if (hist!=null) {
 					marker = new ValueMarker(hist.getLastValue());
 					marker.setAlpha(0.25F);
-					marker.setPaint(this.playerColors.get(entry.getKey()));
+					marker.setPaint(PlayerColor.getColor(entry.getKey()));
 					plot.addRangeMarker(marker, Layer.BACKGROUND);
 				}}
 			}
 		}
 	}
-
-	/**
-	 * Initialize player colors.
-	 */
-	private void initializePlayerColors() {
-		List<Color> colors = Arrays.asList(Color.cyan, Color.magenta,
-				Color.orange, Color.blue, Color.red, Color.yellow, Color.pink);
-		int i = 0;
-		Color color;
-		for (IPlayer player : this.playerSeries.keySet()) {
-			if ((i + 1) < colors.size()) {
-				color = colors.get(i);
-			} else {
-				color = Color.lightGray;
-			}
-			this.playerColors.put(player, color);
-			i++;
-		}
-	}
-
 }

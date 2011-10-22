@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.graphics.RGB;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -20,10 +22,13 @@ import org.jfree.ui.Layer;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
+import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.stats.model.IChart;
+import org.opendarts.ui.stats.pref.IStatsPrefs;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.x01.X01UiPlugin;
 import org.opendarts.ui.x01.chart.Category;
+import org.opendarts.ui.x01.chart.PlayerColor;
 
 /**
  * The Class CategoryChartX01.
@@ -32,12 +37,11 @@ import org.opendarts.ui.x01.chart.Category;
  */
 public abstract class SessionCategoryChartX01<T> implements IChart {
 
-	// TODO prefs
 	/** The color even. */
-	private final Color colorEven = new Color(0, 0, 127, 25);
+	private final Color colorEven;
 
 	/** The color odd. */
-	private final Color colorOdd = new Color(0, 127, 0, 25);
+	private final Color colorOdd;
 
 	/** The name. */
 	private final String name;
@@ -63,6 +67,11 @@ public abstract class SessionCategoryChartX01<T> implements IChart {
 		this.name = name;
 		this.statKey = statKey;
 		this.session = session;
+
+		RGB rgb = PreferenceConverter.getColor(OpenDartsStatsUiPlugin.getOpenDartsStats(), IStatsPrefs.STATS_COLOR_EVEN);
+		this.colorEven = new Color(rgb.red, rgb.green, rgb.blue,25);
+		rgb = PreferenceConverter.getColor(OpenDartsStatsUiPlugin.getOpenDartsStats(), IStatsPrefs.STATS_COLOR_ODD);
+		this.colorOdd = new Color(rgb.red, rgb.green, rgb.blue,25);
 	}
 
 	/* (non-Javadoc)
@@ -205,6 +214,14 @@ public abstract class SessionCategoryChartX01<T> implements IChart {
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
 		renderer.setDrawBarOutline(false);
 		renderer.setShadowVisible(false);
+
+		int series;
+		@SuppressWarnings("unchecked")
+		List<String> rowKeys = dataset.getRowKeys();
+		for (IPlayer player : this.getAllPlayers()) {
+			series = rowKeys.indexOf(this.getRow(player));
+			renderer.setSeriesPaint(series, PlayerColor.getColor(player));
+		}
 
 		Comparable<?> category;
 		CategoryMarker marker;

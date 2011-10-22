@@ -128,4 +128,8 @@ public class OpenDartsStatsUiPlugin extends AbstractUIPlugin {
 		return result;
 	}
 
+	public static IPreferenceStore getPrefefrenceStore() {
+		return null;
+	}
+
 }
