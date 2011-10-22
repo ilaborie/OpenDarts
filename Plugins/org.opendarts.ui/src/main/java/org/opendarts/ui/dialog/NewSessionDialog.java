@@ -212,8 +212,9 @@ public class NewSessionDialog extends TitleAreaDialog implements
 
 		// Set current gameDefinitionProvider
 		if (this.gameDefProvider != null) {
-			this.cbGamesAvailable.setSelection(new StructuredSelection(
-					this.gameDefProvider));
+			IGameDefinitionProvider gdp = this.gameDefProvider;
+			this.gameDefProvider = null;
+			this.cbGamesAvailable.setSelection(new StructuredSelection(gdp));
 		}
 
 		this.spiNbSets.setFocus();
@@ -349,25 +350,27 @@ public class NewSessionDialog extends TitleAreaDialog implements
 	 */
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		this.body.dispose();
-
-		this.body = new Composite(this.main, SWT.NONE);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
-				.applyTo(this.body);
-		GridLayoutFactory.fillDefaults().applyTo(this.body);
-
 		ISelection sel = this.cbGamesAvailable.getSelection();
 		if (sel instanceof IStructuredSelection) {
 			IGameDefinitionProvider gdp = (IGameDefinitionProvider) ((IStructuredSelection) sel)
 					.getFirstElement();
+			if(!gdp.equals(this.gameDefProvider)) {
+				this.body.dispose();
 
-			this.compGameDef = gdp.createGameDefinitionComposite();
-			Composite composite = this.compGameDef.createSetConfiguration(this,
-					this.body, this.gameDefinition);
-			GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
-
-			this.getShell().pack(true);
-			this.compGameDef.setFocus();
+				this.body = new Composite(this.main, SWT.NONE);
+				GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
+						.applyTo(this.body);
+				GridLayoutFactory.fillDefaults().applyTo(this.body);
+				
+				this.gameDefProvider = gdp;
+				this.compGameDef = gdp.createGameDefinitionComposite();
+				Composite composite = this.compGameDef.createSetConfiguration(this,
+						this.body, this.gameDefinition);
+				GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
+	
+				this.getShell().pack(true);
+				this.compGameDef.setFocus();
+			}
 		}
 	}
 

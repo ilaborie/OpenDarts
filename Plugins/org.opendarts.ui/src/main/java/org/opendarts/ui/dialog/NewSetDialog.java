@@ -176,8 +176,9 @@ public class NewSetDialog extends TitleAreaDialog implements
 
 		// Set current gameDefinitionProvider
 		if (this.gameDefProvider != null) {
-			this.cbGamesAvailable.setSelection(new StructuredSelection(
-					this.gameDefProvider));
+			IGameDefinitionProvider gdp = this.gameDefProvider;
+			this.gameDefProvider = null;
+			this.cbGamesAvailable.setSelection(new StructuredSelection(gdp));
 		}
 		return comp;
 	}
@@ -272,26 +273,29 @@ public class NewSetDialog extends TitleAreaDialog implements
 	 */
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		this.body.dispose();
-
-		this.body = new Composite(this.main, SWT.NONE);
-		GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
-				.applyTo(this.body);
-		GridLayoutFactory.fillDefaults().applyTo(this.body);
-
 		ISelection sel = this.cbGamesAvailable.getSelection();
 		if (sel instanceof IStructuredSelection) {
-			this.gameDefProvider = (IGameDefinitionProvider) ((IStructuredSelection) sel)
+			IGameDefinitionProvider gdp = (IGameDefinitionProvider) ((IStructuredSelection) sel)
 					.getFirstElement();
+			if (!gdp.equals(this.gameDefProvider)) {
+				this.body.dispose();
 
-			this.compGameDef = this.gameDefProvider
-					.createGameDefinitionComposite();
-			Composite composite = this.compGameDef.createSetConfiguration(this,
-					this.body, this.gameDefinition);
-			GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
+				this.body = new Composite(this.main, SWT.NONE);
+				GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
+						.applyTo(this.body);
+				GridLayoutFactory.fillDefaults().applyTo(this.body);
+				
+				this.gameDefProvider = gdp;
+				this.compGameDef = this.gameDefProvider
+						.createGameDefinitionComposite();
+				Composite composite = this.compGameDef.createSetConfiguration(
+						this, this.body, this.gameDefinition);
+				GridDataFactory.fillDefaults().grab(true, true)
+						.applyTo(composite);
 
-			this.getShell().pack(true);
-			this.compGameDef.setFocus();
+				this.getShell().pack(true);
+				this.compGameDef.setFocus();
+			}
 		}
 	}
 
@@ -312,7 +316,8 @@ public class NewSetDialog extends TitleAreaDialog implements
 		IPreferenceStore store = OpenDartsUiPlugin.getOpenDartsPreference();
 		if (this.gameDefProvider != null) {
 			store.setValue(IGeneralPrefs.DEFAUlT_GAME_DEFINITION,
-					this.gameDefProvider.getGameDefinitionAsString(this.gameDefinition));
+					this.gameDefProvider
+							.getGameDefinitionAsString(this.gameDefinition));
 			store.setValue(IGeneralPrefs.DEFAUlT_GAME_DEFINITION_NAME,
 					this.gameDefProvider.getName());
 		}
