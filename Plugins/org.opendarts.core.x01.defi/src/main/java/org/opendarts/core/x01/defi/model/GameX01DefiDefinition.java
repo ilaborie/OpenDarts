@@ -1,6 +1,7 @@
 package org.opendarts.core.x01.defi.model;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
@@ -47,7 +48,14 @@ public class GameX01DefiDefinition extends GameDefinition {
 		this.delay = delay;
 		this.gameService = new GameX01DefiService();
 		this.timeTarget = timeTarget;
-		
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opendarts.core.model.game.impl.GameDefinition#toString()
+	 */
+	@Override
+	public String toString() {
+		return NumberFormat.getIntegerInstance().format(this.getStartScore());
 	}
 
 	/**

@@ -6,6 +6,7 @@
       <editor
             class="org.opendarts.ui.x01.defi.editor.DefiX01Editor"
             default="false"
+            icon="icons/view/editor.png"
             id="opendarts.editor.defi.x01"
             name="Defi 100 001">
       </editor>
