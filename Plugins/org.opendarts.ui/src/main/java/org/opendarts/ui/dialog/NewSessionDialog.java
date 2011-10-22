@@ -366,7 +366,7 @@ public class NewSessionDialog extends TitleAreaDialog implements
 					this.body, this.gameDefinition);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
 
-			this.main.layout(true);
+			this.getShell().pack(true);
 			this.compGameDef.setFocus();
 		}
 	}
