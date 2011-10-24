@@ -77,7 +77,7 @@ public class GameDetailComposite extends Composite {
 		colDescr.width(60);
 		colDescr.labelProvider(new TurnLabelProvider(false));
 
-		List<IPlayer> players = this.game.getPlayers();
+		List<IPlayer> players = this.game.getParentSet().getGameDefinition().getInitialPlayers();
 
 		if (players.size() == 2) {
 			// Two player

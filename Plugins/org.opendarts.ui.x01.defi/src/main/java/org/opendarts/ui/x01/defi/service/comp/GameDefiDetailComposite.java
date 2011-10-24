@@ -65,7 +65,7 @@ public class GameDefiDetailComposite extends Composite {
 		this.createDefiStats(cmpDetail, null);
 
 		// Players Detail
-		for (IPlayer player : this.game.getPlayers()) {
+		for (IPlayer player : this.game.getParentSet().getGameDefinition().getInitialPlayers()) {
 			this.createPlayerDetail(cmpDetail,player);	
 		}
 
