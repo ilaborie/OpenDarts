@@ -48,11 +48,10 @@ public class AverageHistoryStatsEntry extends AbstractStatsEntry<AvgHistory> {
 
 		AvgEntry avg = null;
 		IStatValue<AvgEntry> v = this.avgEntry.getValue();
-		if (v!=null) {
+		if (v != null) {
 			avg = v.getValue();
 		}
-		
-		
+
 		if (avg != null) {
 			StatsValue<AvgHistory> val = (StatsValue<AvgHistory>) this
 					.getValue();
@@ -79,22 +78,27 @@ public class AverageHistoryStatsEntry extends AbstractStatsEntry<AvgHistory> {
 			IGameEntry gameEntry, IDartsThrow dartsThrow) {
 		AvgHistory history = null;
 
-		AvgEntry avg = this.avgEntry.getUndoInput(game, player, gameEntry,
-				dartsThrow);
-		if (avg != null) {
-			StatsValue<AvgHistory> val = (StatsValue<AvgHistory>) this
-					.getValue();
-			if (val == null) {
-				val = new StatsValue<AvgHistory>();
-				this.setValue(val);
-			}
+		if (this.avgEntry.undoDartsThrow(game, player, gameEntry, dartsThrow)) {
+			IStatValue<AvgEntry> value = this.avgEntry.getValue();
+			if (value != null) {
+				AvgEntry avg = value.getValue();
 
-			history = val.getValue();
-			if (history == null) {
-				history = new AvgHistory();
-				val.setValue(history);
+				if (avg != null) {
+					StatsValue<AvgHistory> val = (StatsValue<AvgHistory>) this
+							.getValue();
+					if (val == null) {
+						val = new StatsValue<AvgHistory>();
+						this.setValue(val);
+					}
+
+					history = val.getValue();
+					if (history == null) {
+						history = new AvgHistory();
+						val.setValue(history);
+					}
+					history.addHistory(dartsThrow.getTimestamp(), avg.getAvg());
+				}
 			}
-			history.addHistory(dartsThrow.getTimestamp(), avg.getAvg());
 		}
 		return history;
 	}
