@@ -54,7 +54,7 @@ public class GameHistoryChartX01 implements IChart {
 	private final IStatsService service;
 
 	/** The game stats. */
-	private final  IElementStats<IGame> gameStats;
+	private final IElementStats<IGame> gameStats;
 
 	/** The player series. */
 	private final Map<IPlayer, TimeSeries> playerSeries;
@@ -66,7 +66,8 @@ public class GameHistoryChartX01 implements IChart {
 	 * @param statKey the stat key
 	 * @param session the session
 	 */
-	public GameHistoryChartX01(String name, String statKey, IGame game,IStatsService service) {
+	public GameHistoryChartX01(String name, String statKey, IGame game,
+			IStatsService service) {
 		super();
 		this.name = name;
 		this.statKey = statKey;
@@ -146,8 +147,11 @@ public class GameHistoryChartX01 implements IChart {
 		for (IPlayer player : this.getAllPlayers()) {
 			ts = new TimeSeries(player.getName());
 			history = this.getHistory(player);
-			for (Entry<Long, Double> entry : history.getValues().entrySet()) {
-				ts.add(new FixedMillisecond(entry.getKey()), entry.getValue());
+			if (history != null && history.getValues() != null) {
+				for (Entry<Long, Double> entry : history.getValues().entrySet()) {
+					ts.add(new FixedMillisecond(entry.getKey()),
+							entry.getValue());
+				}
 			}
 			result.addSeries(ts);
 			this.playerSeries.put(player, ts);
@@ -179,7 +183,8 @@ public class GameHistoryChartX01 implements IChart {
 	 */
 	protected List<IPlayer> getAllPlayers() {
 		Set<IPlayer> players = new HashSet<IPlayer>();
-		players.addAll(this.game.getParentSet().getGameDefinition().getInitialPlayers());
+		players.addAll(this.game.getParentSet().getGameDefinition()
+				.getInitialPlayers());
 		return new ArrayList<IPlayer>(players);
 	}
 
@@ -190,14 +195,15 @@ public class GameHistoryChartX01 implements IChart {
 	 * @return the j free chart
 	 */
 	private JFreeChart buildChart(TimeSeriesCollection dataset) {
-		final JFreeChart chart = ChartFactory.createTimeSeriesChart(this.getName(),
-				"Player", "Average", dataset, true, true, false);
+		final JFreeChart chart = ChartFactory
+				.createTimeSeriesChart(this.getName(), "Player", "Average",
+						dataset, true, true, false);
 
 		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setRangePannable(true);
 		plot.setForegroundAlpha(0.66F);
 		plot.setBackgroundPaint(Color.white);
-		
+
 		XYItemRenderer renderer = plot.getRenderer();
 		int serieIndex;
 		for (Entry<IPlayer, TimeSeries> entry : this.playerSeries.entrySet()) {
@@ -208,10 +214,9 @@ public class GameHistoryChartX01 implements IChart {
 			}
 		}
 
- 		// Average
+		// Average
 		this.displayAvg(plot);
-		
-	
+
 		return chart;
 	}
 
@@ -221,8 +226,7 @@ public class GameHistoryChartX01 implements IChart {
 	 * @param plot the plot
 	 */
 	private void displayAvg(XYPlot plot) {
-		IElementStats<IGame> eltStats = this.service
-				.getGameStats(this.game);
+		IElementStats<IGame> eltStats = this.service.getGameStats(this.game);
 		Map<IPlayer, IStatsEntry<AvgHistory>> entries = eltStats
 				.getStatsEntries(this.getStatKey());
 		ValueMarker marker;
@@ -232,15 +236,16 @@ public class GameHistoryChartX01 implements IChart {
 		for (Entry<IPlayer, IStatsEntry<AvgHistory>> entry : entries.entrySet()) {
 			v = entry.getValue();
 			if (v != null) {
-				 value = v.getValue();
+				value = v.getValue();
 				if (value != null) {
 					hist = value.getValue();
-					if (hist!=null) {
-					marker = new ValueMarker(hist.getLastValue());
-					marker.setAlpha(0.25F);
-					marker.setPaint(PlayerColor.getColor(entry.getKey()));
-					plot.addRangeMarker(marker, Layer.BACKGROUND);
-				}}
+					if (hist != null) {
+						marker = new ValueMarker(hist.getLastValue());
+						marker.setAlpha(0.25F);
+						marker.setPaint(PlayerColor.getColor(entry.getKey()));
+						plot.addRangeMarker(marker, Layer.BACKGROUND);
+					}
+				}
 			}
 		}
 	}

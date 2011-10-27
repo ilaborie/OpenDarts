@@ -31,12 +31,12 @@ public class AvgSessionProgressChartX01 extends
 	@Override
 	protected Double getValue(IStatsEntry<AvgEntry> stEntry) {
 		Double result = null;
-		IStatValue<AvgEntry> value = stEntry.getValue();
-		if ((value != null) && (value.getValue() != null)) {
-			result = value.getValue().getAvg();
+		if (stEntry != null) {
+			IStatValue<AvgEntry> value = stEntry.getValue();
+			if ((value != null) && (value.getValue() != null)) {
+				result = value.getValue().getAvg();
+			}
 		}
-
 		return result;
 	}
-
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.opendarts.ui.export.ExportProvider">
+   <implementation class="org.opendarts.ui.export.internal.service.ExportProviderImpl"/>
+   <reference bind="addExportUiService" cardinality="0..n" interface="org.opendarts.ui.export.service.IExportUiService" name="IExportUiService" policy="dynamic" unbind="removeExportUiService"/>
+   <service>
+      <provide interface="org.opendarts.ui.export.service.IExportProvider"/>
+   </service>>
+</scr:component>

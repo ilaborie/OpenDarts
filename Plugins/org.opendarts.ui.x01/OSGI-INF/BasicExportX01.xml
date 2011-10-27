@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.opendarts.ui.x01.BasicExport">
+   <implementation class="org.opendarts.ui.x01.service.export.BasicExportX01Service"/>
+   <service>
+      <provide interface="org.opendarts.ui.export.service.IExportUiService"/>
+   </service>
+   <reference bind="setStatsUiProvider" cardinality="1..1" interface="org.opendarts.ui.stats.service.IStatsUiProvider" name="IStatsUiProvider" policy="static" unbind="unsetStatsUiProvider"/>
+   <reference bind="setStatsProvider" cardinality="1..1" interface="org.opendarts.core.stats.service.IStatsProvider" name="IStatsProvider" policy="static" unbind="unsetStatsProvider"/>
+</scr:component>

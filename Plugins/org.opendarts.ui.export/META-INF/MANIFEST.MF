@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts UI Export
+Bundle-SymbolicName: org.opendarts.ui.export;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.opendarts.ui.export.OpenDartsUiExportPlugin
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: org.opendarts.core.export,
+ org.opendarts.core.model.game,
+ org.opendarts.core.model.session,
+ org.opendarts.core.service.session,
+ org.opendarts.ui,
+ org.opendarts.ui.label,
+ org.slf4j;version="1.6.1"
+Service-Component: OSGI-INF/ExportProvider.xml
+Export-Package: org.opendarts.ui.export,
+ org.opendarts.ui.export.composite,
+ org.opendarts.ui.export.dialog,
+ org.opendarts.ui.export.handler,
+ org.opendarts.ui.export.label,
+ org.opendarts.ui.export.service

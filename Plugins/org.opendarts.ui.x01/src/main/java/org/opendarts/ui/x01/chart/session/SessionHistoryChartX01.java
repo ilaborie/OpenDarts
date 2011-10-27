@@ -148,8 +148,11 @@ public class SessionHistoryChartX01 implements IChart {
 		for (IPlayer player : this.getAllPlayers()) {
 			ts = new TimeSeries(player.getName());
 			history = this.getHistory(player);
-			for (Entry<Long, Double> entry : history.getValues().entrySet()) {
-				ts.add(new FixedMillisecond(entry.getKey()), entry.getValue());
+			if (history != null) {
+				for (Entry<Long, Double> entry : history.getValues().entrySet()) {
+					ts.add(new FixedMillisecond(entry.getKey()),
+							entry.getValue());
+				}
 			}
 			result.addSeries(ts);
 			this.playerSeries.put(player, ts);
@@ -166,10 +169,12 @@ public class SessionHistoryChartX01 implements IChart {
 	protected AvgHistory getHistory(IPlayer player) {
 		AvgHistory result = null;
 		IStats<ISession> stats = this.sessionStats.getPlayerStats(player);
-		IStatsEntry<AvgHistory> entry = stats.getEntry(getStatKey());
-		IStatValue<AvgHistory> value = entry.getValue();
-		if (value != null) {
-			result = value.getValue();
+		if (stats != null) {
+			IStatsEntry<AvgHistory> entry = stats.getEntry(getStatKey());
+			IStatValue<AvgHistory> value = entry.getValue();
+			if (value != null) {
+				result = value.getValue();
+			}
 		}
 		return result;
 	}
@@ -201,7 +206,7 @@ public class SessionHistoryChartX01 implements IChart {
 		plot.setRangePannable(true);
 		plot.setForegroundAlpha(0.66F);
 		plot.setBackgroundPaint(Color.white);
-		
+
 		XYItemRenderer renderer = plot.getRenderer();
 		int serieIndex;
 		for (Entry<IPlayer, TimeSeries> entry : this.playerSeries.entrySet()) {
@@ -212,7 +217,7 @@ public class SessionHistoryChartX01 implements IChart {
 			}
 		}
 
- 		// Average
+		// Average
 		this.displayAvg(plot);
 		return chart;
 	}
@@ -234,15 +239,16 @@ public class SessionHistoryChartX01 implements IChart {
 		for (Entry<IPlayer, IStatsEntry<AvgHistory>> entry : entries.entrySet()) {
 			v = entry.getValue();
 			if (v != null) {
-				 value = v.getValue();
+				value = v.getValue();
 				if (value != null) {
 					hist = value.getValue();
-					if (hist!=null) {
-					marker = new ValueMarker(hist.getLastValue());
-					marker.setAlpha(0.25F);
-					marker.setPaint(PlayerColor.getColor(entry.getKey()));
-					plot.addRangeMarker(marker, Layer.BACKGROUND);
-				}}
+					if (hist != null) {
+						marker = new ValueMarker(hist.getLastValue());
+						marker.setAlpha(0.25F);
+						marker.setPaint(PlayerColor.getColor(entry.getKey()));
+						plot.addRangeMarker(marker, Layer.BACKGROUND);
+					}
+				}
 			}
 		}
 	}
