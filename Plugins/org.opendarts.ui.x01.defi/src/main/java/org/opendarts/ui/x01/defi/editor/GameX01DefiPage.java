@@ -68,7 +68,6 @@ import org.opendarts.ui.x01.editor.GameX01ContentProvider;
 import org.opendarts.ui.x01.editor.ScoreX01EditingSupport;
 import org.opendarts.ui.x01.label.ScoreLabelProvider;
 import org.opendarts.ui.x01.pref.IX01Prefs;
-import org.opendarts.ui.x01.utils.TextInputListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -575,7 +574,7 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 				| SWT.LEFT);
 
 		// listener
-		TextInputListener listener = new TextInputListener(this.getSite()
+		TextDefiInputListener listener = new TextDefiInputListener(this.getSite()
 				.getShell(), inputScoreText, this.game, player, dec);
 		inputScoreText.addKeyListener(listener);
 
