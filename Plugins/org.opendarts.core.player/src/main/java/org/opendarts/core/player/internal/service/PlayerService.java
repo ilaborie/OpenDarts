@@ -61,6 +61,7 @@ public class PlayerService implements IPlayerService {
 		String name = System.getenv("USER");
 		if ((name == null) || "".equals(name)) {
 			name = System.getenv("USERNAME");
+			name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 		}
 		try {
 			TypedQuery<IPlayer> query = this.em.createNamedQuery(

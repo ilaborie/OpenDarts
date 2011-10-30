@@ -40,6 +40,8 @@ public interface IElementStats<E> {
 		 * @return the best value
 		 */
 		IStatValue<V> getBestValue();
+
+		boolean isVisible();
 	}
 
 	/**

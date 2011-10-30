@@ -52,7 +52,8 @@ public class StatsListEditor extends ListViewerEditor<String> {
 	 */
 	@Override
 	protected ColumnLabelProvider getLabelProvider() {
-		StatsX01Service statsService = OpenDartsX01Bundle.getStatsX01Service();
+		StatsX01Service statsService = OpenDartsX01Bundle.getBundle()
+				.getStatsX01Service();
 		return X01UiPlugin.getService(IStatsUiProvider.class)
 				.getStatsUiService(statsService).getStatsLabelProvider();
 	}

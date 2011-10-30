@@ -47,6 +47,7 @@
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.opendarts.jfreechart" version="1.0.13" match="greaterOrEqual"/>
       <import plugin="org.eclipse.swt" version="3.7.0" match="compatible"/>
+      <import plugin="com.google.guava"/>
    </requires>
 
    <plugin

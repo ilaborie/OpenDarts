@@ -56,7 +56,7 @@ public class ComputerPlayerThrow {
 		super();
 		this.game = game;
 		this.player = player;
-		this.computerPlayerDartService = OpenDartsX01Bundle
+		this.computerPlayerDartService = OpenDartsX01Bundle.getBundle()
 				.getComputerPlayerDartService();
 		this.gameService = this.game.getParentSet().getGameService();
 	}
@@ -67,7 +67,7 @@ public class ComputerPlayerThrow {
 	 * @param baseScore the base score
 	 * @return the darts throw
 	 */
-	public IComputerThrow getComputerThrow(int baseScore) {
+	public synchronized IComputerThrow getComputerThrow(int baseScore) {
 		int score;
 		IDart dart;
 
@@ -107,7 +107,7 @@ public class ComputerPlayerThrow {
 	 * @return the i dart
 	 * @throws InvalidDartThrowException the invalid dart throw exception
 	 */
-	private IDart throwDart(int score, int index)
+	private synchronized IDart throwDart(int score, int index)
 			throws InvalidDartThrowException {
 		IDart dart = this.getDart(score, index);
 		this.darts[index] = dart;
@@ -133,7 +133,7 @@ public class ComputerPlayerThrow {
 	 * @param index the index
 	 * @return the first dart
 	 */
-	private IDart getDart(int score, int index) {
+	private synchronized IDart getDart(int score, int index) {
 		IDart wished = this.gameService.chooseBestDart(this.player, score,
 				this.darts.length - index, this.game);
 		this.wished[index] = wished;

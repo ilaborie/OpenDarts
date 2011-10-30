@@ -57,8 +57,8 @@ public class X01UiPlugin extends AbstractUIPlugin {
 		statsUiService = new StatsX01UiService();
 		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
 		if (uiProvider != null) {
-			uiProvider.registerStatsUiService(
-					OpenDartsX01Bundle.getStatsX01Service(), statsUiService);
+			uiProvider.registerStatsUiService(OpenDartsX01Bundle.getBundle()
+					.getStatsX01Service(), statsUiService);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class X01UiPlugin extends AbstractUIPlugin {
 		statsUiService = null;
 		IStatsUiProvider uiProvider = getService(IStatsUiProvider.class);
 		if (uiProvider != null) {
-			uiProvider.unregisterStatsUiService(OpenDartsX01Bundle
+			uiProvider.unregisterStatsUiService(OpenDartsX01Bundle.getBundle()
 					.getStatsX01Service());
 		}
 		super.stop(context);

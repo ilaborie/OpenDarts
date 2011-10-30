@@ -58,7 +58,7 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.entries = new ArrayList<GameX01Entry>();
 		this.scoreToDo = startScore;
 		// Stats
-		this.statsService = OpenDartsX01Bundle.getStatsService(this);
+		this.statsService = OpenDartsX01Bundle.getBundle().getStatsService(this);
 	}
 	
 	/**

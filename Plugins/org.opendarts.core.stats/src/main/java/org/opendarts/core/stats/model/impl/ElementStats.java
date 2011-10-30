@@ -216,6 +216,14 @@ public class ElementStats<E> implements IElementStats<E> {
 			this.key = key;
 			this.eltStats = eltStats;
 		}
+		
+		/* (non-Javadoc)
+		 * @see org.opendarts.core.stats.model.IElementStats.IEntry#isVisible()
+		 */
+		@Override
+		public boolean isVisible() {
+			return true;
+		}
 
 		/*
 		 * (non-Javadoc)

@@ -34,6 +34,9 @@
          version="0.0.0"/>
 
    <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.opendarts.core.ia"/>
       <import plugin="org.opendarts.core"/>
       <import plugin="org.opendarts.core.stats"/>
       <import plugin="org.eclipse.osgi"/>
@@ -41,15 +44,15 @@
       <import plugin="org.eclipse.ui" version="3.7.0" match="compatible"/>
       <import plugin="org.eclipse.ui.forms" version="3.5.100" match="compatible"/>
       <import plugin="org.eclipse.core.runtime" version="3.7.0" match="compatible"/>
+      <import plugin="org.opendarts.jfreechart" version="1.0.13" match="greaterOrEqual"/>
       <import plugin="org.opendarts.core.player"/>
       <import plugin="org.opendarts.ui"/>
       <import plugin="org.opendarts.ui.player"/>
-      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.opendarts.core.ia"/>
-      <import plugin="org.opendarts.jfreechart" version="1.0.13" match="greaterOrEqual"/>
       <import plugin="org.opendarts.ui.stats"/>
       <import plugin="org.eclipse.swt" version="3.7.0" match="compatible"/>
+      <import plugin="org.opendarts.core.export"/>
+      <import plugin="org.opendarts.ui.export"/>
+      <import plugin="com.google.guava"/>
    </requires>
 
    <plugin
@@ -68,6 +71,27 @@
 
    <plugin
          id="org.opendarts.jfreechart"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.ui.export.x01.md"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.core.export"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.ui.export"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -9,15 +9,19 @@ Export-Package: org.opendarts.core.internal.service;x-friends:="org.opendarts.ui
  org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
+ org.opendarts.core.model.game.func,
  org.opendarts.core.model.game.impl,
  org.opendarts.core.model.player,
+ org.opendarts.core.model.player.func,
  org.opendarts.core.model.session,
+ org.opendarts.core.model.session.func,
  org.opendarts.core.model.session.impl,
  org.opendarts.core.service.dart,
  org.opendarts.core.service.game,
  org.opendarts.core.service.player,
  org.opendarts.core.service.session
 Service-Component: OSGI-INF/DartService.xml, OSGI-INF/SessionService.xml, OSGI-INF/SetService.xml
-Import-Package: org.opendarts.core.model.game,
+Import-Package: com.google.common.base;version="10.0.0",
+ com.google.common.collect;version="10.0.0",
  org.slf4j;version="1.6.1"
 Bundle-ActivationPolicy: lazy

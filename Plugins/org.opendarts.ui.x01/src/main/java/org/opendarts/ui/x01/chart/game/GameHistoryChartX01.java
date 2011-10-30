@@ -168,10 +168,12 @@ public class GameHistoryChartX01 implements IChart {
 	protected AvgHistory getHistory(IPlayer player) {
 		AvgHistory result = null;
 		IStats<IGame> stats = this.gameStats.getPlayerStats(player);
-		IStatsEntry<AvgHistory> entry = stats.getEntry(getStatKey());
-		IStatValue<AvgHistory> value = entry.getValue();
-		if (value != null) {
-			result = value.getValue();
+		if (stats != null) {
+			IStatsEntry<AvgHistory> entry = stats.getEntry(getStatKey());
+			IStatValue<AvgHistory> value = entry.getValue();
+			if (value != null) {
+				result = value.getValue();
+			}
 		}
 		return result;
 	}

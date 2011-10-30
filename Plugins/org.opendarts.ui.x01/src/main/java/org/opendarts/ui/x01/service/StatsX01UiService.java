@@ -67,7 +67,7 @@ public class StatsX01UiService implements IStatsUiService {
 	 * @return the stats service
 	 */
 	protected IStatsService getStatsService() {
-		return OpenDartsX01Bundle.getStatsX01Service();
+		return OpenDartsX01Bundle.getBundle().getStatsX01Service();
 	}
 
 	/* (non-Javadoc)

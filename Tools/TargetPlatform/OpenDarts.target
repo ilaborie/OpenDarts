@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="OpenDarts" sequenceNumber="8">
+<target name="OpenDarts" sequenceNumber="9">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.derby" version="10.5.1.1_201105231903"/>
@@ -25,6 +25,10 @@
 <unit id="org.eclipse.pde.api.tools.ee.javase16.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
 <unit id="org.eclipse.pde.api.tools.ee.javase17.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
 <repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="com.google.guava.sdk.feature.feature.group" version="10.0.0"/>
+<repository location="http://guava-osgi.googlecode.com/svn/trunk/repository/"/>
 </location>
 </locations>
 </target>

@@ -9,12 +9,28 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
  org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Import-Package: org.opendarts.core.export,
+Import-Package: com.google.common.base;version="10.0.0",
+ com.google.common.collect;version="10.0.0",
+ com.google.common.io;version="10.0.0",
+ org.jfree.chart,
+ org.opendarts.core.export,
+ org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
+ org.opendarts.core.model.game.func,
+ org.opendarts.core.model.player,
+ org.opendarts.core.model.player.func,
  org.opendarts.core.model.session,
+ org.opendarts.core.model.session.func,
  org.opendarts.core.service.session,
+ org.opendarts.core.stats.model,
+ org.opendarts.core.stats.model.func,
+ org.opendarts.core.stats.service,
  org.opendarts.ui,
+ org.opendarts.ui.export.service,
  org.opendarts.ui.label,
+ org.opendarts.ui.service,
+ org.opendarts.ui.stats.model,
+ org.opendarts.ui.stats.service,
  org.slf4j;version="1.6.1"
 Service-Component: OSGI-INF/ExportProvider.xml
 Export-Package: org.opendarts.ui.export,
@@ -22,4 +38,5 @@ Export-Package: org.opendarts.ui.export,
  org.opendarts.ui.export.dialog,
  org.opendarts.ui.export.handler,
  org.opendarts.ui.export.label,
- org.opendarts.ui.export.service
+ org.opendarts.ui.export.service,
+ org.opendarts.ui.export.service.impl

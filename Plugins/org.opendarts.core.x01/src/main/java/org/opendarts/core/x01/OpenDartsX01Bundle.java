@@ -16,16 +16,22 @@ import org.osgi.framework.ServiceReference;
 public class OpenDartsX01Bundle implements BundleActivator {
 
 	/** The stats provider. */
-	private static IStatsProvider statsProvider;
+	private IStatsProvider statsProvider;
 
 	/** The stats x01 service. */
-	private static StatsX01Service statsX01Service;
+	private StatsX01Service statsX01Service;
 
 	/** The computer player dart service. */
-	private static IComputerPlayerDartService computerPlayerDartService;
+	private IComputerPlayerDartService computerPlayerDartService;
 
 	/** The dart service. */
-	private static IDartService dartService;
+	private IDartService dartService;
+
+	/** The context. */
+	private BundleContext context;
+
+	/** The bundle. */
+	private static OpenDartsX01Bundle bundle;
 
 	/**
 	 * The constructor
@@ -39,27 +45,8 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
-		ServiceReference<IStatsProvider> serviceRef = context
-				.getServiceReference(IStatsProvider.class);
-		// Stats
-		if (serviceRef != null) {
-			statsProvider = context.getService(serviceRef);
-			statsX01Service = new StatsX01Service();
-		}
-
-		// Computer player
-		ServiceReference<IComputerPlayerDartService> ref = context
-				.getServiceReference(IComputerPlayerDartService.class);
-		if (ref != null) {
-			computerPlayerDartService = context.getService(ref);
-		}
-
-		// Dart Service
-		ServiceReference<IDartService> dartServiceRef = context
-				.getServiceReference(IDartService.class);
-		if (dartServiceRef != null) {
-			dartService = context.getService(dartServiceRef);
-		}
+		bundle = this;
+		this.context = context;
 	}
 
 	/* (non-Javadoc)
@@ -67,8 +54,21 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		statsProvider = null;
-		statsX01Service = null;
+		this.statsProvider = null;
+		this.statsX01Service = null;
+		this.computerPlayerDartService = null;
+		this.dartService = null;
+		this.context = null;
+		bundle = null;
+	}
+
+	/**
+	 * Gets the bundle.
+	 *
+	 * @return the bundle
+	 */
+	public static OpenDartsX01Bundle getBundle() {
+		return bundle;
 	}
 
 	/**
@@ -76,7 +76,16 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 *
 	 * @return the stats x01 service
 	 */
-	public static StatsX01Service getStatsX01Service() {
+	public StatsX01Service getStatsX01Service() {
+		if (this.statsX01Service == null) {
+			ServiceReference<IStatsProvider> serviceRef = this.context
+					.getServiceReference(IStatsProvider.class);
+			// Stats
+			if (serviceRef != null) {
+				statsProvider = this.context.getService(serviceRef);
+				statsX01Service = new StatsX01Service();
+			}
+		}
 		return statsX01Service;
 	}
 
@@ -86,8 +95,8 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 * @param game the game
 	 * @return the stats service
 	 */
-	public static IStatsService getStatsService(GameX01 game) {
-		IStatsService result = statsX01Service;
+	public IStatsService getStatsService(GameX01 game) {
+		IStatsService result = this.getStatsX01Service();
 		if (result != null) {
 			statsProvider.registerStatsService(game, result);
 		}
@@ -99,11 +108,32 @@ public class OpenDartsX01Bundle implements BundleActivator {
 	 *
 	 * @return the computer player dart service
 	 */
-	public static IComputerPlayerDartService getComputerPlayerDartService() {
+	public IComputerPlayerDartService getComputerPlayerDartService() {
+		if (this.computerPlayerDartService == null) {
+			// Computer player
+			ServiceReference<IComputerPlayerDartService> ref = this.context
+					.getServiceReference(IComputerPlayerDartService.class);
+			if (ref != null) {
+				computerPlayerDartService = this.context.getService(ref);
+			}
+		}
 		return computerPlayerDartService;
 	}
 
-	public static IDartService getDartService() {
+	/**
+	 * Gets the dart service.
+	 *
+	 * @return the dart service
+	 */
+	public IDartService getDartService() {
+		if (dartService == null) {
+			// Dart Service
+			ServiceReference<IDartService> dartServiceRef = this.context
+					.getServiceReference(IDartService.class);
+			if (dartServiceRef != null) {
+				dartService = this.context.getService(dartServiceRef);
+			}
+		}
 		return dartService;
 	}
 }

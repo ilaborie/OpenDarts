@@ -1,7 +1,6 @@
 package org.opendarts.ui.export.handler;
 
 import java.io.File;
-import java.text.MessageFormat;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -10,7 +9,6 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -53,31 +51,19 @@ public class ExportHandler extends AbstractHandler implements IHandler {
 				@SuppressWarnings("unchecked")
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					// touch file
-					if (file.exists()) {
-						if (!MessageDialog
-								.openConfirm(
-										shell,
-										"Folder already exist !",
-										MessageFormat
-												.format("The folder {0} already exists, do you confirm the deletion ?",
-														file))) {
-							return new Status(IStatus.CANCEL, "", "File already exists");
-						}
-						file.delete();
-					}
-					
 					file.mkdirs();
 					
 					exportService.export(session, file, options);
 					return Status.OK_STATUS;
 				}
 			};
+			job.setUser(true);
 			
 			// Run
 			job.schedule();
 			
 		} else {
-			LOG.info("Cancel NewSet creation");
+			LOG.info("Cancel Export");
 		}
 		return null;
 	}

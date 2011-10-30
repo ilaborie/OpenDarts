@@ -5,14 +5,19 @@ Bundle-SymbolicName: org.opendarts.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.opendarts.core.model.dart,
+Import-Package: com.google.common.base;version="10.0.0",
+ org.opendarts.core.model.dart,
  org.opendarts.core.model.dart.impl,
  org.opendarts.core.model.game,
+ org.opendarts.core.model.game.func,
  org.opendarts.core.model.player,
+ org.opendarts.core.model.player.func,
  org.opendarts.core.model.session,
+ org.opendarts.core.model.session.func,
  org.opendarts.core.player.model,
  org.opendarts.core.service.player,
  org.opendarts.core.service.session,
+ org.opendarts.core.stats.model.func,
  org.opendarts.core.stats.service,
  org.osgi.framework,
  org.slf4j;version="1.6.1"

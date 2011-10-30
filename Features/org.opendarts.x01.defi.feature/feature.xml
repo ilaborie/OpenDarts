@@ -50,6 +50,10 @@
       <import plugin="org.opendarts.ui"/>
       <import plugin="org.opendarts.ui.player"/>
       <import plugin="org.opendarts.ui.stats"/>
+      <import plugin="org.opendarts.core.export"/>
+      <import plugin="org.opendarts.ui.export"/>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.opendarts.ui.export.x01.md"/>
    </requires>
 
    <plugin
@@ -82,6 +86,27 @@
 
    <plugin
          id="org.opendarts.ui.x01.defi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.ui.export.x01.defi.md"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.core.export"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.ui.export"
          download-size="0"
          install-size="0"
          version="0.0.0"

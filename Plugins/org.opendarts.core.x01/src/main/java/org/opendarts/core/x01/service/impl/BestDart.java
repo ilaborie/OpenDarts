@@ -35,7 +35,7 @@ public class BestDart implements IBestDart {
 	public BestDart(int index, Properties props) {
 		super();
 		this.index = index;
-		IDartService dartService = OpenDartsX01Bundle.getDartService();
+		IDartService dartService = OpenDartsX01Bundle.getBundle().getDartService();
 
 		this.darts = new HashMap<Integer, IDart>();
 		String sDart;
