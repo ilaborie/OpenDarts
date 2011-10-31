@@ -1,0 +1,1149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+  <HEAD>
+    <TITLE>BNF for FMParser</TITLE>
+  </HEAD>
+  <BODY>
+   <H1 ALIGN=CENTER>BNF for FMParser</H1>
+
+   <H2 ALIGN=CENTER>NON-TERMINALS</H2>
+      <TABLE>
+    <TR><TD><PRE>// Now the actual parsing code, starting
+
+// with the productions for FreeMarker's
+
+// expression syntax.
+
+
+/**
+ * This is the same as OrExpression, since
+ * the OR is the operator with the lowest
+ * precedence.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod1">Expression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod2">OrExpression</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Lowest level expression, a literal, a variable,
+ * or a possibly more complex expression bounded
+ * by parentheses.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod3">PrimaryExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (    <A HREF="#prod4">NumberLiteral</A>
+ |    <A HREF="#prod5">HashLiteral</A>
+ |    <A HREF="#prod6">StringLiteral</A>
+ |    <A HREF="#prod7">BooleanLiteral</A>
+ |    <A HREF="#prod8">ListLiteral</A>
+ |    <A HREF="#prod9">Identifier</A>
+ |    <A HREF="#prod10">Parenthesis</A>
+ |    <A HREF="#prod11">BuiltinVariable</A>
+  )       (    <A HREF="#prod12">AddSubExpression</A>
+ )*
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod10">Parenthesis</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;OPEN_PAREN&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;CLOSE_PAREN&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * A primary expression preceded by zero or
+ * more unary operators. (The only unary operator we
+ * currently have is the NOT.)
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod13">UnaryExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (    <A HREF="#prod14">UnaryPlusMinusExpression</A>
+ |    <A HREF="#prod15">NotExpression</A>
+ |    <A HREF="#prod3">PrimaryExpression</A>
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod15">NotExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (        &lt;EXCLAM&gt;
+  )+
+    <A HREF="#prod3">PrimaryExpression</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod14">UnaryPlusMinusExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;PLUS&gt;
+ |        &lt;MINUS&gt;
+   )   <A HREF="#prod3">PrimaryExpression</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod16">AdditiveExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod17">MultiplicativeExpression</A>
+         ( ( (        &lt;PLUS&gt;
+  |        &lt;MINUS&gt;
+   ) )   <A HREF="#prod17">MultiplicativeExpression</A>
+  )*
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * A unary expression followed by zero or more
+ * unary expressions with operators in between.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod17">MultiplicativeExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod13">UnaryExpression</A>
+         ( ( (        &lt;TIMES&gt;
+  |        &lt;DIVIDE&gt;
+  |        &lt;PERCENT&gt;
+   ) )   <A HREF="#prod13">UnaryExpression</A>
+  )*
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod18">EqualityExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod19">RelationalExpression</A>
+         ( (        &lt;NOT_EQUALS&gt;
+ |        &lt;EQUALS&gt;
+ |        &lt;DOUBLE_EQUALS&gt;
+  )   <A HREF="#prod19">RelationalExpression</A>
+  )?
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod19">RelationalExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod20">RangeExpression</A>
+         ( (        &lt;NATURAL_GTE&gt;
+ |        &lt;ESCAPED_GTE&gt;
+ |        &lt;NATURAL_GT&gt;
+ |        &lt;ESCAPED_GT&gt;
+ |        &lt;LESS_THAN_EQUALS&gt;
+ |        &lt;LESS_THAN&gt;
+  )   <A HREF="#prod20">RangeExpression</A>
+  )?
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod20">RangeExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod16">AdditiveExpression</A>
+         (        &lt;DOT_DOT&gt;
+        (    <A HREF="#prod16">AdditiveExpression</A>
+ )?
+  )?
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod21">AndExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod18">EqualityExpression</A>
+         (        &lt;AND&gt;
+    <A HREF="#prod18">EqualityExpression</A>
+  )*
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod2">OrExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+    <A HREF="#prod21">AndExpression</A>
+         (        &lt;OR&gt;
+    <A HREF="#prod21">AndExpression</A>
+  )*
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod8">ListLiteral</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;OPEN_BRACKET&gt;
+    <A HREF="#prod22">PositionalArgs</A>
+        &lt;CLOSE_BRACKET&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod4">NumberLiteral</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;INTEGER&gt;
+ |        &lt;DECIMAL&gt;
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod9">Identifier</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;ID&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod23">IdentifierOrStringLiteral</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (    <A HREF="#prod9">Identifier</A>
+ |    <A HREF="#prod6">StringLiteral</A>
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod11">BuiltinVariable</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;DOT&gt;
+        &lt;ID&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Production that builds up an expression
+ * using the dot or dynamic key name
+ * or the args list if this is a method invocation.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod12">AddSubExpression</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (    <A HREF="#prod24">DotVariable</A>
+ |    <A HREF="#prod25">DynamicKey</A>
+ |    <A HREF="#prod26">MethodArgs</A>
+ |    <A HREF="#prod27">BuiltIn</A>
+ |    <A HREF="#prod28">DefaultTo</A>
+ |    <A HREF="#prod29">Exists</A>
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod28">DefaultTo</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;TERMINATING_EXCLAM&gt;
+ | (        &lt;EXCLAM&gt;
+        (    <A HREF="#prod1">Expression</A>
+ )?
+  ) )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod29">Exists</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;EXISTS&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod27">BuiltIn</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;BUILT_IN&gt;
+        &lt;ID&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * production for when a key is specified by &lt;DOT&gt; + keyname
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod24">DotVariable</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;DOT&gt;
+ (        &lt;ID&gt;
+ |        &lt;TIMES&gt;
+ |        &lt;DOUBLE_STAR&gt;
+ | (        &lt;LESS_THAN&gt;
+ |        &lt;LESS_THAN_EQUALS&gt;
+ |        &lt;ESCAPED_GT&gt;
+ |        &lt;ESCAPED_GTE&gt;
+ |        &lt;FALSE&gt;
+ |        &lt;TRUE&gt;
+ |        &lt;IN&gt;
+ |        &lt;AS&gt;
+ |        &lt;USING&gt;
+  )  )      </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * production for when the key is specified
+ * in brackets.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod25">DynamicKey</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;OPEN_BRACKET&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;CLOSE_BRACKET&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * production for an arglist part of a method invocation.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod26">MethodArgs</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;OPEN_PAREN&gt;
+    <A HREF="#prod22">PositionalArgs</A>
+        &lt;CLOSE_PAREN&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod6">StringLiteral</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;STRING_LITERAL&gt;
+ |        &lt;RAW_STRING&gt;
+   )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod7">BooleanLiteral</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;FALSE&gt;
+  |        &lt;TRUE&gt;
+   )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod5">HashLiteral</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;OPEN_BRACE&gt;
+        (    <A HREF="#prod1">Expression</A>
+ (        &lt;COMMA&gt;
+ |        &lt;COLON&gt;
+  )   <A HREF="#prod1">Expression</A>
+         (        &lt;COMMA&gt;
+    <A HREF="#prod1">Expression</A>
+ (        &lt;COMMA&gt;
+ |        &lt;COLON&gt;
+  )   <A HREF="#prod1">Expression</A>
+  )*
+ )?
+        &lt;CLOSE_BRACE&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * A production representing the ${...}
+ * that outputs a variable.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod30">StringOutput</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;OUTPUT_ESCAPE&gt;
+    <A HREF="#prod1">Expression</A>
+         &lt;CLOSE_BRACE&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod31">NumericalOutput</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;NUMERICAL_ESCAPE&gt;
+    <A HREF="#prod1">Expression</A>
+         (        &lt;SEMICOLON&gt;
+        &lt;ID&gt;
+ )?
+        &lt;CLOSE_BRACE&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod32">If</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;IF&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+         (        &lt;ELSE_IF&gt;
+    <A HREF="#prod1">Expression</A>
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+    <A HREF="#prod33">OptionalBlock</A>
+  )*
+        (        &lt;ELSE&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+  )?
+        &lt;END_IF&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod35">Attempt</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;ATTEMPT&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+    <A HREF="#prod36">Recover</A>
+ (        &lt;END_RECOVER&gt;
+ |        &lt;END_ATTEMPT&gt;
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod36">Recover</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;RECOVER&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod37">List</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;LIST&gt;
+     <A HREF="#prod1">Expression</A>
+        &lt;AS&gt;
+        &lt;ID&gt;
+        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+        &lt;END_LIST&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod38">ForEach</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;FOREACH&gt;
+         &lt;ID&gt;
+        &lt;IN&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+        &lt;END_FOREACH&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod39">Visit</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;VISIT&gt;
+    <A HREF="#prod1">Expression</A>
+        (        &lt;USING&gt;
+    <A HREF="#prod1">Expression</A>
+ )?
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod40">Recurse</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;SIMPLE_RECURSE&gt;
+ | (        &lt;RECURSE&gt;
+        (    <A HREF="#prod1">Expression</A>
+ )?
+        (        &lt;USING&gt;
+    <A HREF="#prod1">Expression</A>
+ )?
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+  ) )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod41">FallBack</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;FALLBACK&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Production used to break out of a loop or a switch block.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod42">Break</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;BREAK&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Production used to jump out of a macro.
+ * The stop instruction terminates the rendering of the template.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod43">Return</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;SIMPLE_RETURN&gt;
+  |        &lt;RETURN&gt;
+    <A HREF="#prod1">Expression</A>
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod44">Stop</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;HALT&gt;
+ |        &lt;STOP&gt;
+    <A HREF="#prod1">Expression</A>
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod45">Nested</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ ( (        &lt;SIMPLE_NESTED&gt;
+   )| (        &lt;NESTED&gt;
+    <A HREF="#prod22">PositionalArgs</A>
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+   ) )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod46">Flush</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;FLUSH&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod47">Trim</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;TRIM&gt;
+  |        &lt;LTRIM&gt;
+  |        &lt;RTRIM&gt;
+  |        &lt;NOTRIM&gt;
+   )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod48">Assign</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;ASSIGN&gt;
+  |        &lt;GLOBALASSIGN&gt;
+  |        &lt;LOCALASSIGN&gt;
+    )   <A HREF="#prod23">IdentifierOrStringLiteral</A>
+  ( (        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+         (        (        &lt;COMMA&gt;
+ )?
+    <A HREF="#prod23">IdentifierOrStringLiteral</A>
+         &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+  )*
+        (        &lt;IN&gt;
+    <A HREF="#prod1">Expression</A>
+  )?
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+   )| (        (        &lt;IN&gt;
+    <A HREF="#prod1">Expression</A>
+  )?
+        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+ (        &lt;END_LOCAL&gt;
+  |        &lt;END_ASSIGN&gt;
+  |        &lt;END_GLOBAL&gt;
+   )  ) )     </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod49">Include</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;INCLUDE&gt;
+    <A HREF="#prod1">Expression</A>
+        (        &lt;SEMICOLON&gt;
+ )?
+        (        &lt;ID&gt;
+        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+  )*
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod50">Import</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;IMPORT&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;AS&gt;
+        &lt;ID&gt;
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod51">Macro</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;MACRO&gt;
+ |        &lt;FUNCTION&gt;
+   )    <A HREF="#prod23">IdentifierOrStringLiteral</A>
+         (        &lt;OPEN_PAREN&gt;
+ )?
+        (        &lt;ID&gt;
+         (        &lt;ELLIPSIS&gt;
+  )?
+        (        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+  )?
+        (        &lt;COMMA&gt;
+ )?
+  )*
+        (        &lt;CLOSE_PAREN&gt;
+ )?
+        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+ (        &lt;END_MACRO&gt;
+  |        &lt;END_FUNCTION&gt;
+   )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod52">Compress</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;COMPRESS&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+        &lt;END_COMPRESS&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod53">UnifiedMacroTransform</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;UNIFIED_CALL&gt;
+    <A HREF="#prod1">Expression</A>
+         (        &lt;TERMINATING_WHITESPACE&gt;
+ )?
+ (    <A HREF="#prod54">NamedArgs</A>
+ |    <A HREF="#prod22">PositionalArgs</A>
+  )       (        &lt;SEMICOLON&gt;
+         (        (        &lt;TERMINATING_WHITESPACE&gt;
+ )?
+        &lt;ID&gt;
+         (        (        &lt;TERMINATING_WHITESPACE&gt;
+ )?
+        &lt;COMMA&gt;
+        (        &lt;TERMINATING_WHITESPACE&gt;
+ )?
+        &lt;ID&gt;
+  )*
+ )?
+ )?
+ (        &lt;EMPTY_DIRECTIVE_END&gt;
+ | (        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+        &lt;UNIFIED_CALL_END&gt;
+   ) )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod55">Call</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;CALL&gt;
+        &lt;ID&gt;
+  (    <A HREF="#prod54">NamedArgs</A>
+ | (        (        &lt;OPEN_PAREN&gt;
+ )?
+    <A HREF="#prod22">PositionalArgs</A>
+        (        &lt;CLOSE_PAREN&gt;
+ )?
+  ) )   <A HREF="#prod34">LooseDirectiveEnd</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod54">NamedArgs</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (        &lt;ID&gt;
+        &lt;EQUALS&gt;
+     <A HREF="#prod1">Expression</A>
+  )+
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod22">PositionalArgs</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (    <A HREF="#prod1">Expression</A>
+         (        (        &lt;COMMA&gt;
+ )?
+    <A HREF="#prod1">Expression</A>
+  )*
+ )?
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod56">Comment</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;COMMENT&gt;
+ |        &lt;TERSE_COMMENT&gt;
+  )   <A HREF="#prod57">UnparsedContent</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod58">NoParse</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;NOPARSE&gt;
+    <A HREF="#prod57">UnparsedContent</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod59">Transform</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;TRANSFORM&gt;
+    <A HREF="#prod1">Expression</A>
+        (        &lt;SEMICOLON&gt;
+ )?
+        (        &lt;ID&gt;
+        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+  )*
+ (        &lt;EMPTY_DIRECTIVE_END&gt;
+ | (        &lt;DIRECTIVE_END&gt;
+    <A HREF="#prod33">OptionalBlock</A>
+        &lt;END_TRANSFORM&gt;
+  ) )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod60">Switch</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;SWITCH&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;DIRECTIVE_END&gt;
+         (    <A HREF="#prod61">Case</A>
+  )*
+        (        &lt;WHITESPACE&gt;
+ )?
+        &lt;END_SWITCH&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod61">Case</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (        &lt;WHITESPACE&gt;
+ )?
+ (        &lt;CASE&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;DIRECTIVE_END&gt;
+ |        &lt;DEFAUL&gt;
+   )   <A HREF="#prod33">OptionalBlock</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod62">Escape</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;ESCAPE&gt;
+        &lt;ID&gt;
+        &lt;AS&gt;
+    <A HREF="#prod1">Expression</A>
+        &lt;DIRECTIVE_END&gt;
+     <A HREF="#prod33">OptionalBlock</A>
+         &lt;END_ESCAPE&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod63">NoEscape</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;NOESCAPE&gt;
+     <A HREF="#prod33">OptionalBlock</A>
+        &lt;END_NOESCAPE&gt;
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Production to terminate potentially empty elements. Either a &quot;&gt;&quot; or &quot;/&gt;&quot;
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod34">LooseDirectiveEnd</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (        &lt;DIRECTIVE_END&gt;
+ |        &lt;EMPTY_DIRECTIVE_END&gt;
+  )      </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod64">Setting</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        &lt;SETTING&gt;
+        &lt;ID&gt;
+        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+    <A HREF="#prod34">LooseDirectiveEnd</A>
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * A production for FreeMarker directives.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod65">FreemarkerDirective</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+ (    <A HREF="#prod32">If</A>
+ |    <A HREF="#prod37">List</A>
+ |    <A HREF="#prod38">ForEach</A>
+ |    <A HREF="#prod48">Assign</A>
+ |    <A HREF="#prod49">Include</A>
+ |    <A HREF="#prod50">Import</A>
+ |    <A HREF="#prod51">Macro</A>
+ |    <A HREF="#prod52">Compress</A>
+ |    <A HREF="#prod53">UnifiedMacroTransform</A>
+ |    <A HREF="#prod55">Call</A>
+ |    <A HREF="#prod56">Comment</A>
+ |    <A HREF="#prod58">NoParse</A>
+ |    <A HREF="#prod59">Transform</A>
+ |    <A HREF="#prod60">Switch</A>
+ |    <A HREF="#prod64">Setting</A>
+ |    <A HREF="#prod42">Break</A>
+ |    <A HREF="#prod43">Return</A>
+ |    <A HREF="#prod44">Stop</A>
+ |    <A HREF="#prod46">Flush</A>
+ |    <A HREF="#prod47">Trim</A>
+ |    <A HREF="#prod45">Nested</A>
+ |    <A HREF="#prod62">Escape</A>
+ |    <A HREF="#prod63">NoEscape</A>
+ |    <A HREF="#prod39">Visit</A>
+ |    <A HREF="#prod40">Recurse</A>
+ |    <A HREF="#prod41">FallBack</A>
+ |    <A HREF="#prod35">Attempt</A>
+  )      </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Production for a block of raw text
+ * i.e. text that contains no
+ * FreeMarker directives.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod66">PCData</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        ( (         &lt;WHITESPACE&gt;
+ |        &lt;PRINTABLE_CHARS&gt;
+ |        &lt;FALSE_ALERT&gt;
+  ) )+
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Production for dealing with unparsed content,
+ * i.e. what is inside a comment or noparse tag.
+ * It returns the ending token. The content
+ * of the tag is put in buf.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod57">UnparsedContent</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        ( (        &lt;KEEP_GOING&gt;
+ |        &lt;MAYBE_END&gt;
+ |        &lt;TERSE_COMMENT_END&gt;
+ |        &lt;LONE_LESS_THAN_OR_DASH&gt;
+  ) )+
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod67">Content</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        ( (    <A HREF="#prod66">PCData</A>
+ |    <A HREF="#prod30">StringOutput</A>
+ |    <A HREF="#prod31">NumericalOutput</A>
+ |    <A HREF="#prod65">FreemarkerDirective</A>
+  ) )+
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * A production freemarker text that may contain
+ * ${...} and #{...} but no directives.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod68">FreeMarkerText</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        ( (    <A HREF="#prod66">PCData</A>
+ |    <A HREF="#prod30">StringOutput</A>
+ |    <A HREF="#prod31">NumericalOutput</A>
+  ) )+
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * A production for a block of optional content.
+ * Returns an empty Text block if there is no
+ * content.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod33">OptionalBlock</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (    <A HREF="#prod67">Content</A>
+ )?
+       </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod69">HeaderElement</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (        &lt;WHITESPACE&gt;
+ )?
+ (        &lt;TRIVIAL_FTL_HEADER&gt;
+ | (        &lt;FTL_HEADER&gt;
+        (        &lt;ID&gt;
+        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+  )*
+  )   <A HREF="#prod34">LooseDirectiveEnd</A>
+  )     </TD>
+    </TR>
+    <TR><TD><PRE></PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod70">ParamList</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (    <A HREF="#prod9">Identifier</A>
+        &lt;EQUALS&gt;
+    <A HREF="#prod1">Expression</A>
+         (        &lt;COMMA&gt;
+ )?
+ )+
+       </TD>
+    </TR>
+    <TR><TD><PRE>/**
+ * Root production to be used when parsing
+ * an entire file.
+ */</PRE></TD></TR>
+    <TR>
+     <TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod71">Root</A></TD>
+     <TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+     <TD ALIGN=LEFT VALIGN=BASELINE>
+        (    <A HREF="#prod69">HeaderElement</A>
+ )?
+    <A HREF="#prod33">OptionalBlock</A>
+        &lt;EOF&gt;
+       </TD>
+    </TR>
+      </TABLE>
+<HR>
+  <H2 ALIGN=CENTER>TOKENS</H2>
+  <TABLE>
+<TR><TD><PRE>&lt;DEFAULT&gt; TOKEN : { 
+&lt;ATTEMPT: &lt;START_TAG&gt; &quot;attempt&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;RECOVER: &lt;START_TAG&gt; &quot;recover&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;IF: &lt;START_TAG&gt; &quot;if&quot; &lt;BLANK&gt;&gt;
+|&lt;ELSE_IF: &lt;START_TAG&gt; &quot;elseif&quot; &lt;BLANK&gt;&gt;
+|&lt;LIST: &lt;START_TAG&gt; &quot;list&quot; &lt;BLANK&gt;&gt;
+|&lt;FOREACH: &lt;START_TAG&gt; &quot;foreach&quot; &lt;BLANK&gt;&gt;
+|&lt;SWITCH: &lt;START_TAG&gt; &quot;switch&quot; &lt;BLANK&gt;&gt;
+|&lt;CASE: &lt;START_TAG&gt; &quot;case&quot; &lt;BLANK&gt;&gt;
+|&lt;ASSIGN: &lt;START_TAG&gt; &quot;assign&quot; &lt;BLANK&gt;&gt;
+|&lt;GLOBALASSIGN: &lt;START_TAG&gt; &quot;global&quot; &lt;BLANK&gt;&gt;
+|&lt;LOCALASSIGN: &lt;START_TAG&gt; &quot;local&quot; &lt;BLANK&gt;&gt;
+|&lt;INCLUDE: &lt;START_TAG&gt; &quot;include&quot; &lt;BLANK&gt;&gt;
+|&lt;IMPORT: &lt;START_TAG&gt; &quot;import&quot; &lt;BLANK&gt;&gt;
+|&lt;FUNCTION: &lt;START_TAG&gt; &quot;function&quot; &lt;BLANK&gt;&gt;
+|&lt;MACRO: &lt;START_TAG&gt; &quot;macro&quot; &lt;BLANK&gt;&gt;
+|&lt;TRANSFORM: &lt;START_TAG&gt; &quot;transform&quot; &lt;BLANK&gt;&gt;
+|&lt;VISIT: &lt;START_TAG&gt; &quot;visit&quot; &lt;BLANK&gt;&gt;
+|&lt;STOP: &lt;START_TAG&gt; &quot;stop&quot; &lt;BLANK&gt;&gt;
+|&lt;RETURN: &lt;START_TAG&gt; &quot;return&quot; &lt;BLANK&gt;&gt;
+|&lt;CALL: &lt;START_TAG&gt; &quot;call&quot; &lt;BLANK&gt;&gt;
+|&lt;SETTING: &lt;START_TAG&gt; &quot;setting&quot; &lt;BLANK&gt;&gt;
+|&lt;COMPRESS: &lt;START_TAG&gt; &quot;compress&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;COMMENT: &lt;START_TAG&gt; &quot;comment&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;TERSE_COMMENT: ([&quot;&lt;&quot;,&quot;[&quot;]) &quot;#--&quot;&gt;
+|&lt;NOPARSE: &lt;START_TAG&gt; &quot;noparse&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_IF: &lt;END_TAG&gt; &quot;if&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_LIST: &lt;END_TAG&gt; &quot;list&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_RECOVER: &lt;END_TAG&gt; &quot;recover&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_ATTEMPT: &lt;END_TAG&gt; &quot;attempt&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_FOREACH: &lt;END_TAG&gt; &quot;foreach&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_LOCAL: &lt;END_TAG&gt; &quot;local&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_GLOBAL: &lt;END_TAG&gt; &quot;global&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_ASSIGN: &lt;END_TAG&gt; &quot;assign&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_FUNCTION: &lt;END_TAG&gt; &quot;function&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_MACRO: &lt;END_TAG&gt; &quot;macro&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_COMPRESS: &lt;END_TAG&gt; &quot;compress&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_TRANSFORM: &lt;END_TAG&gt; &quot;transform&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_SWITCH: &lt;END_TAG&gt; &quot;switch&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;ELSE: &lt;START_TAG&gt; &quot;else&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;BREAK: &lt;START_TAG&gt; &quot;break&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;SIMPLE_RETURN: &lt;START_TAG&gt; &quot;return&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;HALT: &lt;START_TAG&gt; &quot;stop&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;FLUSH: &lt;START_TAG&gt; &quot;flush&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;TRIM: &lt;START_TAG&gt; &quot;t&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;LTRIM: &lt;START_TAG&gt; &quot;lt&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;RTRIM: &lt;START_TAG&gt; &quot;rt&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;NOTRIM: &lt;START_TAG&gt; &quot;nt&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;DEFAUL: &lt;START_TAG&gt; &quot;default&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;SIMPLE_NESTED: &lt;START_TAG&gt; &quot;nested&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;NESTED: &lt;START_TAG&gt; &quot;nested&quot; &lt;BLANK&gt;&gt;
+|&lt;SIMPLE_RECURSE: &lt;START_TAG&gt; &quot;recurse&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;RECURSE: &lt;START_TAG&gt; &quot;recurse&quot; &lt;BLANK&gt;&gt;
+|&lt;FALLBACK: &lt;START_TAG&gt; &quot;fallback&quot; &lt;CLOSE_TAG2&gt;&gt;
+|&lt;ESCAPE: &lt;START_TAG&gt; &quot;escape&quot; &lt;BLANK&gt;&gt;
+|&lt;END_ESCAPE: &lt;END_TAG&gt; &quot;escape&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;NOESCAPE: &lt;START_TAG&gt; &quot;noescape&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;END_NOESCAPE: &lt;END_TAG&gt; &quot;noescape&quot; &lt;CLOSE_TAG1&gt;&gt;
+|&lt;UNIFIED_CALL: &quot;&lt;@&quot; | &quot;[@&quot;&gt;
+|&lt;UNIFIED_CALL_END: ([&quot;&lt;&quot;,&quot;[&quot;]) &quot;/@&quot; (&lt;ID&gt; (&quot;.&quot; &lt;ID&gt;)*)? &lt;CLOSE_TAG1&gt;&gt;
+|&lt;FTL_HEADER: (&quot;&lt;#ftl&quot; | &quot;[#ftl&quot;) &lt;BLANK&gt;&gt;
+|&lt;TRIVIAL_FTL_HEADER: (&quot;&lt;#ftl&quot; | &quot;[#ftl&quot;) (&quot;/&quot;)? ([&quot;&gt;&quot;,&quot;]&quot;])&gt;
+|&lt;UNKNOWN_DIRECTIVE: (&quot;[#&quot; | &quot;[/#&quot; | &quot;&lt;#&quot; | &quot;&lt;/#&quot;) ([&quot;A&quot;-&quot;Z&quot;,&quot;_&quot;,&quot;a&quot;-&quot;z&quot;])+&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;DEFAULT, NODIRECTIVE&gt; TOKEN : { 
+&lt;WHITESPACE: ([&quot;\t&quot;,&quot;\n&quot;,&quot;\r&quot;,&quot; &quot;])+&gt;
+|&lt;PRINTABLE_CHARS: ([&quot;\u0000&quot;-&quot;\b&quot;,&quot;\u000b&quot;-&quot;\f&quot;,&quot;\u000e&quot;-&quot;\u001f&quot;,&quot;!&quot;-&quot;\&quot;&quot;,&quot;%&quot;-&quot;;&quot;,&quot;=&quot;-&quot;Z&quot;,&quot;\\&quot;-&quot;z&quot;,&quot;|&quot;-&quot;\uffff&quot;])+&gt;
+|&lt;FALSE_ALERT: [&quot;#&quot;,&quot;$&quot;,&quot;&lt;&quot;,&quot;[&quot;,&quot;{&quot;]&gt;
+|&lt;OUTPUT_ESCAPE: &quot;${&quot;&gt;
+|&lt;NUMERICAL_ESCAPE: &quot;#{&quot;&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;FM_EXPRESSION, IN_PAREN, NAMED_PARAMETER_EXPRESSION&gt; SKIP : { 
+&lt;([&quot;\t&quot;,&quot;\n&quot;,&quot;\r&quot;,&quot; &quot;])+&gt;
+|&lt;[&quot;&lt;&quot;,&quot;[&quot;] [&quot;!&quot;,&quot;#&quot;] &quot;--&quot;&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;EXPRESSION_COMMENT&gt; SKIP : { 
+&lt;([&quot;\u0000&quot;-&quot;,&quot;,&quot;.&quot;-&quot;=&quot;,&quot;?&quot;-&quot;\\&quot;,&quot;^&quot;-&quot;\uffff&quot;])+&gt;
+|&quot;&gt;&quot;
+|&quot;]&quot;
+|&quot;-&quot;
+|&lt;&quot;--&gt;&quot; | &quot;--]&quot;&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;FM_EXPRESSION, IN_PAREN, NO_SPACE_EXPRESSION, NAMED_PARAMETER_EXPRESSION&gt; TOKEN : { 
+&lt;STRING_LITERAL: &quot;\&quot;&quot; ([&quot;\u0000&quot;-&quot;!&quot;,&quot;#&quot;-&quot;[&quot;,&quot;]&quot;-&quot;\uffff&quot;] | &lt;ESCAPED_CHAR&gt;)* &quot;\&quot;&quot; | &quot;\'&quot; ([&quot;\u0000&quot;-&quot;&amp;&quot;,&quot;(&quot;-&quot;[&quot;,&quot;]&quot;-&quot;\uffff&quot;] | &lt;ESCAPED_CHAR&gt;)* &quot;\'&quot;&gt;
+|&lt;RAW_STRING: &quot;r&quot; (&quot;\&quot;&quot; ([&quot;\u0000&quot;-&quot;!&quot;,&quot;#&quot;-&quot;\uffff&quot;])* &quot;\&quot;&quot; | &quot;\'&quot; ([&quot;\u0000&quot;-&quot;&amp;&quot;,&quot;(&quot;-&quot;\uffff&quot;])* &quot;\'&quot;)&gt;
+|&lt;FALSE: &quot;false&quot;&gt;
+|&lt;TRUE: &quot;true&quot;&gt;
+|&lt;INTEGER: ([&quot;0&quot;-&quot;9&quot;])+&gt;
+|&lt;DECIMAL: &lt;INTEGER&gt; &quot;.&quot; &lt;INTEGER&gt;&gt;
+|&lt;DOT: &quot;.&quot;&gt;
+|&lt;DOT_DOT: &quot;..&quot;&gt;
+|&lt;BUILT_IN: &quot;?&quot;&gt;
+|&lt;EXISTS: &quot;??&quot;&gt;
+|&lt;EQUALS: &quot;=&quot;&gt;
+|&lt;DOUBLE_EQUALS: &quot;==&quot;&gt;
+|&lt;NOT_EQUALS: &quot;!=&quot;&gt;
+|&lt;LESS_THAN: &quot;lt&quot; | &quot;\\lt&quot; | [&quot;&lt;&quot;] | &quot;&amp;lt;&quot;&gt;
+|&lt;LESS_THAN_EQUALS: &quot;lte&quot; | &quot;\\lte&quot; | &quot;&lt;=&quot; | &quot;&amp;lt;=&quot;&gt;
+|&lt;ESCAPED_GT: &quot;gt&quot; | &quot;\\gt&quot; | &quot;&amp;gt;&quot;&gt;
+|&lt;ESCAPED_GTE: &quot;gte&quot; | &quot;\\gte&quot; | &quot;&amp;gt;=&quot;&gt;
+|&lt;PLUS: &quot;+&quot;&gt;
+|&lt;MINUS: &quot;-&quot;&gt;
+|&lt;TIMES: &quot;*&quot;&gt;
+|&lt;DOUBLE_STAR: &quot;**&quot;&gt;
+|&lt;ELLIPSIS: &quot;...&quot;&gt;
+|&lt;DIVIDE: &quot;/&quot;&gt;
+|&lt;PERCENT: &quot;%&quot;&gt;
+|&lt;AND: [&quot;&amp;&quot;] | &quot;&amp;&amp;&quot;&gt;
+|&lt;OR: [&quot;|&quot;] | &quot;||&quot;&gt;
+|&lt;EXCLAM: &quot;!&quot;&gt;
+|&lt;COMMA: &quot;,&quot;&gt;
+|&lt;SEMICOLON: &quot;;&quot;&gt;
+|&lt;COLON: &quot;:&quot;&gt;
+|&lt;OPEN_BRACKET: &quot;[&quot;&gt;
+|&lt;CLOSE_BRACKET: &quot;]&quot;&gt;
+|&lt;OPEN_PAREN: &quot;(&quot;&gt;
+|&lt;CLOSE_PAREN: &quot;)&quot;&gt;
+|&lt;OPEN_BRACE: &quot;{&quot;&gt;
+|&lt;CLOSE_BRACE: &quot;}&quot;&gt;
+|&lt;IN: &quot;in&quot;&gt;
+|&lt;AS: &quot;as&quot;&gt;
+|&lt;USING: &quot;using&quot;&gt;
+|&lt;ID: &lt;LETTER&gt; ([&quot;$&quot;,&quot;0&quot;-&quot;9&quot;,&quot;@&quot;-&quot;Z&quot;,&quot;_&quot;,&quot;a&quot;-&quot;z&quot;,&quot;\u00c0&quot;-&quot;\u00d6&quot;,&quot;\u00d8&quot;-&quot;\u00f6&quot;,&quot;\u00f8&quot;-&quot;\u00ff&quot;,&quot;\u0100&quot;-&quot;\u1fff&quot;,&quot;\u3040&quot;-&quot;\u318f&quot;,&quot;\u3300&quot;-&quot;\u337f&quot;,&quot;\u3400&quot;-&quot;\u3d2d&quot;,&quot;\u4e00&quot;-&quot;\u9fff&quot;,&quot;\uf900&quot;-&quot;\ufaff&quot;])*&gt;
+|}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;FM_EXPRESSION, NO_SPACE_EXPRESSION, NAMED_PARAMETER_EXPRESSION&gt; TOKEN : { 
+&lt;DIRECTIVE_END: &quot;&gt;&quot;&gt;
+|&lt;EMPTY_DIRECTIVE_END: &quot;/&gt;&quot; | &quot;/]&quot;&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;IN_PAREN&gt; TOKEN : { 
+&lt;NATURAL_GT: &quot;&gt;&quot;&gt;
+|&lt;NATURAL_GTE: &quot;&gt;=&quot;&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;NO_SPACE_EXPRESSION&gt; TOKEN : { 
+&lt;TERMINATING_WHITESPACE: ([&quot;\t&quot;,&quot;\n&quot;,&quot;\r&quot;,&quot; &quot;])+&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;NAMED_PARAMETER_EXPRESSION&gt; TOKEN : { 
+&lt;TERMINATING_EXCLAM: &quot;!&quot; ([&quot;\t&quot;,&quot;\n&quot;,&quot;\r&quot;,&quot; &quot;])+&gt;
+}
+
+</PRE></TD></TR><TR><TD><PRE>&lt;NO_PARSE&gt; TOKEN : { 
+&lt;TERSE_COMMENT_END: &quot;--&gt;&quot; | &quot;--]&quot;&gt;
+|&lt;MAYBE_END: ([&quot;&lt;&quot;,&quot;[&quot;]) &quot;/&quot; (&quot;#&quot;)? ([&quot;A&quot;-&quot;Z&quot;,&quot;a&quot;-&quot;z&quot;])+ ([&quot;\t&quot;,&quot;\n&quot;,&quot;\r&quot;,&quot; &quot;])* ([&quot;&gt;&quot;,&quot;]&quot;])&gt;
+|&lt;KEEP_GOING: ([&quot;\u0000&quot;-&quot;,&quot;,&quot;.&quot;-&quot;;&quot;,&quot;=&quot;-&quot;Z&quot;,&quot;\\&quot;-&quot;\uffff&quot;])+&gt;
+|&lt;LONE_LESS_THAN_OR_DASH: [&quot;-&quot;,&quot;&lt;&quot;,&quot;[&quot;]&gt;
+}
+
+</PRE></TD></TR>  </TABLE>
+
+  </BODY>
+</HTML>
+
