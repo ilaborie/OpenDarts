@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="true" name="org.opendarts.ui.export.x01.defi.md.BasicExportX01Defi">
-   <implementation class="org.opendarts.ui.export.x01.defi.md.service.BasicExportX01Defi"/>
+   <implementation class="org.opendarts.ui.export.x01.defi.service.BasicExportX01Defi"/>
    <service>
       <provide interface="org.opendarts.ui.export.service.IExportUiService"/>
    </service>

@@ -1,38 +1,45 @@
 /*
  * 
  */
-package org.opendarts.ui.export.x01.md.service;
+package org.opendarts.ui.export.x01.service;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.model.game.IGameEntry;
-import org.opendarts.core.model.game.func.GameIndexFunction;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.player.func.PlayerToStringFunction;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
-import org.opendarts.core.model.session.func.SetIndexFunction;
+import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.model.GameX01;
-import org.opendarts.core.x01.model.GameX01Definition;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.ui.export.composite.AbstractExportOptionComposite;
+import org.opendarts.ui.export.model.Game;
+import org.opendarts.ui.export.model.Session;
+import org.opendarts.ui.export.model.Set;
 import org.opendarts.ui.export.service.IExportUiService;
 import org.opendarts.ui.export.service.impl.AbstractExportX01Service;
 import org.opendarts.ui.export.service.impl.BasicExportOption;
 import org.opendarts.ui.export.service.impl.EscapeCsvFuntion;
+import org.opendarts.ui.export.x01.model.GameEntry;
+import org.opendarts.ui.export.x01.model.SessionX01;
+import org.opendarts.ui.export.x01.model.SetX01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Closeables;
+import com.google.common.io.Files;
 
 /**
  * The Class BasicExportX01Service.
@@ -107,106 +114,119 @@ public class BasicExportX01Service extends
 	}
 
 	/* (non-Javadoc)
+	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#createSession(org.opendarts.core.model.session.ISession, java.util.List)
+	 */
+	@Override
+	protected Session createSession(ISession ses, List<IStatsService> stats) {
+		return new SessionX01(ses, stats);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeExtraSetDetail(java.io.FileWriter, org.opendarts.core.model.session.ISet, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
 	@Override
-	protected void writeExtraSetInfo(FileWriter fw, ISet set,
+	protected void writeExtraSetInfo(Writer writer, Set set,
 			BasicExportOption option) throws IOException {
-		GameX01Definition gameDefinition = (GameX01Definition) set
-				.getGameDefinition();
 
 		// Set index
-		fw.write("Set: ");
-		fw.write(new SetIndexFunction().apply(set));
-		fw.write('\n');
+		writer.write("Set: ");
+		writer.write(set.getIndex());
+		writer.write('\n');
 
-		// String Score
-		fw.write("Starting Score: ");
-		fw.write(getNumberFormat().format(gameDefinition.getStartScore()));
-		fw.write('\n');
+		if (set instanceof SetX01) {
+			SetX01 setX01 = (SetX01) set;
+			// String Score
+			writer.write("Starting Score: ");
+			writer.write(setX01.getStartingScore());
+			writer.write('\n');
 
-		// Number Game to Win
-		fw.write("Number game to win: ");
-		fw.write(getNumberFormat().format(gameDefinition.getNbGameToWin()));
-		fw.write('\n');
-		fw.write('\n');
+			// Number Game to Win
+			writer.write("Number game to win: ");
+			writer.write(setX01.getNbGameToWin());
+			writer.write('\n');
+			writer.write('\n');
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeExtraGameInfo(java.io.FileWriter, org.opendarts.core.model.game.IGame, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
 	@Override
-	protected void writeExtraGameInfo(FileWriter fw, IGame game,
+	protected void writeExtraGameInfo(Writer writer, Game game,
 			BasicExportOption option) throws IOException {
 
-		GameX01Definition gameDefinition = (GameX01Definition) game
-				.getParentSet().getGameDefinition();
-
 		// Set index
-		fw.write("Game: ");
-		fw.write(new GameIndexFunction().apply(game));
-		fw.write('\n');
+		writer.write("Game: ");
+		writer.write(game.getIndex());
+		writer.write('\n');
 
-		// String Score
-		fw.write("Starting Score: ");
-		fw.write(getNumberFormat().format(gameDefinition.getStartScore()));
-		fw.write('\n');
+		if (game instanceof org.opendarts.ui.export.x01.model.GameX01) {
+			org.opendarts.ui.export.x01.model.GameX01 gameX01 = (org.opendarts.ui.export.x01.model.GameX01) game;
+			// String Score
+			writer.write("Starting Score: ");
+			writer.write(gameX01.getStartingScore());
+			writer.write('\n');
 
-		// Number Game to Win
-		fw.write("Number game to win: ");
-		fw.write(getNumberFormat().format(gameDefinition.getNbGameToWin()));
-		fw.write('\n');
-		fw.write('\n');
+			// Number Game to Win
+			writer.write("Number game to win: ");
+			writer.write(gameX01.getNbGameToWin());
+			writer.write('\n');
+			writer.write('\n');
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeGameDetail(java.io.File, org.opendarts.core.model.game.IGame, org.opendarts.core.export.IExportOptions)
 	 */
 	@Override
-	protected void writeGameDetail(File gameDetailFile, IGame game,
+	protected void writeGameDetail(File gameDetailFile, Game game,
 			BasicExportOption option) {
 		super.writeGameDetail(gameDetailFile, game, option);
 
 		// Game entries
-		this.exportGameEntries((GameX01) game, gameDetailFile.getParentFile(),
-				option);
+		this.exportGameEntries(
+				(org.opendarts.ui.export.x01.model.GameX01) game,
+				gameDetailFile.getParentFile(), option);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeGameDetail(java.io.Writer, org.opendarts.ui.export.model.Game, org.opendarts.ui.export.service.impl.BasicExportOption)
+	 */
 	@Override
-	protected void writeGameDetail(FileWriter fw, IGame game,
+	protected void writeGameDetail(Writer writer, Game game,
 			BasicExportOption option) throws IOException {
 		// Detail
 		String detailTitle = "Detail";
-		fw.write(detailTitle);
-		fw.write('\n');
-		fw.write(Strings.repeat("-", detailTitle.length()));
-		fw.write('\n');
-		fw.write('\n');
+		writer.write(detailTitle);
+		writer.write('\n');
+		writer.write(Strings.repeat("-", detailTitle.length()));
+		writer.write('\n');
+		writer.write('\n');
 
 		Joiner joiner = Joiner.on('\t');
 
-		List<IPlayer> players = game.getPlayers();
+		List<IPlayer> players = game.getPlayerList();
 
 		// Header
 		List<String> headers = new ArrayList<String>();
 		headers.add("   ");
 		headers.addAll(Lists.transform(players, new PlayerToStringFunction()));
-		joiner.appendTo(fw, headers);
-		fw.write('\n');
+		joiner.appendTo(writer, headers);
+		writer.write('\n');
 
 		// Entries
 		PlayerGameEntryScoreFunction entryScoreFunction;
 		GameX01Entry entry;
 		List<Object> lst;
-		for (IGameEntry e : game.getGameEntries()) {
+		for (IGameEntry e : game.getElement().getGameEntries()) {
 			entry = (GameX01Entry) e;
 			entryScoreFunction = new PlayerGameEntryScoreFunction(entry);
 			lst = new ArrayList<Object>();
 			lst.add("#" + entry.getRound());
 			lst.addAll(Lists.transform(players, entryScoreFunction));
 
-			joiner.appendTo(fw, lst);
-			fw.write('\n');
+			joiner.appendTo(writer, lst);
+			writer.write('\n');
 		}
 	}
 
@@ -217,17 +237,20 @@ public class BasicExportX01Service extends
 	 * @param gameFile the game file
 	 * @param option 
 	 */
-	protected void exportGameEntries(GameX01 game, File gameFile,
+	protected void exportGameEntries(
+			org.opendarts.ui.export.x01.model.GameX01 game, File gameFile,
 			BasicExportOption option) {
-		File entriesFile = new File(gameFile, game.getName() + "-throws.csv");
-		FileWriter fw = null;
+		File entriesFile = new File(gameFile, game.getFileName()
+				+ "-throws.csv");
+		Writer writer = null;
 
-		List<IPlayer> players = game.getPlayers();
+		List<IPlayer> players = game.getPlayerList();
 		Joiner joiner = Joiner.on(option.getCsvSeparator()).useForNull("-");
 		EscapeCsvFuntion escapeCsv = new EscapeCsvFuntion();
 
 		try {
-			fw = new FileWriter(entriesFile);
+			writer = Files.newWriter(entriesFile, Charsets.UTF_8);
+			new FileWriter(entriesFile);
 
 			// Header
 			List<String> headers = new ArrayList<String>();
@@ -235,27 +258,23 @@ public class BasicExportX01Service extends
 			headers.addAll(Lists.transform(players,
 					new PlayerToStringFunction()));
 			headers = Lists.transform(headers, escapeCsv);
-			joiner.appendTo(fw, headers);
-			fw.write('\n');
+			joiner.appendTo(writer, headers);
+			writer.write('\n');
 
 			// Entries
-			PlayerGameEntryScoreFunction entryScoreFunction;
-			GameX01Entry entry;
 			List<Object> lst;
-			for (IGameEntry e : game.getGameEntries()) {
-				entry = (GameX01Entry) e;
-				entryScoreFunction = new PlayerGameEntryScoreFunction(entry);
+			for (GameEntry e : game.getEntries()) {
 				lst = new ArrayList<Object>();
-				lst.add("#" + entry.getRound());
-				lst.addAll(Lists.transform(players, entryScoreFunction));
+				lst.add(e.getLabel());
+				lst.addAll(e.getScores());
 
-				joiner.appendTo(fw, lst);
-				fw.write('\n');
+				joiner.appendTo(writer, lst);
+				writer.write('\n');
 			}
 		} catch (IOException e) {
 			LOG.error(e.toString(), e);
 		} finally {
-			Closeables.closeQuietly(fw);
+			Closeables.closeQuietly(writer);
 		}
 	}
 }

@@ -1,0 +1,10 @@
+<config>
+	<context-values>
+		<resource path="src/main/resources/session.html.ftl">
+			<value key="session" object-class="org.opendarts.ui.export.x01.md.model.Session"/>
+			<value key="option" object-class="org.opendarts.ui.export.service.impl.BasicExportOption"/>
+		</resource>
+	</context-values>
+	<macro-library>
+	</macro-library>
+</config>

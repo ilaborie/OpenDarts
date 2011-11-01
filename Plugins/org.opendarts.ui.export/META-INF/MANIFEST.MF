@@ -29,8 +29,10 @@ Import-Package: com.google.common.base;version="10.0.0",
  org.opendarts.ui.export.service,
  org.opendarts.ui.label,
  org.opendarts.ui.service,
+ org.opendarts.ui.stats,
  org.opendarts.ui.stats.model,
  org.opendarts.ui.stats.service,
+ org.opendarts.ui.utils.comp,
  org.slf4j;version="1.6.1"
 Service-Component: OSGI-INF/ExportProvider.xml
 Export-Package: org.opendarts.ui.export,
@@ -38,5 +40,6 @@ Export-Package: org.opendarts.ui.export,
  org.opendarts.ui.export.dialog,
  org.opendarts.ui.export.handler,
  org.opendarts.ui.export.label,
+ org.opendarts.ui.export.model,
  org.opendarts.ui.export.service,
  org.opendarts.ui.export.service.impl

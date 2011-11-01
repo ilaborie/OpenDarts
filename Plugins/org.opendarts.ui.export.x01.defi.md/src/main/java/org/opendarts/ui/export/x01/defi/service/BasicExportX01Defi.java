@@ -1,18 +1,16 @@
-package org.opendarts.ui.export.x01.defi.md.service;
+package org.opendarts.ui.export.x01.defi.service;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.io.Writer;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.opendarts.core.model.game.IGame;
-import org.opendarts.core.model.game.func.GameIndexFunction;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.player.func.PlayerToStringFunction;
-import org.opendarts.core.model.session.ISet;
-import org.opendarts.core.model.session.func.SetIndexFunction;
+import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IStatValue;
 import org.opendarts.core.stats.model.IStats;
@@ -22,8 +20,14 @@ import org.opendarts.core.x01.defi.OpenDartsX01DefiBundle;
 import org.opendarts.core.x01.defi.model.GameX01Defi;
 import org.opendarts.core.x01.defi.model.GameX01DefiDefinition;
 import org.opendarts.core.x01.defi.service.StatsX01DefiService;
+import org.opendarts.ui.export.model.Game;
+import org.opendarts.ui.export.model.Session;
+import org.opendarts.ui.export.model.Set;
 import org.opendarts.ui.export.service.impl.BasicExportOption;
-import org.opendarts.ui.export.x01.md.service.BasicExportX01Service;
+import org.opendarts.ui.export.x01.defi.model.GameDefi;
+import org.opendarts.ui.export.x01.defi.model.SessionDefi;
+import org.opendarts.ui.export.x01.defi.model.SetDefi;
+import org.opendarts.ui.export.x01.service.BasicExportX01Service;
 
 import com.google.common.base.Strings;
 
@@ -33,7 +37,7 @@ import com.google.common.base.Strings;
 public class BasicExportX01Defi extends BasicExportX01Service {
 
 	/* (non-Javadoc)
-	 * @see org.opendarts.ui.export.x01.md.service.BasicExportX01Service#isApplicable(org.opendarts.core.model.game.IGame)
+	 * @see org.opendarts.ui.export.x01.service.BasicExportX01Service#isApplicable(org.opendarts.core.model.game.IGame)
 	 */
 	@Override
 	public boolean isApplicable(IGame game) {
@@ -41,94 +45,102 @@ public class BasicExportX01Defi extends BasicExportX01Service {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.opendarts.ui.export.x01.service.BasicExportX01Service#createSession(org.opendarts.core.model.session.ISession, java.util.List)
+	 */
+	@Override
+	protected Session createSession(ISession ses, List<IStatsService> stats) {
+		return new SessionDefi(ses, stats);
+	}
+
+	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeExtraSetDetail(java.io.FileWriter, org.opendarts.core.model.session.ISet, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
 	@Override
-	protected void writeExtraSetInfo(FileWriter fw, ISet set,
+	protected void writeExtraSetInfo(Writer writer, Set set,
 			BasicExportOption option) throws IOException {
-		GameX01DefiDefinition gameDefinition = (GameX01DefiDefinition) set
-				.getGameDefinition();
-
 		// Set index
-		fw.write("Set: ");
-		fw.write(new SetIndexFunction().apply(set));
-		fw.write('\n');
+		writer.write("Set: ");
+		writer.write(set.getIndex());
+		writer.write('\n');
 
-		// String Score
-		fw.write("Starting Score: ");
-		fw.write(getNumberFormat().format(gameDefinition.getStartScore()));
-		fw.write('\n');
+		if (set instanceof SetDefi) {
+			SetDefi setDefi = (SetDefi) set;
+			// String Score
+			writer.write("Starting Score: ");
+			writer.write(setDefi.getStartingScore());
+			writer.write('\n');
 
-		// Number Game to Win
-		fw.write("Number game to win: ");
-		fw.write(getNumberFormat().format(gameDefinition.getNbGameToWin()));
-		fw.write('\n');
+			// Number Game to Win
+			writer.write("Number game to win: ");
+			writer.write(setDefi.getNbGameToWin());
+			writer.write('\n');
+			writer.write('\n');
 
-		// Number Game to Win
-		fw.write("Target Time: ");
-		DateFormat timeFormatter = gameDefinition.getTimeFormatter();
-		Date date = new Date(gameDefinition.getTimeTarget());
-		fw.write(timeFormatter.format(date));
-		fw.write('\n');
-		fw.write('\n');
+			// Number Game to Win
+			writer.write("Target Time: ");
+			writer.write(setDefi.getTargetTime());
+			writer.write('\n');
+		}
+		writer.write('\n');
 	}
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeExtraGameInfo(java.io.FileWriter, org.opendarts.core.model.game.IGame, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
 	@Override
-	protected void writeExtraGameInfo(FileWriter fw, IGame game,
+	protected void writeExtraGameInfo(Writer writer, Game game,
 			BasicExportOption option) throws IOException {
-		GameX01DefiDefinition gameDefinition = (GameX01DefiDefinition) game
-				.getParentSet().getGameDefinition();
-
 		// Set index
-		fw.write("Game: ");
-		fw.write(new GameIndexFunction().apply(game));
-		fw.write('\n');
+		writer.write("Game: ");
+		writer.write(game.getIndex());
+		writer.write('\n');
 
-		// String Score
-		fw.write("Starting Score: ");
-		fw.write(getNumberFormat().format(gameDefinition.getStartScore()));
-		fw.write('\n');
+		if (game instanceof GameDefi) {
+			GameDefi gameDefi = (GameDefi) game;
 
-		// Number Game to Win
-		fw.write("Number game to win: ");
-		fw.write(getNumberFormat().format(gameDefinition.getNbGameToWin()));
-		fw.write('\n');
+			// String Score
+			writer.write("Starting Score: ");
+			writer.write(gameDefi.getStartingScore());
+			writer.write('\n');
 
-		// Number Game to Win
-		fw.write("Target Time: ");
-		DateFormat timeFormatter = gameDefinition.getTimeFormatter();
-		Date date = new Date(gameDefinition.getTimeTarget());
-		fw.write(timeFormatter.format(date));
-		fw.write('\n');
-		fw.write('\n');
+			// Number Game to Win
+			writer.write("Number game to win: ");
+			writer.write(gameDefi.getNbGameToWin());
+			writer.write('\n');
 
-		GameX01Defi gameX01Defi = (GameX01Defi) game;
-		IStatsService statsService = OpenDartsX01DefiBundle
-				.getStatsService(gameX01Defi);
-		// Defi stats
-		String title = "Defi Stats";
-		fw.write(title);
-		fw.write('\n');
-		fw.write(Strings.repeat("-", title.length()));
-		fw.write('\n');
-		fw.write(this.createDefiStats(gameX01Defi, null, statsService));
-		fw.write('\n');
+			// Number Game to Win
+			writer.write("Target Time: ");
+			writer.write(gameDefi.getTargetTime());
+			writer.write('\n');
+			writer.write('\n');
 
-		// Player stats
-		PlayerToStringFunction playerFunc = new PlayerToStringFunction();
-		for (IPlayer player : gameX01Defi.getPlayers()) {
-			title = playerFunc.apply(player);
-			fw.write(title);
-			fw.write('\n');
-			fw.write(Strings.repeat("-", title.length()));
-			fw.write('\n');
-			fw.write(this.createDefiStats(gameX01Defi, player, statsService));
-			fw.write('\n');
+			GameX01Defi gameX01Defi = (GameX01Defi) game.getElement();
+			IStatsService statsService = OpenDartsX01DefiBundle
+					.getStatsService(gameX01Defi);
+			// Defi stats
+			String title = "Defi Stats";
+			writer.write(title);
+			writer.write('\n');
+			writer.write(Strings.repeat("-", title.length()));
+			writer.write('\n');
+			writer.write(this.createDefiStats(gameX01Defi, null, statsService));
+			writer.write('\n');
+
+			// Player stats
+			PlayerToStringFunction playerFunc = new PlayerToStringFunction();
+			for (IPlayer player : gameX01Defi.getPlayers()) {
+				title = playerFunc.apply(player);
+				writer.write(title);
+				writer.write('\n');
+				writer.write(Strings.repeat("-", title.length()));
+				writer.write('\n');
+				writer.write(this.createDefiStats(gameX01Defi, player,
+						statsService));
+				writer.write('\n');
+				
+			}
 		}
-		fw.write('\n');
+		writer.write('\n');
 	}
 
 	/**

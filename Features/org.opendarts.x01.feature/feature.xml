@@ -50,8 +50,6 @@
       <import plugin="org.opendarts.ui.player"/>
       <import plugin="org.opendarts.ui.stats"/>
       <import plugin="org.eclipse.swt" version="3.7.0" match="compatible"/>
-      <import plugin="org.opendarts.core.export"/>
-      <import plugin="org.opendarts.ui.export"/>
       <import plugin="com.google.guava"/>
    </requires>
 
@@ -77,13 +75,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.opendarts.ui.export.x01.md"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.opendarts.core.export"
          download-size="0"
          install-size="0"
@@ -92,6 +83,20 @@
 
    <plugin
          id="org.opendarts.ui.export"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.ui.export.x01"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.opendarts.freemarker"
          download-size="0"
          install-size="0"
          version="0.0.0"

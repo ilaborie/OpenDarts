@@ -2,6 +2,7 @@ package org.opendarts.ui.export.service.impl;
 
 import org.opendarts.core.export.IExportOptions;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class BasicExportOption.
  */
@@ -89,6 +90,11 @@ public class BasicExportOption implements IExportOptions {
 	 */
 	public boolean isZip() {
 		return this.zip;
+	}
+
+	/** The is chart png. */
+	public boolean isChartPng() {
+		return ImageType.PNG.equals(this.getChartImageType());
 	}
 
 	/**
