@@ -1,11 +1,10 @@
 package org.opendarts.ui.export.model;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.player.func.PlayerToStringFunction;
+import org.opendarts.core.utils.FormaterUtils;
 import org.opendarts.ui.service.IGameUiProvider;
 import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.stats.service.IStatsUiProvider;
@@ -20,14 +19,7 @@ public abstract class AbstractBean<E> {
 	private static IGameUiProvider gameUiProvider;
 
 	// Format
-	/** The date format. */
-	private final DateFormat dateFormat;
-
-	/** The number format. */
-	private final NumberFormat numberFormat;
-
-	/** The decimal format. */
-	private final NumberFormat decimalFormat;
+	private final FormaterUtils formatters;
 
 	// Functions
 	/** The player to string func. */
@@ -35,10 +27,12 @@ public abstract class AbstractBean<E> {
 
 	/** The element. */
 	private final E element;
-	
+
 	static {
-		statsUiProvider = OpenDartsStatsUiPlugin.getService(IStatsUiProvider.class);
-		gameUiProvider = OpenDartsStatsUiPlugin.getService(IGameUiProvider.class);
+		statsUiProvider = OpenDartsStatsUiPlugin
+				.getService(IStatsUiProvider.class);
+		gameUiProvider = OpenDartsStatsUiPlugin
+				.getService(IGameUiProvider.class);
 	}
 
 	/**
@@ -48,13 +42,11 @@ public abstract class AbstractBean<E> {
 		super();
 		this.element = element;
 		// Formatter
-		this.dateFormat = DateFormat.getDateTimeInstance();
-		this.numberFormat = NumberFormat.getIntegerInstance();
-		this.decimalFormat = NumberFormat.getNumberInstance();
+		this.formatters = FormaterUtils.getFormatters();
 		// Functions
 		this.playerToStringFunc = new PlayerToStringFunction();
 	}
-	
+
 	/**
 	 * Gets the name.
 	 *
@@ -63,7 +55,7 @@ public abstract class AbstractBean<E> {
 	public String getName() {
 		return this.getElement().toString();
 	}
-	
+
 	/**
 	 * Gets the file name.
 	 *
@@ -72,7 +64,7 @@ public abstract class AbstractBean<E> {
 	public String getFileName() {
 		return this.normalize(this.getName());
 	}
-	
+
 	/**
 	 * Normalize.
 	 *
@@ -87,7 +79,7 @@ public abstract class AbstractBean<E> {
 		result = result.replace('?', '_');
 		return result.trim();
 	}
-	
+
 	/**
 	 * Gets the element.
 	 *
@@ -98,47 +90,29 @@ public abstract class AbstractBean<E> {
 	}
 
 	public abstract String getRootName();
-	
+
 	/**
 	 * Gets the player list.
 	 *
 	 * @return the player list
 	 */
-	public abstract List<IPlayer>  getPlayerList();
-	
+	public abstract List<IPlayer> getPlayerList();
+
 	/**
 	 * Gets the stats.
 	 *
 	 * @return the stats
 	 */
 	public abstract List<Stats<E>> getStats();
-	
+
 
 	/**
-	 * Gets the date format.
+	 * Gets the formatters.
 	 *
-	 * @return the date format
+	 * @return the formatters
 	 */
-	public DateFormat getDateFormat() {
-		return this.dateFormat;
-	}
-
-	/**
-	 * Gets the number format.
-	 *
-	 * @return the number format
-	 */
-	public NumberFormat getNumberFormat() {
-		return this.numberFormat;
-	}
-
-	/**
-	 * Gets the decimal format.
-	 *
-	 * @return the decimal format
-	 */
-	public NumberFormat getDecimalFormat() {
-		return this.decimalFormat;
+	public FormaterUtils getFormatters() {
+		return this.formatters;
 	}
 
 	/**
@@ -158,7 +132,7 @@ public abstract class AbstractBean<E> {
 	public IStatsUiProvider getStatsUiProvider() {
 		return statsUiProvider;
 	}
-	
+
 	/**
 	 * Gets the game ui provider.
 	 *

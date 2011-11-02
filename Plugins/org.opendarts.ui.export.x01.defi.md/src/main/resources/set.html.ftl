@@ -7,6 +7,15 @@
 </head>
 <body>
 	<h1>${set.name}</h1>
+	<div class="nav">
+		<a href="#status">Status</a>
+		<a href="#stats">Statistics</a>
+		<#if option.exportChart>
+		<a href="#charts">Charts</a>
+		</#if>
+		<a href="#detail">Detail</a>
+	</div>
+	<a class="parent" href="../${set.parent.fileName?url}.html">${set.parent.name}</a>
 	<ol>
 		<#list set.games as game>
 		<li><a href="./${game.rootName?url}/${game.fileName?url}.html">${game.name}</a></li>
@@ -22,30 +31,6 @@
 		<label for="setWinner">Winner:</label><input type="text" name="sesWinner" value="${set.winner}"/><br/>
 		<label for="setStartingScore">Starting Score:</label><input type="text" name="sesStartingScore" value="${set.startingScore}"/><br/>
 		<label for="setNbGameToWin">Nb. Games to Win:</label><input type="text" name="sesNbGameToWin" value="${set.nbGameToWin}"/><br/>
-	</div>
-	
-	<h2><a name="detail"/>Detail</h2>
-	<div id="detail">
-		<table id="tblDetail">
-			<thead>
-				<tr>
-					<th>Set</th>
-					<th>Players</th>
-					<th>Winner</th>
-					<th>Result</th>
-				<tr>
-			</thead>
-			<tbody>
-				<#list set.games as game>
-				<tr>
-					<td>${game.index}</td>
-					<td>${game.players}</td>
-					<td>${game.winner}</td>
-					<td>${game.result}</td>
-				</tr>
-				</#list>
-			</tbody>
-		</table>
 	</div>
 	
 	<h2><a name="stats"/>Statistics</h2>
@@ -87,5 +72,29 @@
 		</#list>
 	</div>
 	</#if>
+	
+	<h2><a name="detail"/>Detail</h2>
+	<div id="detail">
+		<table id="tblDetail">
+			<thead>
+				<tr>
+					<th>Set</th>
+					<th>Players</th>
+					<th>Winner</th>
+					<th>Result</th>
+				<tr>
+			</thead>
+			<tbody>
+				<#list set.games as game>
+				<tr>
+					<td>${game.index}</td>
+					<td>${game.players}</td>
+					<td>${game.winner}</td>
+					<td>${game.result}</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

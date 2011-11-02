@@ -7,6 +7,20 @@
 </head>
 <body>
 	<h1>${game.name}</h1>
+	<a class="parent" href="../${game.parent.fileName?url}.html">${game.parent.name}</a>
+	
+	<div class="nav">
+		<a href="#status">Status</a>
+		<a href="#stats">Statistics</a>
+		<a href="#gameDetail">Game Detail</a>
+		<#list game.playersGameDetail as detail>
+		<a href="#${detail.player}Detail">${detail.player} Detail</a>
+		</#list>
+		<#if option.exportChart>
+		<a href="#charts">Charts</a>
+		</#if>
+		<a href="#detail">Detail</a>
+	</div>
 	
 	<h2><a name="status"/>Status</h2>
 	<div id="status">
@@ -22,7 +36,7 @@
 	<h2><a name="stats"/>Statistics</h2>
 	<div id="stats">
 		<#list game.stats as st>
-			<table>
+			<table summary="Statistics">
 				<thead>
 					<tr>
 						<th></th>
@@ -49,28 +63,15 @@
 		</#list>
 	</div>
 	
-	<#if option.exportChart>
-	<h2><a name="charts"/>Charts</h2>
-	<div id="charts">
-		<#list game.charts as chart>
-		<h3>${chart.name}</h3>
-		<#if option.chartPng>
-		<img src="${chart.name}.png"/>
-		<#else>
-		<img src="${chart.name}.jpg"/>
-		</#if>
-		</#list>
-	</div>
-	</#if>
-	
 	<h2><a name="gameDetail"/>Game Detail</h2>
 	<div id="gameDetail">
+		<label for="gamTimeTarget">Target Time:</label><input type="text" name="gamTimeTarget" value="${game.targetTime}"/><br/>
 		<label for="gamTotalTime">Total time:</label><input type="text" name="gamTotalTime" value="${game.gameDetail.totalTime}"/><br/>
+		<label for="gamNbThrows">Nb Throws:</label><input type="text" name="gamNbThrows" value="${game.gameDetail.nbThrows}"/><br/>
+		<label for="gamNbDarts">Nb Darts:</label><input type="text" name="gamNbDarts" value="${game.gameDetail.nbDarts}"/><br/>
 		<label for="gamPointBySeconds">Point by Seconds:</label><input type="text" name="gamPointBySeconds" value="${game.gameDetail.pointsBySecond}"/><br/>
 		<label for="gamSecondsByThrow">Seconds by Throw:</label><input type="text" name="gamSecondsByThrow" value="${game.gameDetail.secondsByThrow}"/><br/>
 		<label for="gamAvgScore">Average score:</label><input type="text" name="gamAvgScore" value="${game.gameDetail.averageScore}"/><br/>
-		<label for="gamNbThrows">Nb Throws:</label><input type="text" name="gamNbThrows" value="${game.gameDetail.nbThrows}"/><br/>
-		<label for="gamNbDarts">Nb Darts:</label><input type="text" name="gamNbDarts" value="${game.gameDetail.nbDarts}"/><br/>
 	</div>
 	
 	<#list game.playersGameDetail as detail>
@@ -85,11 +86,25 @@
 		</div>
 	</#list>
 	
+	<#if option.exportChart>
+	<h2><a name="charts"/>Charts</h2>
+	<div id="charts">
+		<#list game.charts as chart>
+		<h3>${chart.name}</h3>
+		<#if option.chartPng>
+		<img src="${chart.name}.png"/>
+		<#else>
+		<img src="${chart.name}.jpg"/>
+		</#if>
+		</#list>
+	</div>
+	</#if>
+	
 	
 	
 	<h2><a name="detail"/>Detail</h2>
 	<div id="detail">
-		<table id="tblDetail">
+		<table id="tblDetail" summary="Scores">
 			<thead>
 				<tr>
 					<th></th>
@@ -101,7 +116,7 @@
 			<tbody>
 				<#list game.entries as e>
 				<tr>
-					<td>${e.label}</td>
+					<th>${e.label}</th>
 					<#list e.scores as s>
 					<td>${s}</td>
 					</#list>

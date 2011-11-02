@@ -19,7 +19,8 @@ Export-Package: org.opendarts.core.internal.service;x-friends:="org.opendarts.ui
  org.opendarts.core.service.dart,
  org.opendarts.core.service.game,
  org.opendarts.core.service.player,
- org.opendarts.core.service.session
+ org.opendarts.core.service.session,
+ org.opendarts.core.utils
 Service-Component: OSGI-INF/DartService.xml, OSGI-INF/SessionService.xml, OSGI-INF/SetService.xml
 Import-Package: com.google.common.base;version="10.0.0",
  com.google.common.collect;version="10.0.0",

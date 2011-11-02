@@ -21,6 +21,7 @@ Import-Package: org.eclipse.swt.graphics,
  org.opendarts.core.stats.model.impl,
  org.opendarts.core.stats.service,
  org.opendarts.core.stats.service.impl,
+ org.opendarts.core.utils,
  org.osgi.framework;version="1.6.0",
  org.slf4j;version="1.6.1"
 Export-Package: org.opendarts.core.x01,

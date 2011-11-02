@@ -39,7 +39,7 @@ public class GameX01 extends Game {
 	* @return the starting score
 	*/
 	public String getStartingScore() {
-		return this.getNumberFormat().format(
+		return this.getFormatters().getNumberFormat().format(
 				this.gameDefinition.getStartScore());
 	}
 
@@ -64,7 +64,7 @@ public class GameX01 extends Game {
 	 * @return the nb game to win
 	 */
 	public String getNbGameToWin() {
-		return this.getNumberFormat().format(
+		return this.getFormatters().getNumberFormat().format(
 				this.gameDefinition.getNbGameToWin());
 	}
 

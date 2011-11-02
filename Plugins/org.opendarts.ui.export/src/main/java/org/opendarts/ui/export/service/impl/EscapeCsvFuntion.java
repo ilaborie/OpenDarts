@@ -2,6 +2,8 @@ package org.opendarts.ui.export.service.impl;
 
 import java.io.StringWriter;
 
+import org.opendarts.core.utils.FormaterUtils;
+
 import com.google.common.base.Function;
 import com.google.common.io.Closeables;
 
@@ -12,6 +14,7 @@ public class EscapeCsvFuntion implements Function<Object, String> {
 
 	/** The null value. */
 	private final String nullValue;
+	private final FormaterUtils formatters;
 
 	/**
 	 * Instantiates a new escape csv funtion.
@@ -27,6 +30,7 @@ public class EscapeCsvFuntion implements Function<Object, String> {
 	 */
 	public EscapeCsvFuntion(String nullValue) {
 		super();
+		this.formatters =FormaterUtils.getFormatters(); 
 		this.nullValue = nullValue;
 	}
 
@@ -56,6 +60,14 @@ public class EscapeCsvFuntion implements Function<Object, String> {
 			} finally {
 				Closeables.closeQuietly(sw);
 			}
+		} else if (input instanceof Long) {
+			result = this.formatters.getNumberFormat().format(((Long) input).longValue());
+		} else if (input instanceof Integer) {
+			result = this.formatters.getNumberFormat().format(((Integer) input).intValue());
+		} else if (input instanceof Float) {
+			result = this.formatters.getDecimalFormat().format(((Float) input).floatValue());
+		} else if (input instanceof Double) {
+			result = this.formatters.getDecimalFormat().format(((Double) input).doubleValue());
 		} else {
 			result = String.valueOf(input);
 		}

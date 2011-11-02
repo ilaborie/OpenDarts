@@ -144,7 +144,7 @@ public class Game extends AbstractBean<IGame> {
 	 * @return the start
 	 */
 	public String getStart() {
-		return this.getDateFormat().format(this.game.getStart().getTime());
+		return this.getFormatters().getDatetimeFormat().format(this.game.getStart().getTime());
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class Game extends AbstractBean<IGame> {
 	 */
 	public String getEnd() {
 		if (this.game.getEnd() != null) {
-			return this.getDateFormat().format(this.game.getEnd().getTime());
+			return this.getFormatters().getDatetimeFormat().format(this.game.getEnd().getTime());
 		}
 		return null;
 	}

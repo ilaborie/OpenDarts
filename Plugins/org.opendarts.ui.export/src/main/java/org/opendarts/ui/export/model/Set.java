@@ -165,7 +165,7 @@ public class Set extends AbstractBean<ISet> {
 	 * @return the start
 	 */
 	public String getStart() {
-		return this.getDateFormat().format(set.getStart().getTime());
+		return this.getFormatters().getDatetimeFormat().format(set.getStart().getTime());
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class Set extends AbstractBean<ISet> {
 	 */
 	public String getEnd() {
 		if (set.getEnd() != null) {
-			return this.getDateFormat().format(set.getEnd().getTime());
+			return this.getFormatters().getDatetimeFormat().format(set.getEnd().getTime());
 		}
 		return null;
 	}

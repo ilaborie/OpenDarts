@@ -58,7 +58,7 @@ public class GameDetail {
 	 */
 	public String getPointsBySecond() {
 		double pointBySec = ((double) score * 1000) / (duration);
-		return this.game.getDecimalFormat().format(pointBySec);
+		return this.game.getFormatters().getDecimalFormat().format(pointBySec);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class GameDetail {
 	 */
 	public String getSecondsByThrow() {
 		double secByThrow = ((double) duration) / (1000 * nbThrows);
-		return this.game.getDecimalFormat().format(secByThrow);
+		return this.game.getFormatters().getDecimalFormat().format(secByThrow);
 
 	}
 
@@ -79,7 +79,7 @@ public class GameDetail {
 	 */
 	public String getAverageScore() {
 		double avg = ((double) score * 3) / nbDarts;
-		return this.game.getDecimalFormat().format(avg);
+		return this.game.getFormatters().getDecimalFormat().format(avg);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class GameDetail {
 	 * @return the nb throws
 	 */
 	public String getNbThrows() {
-		return this.game.getNumberFormat().format(Math.ceil(nbThrows));
+		return this.game.getFormatters().getNumberFormat().format(Math.ceil(nbThrows));
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class GameDetail {
 	 * @return the nb darts
 	 */
 	public String getNbDarts() {
-		return this.game.getNumberFormat().format(Math.ceil(nbDarts));
+		return this.game.getFormatters().getNumberFormat().format(Math.ceil(nbDarts));
 	}
 
 }

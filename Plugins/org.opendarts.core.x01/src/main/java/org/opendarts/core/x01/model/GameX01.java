@@ -17,6 +17,7 @@ import org.opendarts.core.model.game.impl.AbstractGame;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.impl.GameSet;
 import org.opendarts.core.stats.service.IStatsService;
+import org.opendarts.core.utils.FormaterUtils;
 import org.opendarts.core.x01.OpenDartsX01Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,9 +59,10 @@ public class GameX01 extends AbstractGame implements IGame {
 		this.entries = new ArrayList<GameX01Entry>();
 		this.scoreToDo = startScore;
 		// Stats
-		this.statsService = OpenDartsX01Bundle.getBundle().getStatsService(this);
+		this.statsService = OpenDartsX01Bundle.getBundle()
+				.getStatsService(this);
 	}
-	
+
 	/**
 	 * Gets the stats service.
 	 *
@@ -91,7 +93,7 @@ public class GameX01 extends AbstractGame implements IGame {
 		// Set first player
 		this.setCurrentPlayer(this.getFirstPlayer());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.core.model.game.IGame#updatePlayers(java.util.List)
 	 */
@@ -104,14 +106,14 @@ public class GameX01 extends AbstractGame implements IGame {
 		GameX01Entry entry = new GameX01Entry(this, this.entries.size() + 1);
 		this.entries.add(entry);
 		this.setCurrentEntry(entry);
-		
+
 		for (IPlayer player : this.score.keySet()) {
 			this.setScore(player, this.scoreToDo);
 		}
-		
+
 		// Notify
 		this.fireGameEvent(GameEvent.Factory.newGameReinitializedEvent(this));
-		
+
 		// Set first player
 		this.setCurrentPlayer(this.getFirstPlayer());
 	}
@@ -135,13 +137,14 @@ public class GameX01 extends AbstractGame implements IGame {
 	@Override
 	public String getName() {
 		String result;
+		String score = FormaterUtils.getFormatters().getNumberFormat()
+				.format(this.scoreToDo);
 		if (this.getPlayers().size() == 2) {
-			result = MessageFormat.format("{2} - {0} vs {1}",
-					this.getFirstPlayer(), this.getSecondPlayer(),
-					this.scoreToDo);
+			result = MessageFormat.format("{0} - {1} vs {2}", score,
+					this.getFirstPlayer(), this.getSecondPlayer());
 		} else {
-			result = MessageFormat.format("{1} - {0} ", this.getPlayers(),
-					this.scoreToDo);
+			result = MessageFormat.format("{0} - {1} ", score,
+					this.getPlayers());
 		}
 		return result;
 	}
@@ -209,7 +212,7 @@ public class GameX01 extends AbstractGame implements IGame {
 		int score;
 		if (dartThrow != null) {
 			// update player score
-			 score = this.getScore(player);
+			score = this.getScore(player);
 			score -= dartThrow.getScore();
 			if (score < 2) {
 				// broken
@@ -234,7 +237,7 @@ public class GameX01 extends AbstractGame implements IGame {
 
 			// Update stats
 			if (this.getStatsService() != null) {
-				this.getStatsService() .updateStats(player, this, entry);
+				this.getStatsService().updateStats(player, this, entry);
 			}
 
 			// Choose next player
@@ -256,7 +259,7 @@ public class GameX01 extends AbstractGame implements IGame {
 	 * @param score the score
 	 */
 	protected void setScore(IPlayer player, int score) {
-		this.score.put(player, score);		
+		this.score.put(player, score);
 	}
 
 	/**
@@ -271,14 +274,14 @@ public class GameX01 extends AbstractGame implements IGame {
 		ThreeDartsThrow oldThrow = entry.getPlayerThrow().get(player);
 		if (oldThrow != null) {
 			// Update stats
-			if (this.getStatsService()  != null) {
-				this.getStatsService() .undoStats(player, this, entry);
+			if (this.getStatsService() != null) {
+				this.getStatsService().undoStats(player, this, entry);
 			}
 			entry.getPlayerThrow().put(player, newThrow);
 
 			// Update stats
 			if (this.getStatsService() != null) {
-				this.getStatsService() .updateStats(player, this, entry);
+				this.getStatsService().updateStats(player, this, entry);
 			}
 
 			// update score
@@ -297,8 +300,8 @@ public class GameX01 extends AbstractGame implements IGame {
 				}
 				if (update) {
 					if (win) {
-						if (this.getStatsService()  != null) {
-							this.getStatsService() .undoStats(player, this, e);
+						if (this.getStatsService() != null) {
+							this.getStatsService().undoStats(player, this, e);
 						}
 						this.fireGameEvent(GameEvent.Factory
 								.newGameEntryRemoveEvent(this, e));
@@ -318,8 +321,9 @@ public class GameX01 extends AbstractGame implements IGame {
 						for (IPlayer p : this.getParentSet()
 								.getGameDefinition().getPlayers()) {
 							if (clear) {
-								if (this.getStatsService()  != null) {
-									this.getStatsService() .undoStats(p, this, e);
+								if (this.getStatsService() != null) {
+									this.getStatsService()
+											.undoStats(p, this, e);
 								}
 								e.getPlayerThrow().put(p, null);
 							} else if (p.equals(player)) {
@@ -366,8 +370,8 @@ public class GameX01 extends AbstractGame implements IGame {
 		entry.setNbPlayedDart(this.nbDartToFinish);
 
 		// Update stats
-		if (this.getStatsService()  != null) {
-			this.getStatsService() .updateStats(player, this, entry);
+		if (this.getStatsService() != null) {
+			this.getStatsService().updateStats(player, this, entry);
 		}
 
 		// Notify

@@ -7,6 +7,15 @@
 </head>
 <body>
 	<h1>${set.name}</h1>
+	<div class="nav">
+		<a href="#status">Status</a>
+		<a href="#stats">Statistics</a>
+		<#if option.exportChart>
+		<a href="#charts">Charts</a>
+		</#if>
+		<a href="#detail">Detail</a>
+	</div>
+	<a class="parent" href="../${set.parent.fileName?url}.html">${set.parent.name}</a>
 	<ol>
 		<#list set.games as game>
 		<li><a href="./${game.rootName?url}/${game.fileName?url}.html">${game.name}</a></li>

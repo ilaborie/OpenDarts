@@ -7,6 +7,15 @@
 </head>
 <body>
 	<h1>${session.name}</h1>
+	<div class="nav">
+		<a href="#status">Status</a>
+		<a href="#stats">Statistics</a>
+		<#if option.exportChart>
+		<a href="#charts">Charts</a>
+		</#if>
+		<a href="#detail">Detail</a>
+	</div>
+	
 	<ol>
 		<#list session.sets as set>
 		<li><a href="./${set.rootName?url}/${set.fileName?url}.html">${set.name}</a></li>
@@ -20,30 +29,6 @@
 		<label for="sesEndAt">Ended at:</label><input type="text" name="sesEndAt" value="${session.end}"/><br/>
 		</#if>
 		<label for="sesWinner">Winner:</label><input type="text" name="sesWinner" value="${session.winner}"/><br/>
-	</div>
-	
-	<h2><a name="detail"/>Detail</h2>
-	<div id="detail">
-		<table id="tblDetail">
-			<thead>
-				<tr>
-					<th>Set</th>
-					<th>Players</th>
-					<th>Winner</th>
-					<th>Result</th>
-				<tr>
-			</thead>
-			<tbody>
-				<#list session.sets as set>
-				<tr>
-					<td>${set.index}</td>
-					<td>${set.players}</td>
-					<td>${set.winner}</td>
-					<td>${set.result}</td>
-				</tr>
-				</#list>
-			</tbody>
-		</table>
 	</div>
 	
 	<h2><a name="stats"/>Statistics</h2>
@@ -85,5 +70,29 @@
 		</#list>
 	</div>
 	</#if>
+	
+	<h2><a name="detail"/>Detail</h2>
+	<div id="detail">
+		<table id="tblDetail">
+			<thead>
+				<tr>
+					<th>Set</th>
+					<th>Players</th>
+					<th>Winner</th>
+					<th>Result</th>
+				<tr>
+			</thead>
+			<tbody>
+				<#list session.sets as set>
+				<tr>
+					<td>${set.index}</td>
+					<td>${set.players}</td>
+					<td>${set.winner}</td>
+					<td>${set.result}</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

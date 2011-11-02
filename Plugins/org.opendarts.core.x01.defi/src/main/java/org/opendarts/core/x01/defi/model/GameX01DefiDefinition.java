@@ -2,13 +2,12 @@ package org.opendarts.core.x01.defi.model;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.opendarts.core.model.game.impl.GameDefinition;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.service.game.IGameService;
+import org.opendarts.core.utils.FormaterUtils;
 import org.opendarts.core.x01.defi.service.GameX01DefiService;
 
 /**
@@ -29,12 +28,7 @@ public class GameX01DefiDefinition extends GameDefinition {
 	private final long timeTarget;
 	
 	/** The time formatter. */
-	public static final DateFormat TIME_FORMATTER;
-
-	static {
-		TIME_FORMATTER = new SimpleDateFormat("H:mm:ss");
-		TIME_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
-	}
+	public static final DateFormat TIME_FORMATTER = FormaterUtils.getFormatters().getTimeFormat();
 
 	/**
 	 * Instantiates a new game x01 definition.

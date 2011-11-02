@@ -5,6 +5,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opendarts.core.utils.FormaterUtils;
+
 /**
  * The Class AvgEntry.
  */
@@ -16,16 +18,22 @@ public class AvgEntry implements Serializable {
 	/** The count. */
 	private double count;
 
+	/** The distrib. */
 	private final List<Number> distrib;
 
 	/** The sum. */
 	private double sum;
+	
+	/** The format. */
+	private final NumberFormat format;
 
 	/**
 	 * Instantiates a new avg entry.
 	 */
 	public AvgEntry() {
 		super();
+		this.format = FormaterUtils.getFormatters().getDecimalFormat();
+		
 		this.count = 0;
 		this.sum = 0.0D;
 		this.distrib = new ArrayList<Number>();
@@ -90,7 +98,7 @@ public class AvgEntry implements Serializable {
 		if (this.count < 1) {
 			result = "-";
 		} else {
-			result = NumberFormat.getNumberInstance().format(this.getAvg());
+			result = this.format.format(this.getAvg());
 		}
 		return result;
 	}

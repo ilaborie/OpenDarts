@@ -1,9 +1,7 @@
 package org.opendarts.core.stats.model.impl;
 
-import java.text.MessageFormat;
-import java.text.NumberFormat;
-
 import org.opendarts.core.stats.model.IStatValue;
+import org.opendarts.core.utils.FormaterUtils;
 
 /**
  * The Class StatsValue.
@@ -14,12 +12,15 @@ public class StatsValue<T> implements IStatValue<T> {
 
 	/** The value. */
 	private T value;
+	
+	private final FormaterUtils formatters;
 
 	/**
 	 * Instantiates a new stats value.
 	 */
 	public StatsValue() {
 		super();
+		this.formatters = FormaterUtils.getFormatters();
 	}
 
 	/* (non-Javadoc)
@@ -27,7 +28,7 @@ public class StatsValue<T> implements IStatValue<T> {
 	 */
 	@Override
 	public String toString() {
-		return MessageFormat.format("{0}", this.value);
+		return this.getValueAsString();
 	}
 
 	/* (non-Javadoc)
@@ -66,13 +67,15 @@ public class StatsValue<T> implements IStatValue<T> {
 		if (value == null) {
 			result = "";
 		} else if (value instanceof Double) {
-			result = NumberFormat.getNumberInstance().format(value);
+			result = this.formatters.getDecimalFormat().format(value);
 		} else if (value instanceof Float) {
-			result = NumberFormat.getNumberInstance().format(value);
+			result = this.formatters.getDecimalFormat().format(value);
 		} else if (value instanceof Long) {
-			result = NumberFormat.getIntegerInstance().format(value);
+			result = this.formatters.getNumberFormat().format(value);
 		} else if (value instanceof Integer) {
-			result = NumberFormat.getIntegerInstance().format(value);
+			result = this.formatters.getNumberFormat().format(value);
+		} else if (value instanceof AvgEntry) {
+			result = this.displayValue(((AvgEntry) value).getAvg());
 		} else {
 			result = String.valueOf(this.value);
 		}

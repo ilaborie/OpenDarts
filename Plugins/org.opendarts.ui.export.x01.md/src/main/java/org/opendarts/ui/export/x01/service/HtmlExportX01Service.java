@@ -4,15 +4,19 @@
 package org.opendarts.ui.export.x01.service;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
 import org.opendarts.core.model.game.IGame;
+import org.opendarts.core.model.player.IPlayer;
+import org.opendarts.core.model.player.func.PlayerToStringFunction;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.service.IStatsService;
@@ -24,10 +28,16 @@ import org.opendarts.ui.export.model.Set;
 import org.opendarts.ui.export.service.IExportUiService;
 import org.opendarts.ui.export.service.impl.AbstractExportX01Service;
 import org.opendarts.ui.export.service.impl.BasicExportOption;
+import org.opendarts.ui.export.service.impl.EscapeCsvFuntion;
+import org.opendarts.ui.export.x01.model.GameEntry;
 import org.opendarts.ui.export.x01.model.SessionX01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
@@ -126,6 +136,7 @@ public class HtmlExportX01Service extends
 	protected Session createSession(ISession ses, List<IStatsService> stats) {
 		return new SessionX01(ses, stats);
 	}
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeSessionDetail(java.io.File, org.opendarts.ui.export.model.Session, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
@@ -135,7 +146,7 @@ public class HtmlExportX01Service extends
 		super.writeSessionDetail(sessionDetailFile, session, option);
 		this.copyCss(sessionDetailFile.getParentFile());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeSetDetail(java.io.File, org.opendarts.ui.export.model.Set, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
@@ -145,7 +156,7 @@ public class HtmlExportX01Service extends
 		super.writeSetDetail(setDetailFile, set, option);
 		this.copyCss(setDetailFile.getParentFile());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeGameDetail(java.io.File, org.opendarts.ui.export.model.Game, org.opendarts.ui.export.service.impl.BasicExportOption)
 	 */
@@ -154,7 +165,58 @@ public class HtmlExportX01Service extends
 			BasicExportOption option) {
 		super.writeGameDetail(gameDetailFile, game, option);
 		this.copyCss(gameDetailFile.getParentFile());
+
+		this.exportGameEntries((org.opendarts.ui.export.x01.model.GameX01) game, gameDetailFile.getParentFile(),
+				option);
 	}
+
+	/**
+	 * Export game entries.
+	 *
+	 * @param game the game
+	 * @param gameFile the game file
+	 * @param option 
+	 */
+	protected void exportGameEntries(org.opendarts.ui.export.x01.model.GameX01 game, File gameFile,
+			BasicExportOption option) {
+		File entriesFile = new File(gameFile, game.getFileName()
+				+ "-throws.csv");
+		Writer writer = null;
+
+		List<IPlayer> players = game.getPlayerList();
+		Joiner joiner = Joiner.on(option.getCsvSeparator()).useForNull("-");
+		EscapeCsvFuntion escapeCsv = new EscapeCsvFuntion();
+
+		try {
+			writer = Files.newWriter(entriesFile, Charsets.UTF_8);
+			new FileWriter(entriesFile);
+
+			// Header
+			List<String> headers = new ArrayList<String>();
+			headers.add("");
+			headers.addAll(Lists.transform(players,
+					new PlayerToStringFunction()));
+			headers = Lists.transform(headers, escapeCsv);
+			joiner.appendTo(writer, headers);
+			writer.write('\n');
+
+			// Entries
+			List<Object> lst;
+			for (GameEntry e : game.getEntries()) {
+				lst = new ArrayList<Object>();
+				lst.add(e.getLabel());
+				lst.addAll(e.getScores());
+
+				joiner.appendTo(writer, lst);
+				writer.write('\n');
+			}
+		} catch (IOException e) {
+			LOG.error(e.toString(), e);
+		} finally {
+			Closeables.closeQuietly(writer);
+		}
+	}
+
 	/**
 	 * Copy css.
 	 *
@@ -163,7 +225,8 @@ public class HtmlExportX01Service extends
 	private void copyCss(File folder) {
 		// Copy CSS
 		try {
-			URL res = this.getClass().getClassLoader().getResource("opendarts.css");
+			URL res = this.getClass().getClassLoader()
+					.getResource("opendarts.css");
 			File file = new File(folder, "opendarts.css");
 			Files.copy(Resources.newInputStreamSupplier(res), file);
 		} catch (IOException e) {
@@ -190,7 +253,6 @@ public class HtmlExportX01Service extends
 			LOG.error("Error during Export session", e);
 		}
 	}
-
 
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeSet(java.io.Writer, org.opendarts.ui.export.model.Set, org.opendarts.ui.export.service.impl.BasicExportOption)

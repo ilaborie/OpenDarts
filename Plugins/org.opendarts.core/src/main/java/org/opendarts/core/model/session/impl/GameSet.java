@@ -112,7 +112,9 @@ public class GameSet extends GameContainer<IGame> implements ISet {
 		StringBuffer result = new StringBuffer("Set: ");
 		boolean isFirst = true;
 		for (IPlayer player : this.gameDefinition.getPlayers()) {
-			if (isFirst) {
+			if (!isFirst) {
+				isFirst = false;
+			} else {
 				result.append(", ");
 			}
 			result.append(player);

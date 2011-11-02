@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -157,6 +158,8 @@ public class ExportDialog extends TitleAreaDialog implements
 
 		// Main composite
 		this.main = new Composite(root, SWT.NONE);
+		this.main.setBackground(Display.getDefault()
+				.getSystemColor(SWT.COLOR_YELLOW)); // TODO remove after debug
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(2)
 				.applyTo(this.main);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.main);
@@ -224,7 +227,9 @@ public class ExportDialog extends TitleAreaDialog implements
 		});
 
 		// Body
-		this.body = new Composite(this.main, SWT.NONE);
+		this.body = new Composite(root, SWT.NONE);
+		this.body.setBackground(Display.getDefault()
+				.getSystemColor(SWT.COLOR_GREEN)); // TODO remove after debug
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.body);
 		GridLayoutFactory.fillDefaults().applyTo(this.body);
 		return root;

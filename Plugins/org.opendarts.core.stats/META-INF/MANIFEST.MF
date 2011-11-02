@@ -10,6 +10,7 @@ Import-Package: com.google.common.base;version="10.0.0",
  org.opendarts.core.model.game,
  org.opendarts.core.model.player,
  org.opendarts.core.model.session,
+ org.opendarts.core.utils,
  org.slf4j;version="1.6.1"
 Export-Package: org.opendarts.core.stats.model,
  org.opendarts.core.stats.model.comparator,

@@ -7,6 +7,15 @@
 </head>
 <body>
 	<h1>${session.name}</h1>
+	<div class="nav">
+		<a href="#status">Status</a>
+		<a href="#stats">Statistics</a>
+		<#if option.exportChart>
+		<a href="#charts">Charts</a>
+		</#if>
+		<a href="#detail">Detail</a>
+	</div>
+	
 	<ol>
 		<#list session.sets as set>
 		<li><a href="./${set.rootName?url}/${set.fileName?url}.html">${set.name}</a></li>

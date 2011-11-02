@@ -2,11 +2,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>${game.name}</title>
+	<title>${game.name?html}</title>
 	<link rel="stylesheet" href="opendarts.css" type="text/css">
 </head>
 <body>
-	<h1>${game.name}</h1>
+	<h1>${game.name?html}</h1>
+	<a class="parent" href="../${game.parent.fileName?url}.html">${game.parent.name}</a>
+	
+	<div class="nav">
+		<a href="#status">Status</a>
+		<a href="#stats">Statistics</a>
+		<#if option.exportChart>
+		<a href="#charts">Charts</a>
+		</#if>
+		<a href="#detail">Detail</a>
+	</div>
 	
 	<h2><a name="status"/>Status</h2>
 	<div id="status">

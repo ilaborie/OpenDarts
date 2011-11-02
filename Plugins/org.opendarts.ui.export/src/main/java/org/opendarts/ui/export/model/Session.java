@@ -116,7 +116,7 @@ public class Session extends AbstractBean<ISession> {
 	 * @return the start
 	 */
 	public String getStart() {
-		return this.getDateFormat().format(session.getStart().getTime());
+		return this.getFormatters().getDatetimeFormat().format(this.session.getStart().getTime());
 	}
 
 	/**
@@ -125,8 +125,8 @@ public class Session extends AbstractBean<ISession> {
 	 * @return the end
 	 */
 	public String getEnd() {
-		if (session.getEnd() != null) {
-			return this.getDateFormat().format(session.getEnd().getTime());
+		if (this.session.getEnd() != null) {
+			return this.getFormatters().getDatetimeFormat().format(this.session.getEnd().getTime());
 		}
 		return null;
 	}

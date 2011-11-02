@@ -222,7 +222,7 @@ public class ElementStats<E> implements IElementStats<E> {
 		 */
 		@Override
 		public boolean isVisible() {
-			return true;
+			return !(this.key.endsWith(".hist"));
 		}
 
 		/*

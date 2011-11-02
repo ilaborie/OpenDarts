@@ -42,7 +42,7 @@ public class SetDefi extends Set {
 	* @return the starting score
 	*/
 	public String getStartingScore() {
-		return this.getNumberFormat().format(
+		return this.getFormatters().getNumberFormat().format(
 				this.gameDefinition.getStartScore());
 	}
 
@@ -52,7 +52,7 @@ public class SetDefi extends Set {
 	 * @return the nb game to win
 	 */
 	public String getNbGameToWin() {
-		return this.getNumberFormat().format(
+		return this.getFormatters().getNumberFormat().format(
 				this.gameDefinition.getNbGameToWin());
 	}
 
