@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -22,7 +23,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -83,6 +84,9 @@ public class ExportDialog extends TitleAreaDialog implements
 	/** The txt file. */
 	private Text txtFile;
 
+	/** The last file. */
+	private static String lastFile;
+
 	/** The btn file. */
 	private Button btnFile;
 
@@ -139,6 +143,18 @@ public class ExportDialog extends TitleAreaDialog implements
 	@Override
 	protected Control createContents(Composite parent) {
 		Control control = super.createContents(parent);
+
+		// Initial value
+		if (lastFile != null) {
+			this.txtFile.setText(lastFile);
+		}
+		List<ISession> sessions = this.sessionService.getAllSessions();
+		this.sessionViewer.setInput(sessions);
+		if (sessions != null && !sessions.isEmpty()) {
+			ISession ses = sessions.get(0);
+			this.sessionViewer.setSelection(new StructuredSelection(ses));
+		}
+
 		this.getShell().pack();
 		return control;
 	}
@@ -146,26 +162,19 @@ public class ExportDialog extends TitleAreaDialog implements
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.TitleAreaDialog#createDialogArea(org.eclipse.swt.widgets.Composite)
 	 */
-	/**
-	 * Creates the dialog area.
-	 *
-	 * @param parent the parent
-	 * @return the control
-	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite root = (Composite) super.createDialogArea(parent);
 
 		// Main composite
 		this.main = new Composite(root, SWT.NONE);
-		this.main.setBackground(Display.getDefault()
-				.getSystemColor(SWT.COLOR_YELLOW)); // TODO remove after debug
 		GridLayoutFactory.fillDefaults().margins(5, 5).numColumns(2)
 				.applyTo(this.main);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.main);
 
 		// Left composite
-		Composite cmpBasic = new Composite(this.main, SWT.NONE);
+		Group cmpBasic = new Group(this.main, SWT.NONE);
+		cmpBasic.setText("Export");
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(cmpBasic);
 		GridLayoutFactory.fillDefaults().margins(2, 2).numColumns(3)
 				.applyTo(cmpBasic);
@@ -177,7 +186,7 @@ public class ExportDialog extends TitleAreaDialog implements
 				.applyTo(table);
 		this.sessionViewer.setLabelProvider(new OpenDartsLabelProvider());
 		this.sessionViewer.setContentProvider(new ArrayContentProvider());
-		this.sessionViewer.setInput(this.sessionService.getAllSessions());
+
 		this.sessionViewer.addSelectionChangedListener(this);
 
 		// Combo for Exporter
@@ -227,9 +236,7 @@ public class ExportDialog extends TitleAreaDialog implements
 		});
 
 		// Body
-		this.body = new Composite(root, SWT.NONE);
-		this.body.setBackground(Display.getDefault()
-				.getSystemColor(SWT.COLOR_GREEN)); // TODO remove after debug
+		this.body = new Composite(this.main, SWT.NONE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(this.body);
 		GridLayoutFactory.fillDefaults().applyTo(this.body);
 		return root;
@@ -250,6 +257,7 @@ public class ExportDialog extends TitleAreaDialog implements
 			if (this.exportOptionsComposite != null) {
 				this.options = this.exportOptionsComposite.getExportOptions();
 			}
+			lastFile = this.txtFile.getText();
 			super.okPressed();
 		}
 	}
@@ -274,6 +282,11 @@ public class ExportDialog extends TitleAreaDialog implements
 				this.cbExporterAvailable.setInput(exporters);
 				this.cbExporterAvailable.getControl().setEnabled(
 						!exporters.isEmpty());
+				if (exporters != null && !exporters.isEmpty()) {
+					IExportUiService<?> exp = exporters.get(0);
+					this.cbExporterAvailable
+							.setSelection(new StructuredSelection(exp));
+				}
 			} else if (this.cbExporterAvailable.equals(event.getSource())) {
 				IExportUiService service = (IExportUiService) sel
 						.getFirstElement();
@@ -282,7 +295,7 @@ public class ExportDialog extends TitleAreaDialog implements
 					this.body.dispose();
 
 					this.body = new Composite(this.main, SWT.NONE);
-					GridDataFactory.fillDefaults().span(2, 1).grab(true, true)
+					GridDataFactory.fillDefaults().grab(true, true)
 							.applyTo(this.body);
 					GridLayoutFactory.fillDefaults().applyTo(this.body);
 
@@ -292,7 +305,9 @@ public class ExportDialog extends TitleAreaDialog implements
 								.createExportOptionsComposite(body);
 						GridDataFactory.fillDefaults().grab(true, true)
 								.applyTo(this.exportOptionsComposite);
+						this.main.layout(true, true);
 						this.getShell().pack(true);
+						this.main.layout(true, true);
 						this.exportOptionsComposite.setFocus();
 					}
 				}

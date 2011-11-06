@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.stats.model.IElementStats.IEntry;
-import org.opendarts.core.stats.model.func.PlayerEntryValueFunction;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.stats.service.IStatsUiProvider;
@@ -13,32 +12,35 @@ import org.opendarts.ui.stats.service.IStatsUiService;
 
 /**
  * The Class StatsEntry.
+ *
+ * @param <E> the element type
  */
 public class StatsEntry<E> {
-	
+
 	/** The stats ui provider. */
 	private static IStatsUiProvider statsUiProvider;
 
 	/** The player entry value. */
 	private final PlayerEntryValueFunction playerEntryValue;
-	
+
 	/** The entry. */
 	private final IEntry<?> entry;
-	
+
 	/** The parent. */
 	private final Stats<E> parent;
-	
+
 	/** The stats service. */
 	private final IStatsService statsService;
 
 	/** The values. */
-	private List<Object> values = null;
-	
+	private List<StatsValue> values = null;
+
 	/** The label. */
 	private String label = null;
-	
+
 	static {
-		statsUiProvider = OpenDartsStatsUiPlugin.getService(IStatsUiProvider.class);
+		statsUiProvider = OpenDartsStatsUiPlugin
+				.getService(IStatsUiProvider.class);
 	}
 
 	/**
@@ -80,9 +82,9 @@ public class StatsEntry<E> {
 	 *
 	 * @return the players values
 	 */
-	public List<Object> getPlayersValues() {
+	public List<StatsValue> getPlayersValues() {
 		if (this.values == null) {
-			this.values = new ArrayList<Object>();
+			this.values = new ArrayList<StatsValue>();
 			for (IPlayer p : this.parent.getPlayers()) {
 				this.values.add(this.playerEntryValue.apply(p));
 			}

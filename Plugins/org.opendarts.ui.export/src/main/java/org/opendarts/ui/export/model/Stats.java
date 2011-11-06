@@ -6,7 +6,6 @@ import java.util.List;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IElementStats.IEntry;
-import org.opendarts.core.stats.model.func.PlayerEntryValueFunction;
 import org.opendarts.core.stats.service.IStatsService;
 
 /**

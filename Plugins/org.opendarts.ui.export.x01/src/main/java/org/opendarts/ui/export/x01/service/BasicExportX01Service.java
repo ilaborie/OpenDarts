@@ -21,6 +21,7 @@ import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.model.GameX01;
 import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.ui.export.composite.AbstractExportOptionComposite;
+import org.opendarts.ui.export.composite.BasicExportOptionComposite;
 import org.opendarts.ui.export.model.Game;
 import org.opendarts.ui.export.model.Session;
 import org.opendarts.ui.export.model.Set;
@@ -81,12 +82,7 @@ public class BasicExportX01Service extends
 	@Override
 	public AbstractExportOptionComposite<BasicExportOption> createExportOptionsComposite(
 			Composite parent) {
-		return new AbstractExportOptionComposite<BasicExportOption>(parent) {
-			@Override
-			public BasicExportOption getExportOptions() {
-				return new BasicExportOption();
-			}
-		};
+		return new BasicExportOptionComposite(parent);
 	}
 
 	/* (non-Javadoc)

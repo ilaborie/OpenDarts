@@ -66,7 +66,11 @@
 								<th>${e.label}</th>
 								<#list e.playersValues as v>
 								<#if v??>
+									<#if v.best>
+								<td class="best">${v}</td>
+									<#else>
 								<td>${v}</td>
+									</#if>
 								<#else>
 								<td></td>
 								</#if>

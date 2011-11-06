@@ -22,6 +22,7 @@ import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.defi.model.GameX01Defi;
 import org.opendarts.ui.export.composite.AbstractExportOptionComposite;
+import org.opendarts.ui.export.composite.BasicExportOptionComposite;
 import org.opendarts.ui.export.model.Game;
 import org.opendarts.ui.export.model.Session;
 import org.opendarts.ui.export.model.Set;
@@ -30,8 +31,8 @@ import org.opendarts.ui.export.service.impl.AbstractExportX01Service;
 import org.opendarts.ui.export.service.impl.BasicExportOption;
 import org.opendarts.ui.export.service.impl.EscapeCsvFuntion;
 import org.opendarts.ui.export.x01.defi.model.GameDefi;
-import org.opendarts.ui.export.x01.defi.model.GameEntry;
 import org.opendarts.ui.export.x01.defi.model.SessionDefi;
+import org.opendarts.ui.export.x01.model.GameEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,12 +83,7 @@ public class HtmlExportX01Service extends
 	@Override
 	public AbstractExportOptionComposite<BasicExportOption> createExportOptionsComposite(
 			Composite parent) {
-		return new AbstractExportOptionComposite<BasicExportOption>(parent) {
-			@Override
-			public BasicExportOption getExportOptions() {
-				return new BasicExportOption();
-			}
-		};
+		return new BasicExportOptionComposite(parent);
 	}
 
 	/* (non-Javadoc)

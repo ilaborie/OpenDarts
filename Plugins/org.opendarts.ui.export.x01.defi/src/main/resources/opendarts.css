@@ -150,12 +150,21 @@ table tbody tr:hover td {
 	color: #000;
 }
 
-table tbody td.best {
+table tbody td.best, table tbody tr:hover td.best  {
 	color: #313Ad0;
 	font-weight: bold;
 }
-table tbody tr:hover td.best {
-	color: #1f268b;
+
+table tbody td._180, table tbody tr:hover td._180 {
+	color: #800040;
+}
+
+table tbody td._100, table tbody tr:hover td._100 {
+	color: #0000ff;
+}
+
+table tbody td._60, table tbody tr:hover td._60 {
+	color: #008040;
 }
 /* Navigation block */
 div.nav {

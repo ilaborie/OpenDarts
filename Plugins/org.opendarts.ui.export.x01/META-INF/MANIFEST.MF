@@ -42,4 +42,5 @@ Import-Package: com.google.common.base;version="10.0.0",
  org.opendarts.ui.stats.model,
  org.opendarts.ui.stats.service,
  org.slf4j;version="1.6.1"
-Export-Package: org.opendarts.ui.export.x01.service
+Export-Package: org.opendarts.ui.export.x01.model,
+ org.opendarts.ui.export.x01.service

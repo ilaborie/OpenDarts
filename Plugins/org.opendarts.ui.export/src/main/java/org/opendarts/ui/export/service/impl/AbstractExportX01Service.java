@@ -3,7 +3,11 @@
  */
 package org.opendarts.ui.export.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -11,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.swt.graphics.Image;
 import org.jfree.chart.ChartUtilities;
@@ -39,6 +45,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
+import com.google.common.io.InputSupplier;
+import com.google.common.io.OutputSupplier;
 
 /**
  * The Class BasicExportX01Service.
@@ -51,6 +59,9 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 	/** The logger. */
 	private static final Logger LOG = LoggerFactory
 			.getLogger(AbstractExportX01Service.class);
+
+	/** The Constant BUFFER. */
+	private static final int BUFFER = 2048;
 
 	/** The stats ui provider. */
 	private final AtomicReference<IStatsUiProvider> statsUiProvider;
@@ -107,6 +118,68 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 		// Write set detail
 		for (Set set : session.getSets()) {
 			this.export(set, sessionFile, option);
+		}
+
+		if (option.isZip()) {
+			File zipFile = new File(file, session.getRootName() + ".zip");
+			this.zip(zipFile, sessionFile);
+		}
+	}
+
+	/**
+	 * Zip.
+	 *
+	 * @param zipFile the zip file
+	 * @param sessionFile the session file
+	 */
+	private void zip(File zipFile, File sessionFile) {
+		ZipOutputStream out = null;
+		try {
+			OutputSupplier<FileOutputStream> dest = Files
+					.newOutputStreamSupplier(zipFile);
+			out = new ZipOutputStream(new BufferedOutputStream(
+					dest.getOutput()));
+			//out.setMethod(ZipOutputStream.DEFLATED);
+			byte data[] = new byte[BUFFER];
+			this.addFile("", sessionFile, out, data);
+			out.close();
+			
+			sessionFile.delete();
+		} catch (Exception e) {
+			LOG.error("Could not create the zip file",e);
+		} finally {
+			Closeables.closeQuietly(out);
+		}
+	}
+
+	/**
+	 * Adds the file.
+	 *
+	 * @param sessionFile the session file
+	 * @param out the out
+	 * @param data the data
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	private void addFile(String root, File folder, ZipOutputStream out,
+			byte[] data) throws IOException {
+		BufferedInputStream origin;
+		InputSupplier<FileInputStream> fi;
+		// get a list of files from current directory
+		for (File f : folder.listFiles()) {
+			if (f.isDirectory()) {
+				this.addFile(root + "/" + f.getName(), f, out, data);
+				continue;
+			}
+			LOG.debug("[Zip] Adding: " + f);
+			fi = Files.newInputStreamSupplier(f);
+			origin = new BufferedInputStream(fi.getInput(), BUFFER);
+			ZipEntry entry = new ZipEntry(root + "/" + f.getName());
+			out.putNextEntry(entry);
+			int count;
+			while ((count = origin.read(data, 0, BUFFER)) != -1) {
+				out.write(data, 0, count);
+			}
+			origin.close();
 		}
 	}
 

@@ -14,12 +14,13 @@ import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.defi.model.GameX01Defi;
 import org.opendarts.core.x01.defi.model.GameX01DefiDefinition;
 import org.opendarts.core.x01.model.GameX01Entry;
-import org.opendarts.ui.export.model.Game;
+import org.opendarts.ui.export.x01.model.GameEntry;
+import org.opendarts.ui.export.x01.model.GameX01;
 
 /**
  * The Class GameX01.
  */
-public class GameDefi extends Game {
+public class GameDefi extends GameX01 {
 
 	/** The game definition. */
 	private GameX01DefiDefinition gameDefinition;

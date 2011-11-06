@@ -1,13 +1,18 @@
 package org.opendarts.ui.export.x01.defi.service;
 
+
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.opendarts.core.model.game.IGame;
+import org.opendarts.core.model.game.IGameEntry;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.player.func.PlayerToStringFunction;
 import org.opendarts.core.model.session.ISession;
@@ -20,22 +25,38 @@ import org.opendarts.core.x01.defi.OpenDartsX01DefiBundle;
 import org.opendarts.core.x01.defi.model.GameX01Defi;
 import org.opendarts.core.x01.defi.model.GameX01DefiDefinition;
 import org.opendarts.core.x01.defi.service.StatsX01DefiService;
+import org.opendarts.core.x01.model.GameX01Entry;
 import org.opendarts.ui.export.model.Game;
 import org.opendarts.ui.export.model.Session;
 import org.opendarts.ui.export.model.Set;
 import org.opendarts.ui.export.service.impl.BasicExportOption;
+import org.opendarts.ui.export.service.impl.EscapeCsvFuntion;
 import org.opendarts.ui.export.x01.defi.model.GameDefi;
 import org.opendarts.ui.export.x01.defi.model.SessionDefi;
 import org.opendarts.ui.export.x01.defi.model.SetDefi;
+import org.opendarts.ui.export.x01.model.GameEntry;
 import org.opendarts.ui.export.x01.service.BasicExportX01Service;
+import org.opendarts.ui.export.x01.service.PlayerGameEntryScoreFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.io.Closeables;
+import com.google.common.io.Files;
 
 /**
  * The Class BasicExportX01Defi.
  */
 public class BasicExportX01Defi extends BasicExportX01Service {
 
+	/** The logger. */
+	private static final Logger LOG = LoggerFactory
+			.getLogger(BasicExportX01Defi.class);
+	
+	
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.export.x01.service.BasicExportX01Service#isApplicable(org.opendarts.core.model.game.IGame)
 	 */
@@ -82,6 +103,108 @@ public class BasicExportX01Defi extends BasicExportX01Service {
 			writer.write('\n');
 		}
 		writer.write('\n');
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeGameDetail(java.io.File, org.opendarts.core.model.game.IGame, org.opendarts.core.export.IExportOptions)
+	 */
+	@Override
+	protected void writeGameDetail(File gameDetailFile, Game game,
+			BasicExportOption option) {
+		super.writeGameDetail(gameDetailFile, game, option);
+
+		// Game entries
+		this.exportGameEntries(
+				(GameDefi) game,
+				gameDetailFile.getParentFile(), option);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opendarts.ui.export.service.impl.AbstractExportX01Service#writeGameDetail(java.io.Writer, org.opendarts.ui.export.model.Game, org.opendarts.ui.export.service.impl.BasicExportOption)
+	 */
+	@Override
+	protected void writeGameDetail(Writer writer, Game game,
+			BasicExportOption option) throws IOException {
+		// Detail
+		String detailTitle = "Detail";
+		writer.write(detailTitle);
+		writer.write('\n');
+		writer.write(Strings.repeat("-", detailTitle.length()));
+		writer.write('\n');
+		writer.write('\n');
+
+		Joiner joiner = Joiner.on('\t');
+
+		List<IPlayer> players = game.getPlayerList();
+
+		// Header
+		List<String> headers = new ArrayList<String>();
+		headers.add("   ");
+		headers.addAll(Lists.transform(players, new PlayerToStringFunction()));
+		joiner.appendTo(writer, headers);
+		writer.write('\n');
+
+		// Entries
+		PlayerGameEntryScoreFunction entryScoreFunction;
+		GameX01Entry entry;
+		List<Object> lst;
+		for (IGameEntry e : game.getElement().getGameEntries()) {
+			entry = (GameX01Entry) e;
+			entryScoreFunction = new PlayerGameEntryScoreFunction(entry);
+			lst = new ArrayList<Object>();
+			lst.add("#" + entry.getRound());
+			lst.addAll(Lists.transform(players, entryScoreFunction));
+
+			joiner.appendTo(writer, lst);
+			writer.write('\n');
+		}
+	}
+
+	/**
+	 * Export game entries.
+	 *
+	 * @param game the game
+	 * @param gameFile the game file
+	 * @param option 
+	 */
+	protected void exportGameEntries(GameDefi game, File gameFile,
+			BasicExportOption option) {
+		File entriesFile = new File(gameFile, game.getFileName()
+				+ "-throws.csv");
+		Writer writer = null;
+
+		List<IPlayer> players = game.getPlayerList();
+		Joiner joiner = Joiner.on(option.getCsvSeparator()).useForNull("-");
+		EscapeCsvFuntion escapeCsv = new EscapeCsvFuntion();
+
+		try {
+			writer = Files.newWriter(entriesFile, Charsets.UTF_8);
+			new FileWriter(entriesFile);
+
+			// Header
+			List<String> headers = new ArrayList<String>();
+			headers.add("");
+			headers.addAll(Lists.transform(players,
+					new PlayerToStringFunction()));
+			headers = Lists.transform(headers, escapeCsv);
+			joiner.appendTo(writer, headers);
+			writer.write('\n');
+
+			// Entries
+			List<Object> lst;
+			for (GameEntry e : game.getEntries()) {
+				lst = new ArrayList<Object>();
+				lst.add(e.getLabel());
+				lst.addAll(e.getScores());
+
+				joiner.appendTo(writer, lst);
+				writer.write('\n');
+			}
+		} catch (IOException e) {
+			LOG.error(e.toString(), e);
+		} finally {
+			Closeables.closeQuietly(writer);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -137,7 +260,7 @@ public class BasicExportX01Defi extends BasicExportX01Service {
 				writer.write(this.createDefiStats(gameX01Defi, player,
 						statsService));
 				writer.write('\n');
-				
+
 			}
 		}
 		writer.write('\n');

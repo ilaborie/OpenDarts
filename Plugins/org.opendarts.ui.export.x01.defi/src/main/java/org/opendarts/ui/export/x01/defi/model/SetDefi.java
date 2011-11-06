@@ -11,12 +11,12 @@ import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.core.x01.defi.model.GameX01DefiDefinition;
 import org.opendarts.ui.export.model.Game;
 import org.opendarts.ui.export.model.Session;
-import org.opendarts.ui.export.model.Set;
+import org.opendarts.ui.export.x01.model.SetX01;
 
 /**
  * The Class SetX01.
  */
-public class SetDefi extends Set {
+public class SetDefi extends SetX01 {
 
 	/** The games. */
 	private List<Game> games;

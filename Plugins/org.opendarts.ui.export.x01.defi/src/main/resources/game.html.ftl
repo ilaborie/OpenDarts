@@ -68,7 +68,11 @@
 								<th>${e.label}</th>
 								<#list e.playersValues as v>
 								<#if v??>
+									<#if v.best>
+								<td class="best">${v}</td>
+									<#else>
 								<td>${v}</td>
+									</#if>
 								<#else>
 								<td></td>
 								</#if>
@@ -148,7 +152,17 @@
 							<tr>
 								<th>${e.label}</th>
 								<#list e.scores as s>
+									<#if (s == 180)>
+								<td class="_180">${s}</td>
+									<#elseif (s >= 100)>
+								<td class="_100">${s}</td>
+									<#elseif (s >= 60)>
+								<td class="_60">${s}</td>
+									<#elseif (s == -1)>
+								<td>-</td>
+									<#else>
 								<td>${s}</td>
+									</#if>
 								</#list>
 							</tr>
 							</#list>

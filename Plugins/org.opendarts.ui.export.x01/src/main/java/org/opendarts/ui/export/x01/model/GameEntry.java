@@ -19,7 +19,7 @@ public class GameEntry {
 	private final GameX01 game;
 
 	/** The scores. */
-	private List<String> scores = null;
+	private List<Integer> scores = null;
 
 	/**
 	 * Instantiates a new game entry.
@@ -47,15 +47,15 @@ public class GameEntry {
 	 *
 	 * @return the scores
 	 */
-	public List<String> getScores() {
+	public List<Integer> getScores() {
 		if (this.scores == null) {
-			this.scores = new ArrayList<String>();
+			this.scores = new ArrayList<Integer>();
 			for (IPlayer p : this.game.getPlayerList()) {
 				ThreeDartsThrow dartsThrow = this.entry.getPlayerThrow().get(p);
 				if (dartsThrow == null) {
-					this.scores.add("-");
+					this.scores.add(-1);
 				} else {
-					this.scores.add(String.valueOf(dartsThrow.getScore()));
+					this.scores.add(dartsThrow.getScore());
 				}
 			}
 		}
