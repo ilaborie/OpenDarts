@@ -1,7 +1,6 @@
 package org.opendarts.core.x01.defi.model;
 
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
 import org.opendarts.core.model.game.impl.GameDefinition;
@@ -49,7 +48,7 @@ public class GameX01DefiDefinition extends GameDefinition {
 	 */
 	@Override
 	public String toString() {
-		return NumberFormat.getIntegerInstance().format(this.getStartScore());
+		return FormaterUtils.getFormatters().getNumberFormat().format(this.getStartScore());
 	}
 
 	/**

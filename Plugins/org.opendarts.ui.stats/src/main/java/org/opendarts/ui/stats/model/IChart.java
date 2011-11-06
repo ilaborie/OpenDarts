@@ -7,7 +7,6 @@ import org.opendarts.ui.stats.service.IStatsUiService;
  * The Interface IChart.
  */
 public interface IChart {
-			
 	
 	/**
 	 * Gets the name.

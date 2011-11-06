@@ -404,7 +404,8 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 	 * @param option the option
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	protected void writeGame(Writer writer, Game game, O option) throws IOException {
+	protected void writeGame(Writer writer, Game game, O option)
+			throws IOException {
 		// Title
 		String title = game.toString();
 		writer.write(title);
@@ -638,7 +639,8 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 		JFreeChart jfChart = chart.getChart();
 		try {
 			ChartUtilities.saveChartAsPNG(chartFile, jfChart,
-					option.getChartImageWidth(), option.getChartImageHeight());
+					option.getChartImageWidth(), option.getChartImageHeight(),
+					null, true, 9);
 		} catch (IOException e) {
 			LOG.error("Could not export the chart {}", chart.getName());
 		}
