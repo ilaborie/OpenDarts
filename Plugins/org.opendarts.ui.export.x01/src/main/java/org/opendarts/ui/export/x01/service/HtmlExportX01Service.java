@@ -30,6 +30,7 @@ import org.opendarts.ui.export.service.IExportUiService;
 import org.opendarts.ui.export.service.impl.AbstractExportX01Service;
 import org.opendarts.ui.export.service.impl.BasicExportOption;
 import org.opendarts.ui.export.service.impl.EscapeCsvFuntion;
+import org.opendarts.ui.export.service.impl.ScoreToString;
 import org.opendarts.ui.export.x01.model.GameEntry;
 import org.opendarts.ui.export.x01.model.SessionX01;
 import org.slf4j.Logger;
@@ -204,10 +205,11 @@ public class HtmlExportX01Service extends
 
 			// Entries
 			List<Object> lst;
+			ScoreToString function = new ScoreToString(); 
 			for (GameEntry e : game.getEntries()) {
 				lst = new ArrayList<Object>();
 				lst.add(e.getLabel());
-				lst.addAll(e.getScores());
+				lst.addAll(Lists.transform(e.getScores(), function));
 
 				joiner.appendTo(writer, lst);
 				writer.write('\n');

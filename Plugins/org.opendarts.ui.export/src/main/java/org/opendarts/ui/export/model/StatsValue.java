@@ -1,13 +1,16 @@
 package org.opendarts.ui.export.model;
 
+import org.opendarts.core.stats.model.IStatValue;
+
 /**
  * The Class StatsEntry.
  *
  */
+@SuppressWarnings("rawtypes")
 public class StatsValue {
 
 	/** The value. */
-	private final Object value;
+	private final IStatValue value;
 
 	/** The best. */
 	private final boolean best;
@@ -18,7 +21,7 @@ public class StatsValue {
 	 * @param value the value
 	 * @param best the best
 	 */
-	public StatsValue(Object value, boolean best) {
+	public StatsValue(IStatValue value, boolean best) {
 		super();
 		this.value = value;
 		this.best = best;
@@ -37,7 +40,7 @@ public class StatsValue {
 	 *
 	 * @return the value
 	 */
-	public Object getValue() {
+	public IStatValue getValue() {
 		return this.value;
 	}
 

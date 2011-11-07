@@ -39,7 +39,7 @@ public class PlayerEntryValueFunction implements Function<IPlayer, StatsValue> {
 			IStatValue value = entry.getValue();
 			if (value != null) {
 				best = this.equalsValue(bestValue, value);
-				result = new StatsValue(value.getValue(), best);
+				result = new StatsValue(value, best);
 			}
 		}
 		return result;
