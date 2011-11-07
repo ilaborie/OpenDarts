@@ -132,7 +132,7 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 	 * @param zipFile the zip file
 	 * @param sessionFile the session file
 	 */
-	private void zip(File zipFile, File sessionFile) {
+	protected void zip(File zipFile, File sessionFile) {
 		ZipOutputStream out = null;
 		try {
 			OutputSupplier<FileOutputStream> dest = Files
@@ -687,7 +687,7 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 	 * @param rootFolder the root folder
 	 * @param option the option
 	 */
-	private void exportChartAsJpeg(IChart chart, File rootFolder,
+	protected File exportChartAsJpeg(IChart chart, File rootFolder,
 			BasicExportOption option) {
 		File chartFile = new File(rootFolder, chart.getName() + ".jpg");
 		JFreeChart jfChart = chart.getChart();
@@ -697,6 +697,7 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 		} catch (IOException e) {
 			LOG.error("Could not export the chart {}", chart.getName());
 		}
+		return chartFile;
 	}
 
 	/**
@@ -706,7 +707,7 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 	 * @param rootFolder the root folder
 	 * @param option the option
 	 */
-	private void exportChartAsPng(IChart chart, File rootFolder,
+	protected File exportChartAsPng(IChart chart, File rootFolder,
 			BasicExportOption option) {
 		File chartFile = new File(rootFolder, chart.getName() + ".png");
 		JFreeChart jfChart = chart.getChart();
@@ -717,6 +718,7 @@ public abstract class AbstractExportX01Service<O extends BasicExportOption>
 		} catch (IOException e) {
 			LOG.error("Could not export the chart {}", chart.getName());
 		}
+		return chartFile; 
 	}
 
 	/* (non-Javadoc)

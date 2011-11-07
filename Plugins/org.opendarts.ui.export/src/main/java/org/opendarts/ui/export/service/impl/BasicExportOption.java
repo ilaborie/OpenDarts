@@ -147,7 +147,7 @@ public class BasicExportOption implements IExportOptions {
 	 *
 	 * @return the chart image width
 	 */
-	protected int getChartImageWidth() {
+	public int getChartImageWidth() {
 		return this.chartImageWidth;
 	}
 
@@ -156,7 +156,7 @@ public class BasicExportOption implements IExportOptions {
 	 *
 	 * @param chartImageWidth the new chart image width
 	 */
-	protected void setChartImageWidth(int chartImageWidth) {
+	public void setChartImageWidth(int chartImageWidth) {
 		this.chartImageWidth = chartImageWidth;
 	}
 
@@ -165,7 +165,7 @@ public class BasicExportOption implements IExportOptions {
 	 *
 	 * @return the chart image height
 	 */
-	protected int getChartImageHeight() {
+	public int getChartImageHeight() {
 		return this.chartImageHeight;
 	}
 
@@ -174,7 +174,7 @@ public class BasicExportOption implements IExportOptions {
 	 *
 	 * @param chartImageHeight the new chart image height
 	 */
-	protected void setChartImageHeight(int chartImageHeight) {
+	public void setChartImageHeight(int chartImageHeight) {
 		this.chartImageHeight = chartImageHeight;
 	}
 

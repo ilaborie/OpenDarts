@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenDarts x01 PDF exporter
+Bundle-SymbolicName: org.opendarts.ui.export.pdf.x01;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Igor Laborie <ilaborie@gmail.com>
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.itextpdf.text,
+ com.itextpdf.text.pdf,
+ org.opendarts.core.export,
+ org.opendarts.core.model.dart,
+ org.opendarts.core.model.dart.impl,
+ org.opendarts.core.model.game,
+ org.opendarts.core.model.game.func,
+ org.opendarts.core.model.game.impl,
+ org.opendarts.core.model.player,
+ org.opendarts.core.model.player.func,
+ org.opendarts.core.model.session,
+ org.opendarts.core.model.session.func,
+ org.opendarts.core.model.session.impl,
+ org.opendarts.core.stats.service,
+ org.opendarts.core.x01.model,
+ org.opendarts.ui.export.composite,
+ org.opendarts.ui.export.model,
+ org.opendarts.ui.export.service,
+ org.opendarts.ui.export.service.impl,
+ org.opendarts.ui.export.x01.model,
+ org.opendarts.ui.service,
+ org.opendarts.ui.stats.model,
+ org.opendarts.ui.stats.service,
+ org.slf4j;version="1.6.1"
+Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)"
+Service-Component: OSGI-INF/PdfExportX01.xml
+Bundle-ActivationPolicy: lazy

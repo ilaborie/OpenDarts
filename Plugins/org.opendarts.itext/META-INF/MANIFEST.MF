@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: iText
+Bundle-SymbolicName: org.opendarts.itext
+Bundle-Version: 5.1.2.qualifier
+Bundle-Vendor: http://sourceforge.net/projects/itext/
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .,
+ lib/bcprov-ext-jdk16-146.jar,
+ lib/bctsp-jdk16-146.jar,
+ lib/bcmail-jdk16-146.jar
+Export-Package: com.itextpdf.text,
+ com.itextpdf.text.pdf
