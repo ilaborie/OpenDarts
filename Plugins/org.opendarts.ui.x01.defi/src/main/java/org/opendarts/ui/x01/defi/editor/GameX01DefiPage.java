@@ -845,11 +845,11 @@ public class GameX01DefiPage extends FormPage implements IFormPage,
 		} else {
 			this.txtForecast.setText("--:--:--");
 			if (duration > this.gameDefinition.getTimeTarget()) {
-				this.txtDuration.setForeground(this.toolkit.getColors()
-						.getColor(IGeneralPrefs.COLOR_BROKEN));
+				this.txtDuration.setForeground(Display.getDefault()
+						.getSystemColor(SWT.COLOR_DARK_RED));
 			} else {
-				this.txtDuration.setForeground(this.toolkit.getColors()
-						.getColor(IGeneralPrefs.COLOR_WINNING));
+				this.txtDuration.setForeground(Display.getDefault()
+						.getSystemColor(SWT.COLOR_DARK_GREEN));
 			}
 		}
 	}
