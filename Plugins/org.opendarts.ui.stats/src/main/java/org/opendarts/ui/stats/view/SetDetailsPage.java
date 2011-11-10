@@ -24,12 +24,16 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.opendarts.core.model.session.ISet;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IElementStats.IEntry;
+import org.opendarts.core.stats.model.func.VisiblePredicate;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.comp.SetDetailComposite;
 import org.opendarts.ui.utils.listener.GrabColumnsListener;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 /**
  * The Class SessionDetailsPage.
@@ -57,7 +61,7 @@ public class SetDetailsPage extends DetailsPage<ISet> implements IDetailsPage {
 		this.dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
 				DateFormat.MEDIUM);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.stats.view.DetailsPage#getElement()
 	 */
@@ -131,7 +135,7 @@ public class SetDetailsPage extends DetailsPage<ISet> implements IDetailsPage {
 		this.getToolkit().paintBordersFor(client);
 		section.setClient(client);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opendarts.ui.stats.view.DetailsPage#getStatsViewer()
 	 */
@@ -181,6 +185,7 @@ public class SetDetailsPage extends DetailsPage<ISet> implements IDetailsPage {
 			this.setDetailComposite.setInput(this.set);
 
 			// Stats
+			Predicate<IEntry<?>> visible = new VisiblePredicate();
 			List<IStatsService> stats = this.statsProvider
 					.getSetStats(this.set);
 			IElementStats<ISet> setStats;
@@ -189,7 +194,8 @@ public class SetDetailsPage extends DetailsPage<ISet> implements IDetailsPage {
 			for (IStatsService statsService : stats) {
 				setStats = statsService.getSetStats(this.set);
 				columns.addAll(this.getColumns(setStats));
-				entries.addAll(setStats.getStatsEntries());
+				entries.addAll(Collections2.filter(setStats.getStatsEntries(),
+						visible));
 			}
 
 			// Columns

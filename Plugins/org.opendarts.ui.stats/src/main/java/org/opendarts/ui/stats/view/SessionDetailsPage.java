@@ -25,12 +25,16 @@ import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.model.session.ISession;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IElementStats.IEntry;
+import org.opendarts.core.stats.model.func.VisiblePredicate;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.comp.SessionDetailComposite;
 import org.opendarts.ui.utils.listener.GrabColumnsListener;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 /**
  * The Class SessionDetailsPage.
@@ -189,6 +193,7 @@ public class SessionDetailsPage extends DetailsPage<ISession> implements
 			this.sessionDetailComposite.setInput(this.session);
 
 			// Stats
+			Predicate<IEntry<?>> visible = new VisiblePredicate();
 			List<IStatsService> stats = this.statsProvider
 					.getSessionStats(this.session);
 			IElementStats<ISession> sessionStats;
@@ -197,7 +202,8 @@ public class SessionDetailsPage extends DetailsPage<ISession> implements
 			for (IStatsService statsService : stats) {
 				sessionStats = statsService.getSessionStats(this.session);
 				columns.addAll(this.getColumns(sessionStats));
-				entries.addAll(sessionStats.getStatsEntries());
+				entries.addAll(Collections2.filter(sessionStats.getStatsEntries(),
+						visible));
 			}
 
 			// Columns

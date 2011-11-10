@@ -24,6 +24,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.opendarts.core.model.game.IGame;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.model.IElementStats.IEntry;
+import org.opendarts.core.stats.model.func.VisiblePredicate;
 import org.opendarts.core.stats.service.IStatsProvider;
 import org.opendarts.core.stats.service.IStatsService;
 import org.opendarts.ui.service.IGameUiProvider;
@@ -31,6 +32,9 @@ import org.opendarts.ui.service.IGameUiService;
 import org.opendarts.ui.stats.OpenDartsStatsUiPlugin;
 import org.opendarts.ui.utils.ColumnDescriptor;
 import org.opendarts.ui.utils.listener.GrabColumnsListener;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 /**
  * The Class SessionDetailsPage.
@@ -197,6 +201,7 @@ public class GameDetailsPage extends DetailsPage<IGame> implements IDetailsPage 
 			}
 
 			// Stats
+			Predicate<IEntry<?>> visible = new VisiblePredicate();
 			List<IStatsService> stats = this.statsProvider
 					.getGameStats(this.game);
 			IElementStats<IGame> gameStats;
@@ -205,7 +210,8 @@ public class GameDetailsPage extends DetailsPage<IGame> implements IDetailsPage 
 			for (IStatsService statsService : stats) {
 				gameStats = statsService.getGameStats(this.game);
 				columns.addAll(this.getColumns(gameStats));
-				entries.addAll(gameStats.getStatsEntries());
+				entries.addAll(Collections2.filter(gameStats.getStatsEntries(),
+						visible));
 			}
 
 			// Columns
