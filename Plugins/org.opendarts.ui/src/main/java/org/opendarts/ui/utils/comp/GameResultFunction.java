@@ -1,6 +1,7 @@
 package org.opendarts.ui.utils.comp;
 
 import org.opendarts.core.model.game.IGame;
+import org.opendarts.ui.service.IGameUiProvider;
 import org.opendarts.ui.service.IGameUiService;
 
 import com.google.common.base.Function;
@@ -11,11 +12,16 @@ import com.google.common.base.Function;
 public class GameResultFunction implements Function<IGame, String> {
 
 	/** The game ui provider. */
-	private final IGameUiService gameUiService;
+	private final IGameUiProvider gameUiProvider;
 
-	public GameResultFunction(IGameUiService gameUiService) {
+	/**
+	 * Instantiates a new game result function.
+	 *
+	 * @param gameUiProvider the game ui provider
+	 */
+	public GameResultFunction(IGameUiProvider gameUiProvider) {
 		super();
-		this.gameUiService = gameUiService;
+		this.gameUiProvider = gameUiProvider;
 	}
 
 	/* (non-Javadoc)
@@ -24,8 +30,10 @@ public class GameResultFunction implements Function<IGame, String> {
 	@Override
 	public String apply(IGame game) {
 		String result;
-		if (this.gameUiService != null) {
-			result = this.gameUiService.getGameResult(game);
+		IGameUiService gameUiService = gameUiProvider.getGameUiService(game
+				.getParentSet().getGameDefinition());
+		if (gameUiService != null) {
+			result = gameUiService.getGameResult(game);
 		} else {
 			result = "";
 		}

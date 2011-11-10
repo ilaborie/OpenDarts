@@ -11,14 +11,19 @@ import org.opendarts.ui.stats.service.IStatsUiProvider;
 
 /**
  * The Class AbstractBean.
+ *
+ * @param <E> the element type
  */
 public abstract class AbstractBean<E> {
 
-	private static IStatsUiProvider statsUiProvider;
+	/** The stats ui provider. */
+	private IStatsUiProvider statsUiProvider;
 
-	private static IGameUiProvider gameUiProvider;
+	/** The game ui provider. */
+	private IGameUiProvider gameUiProvider;
 
 	// Format
+	/** The formatters. */
 	private final FormaterUtils formatters;
 
 	// Functions
@@ -28,15 +33,10 @@ public abstract class AbstractBean<E> {
 	/** The element. */
 	private final E element;
 
-	static {
-		statsUiProvider = OpenDartsStatsUiPlugin
-				.getService(IStatsUiProvider.class);
-		gameUiProvider = OpenDartsStatsUiPlugin
-				.getService(IGameUiProvider.class);
-	}
-
 	/**
 	 * Instantiates a new abstract bean.
+	 *
+	 * @param element the element
 	 */
 	public AbstractBean(E element) {
 		super();
@@ -89,6 +89,11 @@ public abstract class AbstractBean<E> {
 		return this.element;
 	}
 
+	/**
+	 * Gets the root name.
+	 *
+	 * @return the root name
+	 */
 	public abstract String getRootName();
 
 	/**
@@ -104,7 +109,6 @@ public abstract class AbstractBean<E> {
 	 * @return the stats
 	 */
 	public abstract List<Stats<E>> getStats();
-
 
 	/**
 	 * Gets the formatters.
@@ -130,6 +134,10 @@ public abstract class AbstractBean<E> {
 	 * @return the stats ui provider
 	 */
 	public IStatsUiProvider getStatsUiProvider() {
+		if (statsUiProvider == null) {
+			statsUiProvider = OpenDartsStatsUiPlugin
+					.getService(IStatsUiProvider.class);
+		}
 		return statsUiProvider;
 	}
 
@@ -139,6 +147,10 @@ public abstract class AbstractBean<E> {
 	 * @return the game ui provider
 	 */
 	public IGameUiProvider getGameUiProvider() {
+		if (gameUiProvider == null) {
+			gameUiProvider = OpenDartsStatsUiPlugin
+					.getService(IGameUiProvider.class);
+		}
 		return gameUiProvider;
 	}
 

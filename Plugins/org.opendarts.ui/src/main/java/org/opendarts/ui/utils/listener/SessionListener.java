@@ -27,7 +27,7 @@ public class SessionListener implements ISessionListener {
 			.getLogger(SessionListener.class);
 
 	/** The game ui provider. */
-	private final IGameUiProvider gameUiProvider;
+	private IGameUiProvider gameUiProvider;
 
 	/**
 	 * Instantiates a new session listener.
@@ -37,8 +37,19 @@ public class SessionListener implements ISessionListener {
 	 */
 	public SessionListener() {
 		super();
-		this.gameUiProvider = OpenDartsUiPlugin
-				.getService(IGameUiProvider.class);
+	}
+
+	/**
+	 * Gets the game ui provider.
+	 *
+	 * @return the game ui provider
+	 */
+	protected final IGameUiProvider getGameUiProvider() {
+		if (this.gameUiProvider == null) {
+			this.gameUiProvider = OpenDartsUiPlugin
+					.getService(IGameUiProvider.class);
+		}
+		return this.gameUiProvider;
 	}
 
 	/* (non-Javadoc)
@@ -90,7 +101,7 @@ public class SessionListener implements ISessionListener {
 			SetEditorInput input = new SetEditorInput(set);
 			try {
 				IGameDefinition definition = set.getGameDefinition();
-				IGameUiService gameUiService = this.gameUiProvider
+				IGameUiService gameUiService = this.getGameUiProvider()
 						.getGameUiService(definition);
 				String editorId = gameUiService.getGameEditor(definition);
 				page.openEditor(input, editorId);

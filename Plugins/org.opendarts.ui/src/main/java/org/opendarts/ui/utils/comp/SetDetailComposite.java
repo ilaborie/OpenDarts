@@ -37,7 +37,7 @@ public class SetDetailComposite extends Composite {
 
 	private IGameUiService gameUiService;
 
-	private final IGameUiProvider gameUiProvider;
+	private IGameUiProvider gameUiProvider;
 
 	/**
 	 * Instantiates a new session detail composite.
@@ -46,11 +46,35 @@ public class SetDetailComposite extends Composite {
 	 */
 	public SetDetailComposite(Composite parent) {
 		super(parent, SWT.NONE);
-		this.gameUiProvider = OpenDartsUiPlugin
-				.getService(IGameUiProvider.class);
 		this.toolkit = OpenDartsFormsToolkit.getToolkit();
 		GridLayoutFactory.fillDefaults().applyTo(this);
 		this.createContents();
+	}
+
+	/**
+	 * Gets the game ui provider.
+	 *
+	 * @return the game ui provider
+	 */
+	public IGameUiProvider getGameUiProvider() {
+		if (this.gameUiProvider == null) {
+			this.gameUiProvider = OpenDartsUiPlugin
+					.getService(IGameUiProvider.class);
+		}
+		return this.gameUiProvider;
+	}
+
+	/**
+	 * Gets the game ui service.
+	 *
+	 * @return the game ui service
+	 */
+	public IGameUiService getGameUiService() {
+		if (this.gameUiService == null) {
+			this.gameUiService = this.getGameUiProvider().getGameUiService(
+					set.getGameDefinition());
+		}
+		return this.gameUiService;
 	}
 
 	/**
@@ -61,8 +85,8 @@ public class SetDetailComposite extends Composite {
 	public void setInput(ISet set) {
 		this.set = set;
 		if (set != null) {
-			this.gameUiService = this.gameUiProvider.getGameUiService(set
-					.getGameDefinition());
+			this.gameUiService = this.getGameUiProvider().getGameUiService(
+					set.getGameDefinition());
 			this.viewer.setInput(this.set.getAllGame());
 		} else {
 			this.gameUiService = null;
@@ -126,7 +150,7 @@ public class SetDetailComposite extends Composite {
 		colDescr = new ColumnDescriptor("Result");
 		colDescr.width(45);
 		colDescr.labelProvider(new FunctionalLabelProvider<IGame>(IGame.class,
-				new GameResultFunction(this.gameUiService)));
+				new GameResultFunction(this.getGameUiProvider())));
 		this.toolkit.createTableColumn(this.viewer, colDescr);
 		result.add(colDescr);
 

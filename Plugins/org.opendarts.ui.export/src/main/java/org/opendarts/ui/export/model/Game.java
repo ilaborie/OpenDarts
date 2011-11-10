@@ -9,7 +9,6 @@ import org.opendarts.core.model.game.func.GamePlayersFunction;
 import org.opendarts.core.model.player.IPlayer;
 import org.opendarts.core.stats.model.IElementStats;
 import org.opendarts.core.stats.service.IStatsService;
-import org.opendarts.ui.service.IGameUiService;
 import org.opendarts.ui.stats.model.IChart;
 import org.opendarts.ui.stats.service.IStatsUiService;
 import org.opendarts.ui.utils.comp.GameResultFunction;
@@ -58,9 +57,7 @@ public class Game extends AbstractBean<IGame> {
 		this.indexFunc = new GameIndexFunction();
 		this.playersFunc = new GamePlayersFunction();
 		
-		IGameUiService gameUiService = this.getGameUiProvider()
-				.getGameUiService(set.getElement().getGameDefinition());
-		this.resultFunc = new GameResultFunction(gameUiService);
+		this.resultFunc = new GameResultFunction(this.getGameUiProvider());
 	}
 
 	/* (non-Javadoc)
