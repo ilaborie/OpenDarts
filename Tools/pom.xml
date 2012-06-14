@@ -13,7 +13,7 @@
 	
 	<modules>
 		<module>Repository</module>
-		<module>TargetPlatform</module>
+		<!--<module>TargetPlatform</module>-->
 	</modules>
 
 </project>

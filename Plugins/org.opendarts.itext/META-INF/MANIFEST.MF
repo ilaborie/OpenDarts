@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: iText
 Bundle-SymbolicName: org.opendarts.itext
-Bundle-Version: 5.1.2.qualifier
+Bundle-Version: 5.1.2
 Bundle-Vendor: http://sourceforge.net/projects/itext/
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,

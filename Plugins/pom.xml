@@ -18,14 +18,21 @@
 		<module>org.opendarts.core.stats</module>
 		<module>org.opendarts.core.x01</module>
 		<module>org.opendarts.core.x01.defi</module>
+		<module>org.opendarts.core.export</module>
 		<module>org.opendarts.ui</module>
 		<module>org.opendarts.ui.app</module>
 		<module>org.opendarts.ui.player</module>
 		<module>org.opendarts.ui.stats</module>
 		<module>org.opendarts.ui.x01</module>
 		<module>org.opendarts.ui.x01.defi</module>
+		<module>org.opendarts.ui.export</module>
+		<module>org.opendarts.ui.export.pdf.x01</module>
+		<module>org.opendarts.ui.export.x01</module>
+		<module>org.opendarts.ui.export.x01.defi</module>
 		<module>org.opendarts.derby</module>
-		<module> org.opendarts.jfreechart</module>
+		<module>org.opendarts.jfreechart</module>
+		<module>org.opendarts.freemarker</module>
+		<module>org.opendarts.itext</module>
 	</modules>
 
 </project>
