@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.6"?>
-
-<target name="OpenDarts" sequenceNumber="9">
+<?pde version="3.8"?><target name="OpenDarts" sequenceNumber="13">
 <locations>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.derby" version="10.5.1.1_201105231903"/>
 <unit id="org.apache.derby.source" version="10.5.1.1_201105231903"/>
 <unit id="ch.qos.logback.classic" version="0.9.27.v20110224-1110"/>
@@ -12,23 +10,21 @@
 <unit id="org.slf4j.api.source" version="1.6.1.v20100831-0715"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/"/>
 </location>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.persistence.sdk.feature.group" version="2.3.0.v20110604-r9504"/>
-<repository location="http://download.eclipse.org/releases/indigo"/>
-</location>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.ide" version="3.7.1.M20110909-1335"/>
-<unit id="org.eclipse.platform.sdk" version="3.7.1.M20110909-1335"/>
-<unit id="org.eclipse.rcp.feature.group" version="3.7.1.r37x_v20110729-9DB5FmNFnFLSFCtLxnRfMqt15A4A"/>
-<unit id="org.eclipse.rcp.source.feature.group" version="3.7.1.r37x_v20110729-9DB5FmNFnFLSFCtLxnRfMqt15A4A"/>
-<unit id="org.eclipse.sdk.ide" version="3.7.1.M20110909-1335"/>
-<unit id="org.eclipse.pde.api.tools.ee.javase16.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
-<unit id="org.eclipse.pde.api.tools.ee.javase17.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
-</location>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="com.google.guava.sdk.feature.feature.group" version="10.0.0"/>
 <repository location="http://guava-osgi.googlecode.com/svn/trunk/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.persistence.jpa.feature.group" version="2.4.0.v20120604-r11619"/>
+<unit id="org.eclipse.persistence.jpa.source.feature.group" version="2.4.0.v20120604-r11619"/>
+<repository location="http://download.eclipse.org/releases/juno"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.sdk" version="3.8.0.I20120608-1200"/>
+<unit id="org.eclipse.rcp.id" version="3.8.0.I20120608-1200"/>
+<unit id="org.eclipse.rcp.sdk.id" version="3.8.0.I20120608-1200"/>
+<unit id="org.eclipse.sdk.ide" version="3.8.0.I20120608-1200"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.8milestones"/>
 </location>
 </locations>
 </target>
