@@ -159,10 +159,16 @@ public class PlayerService implements IPlayerService {
 	 */
 	@Override
 	public IPlayer getPlayer(String uuid) {
+		IPlayer result = null;
 		TypedQuery<IPlayer> query = this.em.createNamedQuery("Player.byUuid",
 				IPlayer.class);
 		query.setParameter("uuid", uuid);
-		return query.getSingleResult();
+		try {
+			result = query.getSingleResult();
+		} catch (NoResultException nre) {
+			LOG.warn("No player found with id: {}", uuid);
+		}
+		return result;
 	}
 
 	/* (non-Javadoc)

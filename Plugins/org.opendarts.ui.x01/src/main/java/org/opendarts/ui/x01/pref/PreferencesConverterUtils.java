@@ -112,8 +112,12 @@ public final class PreferencesConverterUtils {
 
 				List<IPlayer> players = new ArrayList<IPlayer>();
 				if (strings.length > 4) {
+					IPlayer player;
 					for (int i = 3; i < strings.length; i++) {
-						players.add(PLAYER_SERVICE.getPlayer(strings[i]));
+						player = PLAYER_SERVICE.getPlayer(strings[i]);
+						if (player != null) {
+							players.add(player);
+						}
 					}
 				}
 
